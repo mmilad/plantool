@@ -4,7 +4,7 @@
 
 Use a **file-per-entity canonical store** under **.pman/**: UTF-8 JSON for structured records and Markdown for long-form plans/specifications/decisions. Treat the store as a graph projected from explicit IDs. Build a public TypeScript library as the core and a thin **pman** CLI as its consumer.
 
-SQLite, servers, accounts, Git remotes, and MCP are not required. Add a rebuildable local cache only if profiling justifies it; it must never be authoritative or required to read/edit plan data.
+Canonical .pman plan files are inside the project and Git-tracked by default; initialization must not add them to .gitignore. A clean clone contains the goals, tickets, decisions, comments, metadata, and relationships that agents need to inspect and edit offline. SQLite, servers, accounts, Git remotes, and MCP are not required. Add a rebuildable local cache only if profiling justifies it; it must never be authoritative or required to read/edit plan data. Only generated caches and ephemeral sessions, process locks, and run logs are excluded from canonical Git-tracked state.
 
 ## Storage options
 
@@ -31,7 +31,7 @@ Scores: 1 weak, 5 strong for Git-native use. Merge score describes likely ordina
       relationships/<first-two-id-chars>/<relationship-id>.json
       assets/                 # optional later, user-managed
 
-References use normalized repository-relative forward-slash paths and are checked to remain in the repository. IDs are immutable; filenames derive from IDs, never titles/parents. A future local cache is ignored by default and keyed by schema version and canonical hashes. It is disposable. Credentials, remote sessions, agent stdout and locks are not tracked.
+All files under .pman that form canonical project state are meant to be committed with the repository; pman does not automatically ignore them. References use normalized repository-relative forward-slash paths and are checked to remain in the repository. IDs are immutable; filenames derive from IDs, never titles/parents. A future local cache is ignored by default and keyed by schema version and canonical hashes. It is disposable. Credentials, remote sessions, agent stdout and locks are not tracked.
 
 ## Core entities
 
