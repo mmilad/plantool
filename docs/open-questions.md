@@ -21,6 +21,7 @@ These are the remaining product decisions and recorded owner choices. Defaults a
 | Document format? | Markdown with minimal optional YAML front matter; structured links validated. | Familiar diffs without a custom rich text syntax. |
 | Context source selection? | Explicit refs plus deterministic lexical search; show provenance and cap output. | Avoid surprising opaque relevance ranking. |
 | Asset storage? | No binary ingestion MVP; repo-relative links and user-controlled Git LFS only. | Avoid bloated clones and hidden uploads. |
+| Local browser UI? | `pman serve` for one project resolved from cwd/nearest ancestor; loopback-only, no auth, foreground process; no multi-project discovery. | Owner requested a project-local UI similar in spirit to FP’s companion app, with no auth because it remains local. Use 127.0.0.1, Host/Origin/CSRF protections, no CORS, and local assets. |
 | MCP? | No MVP requirement; adapter after API stabilizes. | Agent-neutrality is already provided by files, CLI and API. |
 | Project license? | Recommend MIT for the intended broad reuse; add the license text before public release/contributions. | Owner delegated this choice and said they do not mind others using the project. MIT is a simple permissive license with attribution and warranty/liability terms; this records a recommendation, not a legal review. |
 
