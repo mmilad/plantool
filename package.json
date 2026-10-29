@@ -1,5 +1,5 @@
 {
-  "name": "planus-manus",
+  "name": "@mmilad/pm",
   "version": "0.1.0",
   "description": "Git-native planning and issue tracking for people and coding agents",
   "type": "module",

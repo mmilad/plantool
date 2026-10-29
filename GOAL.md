@@ -18,7 +18,7 @@ The product contract is the merged planning baseline on `main` (commit `28f6da3`
 
 - [x] Inspect the current default branch and verify planning PRs #2 and #3 are merged.
 - [x] Record implementation contract and sequence in this goal.
-- [ ] M0: finish the package identity decision (the existing `pman` registry name conflicts with the implementation brief); runtime floor, schema v1, default statuses, UUIDv7, relationships, serialization and MIT license are recorded.
+- [x] M0: lock the npm package as `@mmilad/pm` and executable as `pman`; runtime floor, schema v1, default statuses, UUIDv7, relationships, serialization and MIT license are recorded.
 - [x] M1: implement project discovery, `.pman/` initialization, canonical storage, typed errors and graph validation.
 - [x] M2: implement unlimited-depth ticket CRUD, reparenting, paginated trees, derived rollups, relationships and readiness.
 - [x] M3: expose the public TypeScript API and `pman` CLI with deterministic text/JSON and stable failures.

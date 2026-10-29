@@ -5,14 +5,14 @@ Planus Manus is a Git-native planning and ticket graph for people and coding age
 ## Install locally
 
 ```sh
-npm install --save-dev planus-manus
+npm install --save-dev @mmilad/pm
 npx pman init
 npx pman --help
 ```
 
 Node.js 22 or newer is required. No global installation, native binary, database, hosted service, FP installation, or OS-specific project registry is used. `pman init` creates tracked `.pman/` data and does not modify `.gitignore`.
 
-The package name in the development manifest is provisional: the merged planning documents recommend `planus-manus`, while a separate implementation brief names the package `pman`, which is already registered. Confirm the intended npm package identity before publishing or treating this manifest name as final.
+The npm package is `@mmilad/pm`; the executable remains `pman`. The merged planning documents used the provisional unscoped name `planus-manus`; the owner selected the personal scope after checking the existing `pman` name. The package is not published.
 
 ## Quick start
 
@@ -35,7 +35,7 @@ Run `pman --help` for the current command reference. The first release supports 
 ## TypeScript API
 
 ```ts
-import { openProject } from 'planus-manus';
+import { openProject } from '@mmilad/pm';
 
 const project = await openProject({ cwd: process.cwd() });
 const parent = await project.tickets.create({ title: 'Feature' });
