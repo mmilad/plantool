@@ -12,13 +12,14 @@ Out of MVP: hosted sharing, credentials/auth/invites, live locks, agent executio
 
 **Depends on:** product review and name checks before package metadata.
 
-Tasks: settle file format; publish schema v1 and JSON Schema; define statuses/relationships/IDs/errors/serialization/path rules; check npm name and command; choose tested Node LTS floor.
+Tasks: settle file format; publish schema v1 and JSON Schema; formalize the approved UUIDv7 ID and project status/rollup defaults; define relationships/errors/serialization/path rules; check npm package/bin availability and collision behavior; choose tested Node LTS floor; record MIT as the selected license and add its text before public release.
 
 Acceptance:
 
 - Schema/examples represent goals/plans/decisions/comments/relationships and tickets at arbitrary depth.
 - Root, child, grandchild, and 10,000-deep chains need no special type or nested child array.
-- Package/executable availability is recorded; owner chooses fallback before package setup if unavailable.
+- Package/executable availability and pman bin collision behavior are verified; if unavailable or conflicting, owner chooses a fallback before package setup.
+- The selected MIT license is documented; a LICENSE file is added before the first public release.
 - No product runtime code in this milestone.
 
 ## Milestone 1 — Store, validation and TypeScript core
