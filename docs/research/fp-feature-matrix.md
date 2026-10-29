@@ -37,7 +37,7 @@ FP describes itself as an agent-native issue tracker for Claude Code, Codex, Pi,
 | hot-file/context | Context verified; reviewed docs did not verify hot-file ranking. | Explicit file refs and deterministic local search with provenance. | P1. |
 | extensions/hooks | Pre-hooks can reject transitions; post-hooks trigger side effects; extensions execute in CLI and desktop. | Defer arbitrary code and make future execution explicit opt-in. | P3. |
 | MCP | Pages cover other agents; MCP server not established by inspected sources. | Optional adapter after stable API/CLI. | P2. |
-| desktop | Docs list Mac companion; documented installer requirements say macOS/Linux x86_64, not Windows. | No desktop app MVP; keep format editor-agnostic/cross-platform. | Later. |
+| desktop / project UI | FP docs list a Mac companion; reviewed installer requirements say macOS/Linux x86_64, not Windows. The reviewed pages do not establish every multi-project UI detail from the user report. | Provide `pman serve`: a browser UI scoped to the one project resolved from the current checkout, loopback-only and no auth. No global project picker or dashboard. | P1 in first usable release, after core CLI/API. Local service gets Host/Origin/CSRF protections despite no login. |
 
 ## Security and product fit
 

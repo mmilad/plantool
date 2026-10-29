@@ -19,6 +19,6 @@ Package and executable name availability still need verification before package 
 
 ## Product boundary
 
-Core is a repo-local planning graph, its TypeScript API, and a scriptable CLI. A required hosted service, account system, native executable dependency, always-on daemon, or agent-vendor-specific integration is out of scope for the first usable release. Optional MCP, editors, and hosted coordination can follow without becoming prerequisites.
+Core is a repo-local planning graph, its TypeScript API, and a scriptable CLI, with an optional project-scoped browser UI served by pman from the current checkout. The UI shows only that project, binds to loopback, and needs no account or hosted service. A required hosted service, native executable dependency, always-on daemon, or agent-vendor-specific integration is out of scope.
 
 See [Issue #1](https://github.com/mmilad/planus-manus/issues/1).

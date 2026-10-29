@@ -135,10 +135,19 @@ Expose async methods, typed errors (NotFound, ValidationError, CycleError, Confl
 | pman relation add/remove/list | Manage typed edges. |
 | pman context ID [--budget N] [--format json] | Deterministic packet with provenance. |
 | pman search QUERY [--format json] | Offline full-text search. |
+| pman serve [--open] [--port N] | Serve a browser UI for only the current project on loopback; run in the foreground. |
 | pman validate | Check schemas, IDs, links, cycles, paths and values. |
 | pman doctor | Read-only diagnostics; repair is explicit. |
 
 Commands support human and JSON output, noninteractive operation, stable exit codes, stdin/file input, explicit field flags, Unicode/path safety and completions. A repo devDependency with lockfile is the reliable install. One-shot package-manager use is convenience; avoid downloading unpinned latest code in sensitive/offline workflows.
+
+## Project-scoped local web UI
+
+`pman serve` is an optional local interface over the same core API and canonical `.pman/` files. Resolve exactly one initialized project from the current working directory (or nearest ancestor); refuse to start if no project is found. Do not enumerate other projects, consult a global registry, expose a project picker, or create a shared multi-project service. The UI provides a navigable ticket tree and detail/edit views, planning documents, and local search/context; supported writes use the same validators and storage adapter as CLI commands.
+
+Run as a foreground process and print the URL. By default bind only to `127.0.0.1` on an available local port; `--open` may launch the browser. Stop with Ctrl-C. No account or auth flow is required because the service is local to the machine and project. Do not provide a LAN bind option in the MVP.
+
+No-auth local service still needs browser protections: reject unexpected Host values, reject cross-origin state-changing requests using Origin checks and CSRF protections, disable CORS, and serve assets locally without third-party scripts. Do not execute project extensions, hooks, or ticket instructions. The CLI/API and offline project files must remain fully usable when the UI server is stopped.
 
 ## npm and platform constraints
 
@@ -171,3 +180,4 @@ Context packet sections: ticket, ancestry, bounded descendants, blocking edges, 
 6. Instruction injection: plans are untrusted content; separate data parsing from agent policy.
 7. Large dependency graphs: use cycle detection and bounded readiness/context results.
 8. npm supply chain: check names and publish safeguards before release; no publication in this phase.
+9. Local web exposure: enforce loopback binding, Host/Origin checks, no CORS, and no LAN access; no-auth local interfaces still need CSRF defenses.
