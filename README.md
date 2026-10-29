@@ -4,7 +4,7 @@
 
 Planus Manus is proposed as a local-first planning and issue-tracking toolkit for people and AI coding agents. A repository clone contains the complete usable plan: a fresh checkout can read and edit tickets without an account, network connection, hosted service, or database server. The plan is versioned with the code it describes.
 
-The recommendation is a TypeScript domain library and **pman** CLI, distributed provisionally as npm package **planus-manus**. Store each durable entity in a separate canonical file under **.pman/**. Model nesting with explicit parentId links so depth is unlimited by schema and reparenting changes one ticket record. Compute trees, dependency readiness, and status rollups from the graph; treat indexes as rebuildable.
+The recommendation is a TypeScript domain library and **pman** CLI, distributed provisionally as npm package **planus-manus**. Store every canonical plan entity in a separate file under **.pman/** and track those files in Git by default. A clone therefore includes the plan an agent needs; no hosted service or account is required. Do not automatically ignore canonical plan files. Only rebuildable caches and ephemeral execution/lock state are excluded. Model nesting with explicit parentId links so depth is unlimited by schema and reparenting changes one ticket record. Compute trees, dependency readiness, and status rollups from the graph.
 
 Package and executable name availability still need verification before package metadata or publishing.
 
