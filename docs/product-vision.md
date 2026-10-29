@@ -23,7 +23,7 @@ This is intended product fit, not a claim that no other tool combines these trai
 
 ## Principles
 
-1. Repository-first durability: a clone plus compatible Node runtime is enough to use committed plan data.
+1. Repository-first durability: canonical plans live inside the project and are Git-tracked by default. A clone plus compatible Node runtime is enough to inspect and edit the same durable plan offline; no remote registration or service is needed. Users may opt out of tracking locally, but doing so opts out of sharing the plan with cloned checkouts.
 2. Explicit relationships: parentage is one graph edge, not inferred from folders or dotted IDs. Dependencies are independent from containment.
 3. Unbounded depth, bounded work: no schema depth ceiling; use iterative traversal, cycle detection, pagination/output limits, and resource budgets.
 4. Deterministic outcomes: stable sorting, canonical serialization, reproducible queries, predictable exit codes, no network-dependent results in local mode.
