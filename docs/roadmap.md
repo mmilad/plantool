@@ -31,6 +31,8 @@ Tasks: initialize .pman; canonical serialization; loaders/writers; IDs; schema v
 Acceptance:
 
 - openProject resolves repo root and reads without external service.
+- A fresh Git clone contains all canonical goals, plans, tickets, metadata, and relationships; local commands can inspect and edit that data offline.
+- pman init does not add canonical .pman files to .gitignore; only rebuildable caches and ephemeral execution state may be ignored.
 - Separate records have stable IDs; title change does not change path.
 - Child creation adds one child record, not a parent list.
 - Duplicate IDs, missing parent, self-parent, cycle, dangling edge, unsupported schema and path traversal return path/ID diagnostics.
