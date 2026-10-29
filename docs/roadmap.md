@@ -4,7 +4,7 @@ This is an implementation sequence, not authorization to begin implementation in
 
 ## MVP boundary
 
-A fresh checkout with supported Node LTS can initialize, read, create, update, reparent, search and validate arbitrarily nested tickets and linked planning docs entirely offline. Canonical data is ordinary Git-tracked content. MVP includes CLI and public TypeScript API, runs on Windows/macOS/Linux, and has no mandatory service, database, or MCP requirement.
+A fresh checkout with supported Node LTS can initialize, read, create, update, reparent, search and validate arbitrarily nested tickets and linked planning docs entirely offline. Canonical data is ordinary Git-tracked content. MVP includes CLI and public TypeScript API plus an optional `pman serve` browser UI for the single current project. The UI binds to loopback, has no auth, and does not enumerate other projects. It runs on Windows/macOS/Linux and requires no hosted service, database, or MCP.
 
 Out of MVP: hosted sharing, credentials/auth/invites, live locks, agent execution/session management, arbitrary extensions/hooks, desktop app, MCP adapter, semantic search, binary asset hosting, dashboards, time tracking, auto-update.
 
@@ -83,7 +83,22 @@ Acceptance:
 - Agent setup is opt-in, shows preview, is idempotent and preserves user-authored AGENTS content.
 - Reading/searching never executes content, hooks, or extensions.
 
-## Milestone 5 — Reliability and release candidate
+## Milestone 5 — Project-scoped local web UI
+
+**Depends on:** Milestones 1–4.
+
+Tasks: build a lightweight browser UI on the public TypeScript core; support project tree navigation, ticket detail and supported edits, planning documents, search/context; implement `pman serve` as a foreground server.
+
+Acceptance:
+
+- `pman serve` resolves exactly one initialized project from the current working directory/nearest ancestor and refuses if none exists.
+- UI reads and writes through the same core validators and filesystem adapter as the CLI; all canonical state remains in Git-tracked project files.
+- UI shows only that project; there is no project discovery, picker, multi-project index, or account system.
+- Server binds to 127.0.0.1 only by default, prints its URL, and stops with Ctrl-C; browser launch is opt-in with `--open`.
+- Mutating requests validate Host and Origin, CSRF defenses are in place, CORS is disabled, and assets are served locally without external scripts.
+- UI remains optional; CLI and TypeScript API work independently with the server stopped.
+
+## Milestone 6 — Reliability and release candidate
 
 **Depends on:** Milestones 0–4.
 
@@ -104,7 +119,7 @@ Acceptance:
 2. Import/export for GitHub Issues, Beads, Markdown and hosted trackers; external IDs remain refs.
 3. Optional coordination service for leases/claims/notifications; offline files remain truth.
 4. Declarative custom property/status rules before considering executable extensions.
-5. TUI/editor views without a required server.
+5. Richer TUI/editor integrations beyond the single-project local browser UI.
 6. Explicit repo-relative assets and Git LFS.
 7. Optional semantic search with always-available keyword search.
 
