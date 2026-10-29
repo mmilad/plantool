@@ -4,6 +4,8 @@ Planus Manus is a Git-native planning and ticket graph for people and coding age
 
 ## Install locally
 
+After a release is published, install the package as a project-local development dependency:
+
 ```sh
 npm install --save-dev @mmilad/pm
 npx pman init

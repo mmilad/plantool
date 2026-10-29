@@ -6,6 +6,7 @@ This file records material choices made while implementing the first usable rele
 
 - Executable: `pman`; npm package: `@mmilad/pm`, selected by the owner on 2026-10-29. This replaces the planning docs' provisional package name `planus-manus`; the executable stays `pman`.
 - Registry check on 2026-10-29: unscoped `pman` resolved to version `0.0.5`; `@mmilad/pm` returned npm 404. The scoped package is not published. Registry lookup did not authenticate a publishing user, so scope ownership must be confirmed before any future publication.
+- The npm scope syntax is `@scope/package`; `mmilad/pm` is represented as the scoped package `@mmilad/pm`. The current package install example is explicitly for after publication.
 - Runtime floor: Node.js 22, with CI targeting Node 22, 24, and 26. These are the supported LTS lines at implementation start. No OS/CPU restriction or native dependency is introduced.
 - ESM package with JavaScript runtime and first-party `.d.ts` declarations. The core has no third-party runtime dependencies.
 - `@mmilad/pm` is intended to be installed as a project-local dependency. npm publication remains a separate release action.
