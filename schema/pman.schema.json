@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/mmilad/planus-manus/main/schema/pman.schema.json",
+  "title": "Planus Manus project store",
+  "type": "object",
+  "required": ["schemaVersion", "projectId", "name", "statuses", "createdAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "projectId": { "type": "string", "format": "uuid" },
+    "name": { "type": "string", "minLength": 1 },
+    "statuses": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "properties": { "type": "object" }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "ticket": {
+      "type": "object",
+      "required": ["schemaVersion", "id", "title", "description", "status", "priority", "labels", "properties", "parentId", "createdAt", "updatedAt"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "id": { "$ref": "#/$defs/uuidv7" },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "status": { "type": "string", "minLength": 1 },
+        "priority": { "type": "string" },
+        "labels": { "type": "array", "items": { "type": "string" } },
+        "properties": { "type": "object" },
+        "parentId": { "oneOf": [{ "$ref": "#/$defs/uuidv7" }, { "type": "null" }] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": true
+    },
+    "comment": {
+      "type": "object", "required": ["schemaVersion", "id", "ticketId", "body", "author", "createdAt"],
+      "properties": { "schemaVersion": { "const": 1 }, "id": { "$ref": "#/$defs/uuidv7" }, "ticketId": { "$ref": "#/$defs/uuidv7" }, "body": { "type": "string" }, "author": { "type": "string" }, "createdAt": { "type": "string", "format": "date-time" } }, "additionalProperties": true
+    },
+    "relationship": {
+      "type": "object", "required": ["schemaVersion", "id", "sourceId", "targetId", "type", "createdAt"],
+      "properties": { "schemaVersion": { "const": 1 }, "id": { "$ref": "#/$defs/uuidv7" }, "sourceId": { "$ref": "#/$defs/uuidv7" }, "targetId": { "$ref": "#/$defs/uuidv7" }, "type": { "enum": ["blocks", "relates_to", "duplicates", "implements", "validates", "supersedes"] }, "createdAt": { "type": "string", "format": "date-time" } }, "additionalProperties": true
+    },
+    "uuidv7": { "type": "string", "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$" }
+  }
+}

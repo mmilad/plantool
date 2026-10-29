@@ -1,24 +1,60 @@
-# Planus Manus (pman)
+# Planus Manus (`pman`)
 
-**Proposal status:** research and roadmap only; no product code or npm package has been created.
+Planus Manus is a Git-native planning and ticket graph for people and coding agents. Canonical project data lives in the repository under `.pman/`, works offline, and is ordinary reviewable JSON and Markdown. Tickets can be nested to arbitrary depth using explicit `parentId` links.
 
-Planus Manus is proposed as a local-first planning and issue-tracking toolkit for people and AI coding agents. A repository clone contains the complete usable plan: a fresh checkout can read and edit tickets without an account, network connection, hosted service, or database server. The plan is versioned with the code it describes.
+## Install locally
 
-The recommendation is a TypeScript domain library and **pman** CLI, distributed provisionally as npm package **planus-manus**. Store every canonical plan entity in a separate file under **.pman/** and track those files in Git by default. A clone therefore includes the plan an agent needs; no hosted service or account is required. Do not automatically ignore canonical plan files. Only rebuildable caches and ephemeral execution/lock state are excluded. Model nesting with explicit parentId links so depth is unlimited by schema and reparenting changes one ticket record. Compute trees, dependency readiness, and status rollups from the graph.
+```sh
+npm install --save-dev planus-manus
+npx pman init
+npx pman --help
+```
 
-Package and executable name availability still need verification before package metadata or publishing.
+Node.js 22 or newer is required. No global installation, native binary, database, hosted service, FP installation, or OS-specific project registry is used. `pman init` creates tracked `.pman/` data and does not modify `.gitignore`.
 
-## Planning documents
+The package name in the development manifest is provisional: the merged planning documents recommend `planus-manus`, while a separate implementation brief names the package `pman`, which is already registered. Confirm the intended npm package identity before publishing or treating this manifest name as final.
 
-- [Product vision](docs/product-vision.md): audience, differentiation, principles, non-goals, workflows.
-- [FP feature matrix](docs/research/fp-feature-matrix.md): verified findings, proposed pman priorities, and gaps.
-- [Alternatives](docs/research/alternatives.md): Beads, GitHub Issues, Plane, and Taskwarrior.
-- [Architecture proposal](docs/architecture-proposal.md): storage options, schema, unlimited-depth trees, API/CLI, concurrency and risks.
-- [Roadmap](docs/roadmap.md): milestones, dependencies, MVP boundary and acceptance criteria.
-- [Open questions](docs/open-questions.md): unresolved choices with recommended defaults.
+## Quick start
 
-## Product boundary
+```sh
+npx pman init --name "My project"
+npx pman goal create --title "First release" --body "Ship a usable feature set."
+npx pman ticket create --title "Build the core"
+npx pman ticket list
+npx pman tree
+npx pman validate
+npx pman serve
+```
 
-Core is a repo-local planning graph, its TypeScript API, and a scriptable CLI, with an optional project-scoped browser UI served by pman from the current checkout. The UI shows only that project, binds to loopback, and needs no account or hosted service. A required hosted service, native executable dependency, always-on daemon, or agent-vendor-specific integration is out of scope.
+Create children at any level by passing `--parent <ticket-id>`. The server prints a loopback URL and stays in the foreground; stop it with Ctrl-C. It serves only the project found from the current directory or its ancestors. `--open` asks the operating system to open the URL in the default browser.
 
-See [Issue #1](https://github.com/mmilad/planus-manus/issues/1).
+## CLI
+
+Run `pman --help` for the current command reference. The first release supports project initialization; ticket create/list/show/update/move; trees; goal, plan and decision creation; comments; typed relationships; offline search; bounded context; validation; and the project-local web UI. Output is JSON by default where useful; pass `--format json` where supported for an explicit machine-readable contract.
+
+## TypeScript API
+
+```ts
+import { openProject } from 'planus-manus';
+
+const project = await openProject({ cwd: process.cwd() });
+const parent = await project.tickets.create({ title: 'Feature' });
+const child = await project.tickets.create({ title: 'Subtask', parentId: parent.id });
+console.log(await project.tree());
+```
+
+See [`src/index.d.ts`](src/index.d.ts) for the exported API and [`schema/pman.schema.json`](schema/pman.schema.json) for the project-config schema. Structured ticket records use schema version 1; long-form planning docs use Markdown with a small metadata header. UUIDv7 IDs and record paths are independent of title and parent.
+
+## Product boundaries
+
+Parent rollups are derived views and never cascade status edits to children. Git remains the collaboration and history layer; simultaneous edits to the same record are not distributed transactions. The local server has no login and binds only to loopback; it checks Host and Origin and requires a per-server CSRF token for writes. It does not load extensions or remote assets.
+
+Agent launching, hosted accounts/sharing, remote sync, MCP, arbitrary extensions/hooks, semantic search, binary asset ingestion, global install, and npm publication are outside this first release. The merged contract and research are in [`docs/product-vision.md`](docs/product-vision.md), [`docs/architecture-proposal.md`](docs/architecture-proposal.md), [`docs/roadmap.md`](docs/roadmap.md), and [`docs/research/fp-feature-matrix.md`](docs/research/fp-feature-matrix.md). Implementation choices are in [`docs/implementation-decisions.md`](docs/implementation-decisions.md).
+
+## Development
+
+```sh
+npm run check
+```
+
+The test suite uses only Node's built-in test runner and temporary project directories.

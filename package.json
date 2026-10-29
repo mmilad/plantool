@@ -1,0 +1,18 @@
+{
+  "name": "planus-manus",
+  "version": "0.1.0",
+  "description": "Git-native planning and issue tracking for people and coding agents",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "bin": { "pman": "./bin/pman.js" },
+  "exports": {
+    ".": { "types": "./src/index.d.ts", "import": "./src/index.js" },
+    "./schema": "./schema/pman.schema.json"
+  },
+  "files": ["bin/", "src/", "schema/", "README.md", "LICENSE"],
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check src/index.js && node --check src/server.js && node --check bin/pman.js && npm test"
+  },
+  "license": "MIT"
+}
