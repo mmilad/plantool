@@ -4,7 +4,7 @@ These are the remaining product decisions and recorded owner choices. Defaults a
 
 | Question | Recommended default | Rationale / revisit |
 |---|---|---|
-| Product/CLI name | Owner confirmed Planus Manus, npm name planus-manus, and CLI pman as preferred provisional names. | Keep the name while verifying live registry availability and collisions before package metadata/release. Web search surfaced a legacy pman package/CLI and an unrelated @st3ix/pman package; npm registry queries did not complete in this environment. Avoid global installation and re-check both package and bin collision before release. |
+| Product/CLI name | Owner selected npm package @mmilad/pm and CLI pman on 2026-10-29. | This supersedes the provisional planus-manus package name. The unscoped pman name is already registered; @mmilad/pm currently returns 404 and remains unpublished. Confirm scope ownership before a future publication. |
 | Minimum Node? | Oldest active/maintenance LTS supported at implementation start; choose after CI matrix passes. | Release schedule changes; avoid stale runtime promise. |
 | JSON, YAML or Markdown ticket fields? | Canonical JSON for structured records; Markdown for long-form docs; publish JSON Schema. | Avoid permissive YAML ambiguities while keeping prose human-editable. |
 | ID scheme | UUIDv7 from Node crypto; IDs remain independent from title/path/parent. | Owner approved UUIDv7. Keep sibling sorting explicit rather than relying on the ID's timestamp portion. |

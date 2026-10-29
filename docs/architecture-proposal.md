@@ -114,7 +114,7 @@ Git linked worktrees support concurrent checkouts but are not a conflict-free sy
 
 API proposal:
 
-    import { openProject } from "planus-manus";
+    import { openProject } from "@mmilad/pm";
 
     const project = await openProject({ cwd: process.cwd() });
     const ticket = await project.tickets.get(ticketId);
