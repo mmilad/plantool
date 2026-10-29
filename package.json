@@ -12,7 +12,8 @@
   "files": ["bin/", "src/", "schema/", "README.md", "LICENSE"],
   "scripts": {
     "test": "node --test",
-    "check": "node --check src/index.js && node --check src/server.js && node --check bin/pman.js && npm test"
+    "check": "node --check src/index.js && node --check src/server.js && node --check bin/pman.js && node --check bench/scale.mjs && npm test",
+    "benchmark:scale": "node bench/scale.mjs"
   },
   "license": "MIT"
 }

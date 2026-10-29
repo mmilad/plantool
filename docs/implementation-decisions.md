@@ -33,6 +33,7 @@ This file records material choices made while implementing the first usable rele
 ## Verification and remaining release work
 
 - Local checks were run on Node 24.22.1/Linux: package syntax checks, 11 tests (including a 10,000-deep parent chain and HTTP security checks), JSON Schema parsing, `npm pack --dry-run`, local tarball install, `npm exec -- pman --help`, and a public API import smoke check.
+- The 100,000-record wide-tree benchmark passed locally: record fixture generation 9,950 ms, tree query 14,855 ms, validation 12,606 ms, peak RSS about 450 MiB. These are measurements from this environment, not release performance guarantees.
 - GitHub Actions is configured for Windows, macOS and Linux on Node 22, 24 and 26. The matrix results should be checked on this branch before treating the release as validated.
-- No migration is needed from a prior released format; schema/store version 1 is the initial version. A 100,000-record scale run and Windows/macOS execution are not part of the local verification above.
+- No migration is needed from a prior released format; schema/store version 1 is the initial version. Windows/macOS execution remains subject to the pending GitHub Actions jobs.
 - Before publishing, resolve the npm package identity with the owner, rerun the cross-platform matrix, and review the remaining CLI/API coverage against the roadmap. This task does not publish or merge.

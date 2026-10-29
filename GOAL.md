@@ -24,7 +24,7 @@ The product contract is the merged planning baseline on `main` (commit `28f6da3`
 - [x] M3: expose the public TypeScript API and `pman` CLI with deterministic text/JSON and stable failures.
 - [x] M4: implement goals/plans/decisions/comments, offline search and bounded context with provenance.
 - [x] M5: implement project-scoped `pman serve` with browser request protections.
-- [ ] M6: complete remaining release checks. Seven of nine GitHub Actions OS/runtime jobs passed; macOS Node 22 and 26 are still queued, and the 100,000-record benchmark is pending.
+- [ ] M6: complete remaining release checks. The 100,000-record wide-tree benchmark passed locally; seven of nine GitHub Actions OS/runtime jobs passed, while macOS Node 22 and 26 remain queued.
 - [x] Open a reviewable PR from this branch; PR #4 is open. Do not publish or merge.
 
 ## Completion evidence
