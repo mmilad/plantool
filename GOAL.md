@@ -2,7 +2,7 @@
 
 ## Outcome
 
-Implement and finish the first usable `planus-manus` release in this repository. The project must provide a project-local `pman` CLI and public TypeScript API over canonical Git-tracked `.pman/` files, arbitrary-depth tickets, core planning artifacts, offline search/context/validation, and an optional single-project loopback browser UI.
+Implement and finish the first usable Planus Manus release, packaged as npm `@mmilad/pm` with a project-local `pman` CLI and public TypeScript API over canonical Git-tracked `.pman/` files, arbitrary-depth tickets, core planning artifacts, offline search/context/validation, and an optional single-project loopback browser UI.
 
 The product contract is the merged planning baseline on `main` (commit `28f6da3`, including merged PRs #2 and #3): `README.md`, `docs/product-vision.md`, `docs/architecture-proposal.md`, `docs/roadmap.md`, `docs/open-questions.md`, and `docs/research/fp-feature-matrix.md`.
 
@@ -24,7 +24,7 @@ The product contract is the merged planning baseline on `main` (commit `28f6da3`
 - [x] M3: expose the public TypeScript API and `pman` CLI with deterministic text/JSON and stable failures.
 - [x] M4: implement goals/plans/decisions/comments, offline search and bounded context with provenance.
 - [x] M5: implement project-scoped `pman serve` with browser request protections.
-- [ ] M6: complete remaining release checks. The 100,000-record wide-tree benchmark passed locally; seven of nine GitHub Actions OS/runtime jobs passed, while macOS Node 22 and 26 remain queued.
+- [ ] M6: complete remaining release checks. The 100,000-record wide-tree benchmark passed locally; six of nine GitHub Actions OS/runtime jobs passed, while all three macOS jobs remain queued.
 - [x] Open a reviewable PR from this branch; PR #4 is open. Do not publish or merge.
 
 ## Completion evidence
