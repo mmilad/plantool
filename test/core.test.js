@@ -31,3 +31,22 @@ test('search ranks title matches first, pages deterministically and detects stal
   await assert.rejects(()=>p.searchPage('cart',{limit:4,offset:4,snapshot:first.snapshot}),{code:'STALE_SEARCH'});
   await assert.rejects(()=>p.searchPage('cart',{limit:500}),{code:'VALIDATION'});await assert.rejects(()=>p.search('cart',{types:['secret']}),{code:'VALIDATION'});
 });
+test('documents update revision-safely, validate links and never add duplicates',async t=>{const p=await project(t);
+  const a=await p.tickets.create({title:'A'}),b=await p.tickets.create({title:'B'});
+  const g=await p.documents.create('goals',{title:'Goal',body:'Body',links:[a.id]});
+  await assert.rejects(()=>p.documents.create('plans',{title:'Bad',links:['01a189ac-28ff-73c2-8a77-000000000000']}),{code:'VALIDATION'});
+  await assert.rejects(()=>p.documents.create('plans',{title:'Dup',links:[a.id,a.id]}),{code:'VALIDATION'});
+  const v1=await p.documents.getVersioned('goals',g.id);
+  const same=await p.documents.update('goals',g.id,{title:'Goal',body:'Body'},{expectedRevision:v1.revision});assert.equal(same.changed,false);assert.equal(same.revision,v1.revision);
+  const up=await p.documents.update('goals',g.id,{title:'Goal 2',status:'in_progress',body:'New body',links:[a.id,b.id]},{expectedRevision:v1.revision});assert.equal(up.changed,true);assert.notEqual(up.revision,v1.revision);
+  const read=await p.documents.get('goals',g.id);assert.equal(read.title,'Goal 2');assert.equal(read.status,'in_progress');assert.deepEqual(read.links,[a.id,b.id]);assert.equal(read.body.trim(),'New body');
+  await assert.rejects(()=>p.documents.update('goals',g.id,{title:'Stale'},{expectedRevision:v1.revision}),{code:'CONFLICT'});
+  await assert.rejects(()=>p.documents.update('goals',g.id,{links:[a.id,b.id,b.id]}),{code:'VALIDATION'});
+  await assert.rejects(()=>p.documents.update('goals',g.id,{status:'nope'}),{code:'VALIDATION'});
+  // existing duplicates and dangling links stay allowed, but can be reduced explicitly
+  const file=path.join(p.dir,'goals',g.id.slice(0,2),g.id+'.md');const ghost='01a189ac-28ff-73c2-8a77-000000000000';
+  await fs.writeFile(file,(await fs.readFile(file,'utf8')).replace(/links: .*/,`links: ${JSON.stringify([a.id,a.id,ghost])}`));
+  await p.documents.update('goals',g.id,{body:'still fine',links:[a.id,a.id,ghost]});
+  await p.documents.update('goals',g.id,{links:[a.id,ghost]});assert.deepEqual((await p.documents.get('goals',g.id)).links,[a.id,ghost]);
+  await assert.rejects(()=>p.documents.update('goals',g.id,{links:[a.id,a.id,ghost]}),{code:'VALIDATION'});
+});

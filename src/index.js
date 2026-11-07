@@ -211,18 +211,52 @@ function parseDoc(text, file) {
 }
 const docText = x => `---\nschemaVersion: 1\nid: ${JSON.stringify(x.id)}\ntitle: ${JSON.stringify(x.title)}\nstatus: ${JSON.stringify(x.status)}\nlinks: ${JSON.stringify(x.links ?? [])}\ncreatedAt: ${JSON.stringify(x.createdAt)}\nupdatedAt: ${JSON.stringify(x.updatedAt)}\n---\n${x.body ?? ''}\n`;
 function documentApi(p) {
-  return { async create(kind,input) {
-    if(!kinds.includes(kind)) throw new ValidationError(`Unknown document type: ${kind}`);
+  const fileOf=(kind,id)=>idPath(path.join(p.dir,kind),id,'.md');
+  const checkKind=kind=>{if(!kinds.includes(kind))throw new ValidationError(`Unknown document type: ${kind}`);};
+  /** New links must point at existing tickets or documents; new duplicates are rejected, existing ones are kept. */
+  async function checkLinks(links,previous=[]){
+    if(!Array.isArray(links))throw new ValidationError('Document links must be an array of entity IDs');
+    for(const x of links)checkId(x);
+    const known=new Set((await listJson(p,'tickets')).map(t=>t.id));for(const kind of kinds)for(const d of await api.list(kind,{body:false}))known.add(d.id);
+    const before=new Map(),after=new Map();for(const x of previous)before.set(x,(before.get(x)??0)+1);for(const x of links)after.set(x,(after.get(x)??0)+1);
+    const unknown=[...after.keys()].filter(x=>!known.has(x)&&!before.has(x));
+    if(unknown.length)throw new ValidationError(`Document links refer to unknown tickets or documents: ${unknown.join(', ')}`,{unknown});
+    const duplicates=[...after].filter(([x,n])=>n>1&&n>(before.get(x)??0)).map(([x])=>x);
+    if(duplicates.length)throw new ValidationError(`Document already links to: ${duplicates.join(', ')}`,{duplicates});
+  }
+  const statusOk=s=>{if(s!==undefined&&(typeof s!=='string'||!p.config.statuses.includes(s)))throw new ValidationError(`Unknown status: ${s}`);};
+  const api = { async create(kind,input) {
+    checkKind(kind);
     if(!input.title?.trim()) throw new ValidationError('Document title is required');
-    const id=uuidv7(), date=nowIso(), links=input.links??[];if(!Array.isArray(links))throw new ValidationError('Document links must be an array of entity IDs');for(const x of links)checkId(x);const value={schemaVersion:1,id,title:input.title.trim(),status:input.status??'todo',links,createdAt:date,updatedAt:date,body:input.body??''};
-    const file=idPath(path.join(p.dir,kind),id,'.md'); await assertSafePath(p.dir,path.dirname(file));await fs.mkdir(path.dirname(file),{recursive:true});await assertSafePath(p.dir,file);await fs.writeFile(file,docText(value),{flag:'wx'}); return value;
+    if(input.body!==undefined&&typeof input.body!=='string')throw new ValidationError('Document body must be text');
+    statusOk(input.status);const links=input.links??[];await checkLinks(links);
+    const id=uuidv7(), date=nowIso();const value={schemaVersion:1,id,title:input.title.trim(),status:input.status??'todo',links,createdAt:date,updatedAt:date,body:input.body??''};
+    const file=fileOf(kind,id); await assertSafePath(p.dir,path.dirname(file));await fs.mkdir(path.dirname(file),{recursive:true});await assertSafePath(p.dir,file);await fs.writeFile(file,docText(value),{flag:'wx'}); return value;
   }, async list(kind,{body=true}={}) {
-    if(!kinds.includes(kind)) throw new ValidationError(`Unknown document type: ${kind}`);
+    checkKind(kind);
     const base=path.join(p.dir,kind), out=[];await assertSafePath(p.dir,base); if(!await exists(base)) return out;
     for(const sh of (await fs.readdir(base,{withFileTypes:true})).filter(x=>x.isDirectory()).sort((a,b)=>a.name.localeCompare(b.name))) {const shard=path.join(base,sh.name);await assertSafePath(p.dir,shard);for(const f of (await fs.readdir(shard)).filter(x=>x.endsWith('.md')).sort()){const file=path.join(shard,f);await assertSafePath(p.dir,file);const st=await fs.lstat(file);if(!st.isFile())throw new ValidationError(`Planning document is not a regular file: ${file}`);out.push(parseDoc(await fs.readFile(file,'utf8'),f));}}
     out.sort(sortRecords);
     return body?out:out.map(({body:_,...meta})=>meta);
-  }, async get(kind,id) { checkId(id); if(!kinds.includes(kind))throw new ValidationError(`Unknown document type: ${kind}`);const f=idPath(path.join(p.dir,kind),id,'.md');await assertSafePath(p.dir,f);try{return parseDoc(await fs.readFile(f,'utf8'),f);}catch(e){if(e.code==='ENOENT')throw new NotFoundError(`Document not found: ${id}`);throw e;} } };
+  }, async get(kind,id) { return (await api.getVersioned(kind,id)).document; },
+  async getVersioned(kind,id) { checkId(id); checkKind(kind);const f=fileOf(kind,id);await assertSafePath(p.dir,f);let text;try{text=await fs.readFile(f,'utf8');}catch(e){if(e.code==='ENOENT')throw new NotFoundError(`Document not found: ${id}`);throw e;}return {document:parseDoc(text,f),revision:hash(text)}; },
+  /** Revision-safe update of title, status, body and links. An unchanged patch writes nothing. */
+  async update(kind,id,patch={},{expectedRevision}={}) {
+    const {document:current,revision}=await api.getVersioned(kind,id);
+    if(expectedRevision&&expectedRevision!==revision)throw new ConflictError(`Document changed since it was read: ${id}`,{id,revision});
+    const next={...current};
+    if(patch.title!==undefined){if(typeof patch.title!=='string'||!patch.title.trim())throw new ValidationError('Document title is required');next.title=patch.title.trim();}
+    if(patch.body!==undefined){if(typeof patch.body!=='string')throw new ValidationError('Document body must be text');next.body=patch.body.replace(/\r\n/g,'\n').replace(/\n+$/,'');}
+    if(patch.status!==undefined){statusOk(patch.status);next.status=patch.status;}
+    if(patch.links!==undefined){await checkLinks(patch.links,current.links??[]);next.links=[...patch.links];}
+    const same=next.title===current.title&&next.status===current.status&&String(next.body??'').replace(/\n+$/,'')===String(current.body??'').replace(/\n+$/,'')&&JSON.stringify(next.links??[])===JSON.stringify(current.links??[]);
+    if(same)return {document:current,revision,changed:false};
+    next.updatedAt=nowIso();const text=docText(next),f=fileOf(kind,id),temp=`${f}.${process.pid}.${randomBytes(5).toString('hex')}.tmp`;
+    const recheck=hash(await fs.readFile(f,'utf8'));if(recheck!==revision)throw new ConflictError(`Document changed since it was read: ${id}`,{id,revision:recheck});
+    try{await fs.writeFile(temp,text,{flag:'wx'});await fs.rename(temp,f);}catch(e){await fs.rm(temp,{force:true}).catch(()=>{});throw new StorageError(`Could not atomically write ${f}: ${e.message}`);}
+    return {document:parseDoc(text,f),revision:hash(text),changed:true};
+  } };
+  return api;
 }
 function commentApi(p) { return {
   async add(ticketId,input) { checkId(ticketId); await p.tickets.get(ticketId); if(!input.body?.trim()) throw new ValidationError('Comment body is required'); const rec={schemaVersion:1,id:uuidv7(),ticketId,body:input.body,author:input.author??'local',createdAt:nowIso()}; return writeJson(p,'comments',rec,{create:true}); },

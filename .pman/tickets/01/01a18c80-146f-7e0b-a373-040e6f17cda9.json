@@ -3,12 +3,13 @@
   "id": "01a18c80-146f-7e0b-a373-040e6f17cda9",
   "title": "Edit decisions in the UI with revision safety",
   "description": "PLANUNGSLÜCKE 2026-10-30: Die bestehende UI-Aufgabe 01a18a32-9278-79ae-ae7b-35d4a91b4b7c plant Ziele, Pläne und Entscheidungen anzulegen. Die revision-sichere Bearbeitungsaufgabe 01a189f8-f7bf-7921-b4cf-b3269ac6239d deckt dagegen nur Ziele und Pläne ab. Nach dem Anlegen einer Entscheidung fehlt damit ein geplanter, sicherer Weg, ihren Inhalt zu korrigieren.\n\nBestehende Entscheidungen im Planungsdokumentbereich lesbar öffnen und bewusst in den Bearbeitungsmodus wechseln. Titel, Status, Markdown-Body und gültige Ticket-/Dokumentlinks kontrolliert ändern; Vorschau, Speichern und Abbrechen klar trennen. Revision/ETag beim Lesen und Schreiben verwenden, parallele Änderungen als Konflikt anzeigen und niemals still überschreiben. Ungültige oder veraltete Ziele verständlich behandeln. Unverändertes Speichern soll keine Revision oder Aktualisierungsreihenfolge verschieben. .pman bleibt kanonisch; keine Archivierung oder Löschung in diesen Umfang ziehen.\n\nAbnahmeplanung: Eine Entscheidung über die vorhandene UI-Anlageaufgabe erstellen, anschließend bearbeiten, neu laden und Werte/Links wiederfinden; zusätzlich Abbruch ohne Änderungen, ungültigen Link, veraltete Revision, gleichzeitige Änderung sowie Tastatur-/Screenreader- und Mobilbedienung prüfen. Keine Produktimplementierung in dieser Planungsrunde.\n\nZugehörigkeit: Kind von 01a189a9-42b1-7518-a6e0-89b4577b1270 (Planungsdokumente und Projektübersicht). Das UI-Konzept 01a189ad-5c7c-7e68-b165-79fb9f674539 blockiert diese Aufgabe direkt. Mit Dokumentanlage, Dokumentleser, Ziele-/Pläne-Bearbeitung, Rückmeldungen und Accessibility abstimmen; die fachlichen Parent-Zuordnungen dieser Tickets bleiben unverändert. Diese Aufgabe blockiert die abschließende visuelle Prüfung, damit der Entscheidungs-Lese-/Bearbeitungsfluss in der geplanten UI-Abnahme enthalten ist.\nGEMEINSAME UPDATE-API 2026-10-30: Keine zweite Revisions-/Konfliktlogik entwerfen. Den gemeinsamen kind-aware Core-/HTTP-Dokumentupdatevertrag aus 01a189f8-f7bf-7921-b4cf-b3269ac6239d für kind=decisions wiederverwenden und um die Entscheidungsfelder ergänzen. Erlaubte kinds, pman-Validierung, expected revision, verständliche Konflikte und der bestehende Host/Origin/CSRF-Schutz bleiben konsistent.\nENTSCHEIDUNGS-LINKLISTE: Für Decision-Links dieselbe sichtbare Duplikatbehandlung aus 01a189f8-f7bf-7921-b4cf-b3269ac6239d wiederverwenden: keine stille Bereinigung, Hinzufügen doppelter Ziele verhindern und überzählige vorhandene Einträge einzeln entfernbar machen. Keine zweite Linklisten-/Konfliktlogik aufbauen.\nDECISION-KONFLIKTSTATUS: expectedRevision-Fehler aus dem gemeinsamen Dokument-Updatevertrag als HTTP 409/CONFLICT darstellen, nicht als generischen 500-Fehler. Lokalen Markdown-/Link-Entwurf bei Konflikt erhalten; dieselbe Meldung und bewusste Neulade-/Vergleichsaktion wie für Goals und Plans wiederverwenden.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
   "parentId": "01a189a9-42b1-7518-a6e0-89b4577b1270",
   "createdAt": "2026-10-30T11:09:26.510Z",
-  "updatedAt": "2026-11-07T10:22:51.304Z",
-  "kind": "task"
+  "updatedAt": "2026-11-07T12:43:37.007Z",
+  "kind": "task",
+  "assignee": null
 }

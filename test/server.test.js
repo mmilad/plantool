@@ -63,3 +63,17 @@ test('search API pages results and rejects stale snapshots with 409',async t=>{
   assert.equal((await send(`${app.url}/api/search?q=task&offset=20&snapshot=${a.snapshot}`,'GET',host)).status,409);
   assert.equal((await send(`${app.url}/api/search?q=task&limit=101`,'GET',host)).status,400);
 });
+
+test('documents can be created and updated over HTTP with revision checks',async t=>{
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-docedit-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const tk=await p.tickets.create({title:'T'});
+  const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host=new URL(app.url).host;
+  const token=/"csrf":"([a-f0-9]+)"/.exec((await send(app.url,'GET',{host})).body)[1];const w={host,origin:app.url,'x-pman-csrf':token,'content-type':'application/json'};
+  const created=await send(`${app.url}/api/documents/decisions`,'POST',w,JSON.stringify({title:'Use JSON',body:'Because',links:[tk.id]}));assert.equal(created.status,201);const d=JSON.parse(created.body);assert.ok(d.revision);
+  assert.equal((await send(`${app.url}/api/documents/decisions`,'POST',w,JSON.stringify({title:''}))).status,400);
+  assert.equal((await send(`${app.url}/api/documents/decisions`,'POST',{host,'content-type':'application/json'},JSON.stringify({title:'x'}))).status,403);
+  const patched=await send(`${app.url}/api/documents/decisions/${d.id}`,'PATCH',w,JSON.stringify({title:'Use JSON files',expectedRevision:d.revision}));assert.equal(patched.status,200);const u=JSON.parse(patched.body);assert.equal(u.changed,true);
+  const stale=await send(`${app.url}/api/documents/decisions/${d.id}`,'PATCH',w,JSON.stringify({title:'Stale',expectedRevision:d.revision}));assert.equal(stale.status,409);assert.equal(JSON.parse(stale.body).code,'CONFLICT');
+  assert.equal((await send(`${app.url}/api/documents/decisions/${d.id}`,'PATCH',w,JSON.stringify({title:'No revision'}))).status,400);
+  const got=JSON.parse((await send(`${app.url}/api/documents/decisions/${d.id}`,'GET',{host})).body);assert.equal(got.title,'Use JSON files');assert.equal(got.revision,u.revision);
+});

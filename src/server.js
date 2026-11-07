@@ -36,7 +36,10 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
       if(m&&req.method==='POST')return send(res,201,await project.comments.add(m[1],await body(req)));
       if(url.pathname==='/api/documents'&&req.method==='GET'){const kind=url.searchParams.get('kind'),offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',200,1,1000);const all=await project.documents.list(kind,{body:false});return send(res,200,{items:all.slice(offset,offset+limit),total:all.length,offset,limit});}
       m=/^\/api\/documents\/([a-z]+)\/([0-9a-f-]+)$/.exec(url.pathname);
-      if(m&&req.method==='GET')return send(res,200,await project.documents.get(m[1],m[2]));
+      if(m&&req.method==='GET'){const r=await project.documents.getVersioned(m[1],m[2]);return send(res,200,{...r.document,revision:r.revision});}
+      if(m&&req.method==='PATCH'){const {expectedRevision,...patch}=await body(req);if(!expectedRevision)throw new ValidationError('expectedRevision is required');const r=await project.documents.update(m[1],m[2],patch,{expectedRevision});return send(res,200,{...r.document,revision:r.revision,changed:r.changed});}
+      m=/^\/api\/documents\/([a-z]+)$/.exec(url.pathname);
+      if(m&&req.method==='POST'){const input=await body(req);const d=await project.documents.create(m[1],{title:input.title,body:input.body,status:input.status,links:input.links});const r=await project.documents.getVersioned(m[1],d.id);return send(res,201,{...r.document,kind:m[1],revision:r.revision});}
       m=/^\/api\/context\/([0-9a-f-]+)$/.exec(url.pathname);if(m&&req.method==='GET')return send(res,200,await project.context(m[1]));
       if(url.pathname==='/api/validate'&&req.method==='GET')return send(res,200,await project.validate());
       return send(res,404,{error:'Not found'});

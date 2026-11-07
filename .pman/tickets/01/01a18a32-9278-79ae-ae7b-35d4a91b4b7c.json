@@ -3,12 +3,13 @@
   "id": "01a18a32-9278-79ae-ae7b-35d4a91b4b7c",
   "title": "Create goals, plans and decisions from the UI",
   "description": "Die aktuelle UI zeigt Ziele/Pläne als passive Vorschauen; sie bietet kein Formular oder eine Aktion, um ein Ziel, einen Plan oder eine Entscheidung anzulegen. Der pman-Core stellt documents.create(kind, input) für goals/plans/decisions bereit, aber der lokale HTTP-Server exponiert aktuell nur GET /api/documents. Einen klaren Erstellablauf im Planungsdokument-Arbeitsbereich planen und dafür die fehlende POST-Route ergänzen.\n\nErstellung: Dokumentart aus goals/plans/decisions wählen; Titel ist erforderlich; Markdown-Body optional; Status nach pman-Dokumentvertrag mit todo als Standard; Ticket-/Dokumentverknüpfungen aus vorhandenen Entitäten auswählen statt IDs frei einzutippen. Nach bestätigtem Erfolg die Liste gezielt aktualisieren und das neue Dokument im Lesemodus öffnen. Fehler verständlich und inline anzeigen, Eingaben bei Fehler behalten; CSRF-/Origin-Schutz der schreibenden Route beibehalten. Unsicheres Markdown/HTML nicht ausführbar rendern.\n\nKeine Inline-Bearbeitung, Archivierung oder Löschung in dieses Ticket ziehen; revision-sichere Bearbeitung bleibt im bestehenden Ticket 01a189f8-f7bf-7921-b4cf-b3269ac6239d. Dokumentnavigation/Lesemodus 01a189af-50ab-71b9-9f11-92e13989409f, gezielter Dokumentabruf 01a189d5-d409-79de-b8b2-d59fb0516979, Rückmeldungen 01a189b2-43b1-775a-89f1-388cdd0af53c und Accessibility 01a189b2-a6a6-74d9-b7c4-d9e344090079 behalten ihre bestehenden fachlichen Eltern; diese Beziehungen hier nur abstimmen. Kind von Planungsdokumente und Projektübersicht gestalten. Keine Produktimplementierung in dieser Planungsrunde.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
   "parentId": "01a189a9-42b1-7518-a6e0-89b4577b1270",
   "createdAt": "2026-10-30T00:25:32.535Z",
-  "updatedAt": "2026-11-07T10:22:51.040Z",
-  "kind": "task"
+  "updatedAt": "2026-11-07T12:43:38.613Z",
+  "kind": "task",
+  "assignee": null
 }
