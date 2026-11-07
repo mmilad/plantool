@@ -3,7 +3,7 @@
   "id": "01a1b579-3075-718e-874f-ed239510187f",
   "title": "Agent-ready product planning with execution order, code plans and contracts",
   "description": "Agents plan a whole product (goals, UI, services, code, contracts) and check its consistency before code is touched. Decision: docs/implementation-decisions.md, section \"Agent planning, code plans and contracts\".",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [
     "agent-planning"
@@ -11,6 +11,7 @@
   "properties": {},
   "parentId": null,
   "createdAt": "2026-11-07T10:06:20.788Z",
-  "updatedAt": "2026-11-07T10:13:38.957Z",
-  "kind": "feature"
+  "updatedAt": "2026-11-07T12:51:09.184Z",
+  "kind": "feature",
+  "assignee": null
 }

@@ -3,7 +3,7 @@
   "id": "01a1b579-3155-7187-9b03-0d5d8cf23f4d",
   "title": "Ticket code plans backed by central components, contracts and types",
   "description": "",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [
     "agent-planning",
@@ -12,6 +12,7 @@
   "properties": {},
   "parentId": "01a1b579-3075-718e-874f-ed239510187f",
   "createdAt": "2026-11-07T10:06:21.013Z",
-  "updatedAt": "2026-11-07T10:13:40.796Z",
-  "kind": "feature"
+  "updatedAt": "2026-11-07T12:51:07.054Z",
+  "kind": "feature",
+  "assignee": null
 }
