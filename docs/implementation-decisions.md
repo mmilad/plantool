@@ -22,14 +22,36 @@ This file records material choices made while implementing the first usable rele
 
 ## Browser UI
 
-- `pman serve` binds only to `127.0.0.1`; no LAN option is provided. It resolves one project from cwd/ancestors and does not enumerate projects.
+- `pman serve` binds only to `127.0.0.1:4000` by default and fails clearly if occupied; only a caller-supplied `--port` may override it. No random fallback or automatic process termination. `--open` runs only after a successful bind. No LAN option is provided. It resolves one project from cwd/ancestors and does not enumerate projects.
 - Mutating requests require the server's exact Host, same-origin Origin, and a per-server CSRF token. CORS is disabled; no external assets or project code are executed.
 
 ## Scope
 
 - MVP includes core project/config, ticket, planning document, comment, relationship, search, context, validate and browser workflows.
-- Agent execution, auth/hosted sharing, MCP, extensions/hooks, binary asset ingestion, semantic search, global installation, and publication remain excluded.
+- Agent execution, auth/hosted sharing, MCP, extensions/hooks, binary asset ingestion, global installation, and publication remain excluded. Semantic search remains post-MVP: planned as local Node.js + ONNX `all-MiniLM-L6-v2` embeddings and a rebuildable SQLite vector index, with keyword search always available; see `open-questions.md` and the pman search roadmap.
 - Cross-platform CI definitions will cover Windows, macOS and Linux; only platforms actually run in this task will be reported as executed.
+
+## Agent planning, code plans and contracts (owner decision 2026-11-07)
+
+- Purpose: pman lets agents plan a whole product (goals, UI, services, code and contracts) before implementation and check that plan for consistency before code is touched.
+- Tickets get a small `kind`: `task`, `feature`, `bug`. The ticket kind does not decide whether a contract is required.
+- Code structure is not modelled as ticket subtypes. A ticket carries an optional **code plan** that references central, long-lived architecture records instead of copying them:
+  - `components`: `module`, `service`, `class`, `method`, `function`, `ui-component`, nested via `parentId`; the kind catalog is project configuration like statuses.
+  - `contracts`: one contract per method/function, maintained centrally and versioned, never duplicated per ticket.
+  - `types`: shared types (for example `User`) referenced with `$ref`, using a JSON Schema subset (string, number, boolean, array, object, required, `$ref`).
+- Code-plan entries on a ticket: `implements` a component, `consumes` a contract with the fields it `requires`, `changes` a contract. A plain task (for example a colour or font-size change) has no code plan.
+- `pman check` validates per-kind rules (a service needs methods, a method/function needs a contract), consumer requirements against provider contracts (for example a consumer requiring `getUser.userId` that the contract does not return), missing providers and type mismatches, and lists affected consumers for `changes`.
+- A parent ticket cannot be set to `done` while children or blockers are open, unless forced. Consumers are implicitly not ready until the provider ticket of a consumed contract is done; `pman next` uses this ordering (contract, provider, consumer).
+- Deferred: contract version history and breaking-change detection; generating types, mocks or contract tests from contracts and comparing plans with real code.
+
+## Agent workflow (implemented 2026-11-07)
+
+- Readiness: a ticket is ready when it is `todo`, has no open children, and neither it nor an ancestor has an open (not done/cancelled) `blocks` dependency or a cancelled ancestor. Done or cancelled blockers never block rollups or readiness.
+- `pman next` ranking: effective priority (explicit priority wins; `normal` inherits from the nearest ancestor with an explicit priority), transitive unblock count (including edges of ancestors), focus on parents with work in progress, then creation time and ID for determinism. Every row carries human-readable reasons.
+- Claims are stored on the ticket as `assignee { agent, claimedAt, expiresAt }` so they are visible in Git and across worktrees; default lease 60 minutes. Expired leases are offered again by `next` and can be claimed by another agent. A short lock directory in the OS temp folder (keyed by project root) serialises concurrent claims in one checkout; nothing is written to the repository for locking.
+- `pman done` refuses to finish a ticket with open descendants or blockers unless forced, clears the claim, records an optional note as a comment authored by the agent, and returns tickets that became ready.
+- `pman agent init` previews by default and with `--write` adds or refreshes a section between `<!-- pman:start -->` and `<!-- pman:end -->` in `AGENTS.md`; text outside the markers is never changed.
+- Line endings: `.gitattributes` enforces LF for text files; planning-document parsing also tolerates CRLF.
 
 ## Verification and remaining release work
 

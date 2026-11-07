@@ -1,6 +1,8 @@
 import { randomBytes, createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { TICKET_KINDS, workGraph, readinessOf, nextTickets, claimTicket, releaseTicket, finishTicket } from './workflow.js';
+export { TICKET_KINDS } from './workflow.js';
 
 export const DEFAULT_STATUSES = Object.freeze(['todo', 'in_progress', 'done', 'cancelled']);
 export const RELATION_TYPES = Object.freeze(['blocks', 'relates_to', 'duplicates', 'implements', 'validates', 'supersedes']);
@@ -14,6 +16,7 @@ export class CycleError extends PmanError { constructor(message, details) { supe
 export class ConflictError extends PmanError { constructor(message, details) { super(message, 'CONFLICT', details); } }
 export class UnsupportedSchemaVersionError extends PmanError { constructor(message, details) { super(message, 'UNSUPPORTED_SCHEMA_VERSION', details); } }
 export class StorageError extends PmanError { constructor(message, details) { super(message, 'STORAGE', details); } }
+export class OpenWorkError extends PmanError { constructor(message, details) { super(message, 'OPEN_WORK', details); } }
 
 export function uuidv7(now = Date.now()) {
   const b = randomBytes(16); let ms = BigInt(now);
@@ -70,6 +73,10 @@ export async function openProject({ cwd = process.cwd() } = {}) {
   p.search = query => searchProject(p, query);
   p.context = (id, options) => contextFor(p, id, options);
   p.tree = (id, options) => buildTree(p, id, options);
+  p.next = options => nextTickets(p, options);
+  p.claim = (id, options) => claimTicket(p, id, options);
+  p.release = (id, options) => releaseTicket(p, id, options);
+  p.finish = (id, options) => finishTicket(p, id, options);
   return p;
 }
 
@@ -114,6 +121,8 @@ function validateTicketInput(input, statuses) {
   if(input.description!==undefined&&typeof input.description!=='string')throw new ValidationError('Ticket description must be text');
   if(input.priority!==undefined&&!['low','normal','high','urgent'].includes(input.priority))throw new ValidationError(`Invalid priority: ${input.priority}`);
   if(input.labels!==undefined&&(!Array.isArray(input.labels)||input.labels.some(x=>typeof x!=='string')))throw new ValidationError('Ticket labels must be an array of strings');
+  if(input.kind!==undefined&&!TICKET_KINDS.includes(input.kind))throw new ValidationError(`Invalid ticket kind: ${input.kind}`);
+  if(input.assignee!=null&&(typeof input.assignee!=='object'||typeof input.assignee.agent!=='string'||!input.assignee.agent.trim()||Number.isNaN(Date.parse(input.assignee.expiresAt))))throw new ValidationError('Ticket assignee must have an agent name and an expiresAt timestamp');
   if(input.properties!==undefined&&(!input.properties||typeof input.properties!=='object'||Array.isArray(input.properties)))throw new ValidationError('Ticket properties must be an object');
 }
 
@@ -123,35 +132,33 @@ function ticketApi(p) {
     async create(input) {
       validateTicketInput(input, statuses);
       if (input.parentId) await readJson(idPath(path.join(p.dir, 'tickets'), input.parentId));
-      const date = nowIso(); const rec = { schemaVersion: 1, id: uuidv7(), title: input.title.trim(), description: input.description ?? '', status: input.status ?? statuses[0], priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, createdAt: date, updatedAt: date };
+      const date = nowIso(); const rec = { schemaVersion: 1, id: uuidv7(), title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status: input.status ?? statuses[0], priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, createdAt: date, updatedAt: date };
       return writeJson(p, 'tickets', rec, { create: true });
     },
     async get(id) { return (await this.getVersioned(id)).ticket; },
     async getVersioned(id) { checkId(id); const file=idPath(path.join(p.dir,'tickets'),id);await assertSafePath(p.dir,file);const r = await readJson(file); return {ticket:r.value,revision:r.revision}; },
     async list({ status, parentId, limit = 5000 } = {}) { const a = await listJson(p, 'tickets'); return a.filter(x => (!status || x.status === status) && (parentId === undefined || x.parentId === parentId)).sort(sortRecords).slice(0, limit); },
-    async update(id, patch, {expectedRevision} = {}) {
+    async update(id, patch, {expectedRevision, force = false} = {}) {
       checkId(id); const file = idPath(path.join(p.dir, 'tickets'), id); await assertSafePath(p.dir,file); const current = await readJson(file), rec = current.value;
       if(expectedRevision&&expectedRevision!==current.revision)throw new ConflictError(`Record changed since it was read: ${id}`,{id});
       const next = { ...rec, ...patch, id, schemaVersion: 1, createdAt: rec.createdAt, updatedAt: nowIso() };
       validateTicketInput(next, statuses); if (next.parentId === id) throw new CycleError('A ticket cannot be its own parent');
       if (next.parentId) await ensureCanParent(p, id, next.parentId);
+      if (next.status === 'done' && rec.status !== 'done' && !force) {
+        const g = await workGraph(p), openChildren = g.descendants(id).filter(x => x.status !== 'done' && x.status !== 'cancelled'), blockers = g.openBlockers(id);
+        if (openChildren.length || blockers.length) throw new OpenWorkError(`Ticket still has ${openChildren.length} open descendant(s) and ${blockers.length} open blocker(s); finish them first or use force`, { id, openChildren: openChildren.map(x => x.id), blockers: blockers.map(x => x.id) });
+      }
       return writeJson(p, 'tickets', next, { expectedRevision: current.revision });
     },
     async move(id, parentId) { return this.update(id, { parentId: parentId ?? null }); },
     async rollup(id) { const rows = await buildTree(p,id); return rows[0].rollup; },
-    async readiness(id) { checkId(id);const all=await listJson(p,'tickets'),byId=new Map(all.map(t=>[t.id,t])),rels=await listJson(p,'relationships');const incoming=rels.filter(r=>r.type==='blocks'&&r.targetId===id);return {ready:incoming.every(r=>byId.get(r.sourceId)?.status==='done'),blockers:incoming.map(r=>({relationshipId:r.id,ticket:byId.get(r.sourceId)??null}))}; }
+    async readiness(id) { checkId(id);const all=await listJson(p,'tickets'),byId=new Map(all.map(t=>[t.id,t])),rels=await listJson(p,'relationships');const incoming=rels.filter(r=>r.type==='blocks'&&r.targetId===id);return {ready:incoming.every(r=>isFinished(byId.get(r.sourceId))),blockers:incoming.map(r=>({relationshipId:r.id,ticket:byId.get(r.sourceId)??null}))}; }
   };
 }
+const isFinished = t => t?.status==='done' || t?.status==='cancelled';
 function sortRecords(a,b) { return String(a.createdAt).localeCompare(String(b.createdAt)) || a.id.localeCompare(b.id); }
 function descendants(all, id) { const map = childIndex(all), out = [], stack = [...(map.get(id) ?? [])].reverse(); while(stack.length) { const cur=stack.pop(); out.push(cur); const c=map.get(cur.id)??[]; for(let i=c.length-1;i>=0;i--) stack.push(c[i]); } return out; }
 function childIndex(all) { const m=new Map(); for(const t of all) { if(!m.has(t.parentId)) m.set(t.parentId,[]); m.get(t.parentId).push(t); } for(const v of m.values()) v.sort(sortRecords); return m; }
-function derivedStatus(ticket, descendantsList, relations) {
-  const blockers=relations.some(r=>r.type==='blocks' && r.targetId===ticket.id); if(blockers) return 'blocked';
-  if (!descendantsList.length) return ticket.status;
-  const active=descendantsList.some(x=>x.status==='in_progress');
-  const remaining=descendantsList.some(x=>x.status!=='done' && x.status!=='cancelled');
-  return !remaining ? 'done' : active ? 'in_progress' : ticket.status;
-}
 async function ensureCanParent(p, id, parentId) {
   const all=await listJson(p,'tickets'), map=new Map(all.map(x=>[x.id,x]));
   if(!map.has(parentId)) throw new NotFoundError(`Parent ticket not found: ${parentId}`);
@@ -163,11 +170,12 @@ export async function buildTree(p, id = null, { maxDepth = Infinity, limit = 500
   const ordered=[], stack=[];
   for(let i=roots.length-1;i>=0;i--) stack.push({ticket:roots[i],depth:0});
   while(stack.length) { const item=stack.pop(); ordered.push(item); const cs=idx.get(item.ticket.id)??[]; for(let i=cs.length-1;i>=0;i--) stack.push({ticket:cs[i],depth:item.depth+1}); }
-  const rel=await listJson(p,'relationships'), stats=new Map(), rollups=new Map();
+  const rel=await listJson(p,'relationships'), stats=new Map(), rollups=new Map(), byId=new Map(all.map(x=>[x.id,x]));
+  const openBlocked=new Set(rel.filter(r=>r.type==='blocks'&&!isFinished(byId.get(r.sourceId))).map(r=>r.targetId));
   for(let i=ordered.length-1;i>=0;i--) {
     const {ticket}=ordered[i], cs=idx.get(ticket.id)??[];
     const childStats=cs.map(c=>stats.get(c.id)).filter(Boolean);
-    const blocked=rel.some(r=>r.type==='blocks'&&r.targetId===ticket.id);
+    const blocked=!isFinished(ticket)&&openBlocked.has(ticket.id);
     const rollup=blocked?'blocked':cs.length>0&&!childStats.some(x=>x.remaining)?'done':childStats.some(x=>x.active)?'in_progress':ticket.status;
     rollups.set(ticket.id,rollup);
     stats.set(ticket.id,{active:ticket.status==='in_progress'||childStats.some(x=>x.active),remaining:(ticket.status!=='done'&&ticket.status!=='cancelled')||childStats.some(x=>x.remaining)});
@@ -176,6 +184,7 @@ export async function buildTree(p, id = null, { maxDepth = Infinity, limit = 500
 }
 
 function parseDoc(text, file) {
+  text=text.replace(/\r\n/g,'\n');
   const m=/^---\n([\s\S]*?)\n---\n([\s\S]*)$/.exec(text); if(!m) throw new ValidationError(`Invalid Markdown metadata at ${file}`);
   const meta={}; for(const line of m[1].split('\n')) { const i=line.indexOf(':'); if(i<0) continue; const k=line.slice(0,i),v=line.slice(i+1).trim(); try { meta[k]=JSON.parse(v); } catch { meta[k]=v; } }
   if(meta.schemaVersion!==1) throw new UnsupportedSchemaVersionError(`Unsupported document schema version at ${file}`);
@@ -246,7 +255,7 @@ export async function contextFor(p,id,{budget=8000}={}) {
   const docs=[];for(const kind of kinds)for(const d of await p.documents.list(kind))if((d.links??[]).includes(id)||d.body.includes(id)||d.title.toLowerCase().includes(ticket.title.toLowerCase()))docs.push({id:d.id,type:kind,title:d.title,path:path.relative(p.root,idPath(path.join(p.dir,kind),d.id,'.md')).split(path.sep).join('/')});
   const brief=x=>({id:x.id,title:x.title,status:x.status,priority:x.priority,parentId:x.parentId,description:x.description??''});
   const ticketPath=path.relative(p.root,idPath(path.join(p.dir,'tickets'),id)).split(path.sep).join('/');
-  const packet={ticket:brief(ticket),ancestors:ancestors.map(brief),descendants:selectedDesc.map(brief),relationships:rel,comments,documents:docs,sources:{ticket:ticketPath,ancestors:ancestors.map(x=>path.relative(p.root,idPath(path.join(p.dir,'tickets'),x.id)).split(path.sep).join('/'))}},omitted={comments:0,relationships:0,documents:0,ancestors:0,descendants:Math.max(0,descendantsList.length-selectedDesc.length),descriptionBytes:0};
+  const g=await workGraph(p),ready=readinessOf(g,ticket);const packet={readiness:{ready:ready.ready,reasons:ready.reasons},ticket:{...brief(ticket),kind:ticket.kind??'task',assignee:ticket.assignee??null},ancestors:ancestors.map(brief),descendants:selectedDesc.map(brief),relationships:rel,comments,documents:docs,sources:{ticket:ticketPath,ancestors:ancestors.map(x=>path.relative(p.root,idPath(path.join(p.dir,'tickets'),x.id)).split(path.sep).join('/'))}},omitted={comments:0,relationships:0,documents:0,ancestors:0,descendants:Math.max(0,descendantsList.length-selectedDesc.length),descriptionBytes:0};
   const size=()=>Buffer.byteLength(JSON.stringify({...packet,omitted},null,2));
   for(const key of ['comments','relationships','documents','descendants'])while(size()>max&&packet[key].length){packet[key].pop();omitted[key]++;}
   while(size()>max&&packet.ancestors.length){packet.ancestors.pop();packet.sources.ancestors.pop();omitted.ancestors++;}

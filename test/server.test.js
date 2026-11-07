@@ -13,7 +13,7 @@ test('serve is loopback-only and protects writes with Host, Origin and CSRF chec
   const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const app=await serve({cwd});t.after(()=>new Promise(r=>app.server.close(r)));
   const page=await send(app.url,'GET',{host:new URL(app.url).host});assert.equal(page.status,200);
-  const token=/const csrf="([a-f0-9]+)"/.exec(page.body)?.[1];assert.ok(token);
+  const token=/"csrf":"([a-f0-9]+)"/.exec(page.body)?.[1];assert.ok(token);
   const blocked=await send(app.url,'POST',{host:new URL(app.url).host,'content-type':'application/json'},'{}');assert.equal(blocked.status,403);
   const badHost=await send(app.url,'GET',{host:'evil.example'});assert.equal(badHost.status,403);
   const good=await send(app.url+'/api/tickets','POST',{host:new URL(app.url).host,origin:app.url,'content-type':'application/json','x-pman-csrf':token},JSON.stringify({title:'From browser'}));assert.equal(good.status,201,good.body);

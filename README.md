@@ -28,11 +28,27 @@ npx pman validate
 npx pman serve
 ```
 
-Create children at any level by passing `--parent <ticket-id>`. The server prints a loopback URL and stays in the foreground; stop it with Ctrl-C. It serves only the project found from the current directory or its ancestors. `--open` asks the operating system to open the URL in the default browser.
+Create children at any level by passing `--parent <ticket-id>`. The server uses `http://127.0.0.1:4000` by default and stays in the foreground; stop it with Ctrl-C. If the port is occupied, it reports the conflict and starts no additional server. Choose another port explicitly with `pman serve --port N`. It serves only the project found from the current directory or its ancestors. `--open` asks the operating system to open the URL only after the server starts successfully.
 
 ## CLI
 
 Run `pman --help` for the current command reference. The first release supports project initialization; ticket create/list/show/update/move; trees; goal, plan and decision creation; comments; typed relationships; offline search; bounded context; validation; and the project-local web UI. Output is JSON by default where useful; pass `--format json` where supported for an explicit machine-readable contract.
+
+## Agent workflow
+
+pman is built so coding agents can pick work in a sensible order without a human triaging every step:
+
+```sh
+npx pman next                          # ready tickets, ranked, with reasons
+npx pman claim <id> --agent my-agent   # in_progress + assignee with a 60-minute lease
+npx pman context <id> --format json    # bounded context packet incl. readiness
+npx pman done <id> --note "tested"     # done + comment, prints newly ready tickets
+npx pman agent init --write            # add the workflow to AGENTS.md between markers
+```
+
+A ticket is ready when it is `todo`, has no open children, and neither it nor any ancestor has an open `blocks` dependency. `next` ranks by priority (an explicit priority wins; `normal` inherits from the nearest ancestor with an explicit one), then by how many tickets finishing it transitively unblocks, then by proximity to work already in progress, then by age. A parent cannot be set to `done` while descendants or blockers are open unless `--force` is passed. Expired leases are offered again by `next`. `PMAN_AGENT` sets the default agent name.
+
+Tickets have a `kind` of `task`, `feature` or `bug`. Planned next: ticket code plans that reference centrally maintained components, contracts and types, with `pman check` validating consumer requirements against provider contracts before implementation (see `docs/implementation-decisions.md`).
 
 ## TypeScript API
 
