@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="900" viewBox="0 0 800 900" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — mobile Planungsdokumente</title>
+  <desc id="desc">Zwei statische Mobilzustände nebeneinander: auswählbare Liste der vier echten Planungsdokumente und der reine Lesemodus für den UI-Plan mit dessen acht kanonischen Ticketlinks. Zurück-zur-Liste, Dokumentart, Status und Verknüpfungen sind sichtbar; es gibt keine Bearbeitungsaktion.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 10px; }
+      .small { font-size: 12px; }
+      .body { font-size: 13px; }
+      .title { font-size: 21px; font-weight: 650; }
+      .section { font-size: 15px; font-weight: 650; }
+      .icon { fill: none; stroke: #263445; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .icon-active { stroke: #2457A7; }
+      .blue { fill: #2457A7; }
+      .inverse { fill: #FFFFFF; }
+    </style>
+    <symbol id="target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></symbol>
+    <symbol id="clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M9 10h6m-6 4h6m-6 4h4"/></symbol>
+    <symbol id="nav-house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/></symbol>
+    <symbol id="nav-ticket" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v4a2 2 0 0 0 0 4v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a2 2 0 0 0 0-4V6a1 1 0 0 1 1-1Z"/><path d="M13 5v2m0 3v2m0 3v2"/></symbol>
+    <symbol id="nav-documents" viewBox="0 0 24 24"><path d="M7 3h10l4 4v14H7z"/><path d="M17 3v5h4M3 7v14h4M10 12h8m-8 4h8"/></symbol>
+  </defs>
+  <rect width="800" height="900" fill="#F6F7F9"/>
+
+  <!-- Document list state: 390 x 844 -->
+  <g>
+    <rect x="0" y="0" width="390" height="844" fill="#F6F7F9" stroke="#C8D0DB"/>
+    <rect x="0" y="0" width="390" height="58" fill="#FFFFFF"/>
+    <path d="M0 57.5H390" stroke="#D8DEE7"/>
+    <rect x="16" y="14" width="30" height="30" rx="8" fill="#2457A7"/>
+    <path d="M24.75 23.375h12.5M24.75 28.375h12.5M24.75 33.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
+    <text x="56" y="28" font-size="14" font-weight="650">Planus Manus</text>
+    <text x="56" y="43" class="tiny muted">planus-manus</text>
+    <rect x="242" y="7" width="132" height="44" rx="6" fill="#2457A7"/>
+    <path d="M254 29h10m-5-5v10" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+    <text x="270" y="33" class="small inverse" font-weight="600">Ticket erstellen</text>
+
+    <rect x="12" y="65" width="366" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <circle cx="29" cy="87" r="5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+    <path d="m32.5 90.5 3 3" stroke="#5A687A" stroke-width="1.3" stroke-linecap="round"/>
+    <text x="44" y="91" class="small muted">Im Projekt suchen</text>
+
+    <rect x="0" y="114" width="390" height="44" fill="#FFFFFF"/>
+    <path d="M0 157.5H390" stroke="#D8DEE7"/>
+    <use href="#nav-house" x="13" y="126" width="20" height="20" class="icon"/>
+    <text x="39" y="141" class="small muted">Übersicht</text>
+    <use href="#nav-ticket" x="120" y="126" width="20" height="20" class="icon"/>
+    <text x="146" y="141" class="small muted">Tickets</text>
+    <use href="#nav-documents" x="205" y="126" width="20" height="20" class="icon icon-active"/>
+    <text x="231" y="141" class="small blue" font-weight="650">Planungsdokumente</text>
+    <rect x="201" y="154" width="153" height="3" rx="1.5" fill="#2457A7"/>
+
+    <text x="16" y="190" class="title">Planungsdokumente</text>
+    <text x="16" y="212" class="small muted">4 Dokumente · nur Lesen</text>
+    <rect x="12" y="225" width="366" height="44" rx="6" fill="#FFFFFF" stroke="#768294"/>
+    <text x="28" y="252" class="small">Dokumentart: Alle (4)</text>
+    <path d="m354 243 5 5 5-5" fill="none" stroke="#5A687A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="16" y="286" class="tiny muted">2 Ziele · 2 Pläne · 0 Entscheidungen</text>
+
+    <rect x="12" y="296" width="366" height="78" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <use href="#target" x="28" y="300" width="16" height="16" class="icon"/>
+    <text x="50" y="316" class="tiny muted" font-weight="650">ZIEL · OFFEN</text>
+    <text x="28" y="339" class="small" font-weight="650">Eine klare, moderne Jira-inspirierte</text>
+    <text x="28" y="357" class="small" font-weight="650">Planungsoberfläche gestalten</text>
+    <path d="m354 330 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="12" y="382" width="366" height="78" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <use href="#target" x="28" y="386" width="16" height="16" class="icon"/>
+    <text x="50" y="402" class="tiny muted" font-weight="650">ZIEL · OFFEN</text>
+    <text x="28" y="425" class="small" font-weight="650">Die Planus-Manus-Oberfläche fortlaufend</text>
+    <text x="28" y="443" class="small" font-weight="650">prüfen und verbessern</text>
+    <path d="m354 416 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="12" y="468" width="366" height="84" rx="7" fill="#EAF1FD" stroke="#2457A7"/>
+    <use href="#clipboard" x="28" y="472" width="16" height="16" class="icon"/>
+    <text x="50" y="488" class="tiny blue" font-weight="650">PLAN · OFFEN · AUSGEWÄHLT</text>
+    <text x="28" y="512" class="small" font-weight="650">UI-Plan: Jira-inspirierte Planus-Manus-</text>
+    <text x="28" y="530" class="small" font-weight="650">Oberfläche</text>
+    <path d="m354 502 5 5-5 5" fill="none" stroke="#2457A7" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="12" y="560" width="366" height="84" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <use href="#clipboard" x="28" y="564" width="16" height="16" class="icon"/>
+    <text x="50" y="580" class="tiny muted" font-weight="650">PLAN · OFFEN</text>
+    <text x="28" y="604" class="small" font-weight="650">Fortlaufender UI-Review und Jira-</text>
+    <text x="28" y="622" class="small" font-weight="650">inspirierte Verbesserung</text>
+    <path d="m354 594 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <text x="16" y="675" class="tiny muted">Die Auswahl öffnet den vollständigen Dokumentleser.</text>
+    <text x="16" y="695" class="tiny muted">Bei Entscheidungen (0): „Noch keine Entscheidungen“.</text>
+    <text x="16" y="817" class="tiny muted">Datenstand 2026-10-30 · Entwurf · nur Lesen</text>
+  </g>
+
+  <!-- Document reader state: 390 x 844 -->
+  <g transform="translate(410 0)">
+    <rect x="0" y="0" width="390" height="844" fill="#F6F7F9" stroke="#C8D0DB"/>
+    <rect x="0" y="0" width="390" height="58" fill="#FFFFFF"/>
+    <path d="M0 57.5H390" stroke="#D8DEE7"/>
+    <rect x="16" y="14" width="30" height="30" rx="8" fill="#2457A7"/>
+    <path d="M24.75 23.375h12.5M24.75 28.375h12.5M24.75 33.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
+    <text x="56" y="28" font-size="14" font-weight="650">Planus Manus</text>
+    <text x="56" y="43" class="tiny muted">planus-manus</text>
+    <rect x="242" y="7" width="132" height="44" rx="6" fill="#2457A7"/>
+    <path d="M254 29h10m-5-5v10" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+    <text x="270" y="33" class="small inverse" font-weight="600">Ticket erstellen</text>
+
+    <rect x="12" y="65" width="366" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <circle cx="29" cy="87" r="5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+    <path d="m32.5 90.5 3 3" stroke="#5A687A" stroke-width="1.3" stroke-linecap="round"/>
+    <text x="44" y="91" class="small muted">Im Projekt suchen</text>
+
+    <rect x="0" y="114" width="390" height="44" fill="#FFFFFF"/>
+    <path d="M0 157.5H390" stroke="#D8DEE7"/>
+    <use href="#nav-house" x="13" y="126" width="20" height="20" class="icon"/>
+    <text x="39" y="141" class="small muted">Übersicht</text>
+    <use href="#nav-ticket" x="120" y="126" width="20" height="20" class="icon"/>
+    <text x="146" y="141" class="small muted">Tickets</text>
+    <use href="#nav-documents" x="205" y="126" width="20" height="20" class="icon icon-active"/>
+    <text x="231" y="141" class="small blue" font-weight="650">Planungsdokumente</text>
+    <rect x="201" y="154" width="153" height="3" rx="1.5" fill="#2457A7"/>
+
+    <rect x="12" y="166" width="366" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <path d="m31 188-5-5 5-5m-5 5h14" fill="none" stroke="#2457A7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="48" y="193" class="small blue" font-weight="600">Zurück zur Dokumentliste</text>
+
+    <text x="20" y="233" class="tiny muted">Planungsdokumente</text>
+    <path d="m137 228 4 4-4 4" fill="none" stroke="#768294" stroke-width="1.2"/>
+    <text x="148" y="233" class="tiny muted">Pläne</text>
+
+    <text x="20" y="267" class="title">UI-Plan: Jira-inspirierte</text>
+    <text x="20" y="293" class="title">Planus-Manus-Oberfläche</text>
+    <rect x="20" y="306" width="110" height="28" rx="14" fill="#F0F3F7"/>
+    <use href="#clipboard" x="28" y="312" width="16" height="16" class="icon"/>
+    <text x="50" y="325" class="small" font-weight="600">Plan · Offen</text>
+
+    <rect x="12" y="346" width="366" height="230" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="28" y="373" class="section">Zielbild</text>
+    <text x="28" y="399" class="body">Eine vertraute, arbeitsorientierte</text>
+    <text x="28" y="418" class="body">Oberfläche mit klarer Projektnavigation,</text>
+    <text x="28" y="437" class="body">effizienter Ticketübersicht und gut</text>
+    <text x="28" y="456" class="body">lesbaren Detailansichten.</text>
+    <path d="M28 470H362" stroke="#D8DEE7"/>
+    <text x="28" y="494" class="section">Reihenfolge</text>
+    <text x="28" y="518" class="small">1 · UI-Richtung und Informationsarchitektur</text>
+    <text x="43" y="535" class="small">festlegen</text>
+    <text x="28" y="554" class="small">2 · Lokales, konsistentes Icon-System definieren</text>
+    <text x="28" y="571" class="tiny muted">Weitere Punkte folgen im vollständigen Lesemodus.</text>
+
+    <rect x="12" y="590" width="366" height="246" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="28" y="617" class="section">Verknüpfte Tickets · 8</text>
+    <rect x="24" y="629" width="342" height="48" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="38" y="650" class="small">Schlichte Planungsoberfläche für</text>
+    <text x="38" y="666" class="small">Planus Manus gestalten und umsetzen</text>
+    <path d="m347 645 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+    <rect x="24" y="683" width="342" height="48" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="38" y="704" class="small">UI-Richtung und Informationsarchitektur</text>
+    <text x="38" y="720" class="small">festlegen</text>
+    <path d="m347 699 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+    <rect x="24" y="737" width="342" height="48" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="38" y="758" class="small">Konsistentes Icon-System auswählen</text>
+    <text x="38" y="774" class="small">und integrieren</text>
+    <path d="m347 753 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+    <rect x="24" y="787" width="342" height="44" rx="6" fill="#EAF1FD" stroke="#768294"/>
+    <text x="38" y="814" class="small blue" font-weight="600">Weitere 5 Ticketlinks anzeigen</text>
+    <path d="m347 802 5 5-5 5" fill="none" stroke="#2457A7" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

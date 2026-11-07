@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="960" viewBox="0 0 320 960" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — Ticketdetail bei 320 Pixeln</title>
+  <desc id="desc">Statische schmale Mobilvorschau für das echte Ticket Planungsdokumente und Projektübersicht gestalten. Sie zeigt Rückweg, den navigierbaren Elternkontext „Schlichte Planungsoberfläche für Planus Manus gestalten und umsetzen“, gespeicherten Status und Priorität, getrennte Blockerbereitschaft, sechs Unteraufgaben sowie alle vier navigierbaren aktuellen Beziehungen mit Richtung und Gegen-Ticket.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 10px; }
+      .small { font-size: 12px; }
+      .body { font-size: 13px; }
+      .title-text { font-size: 21px; font-weight: 650; }
+      .section { font-size: 14px; font-weight: 650; }
+      .action { font-size: 11px; font-weight: 650; fill: #2457A7; }
+      .inverse { fill: #FFFFFF; }
+      .critical { fill: #9B1C1C; }
+      .blue { fill: #2457A7; }
+      .nav-icon { fill: none; stroke: #5A687A; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .nav-icon-active { fill: none; stroke: #2457A7; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <symbol id="nav-house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/></symbol>
+    <symbol id="nav-ticket" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v4a2 2 0 0 0 0 4v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a2 2 0 0 0 0-4V6a1 1 0 0 1 1-1Z"/><path d="M13 5v2m0 3v2m0 3v2"/></symbol>
+    <symbol id="nav-documents" viewBox="0 0 24 24"><path d="M7 3h10l4 4v14H7z"/><path d="M17 3v5h4M3 7v14h4M10 12h8m-8 4h8"/></symbol>
+  </defs>
+  <rect width="320" height="960" fill="#F6F7F9"/>
+
+  <rect width="320" height="52" fill="#FFFFFF"/>
+  <path d="M0 51.5H320" stroke="#D8DEE7"/>
+  <rect x="12" y="11" width="30" height="30" rx="8" fill="#2457A7"/>
+  <path d="M20.75 20.375h12.5M20.75 25.375h12.5M20.75 30.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
+  <text x="52" y="25" font-size="14" font-weight="650">Planus Manus</text>
+  <text x="52" y="40" class="tiny muted">planus-manus</text>
+
+  <rect x="12" y="57" width="296" height="44" rx="6" fill="#2457A7"/>
+  <path d="M110 79h10m-5-5v10" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="126" y="83" class="small inverse" font-weight="600">Ticket erstellen</text>
+
+  <rect x="12" y="109" width="296" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="29" cy="131" r="5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+  <path d="m32.5 134.5 3 3" stroke="#5A687A" stroke-width="1.3" stroke-linecap="round"/>
+  <text x="44" y="135" class="small muted">Im Projekt suchen</text>
+
+  <rect y="158" width="320" height="44" fill="#FFFFFF"/>
+  <path d="M0 201.5H320" stroke="#D8DEE7"/>
+  <use href="#nav-house" x="10" y="170" width="20" height="20" class="nav-icon"/>
+  <text x="35" y="185" class="small muted">Übersicht</text>
+  <use href="#nav-ticket" x="96" y="170" width="20" height="20" class="nav-icon-active"/>
+  <text x="121" y="185" class="small blue" font-weight="650">Tickets</text>
+  <use href="#nav-documents" x="172" y="170" width="20" height="20" class="nav-icon"/>
+  <text x="198" y="185" class="small muted">Planungsdokumente</text>
+  <rect x="94" y="198" width="74" height="3" rx="1.5" fill="#2457A7"/>
+
+  <rect x="12" y="208" width="296" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <path d="M25 230h14m-6-6-6 6 6 6" fill="none" stroke="#2457A7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="47" y="234" class="small blue" font-weight="600">Zurück zur Ticketliste</text>
+
+  <text x="16" y="272" class="tiny blue" font-weight="600" text-decoration="underline">Schlichte Planungsoberfläche für Planus Manus …<title>Schlichte Planungsoberfläche für Planus Manus gestalten und umsetzen</title></text>
+  <text x="16" y="305" class="title-text">Planungsdokumente</text>
+  <text x="16" y="331" class="title-text">und Projektübersicht</text>
+  <text x="16" y="357" class="title-text">gestalten</text>
+
+  <rect x="16" y="374" width="77" height="28" rx="14" fill="#F0F3F7"/>
+  <circle cx="29" cy="388" r="4" fill="#5A687A"/>
+  <text x="40" y="392" class="small" font-weight="600">Offen</text>
+  <text x="106" y="392" class="tiny muted">Priorität</text>
+  <rect x="160" y="374" width="80" height="28" rx="14" fill="#F0F3F7"/>
+  <text x="173" y="392" class="small" font-weight="600">Normal</text>
+
+  <rect x="16" y="414" width="288" height="74" rx="7" fill="#FDECEC" stroke="#F1C6C6"/>
+  <path d="M33 433 41 448H25z" fill="none" stroke="#9B1C1C" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M33 437v5m0 3v.2" stroke="#9B1C1C" stroke-width="1.4" stroke-linecap="round"/>
+  <text x="52" y="435" class="small critical" font-weight="650">Bereitschaft: Blockiert</text>
+  <text x="52" y="454" class="tiny muted">Wartet auf das schlichte</text>
+  <text x="52" y="470" class="tiny muted">UI-Konzept · Beziehung separat</text>
+
+  <text x="16" y="516" class="section">Beschreibung</text>
+  <text x="16" y="539" class="body">Projektübersicht und Planungsdokumente</text>
+  <text x="16" y="558" class="body">als getrennte Arbeitsbereiche gestalten.</text>
+
+  <rect x="16" y="576" width="288" height="48" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="29" y="596" class="section">Unteraufgaben</text>
+  <text x="29" y="613" class="tiny muted">6 · öffnen</text>
+  <rect x="141" y="578" width="134" height="44" rx="6" fill="#FFFFFF" stroke="#2457A7"/>
+  <text x="208" y="605" class="action" text-anchor="middle">Unterticket anlegen</text>
+  <path d="m278 595 5 5 5-5" fill="none" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="16" y="636" width="288" height="228" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="29" y="658" class="section">Beziehungen · 4</text>
+  <path d="M29 670H291" stroke="#D8DEE7"/>
+  <rect x="24" y="674" width="272" height="44" rx="5" fill="#F6F7F9"/>
+  <text x="34" y="690" class="tiny blue" font-weight="650">WARTET AUF</text>
+  <text x="34" y="706" class="tiny blue" text-decoration="underline">Schlichtes UI-Konzept …</text>
+  <rect x="24" y="720" width="272" height="44" rx="5" fill="#F6F7F9"/>
+  <text x="34" y="736" class="tiny critical" font-weight="650">BLOCKIERT</text>
+  <text x="34" y="752" class="tiny blue" text-decoration="underline">UI visuell prüfen und verfeinern</text>
+  <rect x="24" y="766" width="272" height="44" rx="5" fill="#F6F7F9"/>
+  <text x="34" y="782" class="tiny blue" font-weight="650">VERKNÜPFT</text>
+  <text x="34" y="798" class="tiny blue" text-decoration="underline">Deutsche UI-Beschriftungen …</text>
+  <rect x="24" y="812" width="272" height="44" rx="5" fill="#F6F7F9"/>
+  <text x="34" y="828" class="tiny blue" font-weight="650">VERKNÜPFT</text>
+  <text x="34" y="844" class="tiny blue" text-decoration="underline">Responsive Darstellung &amp; Barrierefreiheit</text>
+
+  <rect x="16" y="876" width="288" height="48" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="29" y="905" class="section">Kommentare</text>
+  <path d="m278 895 5 5 5-5" fill="none" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="16" y="946" class="tiny muted">Statischer Zielentwurf · 320 CSS-Pixel · weiter scrollen</text>
+</svg>

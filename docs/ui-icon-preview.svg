@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="850" viewBox="0 0 1280 850" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus Icon-Inventar — Kandidaten</title>
+  <desc id="desc">Nicht freigegebene Vorschau einfacher, lokaler Linienzeichen für vorhandene pman-Bereiche und Aktionen einschließlich eines separaten App-Mark- und eines Beziehungssymbol-Kandidaten. Status, Priorität, Blocker sowie Beziehungstyp und -richtung werden zusätzlich ausgeschrieben. Es gibt keine Tickettyp-Icons.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .small { font-size: 12px; }
+      .tiny { font-size: 12px; }
+      .body { font-size: 14px; }
+      .title { font-size: 25px; font-weight: 650; }
+      .section { font-size: 16px; font-weight: 650; }
+      .name { font-size: 13px; font-weight: 600; }
+      .icon { fill: none; stroke: #263445; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .accent { fill: none; stroke: #2457A7; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .critical { fill: none; stroke: #9B1C1C; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <symbol id="house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></symbol>
+    <symbol id="ticket" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v4a2 2 0 0 0 0 4v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a2 2 0 0 0 0-4V6a1 1 0 0 1 1-1Z"/><path d="M13 5v2m0 3v2m0 3v2"/></symbol>
+    <symbol id="target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></symbol>
+    <symbol id="clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M9 10h6m-6 4h6m-6 4h4"/></symbol>
+    <symbol id="scale" viewBox="0 0 24 24"><path d="M12 3v18m-6 0h12M5 7h14M7 7l-4 7h8L7 7Zm10 0-4 7h8l-4-7Z"/></symbol>
+    <symbol id="search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7.2"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="message" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H7l-4 2v-6.5A7.5 7.5 0 1 1 20 11.5Z"/><path d="M8 11h8m-8 4h5"/></symbol>
+    <symbol id="status" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="flag" viewBox="0 0 24 24"><path d="M5 21V4m0 1c6-4 8 4 14 0v10c-6 4-8-4-14 0"/></symbol>
+    <symbol id="alert" viewBox="0 0 24 24"><path d="M10.3 4.3 2.7 18a1.5 1.5 0 0 0 1.3 2.2h16a1.5 1.5 0 0 0 1.3-2.2L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 3v.2"/></symbol>
+    <symbol id="columns" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="9.5" y="4" width="5" height="16" rx="1"/><rect x="16" y="4" width="5" height="16" rx="1"/></symbol>
+    <symbol id="documents" viewBox="0 0 24 24"><path d="M7 3h10l4 4v14H7z"/><path d="M17 3v5h4M3 7v14h4M10 12h8m-8 4h8"/></symbol>
+    <symbol id="link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+    <symbol id="appmark" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" fill="#2457A7"/><path d="M7 7.5h10M7 11.5h10M7 15.5h6" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  </defs>
+
+  <rect width="1280" height="850" fill="#F6F7F9"/>
+  <rect x="0" y="0" width="1280" height="94" fill="#FFFFFF"/>
+  <path d="M0 93.5H1280" stroke="#D8DEE7"/>
+  <text x="32" y="42" class="title">Icon-Inventar · Kandidaten</text>
+  <text x="32" y="70" class="body muted">Lokale Linienzeichen für vorhandene pman-Funktionen · Entwurf, nicht freigegeben</text>
+  <rect x="1081" y="27" width="163" height="30" rx="15" fill="#F0F3F7"/>
+  <circle cx="1100" cy="42" r="4" fill="#5A687A"/>
+  <text x="1112" y="46" class="small" font-weight="600">Kandidaten v0</text>
+
+  <text x="32" y="130" class="section">Navigation und Dokumente</text>
+  <g>
+    <g transform="translate(32 150)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#house" x="22" y="20" width="24" height="24" class="icon"/><text x="60" y="35" class="name">Übersicht</text><text x="60" y="56" class="small muted">house · 20 px Navigation</text><text x="22" y="94" class="tiny muted">Textlabel immer sichtbar</text></g>
+    <g transform="translate(338 150)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#ticket" x="22" y="20" width="24" height="24" class="icon"/><text x="60" y="35" class="name">Tickets</text><text x="60" y="56" class="small muted">ticket · generisches Ticket</text><text x="22" y="94" class="tiny muted">Keine Epic-/Story-/Bug-Semantik</text></g>
+    <g transform="translate(644 150)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#target" x="22" y="20" width="24" height="24" class="icon"/><text x="60" y="35" class="name">Ziele</text><text x="60" y="56" class="small muted">target · Planungsdokument</text><text x="22" y="94" class="tiny muted">Ziel- und Dokumentlink prüfen</text></g>
+    <g transform="translate(950 150)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#clipboard" x="22" y="20" width="24" height="24" class="icon"/><text x="60" y="35" class="name">Pläne</text><text x="60" y="56" class="small muted">clipboard-list · Planungsdokument</text><text x="22" y="94" class="tiny muted">In Listen und Detail wiederverwenden</text></g>
+  </g>
+
+  <text x="32" y="303" class="section">Aktionen und Arbeitsabläufe</text>
+  <g>
+    <g transform="translate(32 323)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#scale" x="22" y="20" width="24" height="24" class="icon"/><text x="60" y="35" class="name">Entscheidungen</text><text x="60" y="56" class="small muted">scale · Planungsdokument</text><text x="22" y="94" class="tiny muted">Ziel/Plan/Entscheidung ähnlich gewichten</text></g>
+    <g transform="translate(338 323)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#search" x="22" y="20" width="24" height="24" class="icon"/><text x="60" y="35" class="name">Suchen</text><text x="60" y="56" class="small muted">search · globale Suche</text><text x="22" y="94" class="tiny muted">Lokale Listenfilter separat halten</text></g>
+    <g transform="translate(644 323)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#plus" x="22" y="20" width="24" height="24" class="accent"/><text x="60" y="35" class="name">Erstellen</text><text x="60" y="56" class="small muted">plus · immer mit Textlabel</text><text x="22" y="94" class="tiny muted">Ticket oder Dokument anhand Kontext</text></g>
+    <g transform="translate(950 323)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#chevron" x="22" y="20" width="24" height="24" class="icon"/><use href="#chevron" x="46" y="20" width="24" height="24" class="icon" transform="rotate(90 58 32)"/><text x="80" y="35" class="name">Ein-/Ausklappen</text><text x="80" y="56" class="small muted">zu: rechts · offen: unten</text><text x="22" y="94" class="tiny muted">Auf-/Zu-Zustand zugänglich benennen</text></g>
+  </g>
+
+  <text x="32" y="476" class="section">Metadaten und optionale Ansichten</text>
+  <g>
+    <g transform="translate(32 496)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#message" x="22" y="20" width="24" height="24" class="icon"/><text x="60" y="35" class="name">Kommentare</text><text x="60" y="56" class="small muted">message-circle · Verlauf</text><text x="22" y="94" class="tiny muted">Fokus auf konkreten Kommentar</text></g>
+    <g transform="translate(338 496)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#status" x="22" y="20" width="24" height="24" class="icon"/><text x="60" y="35" class="name">Status</text><text x="60" y="56" class="small muted">circle-dot + „Offen“</text><text x="22" y="94" class="tiny muted">Nie nur durch Farbe codieren</text></g>
+    <g transform="translate(644 496)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#flag" x="22" y="20" width="24" height="24" class="icon"/><text x="60" y="35" class="name">Priorität</text><text x="60" y="56" class="small muted">flag + „Normal“</text><text x="22" y="94" class="tiny muted">Getrennt vom Ticketstatus halten</text></g>
+    <g transform="translate(950 496)"><rect width="286" height="116" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/><use href="#alert" x="22" y="20" width="24" height="24" class="critical"/><text x="60" y="35" class="name">Blockerbereitschaft</text><text x="60" y="56" class="small muted">triangle-alert + „Blockiert“</text><text x="22" y="94" class="tiny muted">Abgeleitet, nicht gespeicherter Status</text></g>
+  </g>
+
+  <rect x="32" y="634" width="1204" height="204" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <use href="#documents" x="52" y="646" width="24" height="24" class="icon"/>
+  <text x="88" y="663" class="name">Planungsdokumente · Bereichssymbol</text>
+  <text x="88" y="683" class="small muted">files · gemeinsamer Einstieg für Ziele, Pläne</text>
+  <text x="88" y="701" class="small muted">und Entscheidungen; nicht das Plansymbol allein.</text>
+  <use href="#columns" x="52" y="722" width="24" height="24" class="icon"/>
+  <text x="88" y="739" class="name">Board · optionaler Kandidat</text>
+  <text x="88" y="758" class="small muted">Nur zeigen, wenn die geplante Statusansicht verfügbar ist.</text>
+  <use href="#link" x="52" y="778" width="24" height="24" class="icon"/>
+  <text x="88" y="795" class="name">Beziehungen · Link-Symbolkandidat</text>
+  <text x="88" y="815" class="small muted">Typ und Richtung immer zusätzlich ausschreiben.</text>
+  <path d="M462 650v172" stroke="#D8DEE7"/>
+  <use href="#appmark" x="486" y="650" width="32" height="32"/>
+  <text x="530" y="665" class="name">App-Mark · Kandidat „Planblatt“</text>
+  <text x="530" y="685" class="small muted">Separat von Navigation und Ticketzeichen</text>
+  <use href="#appmark" x="530" y="701" width="16" height="16"/>
+  <text x="552" y="714" class="small muted">16 px</text>
+  <use href="#appmark" x="602" y="693" width="32" height="32"/>
+  <text x="640" y="714" class="small muted">32 px · Browser-Tab prüfen</text>
+  <path d="M850 650v172" stroke="#D8DEE7"/>
+  <text x="876" y="663" class="small" font-weight="600">Gestaltungsregeln</text>
+  <text x="876" y="684" class="small muted">24×24-ViewBox · 16 px Aktionen · 20 px Navigation · 1,8 px Strich</text>
+  <text x="876" y="704" class="small muted">Kandidatenformen, keine übernommene Bibliothek oder finale Auswahl.</text>
+  <text x="876" y="730" class="small muted">Keine externe Einbindung · keine Jira-Marke</text>
+</svg>

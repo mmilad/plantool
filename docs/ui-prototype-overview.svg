@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — Projektübersicht</title>
+  <desc id="desc">Statischer Desktopentwurf der Startfläche. Die Statuskarten zählen die zehn direkten Kinder des UI-Programms, ohne Eltern und Untertickets doppelt zu zählen. Arbeit, zuletzt geänderte Tickets und Planungsdokumente bleiben direkt erreichbar. Das Änderungsdatum ist keine Kommentar- oder Aktivitätschronik.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 11px; }
+      .small { font-size: 12px; }
+      .body { font-size: 14px; }
+      .inverse { fill: #FFFFFF; }
+      .critical { fill: #9B1C1C; }
+      .title { font-size: 24px; font-weight: 650; }
+      .section { font-size: 16px; font-weight: 650; }
+    </style>
+    <symbol id="nav-house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/></symbol>
+    <symbol id="nav-ticket" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v4a2 2 0 0 0 0 4v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a2 2 0 0 0 0-4V6a1 1 0 0 1 1-1Z"/><path d="M13 5v2m0 3v2m0 3v2"/></symbol>
+    <symbol id="nav-documents" viewBox="0 0 24 24"><path d="M7 3h10l4 4v14H7z"/><path d="M17 3v5h4M3 7v14h4M10 12h8m-8 4h8"/></symbol>
+  </defs>
+  <rect width="1280" height="720" fill="#F6F7F9"/>
+
+  <!-- Project header -->
+  <rect width="1280" height="64" fill="#FFFFFF"/>
+  <path d="M0 63.5H1280" stroke="#D8DEE7"/>
+  <rect x="24" y="17" width="30" height="30" rx="8" fill="#2457A7"/>
+  <path d="M32.75 26.375h12.5M32.75 31.375h12.5M32.75 36.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
+  <text x="64" y="30" font-size="15" font-weight="650">Planus Manus</text>
+  <text x="64" y="46" class="tiny muted">planus-manus</text>
+  <rect x="324" y="13" width="440" height="38" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="344" cy="31" r="6" fill="none" stroke="#5A687A" stroke-width="1.5"/>
+  <path d="m348.5 35.5 4 4" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="362" y="36" class="body muted">Im Projekt suchen</text>
+  <rect x="1080" y="12" width="176" height="40" rx="6" fill="#2457A7"/>
+  <path d="M1098 32h12m-6-6v12" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="1118" y="36" font-size="13" font-weight="600" class="inverse">Ticket erstellen</text>
+
+  <!-- Main navigation -->
+  <rect x="0" y="64" width="1280" height="48" fill="#FFFFFF"/>
+  <path d="M0 111.5H1280" stroke="#D8DEE7"/>
+  <use href="#nav-house" x="22" y="78" width="20" height="20" fill="none" stroke="#2457A7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="48" y="93" font-size="13" font-weight="600" fill="#2457A7">Übersicht</text>
+  <use href="#nav-ticket" x="128" y="78" width="20" height="20" fill="none" stroke="#5A687A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="154" y="93" class="small muted">Tickets</text>
+  <use href="#nav-documents" x="218" y="78" width="20" height="20" fill="none" stroke="#5A687A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="244" y="93" class="small muted">Planungsdokumente</text>
+  <rect x="18" y="108" width="90" height="3" rx="1.5" fill="#2457A7"/>
+
+  <text x="24" y="153" class="title">Projektübersicht</text>
+  <text x="24" y="176" class="small muted">UI-Programm · Überblick über die direkten Arbeitspakete</text>
+
+  <!-- Snapshot cards -->
+  <g>
+    <rect x="24" y="194" width="288" height="82" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="44" y="221" class="small muted">Hauptpakete</text>
+    <text x="44" y="257" font-size="28" font-weight="650">10</text>
+    <text x="75" y="256" class="small muted">direkte Arbeitspakete</text>
+
+    <rect x="328" y="194" width="288" height="82" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="348" y="221" class="small muted">Offen · bereit</text>
+    <text x="348" y="257" font-size="28" font-weight="650">2</text>
+    <text x="378" y="256" class="small muted">UI-Richtung und Serverstart</text>
+
+    <rect x="632" y="194" width="288" height="82" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="652" y="221" class="small muted">In Arbeit</text>
+    <text x="652" y="257" font-size="28" font-weight="650">1</text>
+    <text x="682" y="256" class="small muted">fortlaufendes UI-Review</text>
+
+    <rect x="936" y="194" width="320" height="82" rx="8" fill="#FDECEC" stroke="#F1C6C6"/>
+    <text x="956" y="221" class="small critical" font-weight="600">Blockiert</text>
+    <text x="956" y="257" font-size="28" font-weight="650" class="critical">7</text>
+    <text x="988" y="256" class="small muted">warten auf Voraussetzungen</text>
+  </g>
+
+  <!-- Work panels -->
+  <rect x="24" y="296" width="788" height="385" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="48" y="329" class="section">Weiterarbeiten</text>
+  <text x="48" y="351" class="small muted">Status und Blockerbereitschaft getrennt nach pman-Daten</text>
+
+  <rect x="44" y="369" width="748" height="54" rx="6" fill="#F6F7F9"/>
+  <circle cx="68" cy="389" r="7" fill="#E8F5EC" stroke="#14532D"/>
+  <path d="m64.5 389 2.5 2.5 5-5" fill="none" stroke="#14532D" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="88" y="391" class="small muted">ALS NÄCHSTES · OFFEN · HOCH · BEREIT</text>
+  <text x="88" y="412" class="body" font-weight="650">UI-Richtung und Informationsarchitektur festlegen</text>
+  <path d="m758 386 6 6-6 6" fill="none" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="44" y="431" width="748" height="54" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="68" cy="451" r="7" fill="#E8F5EC" stroke="#14532D"/>
+  <path d="m64.5 451 2.5 2.5 5-5" fill="none" stroke="#14532D" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="88" y="453" class="small muted">EBENFALLS · OFFEN · HOCH · BEREIT</text>
+  <text x="88" y="474" class="body" font-weight="650">Lokalen UI-Server auf Port 4000 starten</text>
+  <path d="m758 448 6 6-6 6" fill="none" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="44" y="493" width="748" height="54" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="68" cy="513" r="7" fill="#EAF1FD" stroke="#2457A7"/>
+  <path d="M65 513h6" stroke="#2457A7" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="88" y="515" class="small muted">IN ARBEIT</text>
+  <text x="88" y="536" class="body" font-weight="650">UI regelmäßig prüfen und den pman-Plan nachschärfen</text>
+  <path d="m758 510 6 6-6 6" fill="none" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="44" y="555" width="748" height="98" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <path d="M63 575 71 590H55z" fill="none" stroke="#9B1C1C" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M63 579v5m0 3v.2" stroke="#9B1C1C" stroke-width="1.4" stroke-linecap="round"/>
+  <text x="88" y="579" class="small critical" font-weight="650">7 direkte Pakete sind blockiert</text>
+  <text x="88" y="601" class="small">Sechs warten auf das UI-Konzept; Visual-QA zusätzlich auf Port 4000,</text>
+  <text x="88" y="621" class="small">Entscheidungsbearbeitung und Beziehungspflege.</text>
+  <text x="88" y="643" class="tiny muted">Gezählt werden direkte Programmkinder, keine Eltern oder Untertickets.</text>
+
+  <!-- Planning documents -->
+  <rect x="832" y="296" width="424" height="385" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="856" y="329" class="section">Zuletzt geändert</text>
+  <text x="856" y="351" class="small muted">3 Tickets · nach Änderungsdatum</text>
+  <rect x="848" y="363" width="392" height="48" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="864" y="383" class="small" font-weight="600">UI regelmäßig prüfen und den pman-Plan nachschärfen<title>UI regelmäßig prüfen und den pman-Plan nachschärfen</title></text>
+  <text x="864" y="400" class="tiny muted">In Arbeit · UI-Programm · 31.10.2026</text>
+  <rect x="848" y="415" width="392" height="48" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="864" y="435" class="small" font-weight="600">Schlichtes UI-Konzept mit klaren Planungsabläufen festhalten<title>Schlichtes UI-Konzept mit klaren Planungsabläufen festhalten</title></text>
+  <text x="864" y="452" class="tiny muted">Offen · UI-Richtung · 31.10.2026</text>
+  <rect x="848" y="467" width="392" height="48" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="864" y="487" class="small" font-weight="600">Status, Rollup und Blockerbereitschaft trennen<title>Gespeicherten Status, Rollup und Blockerbereitschaft getrennt darstellen</title></text>
+  <text x="864" y="504" class="tiny muted">Offen · Ticketdetail · 31.10.2026</text>
+  <text x="856" y="536" class="tiny muted">Nach updatedAt · Kommentare sind keine Ticketaktivität.</text>
+
+  <text x="856" y="570" class="section">Planungsdokumente</text>
+  <text x="856" y="590" class="small muted">2 Ziele · 2 Pläne · 0 Entscheidungen</text>
+  <rect x="848" y="603" width="392" height="54" rx="5" fill="#EAF1FD" stroke="#768294"/>
+  <text x="864" y="626" class="small" font-weight="650">Alle Planungsdokumente öffnen</text>
+  <text x="864" y="644" class="tiny muted">Ziele, Pläne und Entscheidungen</text>
+</svg>

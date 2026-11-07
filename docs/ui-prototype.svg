@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — Ticketbereich am Desktop</title>
+  <desc id="desc">Statischer, eigenständiger Entwurf mit vorläufiger fp.dev-inspirierter visueller Richtung: Projektkopf und Navigation, kompakte Ticketliste links und ein lesbares Ticketdetail mit getrenntem Status, Priorität und Blockerbereitschaft rechts. Planungsabläufe berücksichtigen pman-Semantik.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 11px; }
+      .small { font-size: 12px; }
+      .body { font-size: 14px; }
+      .label { font-size: 12px; font-weight: 600; }
+      .section { font-size: 16px; font-weight: 600; }
+      .title { font-size: 24px; font-weight: 650; }
+      .inverse { fill: #FFFFFF; }
+      .critical { fill: #9B1C1C; }
+      .nav-icon { fill: none; stroke: #5A687A; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .nav-icon-active { fill: none; stroke: #2457A7; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <symbol id="nav-house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/></symbol>
+    <symbol id="nav-ticket" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v4a2 2 0 0 0 0 4v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a2 2 0 0 0 0-4V6a1 1 0 0 1 1-1Z"/><path d="M13 5v2m0 3v2m0 3v2"/></symbol>
+    <symbol id="nav-documents" viewBox="0 0 24 24"><path d="M7 3h10l4 4v14H7z"/><path d="M17 3v5h4M3 7v14h4M10 12h8m-8 4h8"/></symbol>
+  </defs>
+  <rect width="1280" height="720" fill="#F6F7F9"/>
+
+  <!-- Project header -->
+  <rect x="0" y="0" width="1280" height="64" fill="#FFFFFF"/>
+  <path d="M0 63.5H1280" stroke="#D8DEE7"/>
+  <rect x="24" y="17" width="30" height="30" rx="8" fill="#2457A7"/>
+  <path d="M32.75 26.375h12.5M32.75 31.375h12.5M32.75 36.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
+  <text x="64" y="30" font-size="15" font-weight="650">Planus Manus</text>
+  <text x="64" y="46" class="tiny muted">planus-manus</text>
+  <rect x="324" y="12" width="440" height="40" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="344" cy="32" r="6" fill="none" stroke="#5A687A" stroke-width="1.5"/>
+  <path d="m348.5 36.5 4 4" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="362" y="37" class="body muted">Im Projekt suchen</text>
+  <rect x="1080" y="12" width="176" height="40" rx="6" fill="#2457A7"/>
+  <path d="M1098 32h12m-6-6v12" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="1118" y="36" font-size="13" font-weight="600" class="inverse">Ticket erstellen</text>
+
+  <!-- Main navigation -->
+  <rect x="0" y="64" width="1280" height="48" fill="#FFFFFF"/>
+  <path d="M0 111.5H1280" stroke="#D8DEE7"/>
+  <g font-size="13" font-weight="550">
+    <use href="#nav-house" x="24" y="78" width="20" height="20" class="nav-icon"/>
+    <text x="50" y="93" class="muted">Übersicht</text>
+    <use href="#nav-ticket" x="128" y="78" width="20" height="20" class="nav-icon-active"/>
+    <text x="154" y="93" fill="#2457A7">Tickets</text>
+    <use href="#nav-documents" x="218" y="78" width="20" height="20" class="nav-icon"/>
+    <text x="244" y="93" class="muted">Planungsdokumente</text>
+  </g>
+  <rect x="126" y="108" width="74" height="3" rx="1.5" fill="#2457A7"/>
+
+  <!-- Ticket list pane -->
+  <rect x="0" y="112" width="320" height="608" fill="#FFFFFF"/>
+  <path d="M319.5 112V720" stroke="#D8DEE7"/>
+  <text x="24" y="146" class="section">Tickets</text>
+  <text x="281" y="146" class="small muted">46</text>
+  <rect x="20" y="160" width="280" height="40" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="37" cy="180" r="5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+  <path d="m40.5 183.5 3 3" stroke="#5A687A" stroke-width="1.3" stroke-linecap="round"/>
+  <text x="52" y="184" class="small muted">In Liste filtern</text>
+  <rect x="20" y="204" width="92" height="40" rx="5" fill="#F0F3F7"/>
+  <path d="M34 216h14m-11 6h8m-5 6h2" stroke="#5A687A" stroke-width="1.3" stroke-linecap="round"/>
+  <text x="55" y="229" class="small">Filter</text>
+
+  <rect x="12" y="248" width="296" height="44" rx="5" fill="#FFFFFF"/>
+  <path d="m27 266 5 5 5-5" fill="none" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="44" y="260" width="14" height="14" rx="3" fill="#EAF1FD" stroke="#2457A7"/>
+  <path d="M48 267h6" stroke="#2457A7" stroke-width="1.4"/>
+  <text x="66" y="266" class="small" font-weight="600">UI-Programm</text>
+  <text x="66" y="282" class="tiny muted">Offen · Unteraufgaben: In Arbeit</text>
+
+  <rect x="12" y="295" width="296" height="44" rx="5" fill="#FFFFFF"/>
+  <path d="M32 308v17m0-12h6m-6 6h6" stroke="#768294" stroke-width="1.4" stroke-linecap="round"/>
+  <text x="48" y="313" class="small">UI-Richtung und Informationsarchitektur</text>
+  <text x="48" y="330" class="tiny muted">Offen · Normal</text>
+
+  <rect x="12" y="342" width="296" height="44" rx="5" fill="#EAF1FD" stroke="#2457A7"/>
+  <rect x="24" y="357" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#2457A7"/>
+  <path d="M28 364h6" stroke="#2457A7" stroke-width="1.4"/>
+  <text x="48" y="360" font-size="12" font-weight="600">Planungsdokumente und</text>
+  <text x="48" y="376" class="small" font-weight="600">Projektübersicht gestalten</text>
+
+  <rect x="12" y="389" width="296" height="44" rx="5" fill="#FFFFFF"/>
+  <path d="M50 402v17m0-12h6m-6 6h6" stroke="#768294" stroke-width="1.4" stroke-linecap="round"/>
+  <text x="66" y="407" class="small">Dokumentnavigation und Lesemodus</text>
+  <text x="66" y="424" class="tiny muted">Offen · Normal</text>
+
+  <rect x="12" y="436" width="296" height="44" rx="5" fill="#FFFFFF"/>
+  <path d="M50 449v17m0-12h6m-6 6h6" stroke="#768294" stroke-width="1.4" stroke-linecap="round"/>
+  <text x="66" y="454" class="small">Projektstartseite mit Arbeitsüberblick</text>
+  <text x="66" y="471" class="tiny muted">Offen · Normal</text>
+
+  <rect x="12" y="483" width="296" height="44" rx="5" fill="#FFFFFF"/>
+  <path d="M50 496v17m0-12h6m-6 6h6" stroke="#768294" stroke-width="1.4" stroke-linecap="round"/>
+  <text x="66" y="501" class="small">Ziele und Pläne revision-sicher bearbeiten</text>
+  <text x="66" y="518" class="tiny muted">Offen · Normal</text>
+
+  <path d="M20 552h280" stroke="#D8DEE7"/>
+  <text x="22" y="576" class="tiny muted">Die Ticketliste zeigt gespeicherten Status</text>
+  <text x="22" y="592" class="tiny muted">und Priorität; Blocker bleiben separat.</text>
+
+  <!-- Ticket details -->
+  <text x="352" y="145" class="small muted">UI-Programm</text>
+  <path d="m431 139 4 4-4 4" fill="none" stroke="#768294" stroke-width="1.3"/>
+  <text x="445" y="145" class="small muted">Planungsdokumente und Projektübersicht</text>
+
+  <text x="352" y="187" class="title">Planungsdokumente und Projektübersicht</text>
+  <text x="352" y="216" font-size="17" font-weight="600">gestalten</text>
+
+  <rect x="352" y="236" width="92" height="28" rx="14" fill="#F0F3F7"/>
+  <circle cx="368" cy="250" r="4" fill="#5A687A"/>
+  <text x="379" y="254" class="small" font-weight="600">Offen</text>
+  <text x="459" y="254" class="small muted">Priorität</text>
+  <rect x="514" y="236" width="82" height="28" rx="14" fill="#F0F3F7"/>
+  <text x="530" y="254" class="small" font-weight="600">Normal</text>
+
+  <rect x="352" y="280" width="888" height="58" rx="7" fill="#FDECEC" stroke="#F1C6C6"/>
+  <path d="M371 299 380 316h-18z" fill="none" stroke="#9B1C1C" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M371 304v5m0 3v.2" stroke="#9B1C1C" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="394" y="303" font-size="12" font-weight="650" class="critical">Bereitschaft: Blockiert</text>
+  <text x="394" y="321" class="small" fill="#5A687A">Wartet auf „Schlichtes UI-Konzept mit klaren Planungsabläufen festhalten“</text>
+
+  <text x="352" y="378" class="section">Beschreibung</text>
+  <text x="352" y="405" class="body">Projektübersicht und Planungsdokumente als getrennte, erreichbare Arbeitsbereiche gestalten.</text>
+  <text x="352" y="427" class="body muted">Ziele, Pläne und Entscheidungen erhalten eine eigene Navigation und eine lesbare Detailfläche.</text>
+
+  <rect x="352" y="454" width="126" height="40" rx="6" fill="#EAF1FD" stroke="#2457A7"/>
+  <text x="365" y="480" class="small" fill="#2457A7" font-weight="650">Unteraufgaben · 6</text>
+  <rect x="486" y="454" width="112" height="40" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="502" y="480" class="small muted">Beziehungen</text>
+  <rect x="606" y="454" width="108" height="40" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="622" y="480" class="small muted">Kommentare</text>
+  <rect x="1060" y="454" width="180" height="40" rx="6" fill="#2457A7"/>
+  <text x="1150" y="480" class="small inverse" font-weight="650" text-anchor="middle">Unterticket anlegen</text>
+  <rect x="352" y="500" width="888" height="40" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="371" cy="520" r="5" fill="#F0F3F7" stroke="#5A687A"/>
+  <text x="390" y="525" class="small">Dokumentnavigation und Lesemodus an die pman-API anpassen</text>
+  <text x="1174" y="525" class="tiny muted">Offen</text>
+
+  <rect x="352" y="542" width="888" height="40" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="371" cy="562" r="5" fill="#F0F3F7" stroke="#5A687A"/>
+  <text x="390" y="567" class="small">Projektstartseite mit hilfreichem Arbeitsüberblick planen</text>
+  <text x="1174" y="567" class="tiny muted">Offen</text>
+
+  <rect x="352" y="584" width="888" height="40" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="371" cy="604" r="5" fill="#F0F3F7" stroke="#5A687A"/>
+  <text x="390" y="609" class="small">Aktuellen Projektkontext in der UI eindeutig anzeigen</text>
+  <text x="1174" y="609" class="tiny muted">Offen</text>
+
+  <rect x="352" y="626" width="888" height="40" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="371" cy="646" r="5" fill="#F0F3F7" stroke="#5A687A"/>
+  <text x="390" y="651" class="small">Ziele und Pläne in der UI revision-sicher bearbeiten</text>
+  <text x="1174" y="651" class="tiny muted">Offen</text>
+
+  <rect x="352" y="668" width="888" height="40" rx="5" fill="#F0F3F7" stroke="#D8DEE7"/>
+  <text x="390" y="693" class="small" fill="#2457A7" font-weight="600">Weitere 2 Unteraufgaben anzeigen</text>
+  <path d="m1214 684 5 5-5 5" fill="none" stroke="#2457A7" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="352" y="697" class="tiny muted">Vorschau · 6 direkte pman-Unteraufgaben; Icons und finale Texte noch nicht abgestimmt</text>
+</svg>

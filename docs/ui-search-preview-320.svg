@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="940" viewBox="0 0 320 940" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — Suche bei 320 Pixeln</title>
+  <desc id="desc">Statische schmale Suchvorschau mit verfügbarer Keyword-Suche, ausdrücklich späterer semantischer Suche über ONNX und SQLite-Vektorindex, Typfilter sowie echten Ticket-, Kommentar- und Zielbeispielen aus dem lokalen pman-Bestand.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 10px; }
+      .small { font-size: 12px; }
+      .title { font-size: 21px; font-weight: 650; }
+      .resulttitle { font-size: 13px; font-weight: 650; }
+      .blue { fill: #2457A7; }
+      .inverse { fill: #FFFFFF; }
+      .nav-icon { fill: none; stroke: #5A687A; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .nav-icon-active { fill: none; stroke: #2457A7; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <symbol id="nav-house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/></symbol>
+    <symbol id="nav-ticket" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v4a2 2 0 0 0 0 4v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a2 2 0 0 0 0-4V6a1 1 0 0 1 1-1Z"/><path d="M13 5v2m0 3v2m0 3v2"/></symbol>
+    <symbol id="nav-documents" viewBox="0 0 24 24"><path d="M7 3h10l4 4v14H7z"/><path d="M17 3v5h4M3 7v14h4M10 12h8m-8 4h8"/></symbol>
+  </defs>
+  <rect width="320" height="940" fill="#F6F7F9"/>
+
+  <rect width="320" height="52" fill="#FFFFFF"/>
+  <path d="M0 51.5H320" stroke="#D8DEE7"/>
+  <rect x="12" y="11" width="30" height="30" rx="8" fill="#2457A7"/>
+  <path d="M20.75 20.375h12.5M20.75 25.375h12.5M20.75 30.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
+  <text x="52" y="25" font-size="14" font-weight="650">Planus Manus</text>
+  <text x="52" y="40" class="tiny muted">planus-manus</text>
+
+  <rect x="12" y="57" width="296" height="44" rx="6" fill="#2457A7"/>
+  <path d="M110 79h10m-5-5v10" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="126" y="83" class="small inverse" font-weight="600">Ticket erstellen</text>
+
+  <rect x="12" y="109" width="296" height="44" rx="6" fill="#FFFFFF" stroke="#768294"/>
+  <circle cx="29" cy="131" r="5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+  <path d="m32.5 134.5 3 3" stroke="#5A687A" stroke-width="1.3" stroke-linecap="round"/>
+  <text x="44" y="135" class="small">UI</text>
+  <rect x="264" y="109" width="44" height="44" rx="5" fill="#F0F3F7"/>
+  <path d="m280 125 12 12m0-12-12 12" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round"/>
+
+  <rect y="158" width="320" height="44" fill="#FFFFFF"/>
+  <path d="M0 201.5H320" stroke="#D8DEE7"/>
+  <use href="#nav-house" x="10" y="170" width="20" height="20" class="nav-icon"/>
+  <text x="35" y="185" class="small muted">Übersicht</text>
+  <use href="#nav-ticket" x="96" y="170" width="20" height="20" class="nav-icon-active"/>
+  <text x="121" y="185" class="small blue" font-weight="650">Tickets</text>
+  <use href="#nav-documents" x="172" y="170" width="20" height="20" class="nav-icon"/>
+  <text x="198" y="185" class="small muted">Planungsdokumente</text>
+  <rect x="94" y="198" width="74" height="3" rx="1.5" fill="#2457A7"/>
+
+  <text x="16" y="224" class="tiny muted">PROJEKTSUCHE</text>
+  <text x="16" y="251" class="title">Suchergebnisse</text>
+  <text x="16" y="270" class="small muted">Abfrage „UI“ · Beispiele</text>
+
+  <rect x="12" y="280" width="296" height="44" rx="6" fill="#FFFFFF" stroke="#768294"/>
+  <rect x="13" y="281" width="147" height="42" rx="5" fill="#EAF1FD" stroke="#2457A7"/>
+  <text x="86" y="307" class="small blue" font-weight="650" text-anchor="middle">Stichwort · aktiv</text>
+  <text x="232" y="307" class="small muted" text-anchor="middle">Semantik · später</text>
+
+  <text x="16" y="343" class="tiny muted">Später: ONNX (all-MiniLM-L6-v2)</text>
+  <text x="16" y="358" class="tiny muted">SQLite-Vektorindex, lokal neu aufbaubar.</text>
+
+  <text x="16" y="384" class="small" font-weight="650">Ergebnistyp</text>
+  <rect x="12" y="393" width="296" height="44" rx="6" fill="#FFFFFF" stroke="#768294"/>
+  <text x="28" y="420" class="small">Alle Trefferarten</text>
+  <text x="290" y="420" class="small muted" text-anchor="end">▾</text>
+
+  <rect x="12" y="449" width="296" height="118" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="24" y="466" class="tiny muted" font-weight="650">TICKET · OFFEN</text>
+  <text x="24" y="487" class="resulttitle">Schlichte Planungsoberfläche</text>
+  <text x="24" y="503" class="resulttitle">für Planus Manus gestalten</text>
+  <text x="24" y="519" class="resulttitle">und umsetzen</text>
+  <text x="24" y="538" class="tiny muted">Ticket-ID · 01a189a9…8942</text>
+  <text x="24" y="555" class="tiny">Eigenständiges UI-Programm</text>
+
+  <rect x="12" y="575" width="296" height="124" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="24" y="592" class="tiny muted" font-weight="650">KOMMENTAR</text>
+  <text x="24" y="614" class="resulttitle">„UI-Review 2026-10-30:</text>
+  <text x="24" y="630" class="resulttitle">Live-Auswahl des fortlaufenden …“</text>
+  <text x="24" y="650" class="tiny muted">Im Ticket „Ticketauswahl über stabile URLs …“</text>
+  <text x="24" y="672" class="tiny">Zum Kommentar im Ticketkontext</text>
+  <text x="24" y="689" class="tiny muted">Kommentar-ID · 01a18a36…45a7</text>
+
+  <rect x="12" y="707" width="296" height="124" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="24" y="724" class="tiny muted" font-weight="650">ZIEL</text>
+  <text x="24" y="746" class="resulttitle">Eine klare, moderne Jira-</text>
+  <text x="24" y="762" class="resulttitle">inspirierte Planungsoberfläche</text>
+  <text x="24" y="778" class="resulttitle">gestalten</text>
+  <text x="24" y="799" class="tiny muted">Zieldokument · 01a189a9…b01b</text>
+  <text x="24" y="818" class="tiny">„Klare Informationsarchitektur …“</text>
+
+  <rect x="12" y="843" width="296" height="44" rx="6" fill="#FFFFFF" stroke="#768294"/>
+  <text x="160" y="870" class="small blue" font-weight="650" text-anchor="middle">Weitere Treffer laden</text>
+  <text x="16" y="914" class="tiny muted">Zielentwurf · keine Live-Ergebnisse</text>
+</svg>

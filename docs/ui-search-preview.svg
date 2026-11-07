@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="920" viewBox="0 0 1280 920" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — globale Suche</title>
+  <desc id="desc">Statische Desktopvorschau für globale Projektsuche. Keyword-Suche ist der heutige Standard. Eine spätere lokale semantische Suche mit ONNX und SQLite bleibt optional und zeigt transparent Modell-, Index- und Fallbackzustände.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 11px; }
+      .small { font-size: 12px; }
+      .body { font-size: 14px; }
+      .label { font-size: 12px; font-weight: 600; }
+      .section { font-size: 16px; font-weight: 650; }
+      .title { font-size: 24px; font-weight: 650; }
+      .blue { fill: #2457A7; }
+      .critical { fill: #9B1C1C; }
+      .inverse { fill: #FFFFFF; }
+    </style>
+    <symbol id="nav-house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/></symbol>
+    <symbol id="nav-ticket" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v4a2 2 0 0 0 0 4v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a2 2 0 0 0 0-4V6a1 1 0 0 1 1-1Z"/><path d="M13 5v2m0 3v2m0 3v2"/></symbol>
+    <symbol id="nav-documents" viewBox="0 0 24 24"><path d="M7 3h10l4 4v14H7z"/><path d="M17 3v5h4M3 7v14h4M10 12h8m-8 4h8"/></symbol>
+  </defs>
+  <rect width="1280" height="920" fill="#F6F7F9"/>
+
+  <rect width="1280" height="64" fill="#FFFFFF"/>
+  <path d="M0 63.5H1280" stroke="#D8DEE7"/>
+  <rect x="24" y="17" width="30" height="30" rx="8" fill="#2457A7"/>
+  <path d="M32.75 26.375h12.5M32.75 31.375h12.5M32.75 36.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
+  <text x="64" y="30" font-size="15" font-weight="650">Planus Manus</text>
+  <text x="64" y="46" class="tiny muted">planus-manus</text>
+  <rect x="324" y="12" width="600" height="40" rx="6" fill="#FFFFFF" stroke="#768294"/>
+  <circle cx="345" cy="32" r="6" fill="none" stroke="#5A687A" stroke-width="1.5"/>
+  <path d="m349.5 36.5 4 4" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="364" y="37" class="body">UI</text>
+  <rect x="816" y="12" width="96" height="40" rx="6" fill="#F0F3F7"/>
+  <path d="m828 27 8 8m0-8-8 8" stroke="#5A687A" stroke-width="1.3" stroke-linecap="round"/>
+  <text x="842" y="36" class="tiny muted">Suche leeren</text>
+  <rect x="1080" y="12" width="176" height="40" rx="6" fill="#2457A7"/>
+  <path d="M1098 32h12m-6-6v12" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="1118" y="36" font-size="13" font-weight="600" class="inverse">Ticket erstellen</text>
+
+  <rect y="64" width="1280" height="48" fill="#FFFFFF"/>
+  <path d="M0 111.5H1280" stroke="#D8DEE7"/>
+  <use href="#nav-house" x="24" y="78" width="20" height="20" fill="none" stroke="#5A687A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="50" y="93" class="small muted">Übersicht</text>
+  <use href="#nav-ticket" x="128" y="78" width="20" height="20" fill="none" stroke="#5A687A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="154" y="93" class="small muted">Tickets</text>
+  <use href="#nav-documents" x="218" y="78" width="20" height="20" fill="none" stroke="#5A687A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="244" y="93" class="small muted">Planungsdokumente</text>
+
+  <text x="40" y="160" class="tiny muted">PROJEKTSUCHE</text>
+  <text x="40" y="196" class="title">Suchergebnisse</text>
+  <text x="40" y="222" class="body muted">Beispiele aus Ticket-, Kommentar- und Dokumenttreffern zu „UI“</text>
+
+  <rect x="40" y="244" width="824" height="64" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="60" y="269" class="tiny muted">SUCHART</text>
+  <rect x="60" y="278" width="132" height="24" rx="5" fill="#EAF1FD" stroke="#2457A7"/>
+  <text x="77" y="294" class="small blue" font-weight="650">Stichwort · aktiv</text>
+  <text x="213" y="294" class="small muted">Semantik · später optional</text>
+  <text x="842" y="282" class="tiny muted" text-anchor="end">Live: Titel/Typ · Zielbild geplant</text>
+
+  <rect x="40" y="324" width="824" height="54" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="60" y="356" class="tiny muted" font-weight="650">ERGEBNISTYP</text>
+  <rect x="159" y="330" width="58" height="40" rx="14" fill="#EAF1FD" stroke="#2457A7"/>
+  <text x="175" y="356" class="tiny blue" font-weight="650">Alle</text>
+  <rect x="225" y="330" width="72" height="40" rx="14" fill="#F0F3F7"/>
+  <text x="239" y="356" class="tiny">Tickets</text>
+  <rect x="305" y="330" width="102" height="40" rx="14" fill="#F0F3F7"/>
+  <text x="317" y="356" class="tiny">Kommentare</text>
+  <rect x="415" y="330" width="64" height="40" rx="14" fill="#F0F3F7"/>
+  <text x="428" y="356" class="tiny">Ziele</text>
+  <rect x="487" y="330" width="66" height="40" rx="14" fill="#F0F3F7"/>
+  <text x="501" y="356" class="tiny">Pläne</text>
+  <rect x="561" y="330" width="132" height="40" rx="14" fill="#F0F3F7"/>
+  <text x="573" y="356" class="tiny">Entscheidungen</text>
+
+  <rect x="40" y="394" width="824" height="112" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <rect x="60" y="414" width="72" height="22" rx="11" fill="#F0F3F7"/>
+  <text x="75" y="429" class="tiny" font-weight="600">TICKET</text>
+  <text x="148" y="431" class="section">Schlichte Planungsoberfläche für Planus Manus gestalten und umsetzen</text>
+  <text x="60" y="461" class="small muted">Ticket-ID · 01a189a9…8942</text>
+  <text x="60" y="483" class="body">Eigenständiges UI-Programm</text>
+  <rect x="766" y="414" width="74" height="24" rx="12" fill="#F0F3F7"/>
+  <text x="783" y="430" class="tiny" font-weight="600">Offen</text>
+
+  <rect x="40" y="520" width="824" height="112" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <rect x="60" y="540" width="94" height="22" rx="11" fill="#F0F3F7"/>
+  <text x="72" y="555" class="tiny" font-weight="600">KOMMENTAR</text>
+  <text x="170" y="557" class="section">Kommentar zu „Ticketauswahl über stabile URLs …“</text>
+  <text x="60" y="587" class="small muted">Öffnet das Ticket und fokussiert diesen Beitrag</text>
+  <text x="60" y="609" class="body">„UI-Review 2026-10-30: Live-Auswahl des fortlaufenden Review-Tickets …“</text>
+
+  <rect x="40" y="646" width="824" height="106" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <rect x="60" y="666" width="58" height="22" rx="11" fill="#F0F3F7"/>
+  <text x="75" y="681" class="tiny" font-weight="600">ZIEL</text>
+  <text x="134" y="683" class="section">Eine klare, moderne Jira-inspirierte Planungsoberfläche gestalten</text>
+  <text x="60" y="713" class="small muted">Ziel · öffnet den Dokumentleser</text>
+  <text x="60" y="735" class="body">„Klare Informationsarchitektur und effizienter Arbeitsfluss …“</text>
+
+  <rect x="40" y="772" width="824" height="112" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <rect x="60" y="792" width="68" height="22" rx="11" fill="#F0F3F7"/>
+  <text x="76" y="807" class="tiny" font-weight="600">PLAN</text>
+  <text x="142" y="809" class="section">Fortlaufender UI-Review und Jira-inspirierte Verbesserung</text>
+  <text x="60" y="837" class="small muted">Planungsdokument · öffnet den Dokumentleser</text>
+  <text x="60" y="861" class="body">„Bei jeder UI-Planungsrunde: Oberfläche ansehen, vorhandene UI-Tickets und Zugehörigkeiten prüfen …“</text>
+
+  <rect x="892" y="244" width="348" height="508" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="916" y="279" class="section">Spätere Ausbaustufe</text>
+  <text x="916" y="303" class="small muted">Lokale semantische Suche · nicht Teil des MVP</text>
+  <path d="M916 321H1216" stroke="#D8DEE7"/>
+  <circle cx="929" cy="351" r="9" fill="#EAF1FD" stroke="#2457A7"/>
+  <path d="M925 351h8m-4-4v8" stroke="#2457A7" stroke-width="1.3" stroke-linecap="round"/>
+  <text x="950" y="348" class="label">Node.js + ONNX</text>
+  <text x="950" y="367" class="tiny muted">all-MiniLM-L6-v2 · lokal</text>
+  <circle cx="929" cy="405" r="9" fill="#EAF1FD" stroke="#2457A7"/>
+  <path d="M925 405h8m-4-4v8" stroke="#2457A7" stroke-width="1.3" stroke-linecap="round"/>
+  <text x="950" y="402" class="label">SQLite-Vektorindex</text>
+  <text x="950" y="421" class="tiny muted">abgeleitet und rebuildbar</text>
+
+  <rect x="916" y="449" width="300" height="102" rx="7" fill="#F6F7F9" stroke="#D8DEE7"/>
+  <text x="936" y="475" class="label">Bereitschaft</text>
+  <text x="936" y="498" class="small muted">Semantikmodus erscheint nur,</text>
+  <text x="936" y="517" class="small muted">wenn Modell und Index bereit sind.</text>
+  <text x="936" y="538" class="small muted">Keine stillen leeren Ergebnisse.</text>
+
+  <rect x="916" y="568" width="300" height="130" rx="7" fill="#FFF8E8" stroke="#E7D5A5"/>
+  <path d="M936 588h12v12h-12z" fill="none" stroke="#8A5A00" stroke-width="1.4"/>
+  <path d="M939 594h6m-6 3h6" stroke="#8A5A00" stroke-width="1.2" stroke-linecap="round"/>
+  <text x="958" y="599" class="label">Fallback bei Problemen</text>
+  <text x="936" y="628" class="small">Modell oder Index nicht bereit?</text>
+  <text x="936" y="649" class="small muted">Query bleibt erhalten; Suche läuft</text>
+  <text x="936" y="668" class="small muted">sichtbar im Keyword-Modus weiter.</text>
+  <text x="916" y="727" class="tiny muted">Repository-Dateien bleiben maßgeblich.</text>
+
+  <text x="40" y="906" class="tiny muted">Entwurf zur Abstimmung · Beispielschnipsel und Reihenfolge sind illustrativ, keine aktuelle Suchantwort.</text>
+</svg>

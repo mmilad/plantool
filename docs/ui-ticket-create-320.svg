@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="900" viewBox="0 0 320 900" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — Unterticketformular bei 320 Pixeln</title>
+  <desc id="desc">Schmale 320-Pixel-Vorschau eines Unterticketformulars mit dauerhaft sichtbarem Eltern-Ticket, beschrifteten Eingabefeldern, Offen- und Normal-Defaults sowie 44-Pixel-Aktionen. Der Elternstatus wird nicht verändert.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 10px; }
+      .small { font-size: 12px; }
+      .title { font-size: 21px; font-weight: 650; }
+      .label { font-size: 12px; font-weight: 600; }
+      .inverse { fill: #FFFFFF; }
+      .blue { fill: #2457A7; }
+      .control { fill: #FFFFFF; stroke: #768294; }
+    </style>
+  </defs>
+  <rect width="320" height="900" fill="#F6F7F9"/>
+
+  <rect width="320" height="52" fill="#FFFFFF"/>
+  <path d="M0 51.5H320" stroke="#D8DEE7"/>
+  <rect x="12" y="11" width="30" height="30" rx="8" fill="#2457A7"/>
+  <path d="M20.75 20.375h12.5M20.75 25.375h12.5M20.75 30.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
+  <text x="52" y="25" font-size="14" font-weight="650">Planus Manus</text>
+  <text x="52" y="40" class="tiny muted">planus-manus</text>
+  <text x="254" y="31" class="small blue" font-weight="600">Zurück</text>
+
+  <text x="14" y="83" class="title">Unterticket anlegen</text>
+  <text x="14" y="103" class="small muted">Direkt aus dem geöffneten Ticket</text>
+
+  <rect x="12" y="114" width="296" height="76" rx="6" fill="#EAF1FD" stroke="#B9CBE8"/>
+  <text x="22" y="134" class="tiny blue" font-weight="650">ELTERN-TICKET · DIREKT DARÜBER</text>
+  <text x="22" y="155" class="small">Planungsdokumente und</text>
+  <text x="22" y="173" class="small">Projektübersicht gestalten</text>
+
+  <text x="16" y="212" class="label">Titel <tspan fill="#9B1C1C">*</tspan></text>
+  <rect x="12" y="220" width="296" height="44" rx="6" class="control"/>
+  <text x="24" y="247" class="small muted">Titel des Untertickets</text>
+
+  <text x="16" y="281" class="label">Beschreibung <tspan class="muted" font-weight="400">(optional)</tspan></text>
+  <rect x="12" y="289" width="296" height="80" rx="6" class="control"/>
+  <text x="24" y="316" class="small muted">Ziel und erwartetes Ergebnis</text>
+  <text x="24" y="334" class="small muted">kurz beschreiben</text>
+
+  <text x="16" y="394" class="label">Status</text>
+  <rect x="12" y="402" width="296" height="44" rx="6" class="control"/>
+  <text x="24" y="429" class="small">Offen</text>
+  <text x="290" y="429" class="small muted" text-anchor="end">▾</text>
+
+  <text x="16" y="469" class="label">Priorität</text>
+  <rect x="12" y="477" width="296" height="44" rx="6" class="control"/>
+  <text x="24" y="504" class="small">Normal</text>
+  <text x="290" y="504" class="small muted" text-anchor="end">▾</text>
+
+  <text x="16" y="544" class="label">Labels <tspan class="muted" font-weight="400">(optional)</tspan></text>
+  <rect x="12" y="552" width="296" height="44" rx="6" class="control"/>
+  <text x="24" y="579" class="small muted">Label hinzufügen</text>
+
+  <text x="16" y="619" class="tiny muted">Status folgt dem Projektstandard.</text>
+  <text x="16" y="635" class="tiny muted">Elternstatus bleibt unverändert.</text>
+
+  <rect x="12" y="654" width="104" height="44" rx="6" fill="#FFFFFF" stroke="#768294"/>
+  <text x="64" y="681" class="small" text-anchor="middle">Abbrechen</text>
+  <rect x="124" y="654" width="184" height="44" rx="6" fill="#2457A7"/>
+  <text x="216" y="681" class="small inverse" font-weight="650" text-anchor="middle">Unterticket anlegen</text>
+
+  <text x="16" y="725" class="tiny muted">Bei einem Fehler bleiben die Eingaben erhalten.</text>
+</svg>

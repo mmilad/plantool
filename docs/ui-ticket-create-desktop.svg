@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="780" viewBox="0 0 1280 780" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — Ticketanlage am Desktop</title>
+  <desc id="desc">Zwei Desktopzustände zeigen ein Root-Ticketformular aus der Projektübersicht und ein Unterticketformular aus dem geöffneten Ticketdetail. Beide Dialoge haben beschriftete Felder, Projektstatus und Prioritätsdefaults sowie Abbrechen und Speichern. Der Unterticketdialog zeigt den festen Elternkontext. Bei Fehlern bleiben Eingaben erhalten.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 10px; }
+      .small { font-size: 12px; }
+      .label { font-size: 12px; font-weight: 600; }
+      .section { font-size: 15px; font-weight: 650; }
+      .inverse { fill: #FFFFFF; }
+      .blue { fill: #2457A7; }
+      .stroke { stroke: #D8DEE7; }
+      .control { fill: #FFFFFF; stroke: #768294; }
+    </style>
+  </defs>
+  <rect width="1280" height="760" fill="#FFFFFF"/>
+  <text x="24" y="31" font-size="19" font-weight="650">Ticket erstellen · Desktopzustände</text>
+  <text x="24" y="51" class="small muted">Zwei Einstiege, derselbe klar beschriftete Formularvertrag · Zielbild, nicht Live-Funktion</text>
+
+  <g transform="translate(16 68)">
+    <rect width="616" height="676" rx="10" fill="#F0F3F7" stroke="#D8DEE7"/>
+    <rect x="1" y="1" width="614" height="48" rx="9" fill="#FFFFFF"/>
+    <path d="M1 48.5H615" class="stroke"/>
+    <text x="18" y="30" class="small" font-weight="650">Planus Manus</text>
+    <text x="485" y="30" class="tiny muted">Projektübersicht</text>
+    <rect x="14" y="66" width="588" height="590" rx="6" fill="#F0F3F7" opacity=".48"/>
+    <text x="34" y="100" class="section">Projektübersicht</text>
+    <text x="34" y="125" class="small muted">Offene Arbeit und nächste Schritte</text>
+    <rect x="34" y="151" width="550" height="74" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <rect x="34" y="238" width="266" height="165" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <rect x="318" y="238" width="266" height="165" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <rect x="34" y="416" width="550" height="212" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <rect width="616" height="676" rx="10" fill="#172334" opacity=".23"/>
+
+    <rect x="32" y="92" width="552" height="552" rx="9" fill="#FFFFFF" stroke="#C8D0DB"/>
+    <path d="M56 153.5H560" class="stroke"/>
+    <text x="80" y="126" class="section">Ticket erstellen</text>
+    <rect x="510" y="106" width="40" height="40" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="530" y="132" class="small muted" text-anchor="middle">×</text>
+    <rect x="80" y="169" width="456" height="48" rx="6" fill="#F0F3F7" stroke="#D8DEE7"/>
+    <text x="94" y="187" class="tiny muted" font-weight="650">PROJEKT</text>
+    <text x="94" y="205" class="small">planus-manus · ohne Eltern-Ticket</text>
+
+    <text x="80" y="242" class="label">Titel <tspan fill="#9B1C1C">*</tspan></text>
+    <rect x="80" y="251" width="456" height="40" rx="5" class="control"/>
+    <text x="92" y="276" class="small muted">Titel des Tickets</text>
+
+    <text x="80" y="315" class="label">Beschreibung <tspan class="muted" font-weight="400">(optional)</tspan></text>
+    <rect x="80" y="324" width="456" height="68" rx="5" class="control"/>
+    <text x="92" y="349" class="small muted">Ziel und erwartetes Ergebnis kurz beschreiben</text>
+
+    <text x="80" y="416" class="label">Status</text>
+    <rect x="80" y="425" width="220" height="40" rx="5" class="control"/>
+    <text x="92" y="450" class="small">Offen</text>
+    <text x="284" y="450" class="small muted" text-anchor="end">▾</text>
+    <text x="316" y="416" class="label">Priorität</text>
+    <rect x="316" y="425" width="220" height="40" rx="5" class="control"/>
+    <text x="328" y="450" class="small">Normal</text>
+    <text x="520" y="450" class="small muted" text-anchor="end">▾</text>
+
+    <text x="80" y="489" class="label">Labels <tspan class="muted" font-weight="400">(optional)</tspan></text>
+    <rect x="80" y="498" width="456" height="40" rx="5" class="control"/>
+    <text x="92" y="523" class="small muted">Label hinzufügen</text>
+    <path d="M56 562.5H560" class="stroke"/>
+    <rect x="242" y="580" width="92" height="40" rx="5" fill="#FFFFFF" stroke="#768294"/>
+    <text x="288" y="605" class="small" text-anchor="middle">Abbrechen</text>
+    <rect x="346" y="580" width="190" height="40" rx="5" fill="#2457A7"/>
+    <text x="441" y="605" class="small inverse" font-weight="650" text-anchor="middle">Ticket erstellen</text>
+    <text x="80" y="636" class="tiny muted">Root-Ticket erscheint danach in der Projektliste.</text>
+  </g>
+
+  <g transform="translate(648 68)">
+    <rect width="616" height="676" rx="10" fill="#F0F3F7" stroke="#D8DEE7"/>
+    <rect x="1" y="1" width="614" height="48" rx="9" fill="#FFFFFF"/>
+    <path d="M1 48.5H615" class="stroke"/>
+    <text x="18" y="30" class="small" font-weight="650">Planus Manus</text>
+    <text x="455" y="30" class="tiny muted">Ticketdetail · Unteraufgaben</text>
+    <rect x="14" y="66" width="588" height="590" rx="6" fill="#F0F3F7" opacity=".48"/>
+    <text x="34" y="100" class="section">Ticketdetail</text>
+    <rect x="34" y="116" width="550" height="74" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <rect x="34" y="204" width="550" height="180" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <rect x="34" y="395" width="550" height="233" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <rect width="616" height="676" rx="10" fill="#172334" opacity=".23"/>
+
+    <rect x="32" y="92" width="552" height="552" rx="9" fill="#FFFFFF" stroke="#C8D0DB"/>
+    <path d="M56 153.5H560" class="stroke"/>
+    <text x="80" y="126" class="section">Unterticket anlegen</text>
+    <rect x="510" y="106" width="40" height="40" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="530" y="132" class="small muted" text-anchor="middle">×</text>
+    <rect x="80" y="169" width="456" height="58" rx="6" fill="#EAF1FD" stroke="#B9CBE8"/>
+    <text x="94" y="188" class="tiny blue" font-weight="650">ELTERN-TICKET · DIREKT DARÜBER</text>
+    <text x="94" y="209" class="small">Ticketdetail und Bearbeitungsfluss verbessern</text>
+
+    <text x="80" y="252" class="label">Titel <tspan fill="#9B1C1C">*</tspan></text>
+    <rect x="80" y="261" width="456" height="40" rx="5" class="control"/>
+    <text x="92" y="286" class="small muted">Titel des Untertickets</text>
+
+    <text x="80" y="325" class="label">Beschreibung <tspan class="muted" font-weight="400">(optional)</tspan></text>
+    <rect x="80" y="334" width="456" height="68" rx="5" class="control"/>
+    <text x="92" y="359" class="small muted">Ziel und erwartetes Ergebnis kurz beschreiben</text>
+
+    <text x="80" y="426" class="label">Status</text>
+    <rect x="80" y="435" width="220" height="40" rx="5" class="control"/>
+    <text x="92" y="460" class="small">Offen</text>
+    <text x="284" y="460" class="small muted" text-anchor="end">▾</text>
+    <text x="316" y="426" class="label">Priorität</text>
+    <rect x="316" y="435" width="220" height="40" rx="5" class="control"/>
+    <text x="328" y="460" class="small">Normal</text>
+    <text x="520" y="460" class="small muted" text-anchor="end">▾</text>
+
+    <text x="80" y="499" class="label">Labels <tspan class="muted" font-weight="400">(optional)</tspan></text>
+    <rect x="80" y="508" width="456" height="40" rx="5" class="control"/>
+    <text x="92" y="533" class="small muted">Label hinzufügen</text>
+    <path d="M56 562.5H560" class="stroke"/>
+    <rect x="242" y="580" width="92" height="40" rx="5" fill="#FFFFFF" stroke="#768294"/>
+    <text x="288" y="605" class="small" text-anchor="middle">Abbrechen</text>
+    <rect x="346" y="580" width="190" height="40" rx="5" fill="#2457A7"/>
+    <text x="441" y="605" class="small inverse" font-weight="650" text-anchor="middle">Unterticket erstellen</text>
+    <text x="80" y="636" class="tiny muted">Elternbezug bleibt fest; Elternstatus ändert sich nicht.</text>
+  </g>
+
+  <text x="24" y="756" class="tiny muted">Abbrechen/Escape schließt den Dialog und gibt den Fokus an den Einstieg zurück. Bei Fehlern bleibt die Eingabe erhalten; Erfolg und Aktualisierung werden getrennt bestätigt.</text>
+</svg>

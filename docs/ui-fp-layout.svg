@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus — schlichte Ticketarbeitsfläche nach fp.dev-Referenz</title>
+  <desc id="desc">Statischer Desktopentwurf mit kompaktem Kopf, Suche, Ticketliste links und ausgewähltem Ticketdetail rechts. Zehn direkte UI-Programmpakete werden mit vorhandenem pman-Status und Priorität gezeigt; Filter für Status, Priorität, Labels und Hierarchiebereich sind vorgesehen. Es gibt kein Assignee-Feld.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 11px; }
+      .small { font-size: 12px; }
+      .body { font-size: 14px; }
+      .label { font-size: 11px; font-weight: 650; letter-spacing: .04em; }
+      .section { font-size: 15px; font-weight: 650; }
+      .heading { font-size: 23px; font-weight: 650; }
+      .divider { stroke: #E1E5EA; }
+      .control { fill: #FFFFFF; stroke: #D8DEE7; }
+      .primary { fill: #202A36; }
+      .inverse { fill: #FFFFFF; }
+      .selected { fill: #F1F3F5; }
+      .blue { fill: #2457A7; }
+      .green { fill: #14532D; }
+      .icon { fill: none; stroke: #697586; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+      .icon-blue { fill: none; stroke: #2457A7; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="800" fill="#F7F8FA"/>
+  <rect width="1280" height="58" fill="#FFFFFF"/>
+  <path d="M0 57.5H1280" class="divider"/>
+  <rect x="24" y="13" width="32" height="32" rx="7" fill="#202A36"/>
+  <path d="M32 22h16M32 28h16M32 34h11" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="68" y="35" font-size="15" font-weight="650">Planus Manus</text>
+  <path d="M190 19v20" class="divider"/>
+  <text x="210" y="35" class="small">planus-manus</text>
+
+  <rect x="380" y="9" width="420" height="40" rx="7" fill="#F7F8FA" stroke="#E1E5EA"/>
+  <circle cx="400" cy="28" r="6" fill="none" stroke="#697586" stroke-width="1.5"/>
+  <path d="m404 32 4 4" class="icon"/>
+  <text x="418" y="32" class="small muted">Im Projekt suchen</text>
+  <rect x="767" y="17" width="22" height="22" rx="4" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="778" y="32" text-anchor="middle" class="tiny muted">/</text>
+  <rect x="1090" y="9" width="166" height="40" rx="6" class="primary"/>
+  <path d="M1108 29h12m-6-6v12" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="1128" y="33" class="small inverse" font-weight="650">Ticket erstellen</text>
+
+  <rect x="24" y="76" width="1232" height="42" fill="none"/>
+  <text x="24" y="102" class="small muted">Tickets</text>
+  <path d="m70 95 3 3 3-3" class="icon"/>
+  <text x="1090" y="102" class="small muted">UI-Programm · 10 Arbeitspakete</text>
+
+  <rect x="24" y="132" width="1232" height="636" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <path d="M510 132v636" class="divider"/>
+
+  <!-- Compact hierarchical list pane -->
+  <rect x="25" y="133" width="484" height="635" rx="7" fill="#FFFFFF"/>
+  <text x="48" y="170" class="section">UI-Programm</text>
+  <text x="454" y="170" text-anchor="end" class="small muted">10 direkt · 11 sichtbar</text>
+  <rect x="48" y="183" width="137" height="40" rx="5" class="control"/>
+  <circle cx="64" cy="203" r="5" fill="none" stroke="#8993A1" stroke-width="1.2"/>
+  <text x="77" y="207" class="tiny">Status</text>
+  <path d="m167 201 3 3 3-3" class="icon"/>
+  <rect x="193" y="183" width="137" height="40" rx="5" class="control"/>
+  <path d="M208 198h10m-10 5h7m-7 5h4" class="icon"/>
+  <text x="225" y="207" class="tiny">Priorität</text>
+  <path d="m311 201 3 3 3-3" class="icon"/>
+  <rect x="343" y="183" width="143" height="40" rx="5" class="control"/>
+  <text x="356" y="207" class="tiny">Labels · Bereich</text>
+  <path d="m466 201 3 3 3-3" class="icon"/>
+
+  <circle cx="69" cy="256" r="5" fill="none" stroke="#697586" stroke-width="1.4"/>
+  <text x="85" y="253" class="small">UI-Richtung und Informationsarchitektur festlegen</text>
+  <text x="85" y="269" class="tiny muted">UI-Programm · Offen · Hoch</text>
+
+  <rect x="48" y="280" width="438" height="44" rx="5" class="selected"/>
+  <rect x="48" y="280" width="3" height="44" rx="1.5" fill="#2457A7"/>
+  <path d="M69 261v41h14" fill="none" stroke="#D8DEE7" stroke-width="1.2"/>
+  <circle cx="83" cy="302" r="5" fill="#EAF1FD" stroke="#2457A7" stroke-width="1.4"/>
+  <text x="99" y="299" class="small" font-weight="600">Schlichtes UI-Konzept festhalten</text>
+  <text x="99" y="315" class="tiny muted">Unter UI-Richtung · Offen · Hoch</text>
+
+  <circle cx="69" cy="348" r="5" fill="none" stroke="#697586" stroke-width="1.4"/>
+  <text x="85" y="345" class="small">Konsistentes Icon-System auswählen</text>
+  <text x="85" y="361" class="tiny muted">Offen · Normal · blockiert</text>
+  <circle cx="69" cy="394" r="5" fill="none" stroke="#697586" stroke-width="1.4"/>
+  <text x="85" y="391" class="small">Ticketnavigation, Liste und Filter</text>
+  <text x="85" y="407" class="tiny muted">Offen · Hoch · blockiert</text>
+  <circle cx="69" cy="440" r="5" fill="none" stroke="#697586" stroke-width="1.4"/>
+  <text x="85" y="437" class="small">Ticketdetail und Bearbeitungsfluss</text>
+  <text x="85" y="453" class="tiny muted">Offen · Hoch · blockiert</text>
+  <circle cx="69" cy="486" r="5" fill="none" stroke="#697586" stroke-width="1.4"/>
+  <text x="85" y="483" class="small">Projektübersicht und Dokumente</text>
+  <text x="85" y="499" class="tiny muted">Offen · Normal · blockiert</text>
+  <circle cx="69" cy="532" r="5" fill="none" stroke="#697586" stroke-width="1.4"/>
+  <text x="85" y="529" class="small">Responsive Darstellung und Barrierefreiheit</text>
+  <text x="85" y="545" class="tiny muted">Offen · Normal · blockiert</text>
+  <circle cx="69" cy="578" r="5" fill="none" stroke="#697586" stroke-width="1.4"/>
+  <text x="85" y="575" class="small">UI visuell prüfen und verfeinern</text>
+  <text x="85" y="591" class="tiny muted">Offen · Normal · blockiert</text>
+  <circle cx="69" cy="624" r="5" fill="#EAF1FD" stroke="#2457A7" stroke-width="1.4"/>
+  <text x="85" y="621" class="small">UI regelmäßig prüfen und nachschärfen</text>
+  <text x="85" y="637" class="tiny muted">In Arbeit · Normal</text>
+  <circle cx="69" cy="670" r="5" fill="none" stroke="#697586" stroke-width="1.4"/>
+  <text x="85" y="667" class="small">Deutsche UI-Beschriftungen</text>
+  <text x="85" y="683" class="tiny muted">Offen · Normal · blockiert</text>
+  <circle cx="69" cy="716" r="5" fill="none" stroke="#697586" stroke-width="1.4"/>
+  <text x="85" y="713" class="small">Lokalen UI-Server auf Port 4000</text>
+  <text x="85" y="729" class="tiny muted">Offen · Hoch</text>  <!-- Selected ticket detail -->
+  <rect x="511" y="133" width="744" height="40" fill="#FFFFFF"/>
+  <text x="536" y="158" class="tiny muted">PLANUS MANUS  /  UI-PROGRAMM  /  TICKET</text>
+  <path d="M511 173h744" class="divider"/>
+  <text x="536" y="220" class="heading">Schlichtes UI-Konzept mit klaren Planungsabläufen festhalten</text>
+  <text x="536" y="246" class="small muted">Ticket-ID 01a189ad-5c7c-7e68-b165-79fb9f674539</text>
+  <path d="M536 266h694" class="divider"/>
+  <text x="536" y="298" class="label muted">EIGENSCHAFTEN</text>
+  <text x="536" y="330" class="small muted">Status</text>
+  <rect x="632" y="311" width="94" height="28" rx="14" fill="#F0F3F7"/>
+  <circle cx="648" cy="325" r="4" fill="#697586"/>
+  <text x="661" y="329" class="small">Offen</text>
+  <text x="760" y="330" class="small muted">Priorität</text>
+  <path d="M842 321h7m-7 5h6m-6 5h4" stroke="#697586" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="859" y="330" class="small">Hoch</text>
+  <text x="536" y="374" class="label muted">BESCHREIBUNG</text>
+  <text x="536" y="402" class="body">Konkrete UI-Richtung und Informationsarchitektur vor der Umsetzung</text>
+  <text x="536" y="423" class="body">festlegen. Die erste visuelle Referenz ist fp.dev; Planus zeigt</text>
+  <text x="536" y="444" class="body">nur Funktionen und Felder, die pman tatsächlich unterstützt.</text>
+  <text x="536" y="480" class="small muted">Vorschlag: schlichte Zweispaltenfläche mit Liste links, Detail rechts,</text>
+  <text x="536" y="499" class="small muted">dezenter Auswahl, feinen Linien und sparsamer Akzentfarbe.</text>
+  <path d="M536 524h694" class="divider"/>
+  <text x="536" y="554" class="label muted">ZUGEHÖRIGKEIT</text>
+  <text x="536" y="581" class="small">UI-Richtung und Informationsarchitektur festlegen</text>
+  <path d="M536 605h694" class="divider"/>
+  <text x="536" y="635" class="label muted">ABHÄNGIGKEITEN</text>
+  <path d="M538 656h10l5 5-5 5h-10z" fill="#EAF1FD" stroke="#2457A7"/>
+  <text x="565" y="665" class="small">Blockiert 34 Tickets · u. a. Navigation, Detail und Übersicht</text>
+  <text x="536" y="706" class="tiny muted">Nur Planung · Gestaltung und Prioritäten bleiben überprüfbar.</text>
+
+  <text x="24" y="790" class="tiny muted">Statischer Entwurf · fp.dev als vorläufige visuelle Referenz · nicht umgesetzt</text>
+</svg>
+

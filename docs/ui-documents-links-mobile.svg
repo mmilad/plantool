@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="900" viewBox="0 0 420 900" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — Dokumentlinks und doppelte Verknüpfung</title>
+  <desc id="desc">Statischer mobiler Lesemodus für den echten Review-Plan. Er zeigt elf Verknüpfungseinträge: zehn Ticketlinks zu neun Tickets (das Review-Ticket doppelt) und ein UI-Zieldokument; insgesamt zehn eindeutige Ziele. Der Entwurf schlägt vor, Duplikate sichtbar zu gruppieren, ohne sie im Lesemodus zu verbergen oder zu entfernen.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 10px; }
+      .small { font-size: 12px; }
+      .body { font-size: 12px; }
+      .title { font-size: 19px; font-weight: 650; }
+      .section { font-size: 14px; font-weight: 650; }
+      .icon { fill: none; stroke: #263445; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .icon-active { stroke: #2457A7; }
+      .blue { fill: #2457A7; }
+      .inverse { fill: #FFFFFF; }
+    </style>
+    <symbol id="clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M9 10h6m-6 4h6m-6 4h4"/></symbol>
+    <symbol id="target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></symbol>
+    <symbol id="nav-house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/></symbol>
+    <symbol id="nav-ticket" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v4a2 2 0 0 0 0 4v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a2 2 0 0 0 0-4V6a1 1 0 0 1 1-1Z"/><path d="M13 5v2m0 3v2m0 3v2"/></symbol>
+    <symbol id="nav-documents" viewBox="0 0 24 24"><path d="M7 3h10l4 4v14H7z"/><path d="M17 3v5h4M3 7v14h4M10 12h8m-8 4h8"/></symbol>
+  </defs>
+  <rect width="420" height="900" fill="#F6F7F9"/>
+  <g transform="translate(15 8)">
+    <rect width="390" height="844" fill="#F6F7F9" stroke="#C8D0DB"/>
+    <rect width="390" height="58" fill="#FFFFFF"/>
+    <path d="M0 57.5H390" stroke="#D8DEE7"/>
+    <rect x="16" y="14" width="30" height="30" rx="8" fill="#2457A7"/>
+    <path d="M24.75 23.375h12.5M24.75 28.375h12.5M24.75 33.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
+    <text x="56" y="28" font-size="14" font-weight="650">Planus Manus</text>
+    <text x="56" y="43" class="tiny muted">planus-manus</text>
+    <rect x="242" y="7" width="132" height="44" rx="6" fill="#2457A7"/>
+    <path d="M254 29h10m-5-5v10" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+    <text x="270" y="33" class="small inverse" font-weight="600">Ticket erstellen</text>
+
+    <rect x="12" y="65" width="366" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <circle cx="29" cy="87" r="5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+    <path d="m32.5 90.5 3 3" stroke="#5A687A" stroke-width="1.3" stroke-linecap="round"/>
+    <text x="44" y="91" class="small muted">Im Projekt suchen</text>
+
+    <rect y="114" width="390" height="44" fill="#FFFFFF"/>
+    <path d="M0 157.5H390" stroke="#D8DEE7"/>
+    <use href="#nav-house" x="13" y="126" width="20" height="20" class="icon"/>
+    <text x="39" y="141" class="small muted">Übersicht</text>
+    <use href="#nav-ticket" x="120" y="126" width="20" height="20" class="icon"/>
+    <text x="146" y="141" class="small muted">Tickets</text>
+    <use href="#nav-documents" x="205" y="126" width="20" height="20" class="icon icon-active"/>
+    <text x="231" y="141" class="small blue" font-weight="650">Planungsdokumente</text>
+    <rect x="201" y="154" width="153" height="3" rx="1.5" fill="#2457A7"/>
+
+    <rect x="12" y="166" width="366" height="42" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <path d="m31 187-5-5 5-5m-5 5h14" fill="none" stroke="#2457A7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="48" y="192" class="small blue" font-weight="600">Zurück zur Dokumentliste</text>
+
+    <text x="20" y="231" class="tiny muted">Planungsdokumente  ›  Pläne</text>
+    <text x="20" y="260" class="title">Fortlaufender UI-Review und</text>
+    <text x="20" y="283" class="title">Jira-inspirierte Verbesserung</text>
+    <rect x="20" y="294" width="110" height="27" rx="13.5" fill="#F0F3F7"/>
+    <use href="#clipboard" x="27" y="299" width="16" height="16" class="icon"/>
+    <text x="49" y="312" class="small" font-weight="600">Plan · Offen</text>
+
+    <rect x="12" y="329" width="366" height="103" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="26" y="352" class="section">Review-Takt</text>
+    <text x="26" y="373" class="body">Oberfläche prüfen, Ticketzugehörigkeiten abgleichen</text>
+    <text x="26" y="390" class="body">und belegte Verbesserungen im UI-Review festhalten.</text>
+    <text x="26" y="415" class="tiny muted">Vollständiger Plantext bleibt im Lesemodus erreichbar.</text>
+
+    <text x="20" y="458" class="section">Ticketverknüpfungen</text>
+    <text x="20" y="476" class="tiny muted">11 Einträge · 10 eindeutige Ziele</text>
+    <rect x="12" y="485" width="366" height="46" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="26" y="504" class="small">Schlichte Planungsoberfläche …</text>
+    <text x="26" y="520" class="tiny muted">Programm</text>
+    <path d="m354 502 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+
+    <rect x="12" y="537" width="366" height="46" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="26" y="556" class="small">UI-Richtung und Informationsarchitektur</text>
+    <text x="26" y="572" class="tiny muted">Arbeitspaket</text>
+    <path d="m354 554 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+
+    <rect x="12" y="589" width="366" height="46" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="26" y="608" class="small">Konsistentes Icon-System auswählen</text>
+    <text x="26" y="624" class="tiny muted">und integrieren</text>
+    <path d="m354 621 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+
+    <rect x="12" y="641" width="366" height="38" rx="6" fill="#FFFFFF" stroke="#768294"/>
+    <text x="26" y="665" class="small blue" font-weight="600">Weitere 6 Ticketziele anzeigen</text>
+    <path d="m354 655 5 5-5 5" fill="none" stroke="#2457A7" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <text x="20" y="699" class="tiny muted">Weiter unten: UI-Review-Ticket (2× Linkeintrag)</text>
+    <text x="20" y="724" class="section">Verknüpftes Dokument · 1</text>
+    <rect x="12" y="733" width="366" height="62" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <use href="#target" x="25" y="749" width="18" height="18" class="icon"/>
+    <text x="52" y="755" class="tiny muted" font-weight="650">ZIEL · OFFEN</text>
+    <text x="52" y="774" class="small" font-weight="600">Die Planus-Manus-Oberfläche</text>
+    <text x="52" y="789" class="small" font-weight="600">fortlaufend prüfen und verbessern</text>
+    <path d="m354 758 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+
+    <text x="20" y="816" class="tiny muted">2× zeigt doppelte Quelldaten; nichts wird still entfernt.</text>
+    <text x="20" y="834" class="tiny muted">Entwurf · Lesemodus · Datenstand 2026-10-30</text>
+  </g>
+</svg>
+

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#F6F7F9"/>
+  <rect x="0" y="0" width="1280" height="64" fill="#fff" stroke="#D8DEE7"/>
+  <text x="32" y="40" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#263445">Planus</text>
+  <text x="190" y="40" font-family="Arial,sans-serif" font-size="14" fill="#263445">Übersicht</text>
+  <text x="290" y="40" font-family="Arial,sans-serif" font-size="14" fill="#5A687A">Tickets</text>
+  <text x="370" y="40" font-family="Arial,sans-serif" font-size="14" fill="#5A687A">Planungsdokumente</text>
+  <rect x="900" y="14" width="250" height="36" rx="6" fill="#F0F3F7"/>
+  <text x="916" y="37" font-family="Arial,sans-serif" font-size="13" fill="#5A687A">⌕  Suchen</text>
+  <text x="32" y="120" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="#263445">Mein Projekt</text>
+  <text x="32" y="150" font-family="Arial,sans-serif" font-size="14" fill="#5A687A">Projektübersicht</text>
+  <rect x="32" y="184" width="1216" height="488" rx="10" fill="#fff" stroke="#D8DEE7"/>
+  <circle cx="640" cy="315" r="38" fill="#EAF1FD"/>
+  <path d="M640 294v42M619 315h42" stroke="#2457A7" stroke-width="3" stroke-linecap="round"/>
+  <text x="640" y="398" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#263445">Starte die Planung für dein Projekt</text>
+  <text x="640" y="432" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="#5A687A">Hier erscheinen Tickets, offene Voraussetzungen und zuletzt geänderte Arbeit.</text>
+  <text x="640" y="454" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="#5A687A">Erstelle ein erstes Ticket, um die Planung zu beginnen.</text>
+  <rect x="526" y="482" width="228" height="44" rx="6" fill="#2457A7"/>
+  <text x="640" y="510" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#fff">+  Erstes Ticket erstellen</text>
+  <text x="640" y="570" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#5A687A">Noch keine Planungsdokumente</text>
+</svg>

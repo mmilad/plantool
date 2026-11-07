@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — Rückmeldungen bei der Ticketanlage</title>
+  <desc id="desc">Vier Zustände unterscheiden Eingabeprüfung, bestätigte Ablehnung, unklare Antwort nach dem Absenden und erfolgreiche Anlage mit fehlgeschlagenem Listenabruf. Eingaben bleiben bei Fehlern erhalten; eine unklare Anfrage wird nicht blind wiederholt. Nach bestätigter Anlage bleibt ein direkter Einstieg zum neuen Ticket neben dem erneuten Laden der Liste verfügbar.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 10px; }
+      .small { font-size: 12px; }
+      .body { font-size: 13px; }
+      .heading { font-size: 16px; font-weight: 650; }
+      .label { font-size: 12px; font-weight: 600; }
+      .error { fill: #9B1C1C; }
+      .panel { fill: #FFFFFF; stroke: #D8DEE7; }
+      .control { fill: #FFFFFF; stroke: #768294; }
+      .alert { fill: #FDECEC; stroke: #F1C6C6; }
+      .warning { fill: #FFF8E8; stroke: #E7D5A5; }
+      .success { fill: #E8F5EC; stroke: #B8D8C0; }
+      .primary { fill: #2457A7; }
+      .inverse { fill: #FFFFFF; }
+    </style>
+  </defs>
+  <rect width="1280" height="720" fill="#F6F7F9"/>
+  <text x="24" y="32" font-size="20" font-weight="650">Ticketanlage · Validierung, Fehler und bestätigter Erfolg</text>
+  <text x="24" y="54" class="small muted">Farbige Karten zeigen Produkttextvorschläge; graue Bereiche sind interne Planungs-/Abnahmehinweise.</text>
+
+  <g transform="translate(24 78)">
+    <rect width="296" height="594" rx="8" class="panel"/>
+    <text x="18" y="30" class="tiny muted" font-weight="650">1 · EINGABEFEHLER</text>
+    <text x="18" y="59" class="heading">Titel fehlt</text>
+    <text x="18" y="86" class="label">Titel <tspan fill="#9B1C1C">*</tspan></text>
+    <rect x="18" y="96" width="260" height="42" rx="5" fill="#FFFFFF" stroke="#9B1C1C" stroke-width="1.5"/>
+    <text x="28" y="122" class="small muted">Titel eingeben</text>
+    <text x="18" y="157" class="small" fill="#9B1C1C">Bitte gib einen Titel ein.</text>
+    <rect x="18" y="183" width="260" height="78" rx="5" class="control"/>
+    <text x="28" y="208" class="tiny muted">BESCHREIBUNG (OPTIONAL)</text>
+    <text x="28" y="233" class="small">Vorhandener Text bleibt erhalten.</text>
+    <rect x="18" y="282" width="132" height="40" rx="5" class="primary"/>
+    <text x="84" y="307" class="small inverse" font-weight="650" text-anchor="middle">Ticket erstellen</text>
+    <text x="18" y="350" class="small muted">Kein Request bei leerem Titel.</text>
+    <text x="18" y="369" class="small muted">Fokus geht zum Titel; Fehler wird</text>
+    <text x="18" y="388" class="small muted">auch assistiv angekündigt.</text>
+    <rect x="18" y="430" width="260" height="88" rx="5" fill="#F0F3F7" stroke="#D8DEE7"/>
+    <text x="30" y="455" class="tiny muted" font-weight="650">PLANUNGSREGEL</text>
+    <text x="30" y="478" class="small">Browserprüfung und Core-</text>
+    <text x="30" y="496" class="small">Validierung bleiben abgestimmt.</text>
+  </g>
+
+  <g transform="translate(336 78)">
+    <rect width="296" height="594" rx="8" class="panel"/>
+    <text x="18" y="30" class="tiny muted" font-weight="650">2 · VALIDIERUNG LEHNT AB</text>
+    <text x="18" y="59" class="heading">Eingabe behalten</text>
+    <text x="18" y="86" class="label">Titel</text>
+    <rect x="18" y="96" width="260" height="42" rx="5" class="control"/>
+    <text x="28" y="122" class="small">Mein Ticket</text>
+    <rect x="18" y="153" width="260" height="91" rx="5" class="alert"/>
+    <text x="30" y="177" class="small error" font-weight="650">Ticket konnte nicht</text>
+    <text x="30" y="196" class="small error" font-weight="650">erstellt werden.</text>
+    <text x="30" y="222" class="tiny">Prüfe deine Eingabe und versuche es erneut.</text>
+    <rect x="18" y="264" width="150" height="40" rx="5" class="primary"/>
+    <text x="93" y="289" class="small inverse" font-weight="650" text-anchor="middle">Erneut versuchen</text>
+    <rect x="176" y="264" width="102" height="40" rx="5" fill="#FFFFFF" stroke="#768294"/>
+    <text x="227" y="289" class="small" text-anchor="middle">Abbrechen</text>
+    <text x="18" y="340" class="small muted">Erneut nur nach sicher bestätigter</text>
+    <text x="18" y="359" class="small muted">Nichtanlage. Timeout bleibt ein</text>
+    <text x="18" y="378" class="small muted">eigener Zustand, ohne Roh-JSON.</text>
+    <rect x="18" y="430" width="260" height="88" rx="5" fill="#F0F3F7" stroke="#D8DEE7"/>
+    <text x="30" y="455" class="tiny muted" font-weight="650">FORMULARZUSTAND</text>
+    <text x="30" y="478" class="small">Titel, Beschreibung und Parent</text>
+    <text x="30" y="496" class="small">bleiben beim Fehler erhalten.</text>
+  </g>
+
+  <g transform="translate(648 78)">
+    <rect width="296" height="594" rx="8" class="panel"/>
+    <text x="18" y="30" class="tiny muted" font-weight="650">3 · ANTWORT UNKLAR</text>
+    <text x="18" y="59" class="heading">Erstellung nicht bestätigt</text>
+    <rect x="18" y="82" width="260" height="134" rx="5" class="warning"/>
+    <text x="30" y="108" class="body" font-weight="650">Erstellung nicht bestätigt</text>
+    <text x="30" y="134" class="small">Das Ticket könnte schon angelegt</text>
+    <text x="30" y="153" class="small">sein. Bitte sende es nicht blind</text>
+    <text x="30" y="172" class="small">noch einmal ab.</text>
+    <rect x="18" y="237" width="260" height="42" rx="5" fill="#FFFFFF" stroke="#768294"/>
+    <text x="148" y="263" class="small" fill="#2457A7" font-weight="650" text-anchor="middle">Zur Ticketliste</text>
+    <text x="18" y="315" class="small muted">Suche dort zuerst nach dem Titel,</text>
+    <text x="18" y="334" class="small muted">bevor du ein weiteres Ticket anlegst.</text>
+    <rect x="18" y="391" width="260" height="127" rx="5" fill="#F0F3F7" stroke="#D8DEE7"/>
+    <text x="30" y="417" class="tiny muted" font-weight="650">PLANUNGSHINWEIS</text>
+    <text x="30" y="442" class="small">Die aktuelle Schnittstelle kann nicht</text>
+    <text x="30" y="461" class="small">sicher feststellen, ob der Auftrag</text>
+    <text x="30" y="480" class="small">bereits gespeichert wurde.</text>
+  </g>
+
+  <g transform="translate(960 78)">
+    <rect width="296" height="594" rx="8" class="panel"/>
+    <text x="18" y="30" class="tiny muted" font-weight="650">4 · ERSTELLT, LISTE NICHT AKTUALISIERT</text>
+    <text x="18" y="59" class="heading">Schreibvorgang fertig</text>
+    <rect x="18" y="82" width="260" height="118" rx="5" class="success"/>
+    <text x="30" y="108" class="body" font-weight="650">Ticket wurde erstellt.</text>
+    <text x="30" y="135" class="small">Die Liste konnte nicht aktualisiert</text>
+    <text x="30" y="154" class="small">werden. Das Ticket wurde dennoch</text>
+    <text x="30" y="173" class="small">erstellt und bleibt direkt erreichbar.</text>
+    <rect x="18" y="220" width="112" height="40" rx="5" fill="#FFFFFF" stroke="#768294"/><rect x="138" y="220" width="140" height="40" rx="5" class="primary"/>
+    <text x="74" y="245" class="small" text-anchor="middle">Ticket öffnen</text><text x="208" y="245" class="small inverse" font-weight="650" text-anchor="middle">Liste aktualisieren</text>
+    <text x="18" y="305" class="small muted">Nur die Liste neu laden, das Ticket</text>
+    <text x="18" y="324" class="small muted">nicht erneut erstellen.</text>
+    <rect x="18" y="367" width="260" height="151" rx="5" fill="#F0F3F7" stroke="#D8DEE7"/>
+    <text x="30" y="393" class="tiny muted" font-weight="650">ZUSTAND TRENNEN</text>
+    <text x="30" y="418" class="small">Erfolg erst nach bestätigter Anlage.</text>
+    <text x="30" y="437" class="small">Ein Fehler beim Listenabruf darf den</text>
+    <text x="30" y="456" class="small">bestätigten Erfolg nicht als</text>
+    <text x="30" y="475" class="small">fehlgeschlagene Anlage zeigen.</text>
+  </g>
+
+  <text x="24" y="701" class="tiny muted">Zielbild zur Abstimmung mit dem bestehenden Ticket „Lade-, Fehler-, Leer- und Erfolgsmeldungen systematisch planen“; kein Live-Zustand.</text>
+</svg>

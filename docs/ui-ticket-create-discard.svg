@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — Ungespeicherte Ticketentwürfe verwerfen</title>
+  <desc id="desc">Desktop- und Mobilzustand zeigen eine Bestätigung, wenn ein ausgefülltes Root- oder Unterticketformular verlassen wird. Weiter bearbeiten ist die sichere vorausgewählte Aktion; Verwerfen löscht den lokalen Entwurf ohne Ticketanlage.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 10px; }
+      .small { font-size: 12px; }
+      .body { font-size: 13px; }
+      .heading { font-size: 17px; font-weight: 650; }
+      .label { font-size: 12px; font-weight: 600; }
+      .panel { fill: #FFFFFF; stroke: #D8DEE7; }
+      .control { fill: #FFFFFF; stroke: #768294; }
+      .primary { fill: #2457A7; }
+      .inverse { fill: #FFFFFF; }
+      .danger { fill: #FFFFFF; stroke: #9B1C1C; }
+      .error { fill: #9B1C1C; }
+    </style>
+  </defs>
+  <rect width="1280" height="760" fill="#F6F7F9"/>
+  <text x="24" y="32" font-size="20" font-weight="650">Ticketanlage · ungespeicherte Eingaben schützen</text>
+  <text x="24" y="54" class="small muted">Verlassen mit Inhalt fragt nach; leere Formulare und unveränderte Projektdefaults schließen direkt.</text>
+
+  <g transform="translate(16 72)">
+    <rect width="616" height="660" rx="10" fill="#F0F3F7" stroke="#D8DEE7"/>
+    <rect x="1" y="1" width="614" height="48" rx="9" fill="#FFFFFF"/>
+    <text x="18" y="30" class="small" font-weight="650">Planus Manus</text>
+    <rect x="18" y="65" width="580" height="563" rx="6" fill="#F0F3F7" opacity=".45"/>
+    <rect x="64" y="98" width="488" height="500" rx="8" fill="#FFFFFF" stroke="#C8D0DB"/>
+    <text x="88" y="132" class="heading">Ticket erstellen</text>
+    <text x="88" y="172" class="label">Titel *</text>
+    <rect x="88" y="182" width="440" height="42" rx="5" class="control"/>
+    <text x="100" y="208" class="small">Projektübersicht als Startfläche</text>
+    <text x="88" y="254" class="label">Beschreibung</text>
+    <rect x="88" y="264" width="440" height="74" rx="5" class="control"/>
+    <text x="100" y="290" class="small">Bisher eingegebener Text bleibt im</text>
+    <text x="100" y="309" class="small">Formular, bis bewusst verworfen wird.</text>
+    <rect x="88" y="368" width="440" height="42" rx="5" class="control"/>
+    <text x="100" y="394" class="small">Status Offen · Priorität Normal</text>
+    <rect width="616" height="660" rx="10" fill="#172334" opacity=".28"/>
+
+    <g role="group" aria-label="Visuelle Vorschau einer Verwerfbestätigung">
+      <rect x="76" y="218" width="464" height="238" rx="8" fill="#FFFFFF" stroke="#C8D0DB"/>
+      <text x="126" y="254" class="heading">Entwurf verwerfen?</text>
+      <text x="126" y="292" class="body">Deine Eingaben gehen verloren.</text>
+      <text x="126" y="313" class="body">Das Ticket wurde noch nicht angelegt.</text>
+      <text x="126" y="349" class="small muted">Du kannst weiterbearbeiten oder</text>
+      <text x="126" y="367" class="small muted">den Entwurf bewusst verwerfen.</text>
+      <rect x="126" y="390" width="184" height="42" rx="5" class="primary"/>
+      <text x="218" y="416" class="small inverse" font-weight="650" text-anchor="middle">Weiter bearbeiten</text>
+      <rect x="322" y="390" width="166" height="42" rx="5" class="danger"/>
+      <text x="405" y="416" class="small error" font-weight="650" text-anchor="middle">Entwurf verwerfen</text>
+      <rect x="123" y="387" width="190" height="48" rx="7" fill="none" stroke="#2457A7" stroke-width="2"/>
+    </g>
+    <text x="24" y="643" class="tiny muted">Desktop: benanntes alertdialog; Fokus startet auf „Weiter bearbeiten“. Escape schließt nur diese Bestätigung.</text>
+  </g>
+
+  <g transform="translate(648 72)">
+    <rect width="616" height="660" rx="10" fill="#F0F3F7" stroke="#D8DEE7"/>
+    <rect x="1" y="1" width="614" height="48" rx="9" fill="#FFFFFF"/>
+    <text x="18" y="30" class="small" font-weight="650">Planus Manus</text>
+    <text x="530" y="30" class="small muted" text-anchor="end">Zurück</text>
+    <text x="24" y="90" class="heading">Unterticket anlegen</text>
+    <rect x="24" y="108" width="568" height="64" rx="5" fill="#EAF1FD" stroke="#B9CBE8"/>
+    <text x="38" y="133" class="tiny muted" font-weight="650">ELTERN-TICKET</text>
+    <text x="38" y="155" class="small">Ticketdetail und Bearbeitungsfluss verbessern</text>
+    <text x="24" y="207" class="label">Titel *</text>
+    <rect x="24" y="217" width="568" height="42" rx="5" class="control"/>
+    <text x="36" y="243" class="small">API-Fallback prüfen</text>
+    <rect x="24" y="276" width="568" height="84" rx="5" class="control"/>
+    <text x="36" y="302" class="small">Beschreibungstext</text>
+    <rect width="616" height="660" rx="10" fill="#172334" opacity=".28"/>
+
+    <rect x="118" y="224" width="380" height="228" rx="8" fill="#FFFFFF" stroke="#C8D0DB"/>
+    <text x="140" y="258" class="heading">Entwurf verwerfen?</text>
+    <text x="140" y="294" class="body">Deine Eingaben gehen verloren.</text>
+    <text x="140" y="315" class="body">Das Unterticket wurde noch nicht</text>
+    <text x="140" y="336" class="body">angelegt.</text>
+    <rect x="140" y="372" width="162" height="44" rx="5" class="primary"/>
+    <text x="221" y="399" class="small inverse" font-weight="650" text-anchor="middle">Weiter bearbeiten</text>
+    <rect x="314" y="372" width="162" height="44" rx="5" class="danger"/>
+    <text x="395" y="399" class="small error" font-weight="650" text-anchor="middle">Entwurf verwerfen</text>
+    <text x="24" y="643" class="tiny muted">Mobil: Bestätigung überlagert die Vollbildansicht; Zurück behält Parent-, Fokus- und Listenposition.</text>
+  </g>
+
+  <text x="24" y="752" class="tiny muted">Nur nutzereigene Änderungen zählen: Titel, Beschreibung, Labels und geänderte Status-/Prioritätswerte; Parent und unveränderte Defaults nicht.</text>
+</svg>

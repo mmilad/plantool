@@ -1,10 +1,10 @@
 # Roadmap
 
-This is an implementation sequence, not authorization to begin implementation in this research phase. Issue #1 ends at research and roadmap. No product code or package is included in this proposal.
+This roadmap records the broader product direction and is maintained passively while the first usable release is implemented. It is not a prerequisite checklist for each UI increment. Work proceeds in small, visible slices; only the current slice is actively planned, and implementation findings are recorded here when they change scope or sequencing.
 
 ## MVP boundary
 
-A fresh checkout with supported Node LTS can initialize, read, create, update, reparent, search and validate arbitrarily nested tickets and linked planning docs entirely offline. Canonical data is ordinary Git-tracked content. MVP includes CLI and public TypeScript API plus an optional `pman serve` browser UI for the single current project. The UI binds to loopback, has no auth, and does not enumerate other projects. It runs on Windows/macOS/Linux and requires no hosted service, database, or MCP.
+A fresh checkout with supported Node LTS can initialize, read, create, update, reparent, search and validate arbitrarily nested tickets and linked planning docs entirely offline. Canonical data is ordinary Git-tracked content. MVP includes CLI and public TypeScript API plus an optional `pman serve` browser UI for the single current project. The UI binds to loopback, defaults to fixed port 4000, fails clearly if occupied (with only an explicit `--port` override), has no auth, and does not enumerate other projects. It runs on Windows/macOS/Linux and requires no hosted service, database, or MCP.
 
 Out of MVP: hosted sharing, credentials/auth/invites, live locks, agent execution/session management, arbitrary extensions/hooks, desktop app, MCP adapter, semantic search, binary asset hosting, dashboards, time tracking, auto-update.
 
@@ -121,10 +121,10 @@ Acceptance:
 4. Declarative custom property/status rules before considering executable extensions.
 5. Richer TUI/editor integrations beyond the single-project local browser UI.
 6. Explicit repo-relative assets and Git LFS.
-7. Optional semantic search with always-available keyword search.
+7. Optional local semantic search in Node.js using ONNX and `all-MiniLM-L6-v2`, with a rebuildable SQLite vector index and always-available keyword fallback. Repository files remain canonical; the index is derived local data.
 
-## Sequencing and verification plan
+## Sequencing and verification plan (passive reference)
 
 Resolve names, schema, ID, status, relationship and migration choices before implementation. Build graph model before UX. Add planning/context after IDs and links stabilize. Test Windows early.
 
-Implementation should include property-generated graphs, extreme-depth/wide-tree cases, cycle/orphan cases, canonical serialization, stale writes, disjoint Git merges, Windows path/encoding, migration fixtures, CLI JSON/exit contracts, offline checkout integration and TS API import checks. This proposal does not run or add those tests.
+These are release-level verification topics, not gates for routine UI increments. Select relevant checks when preparing a release candidate; do not expand the active planning queue in advance.

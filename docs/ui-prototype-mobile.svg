@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus UI-Entwurf — mobiler Ticketdetailzustand</title>
+  <desc id="desc">Statischer Mobilentwurf mit sichtbarer Rückkehr zur Ticketliste, Elternkontext, Ticketstatus, Priorität und separat benannter Blockerbereitschaft.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 11px; }
+      .small { font-size: 12px; }
+      .body { font-size: 14px; }
+      .inverse { fill: #FFFFFF; }
+      .critical { fill: #9B1C1C; }
+      .section { font-size: 15px; font-weight: 650; }
+      .nav-icon { fill: none; stroke: #5A687A; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .nav-icon-active { fill: none; stroke: #2457A7; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <symbol id="nav-house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/></symbol>
+    <symbol id="nav-ticket" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v4a2 2 0 0 0 0 4v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a2 2 0 0 0 0-4V6a1 1 0 0 1 1-1Z"/><path d="M13 5v2m0 3v2m0 3v2"/></symbol>
+    <symbol id="nav-documents" viewBox="0 0 24 24"><path d="M7 3h10l4 4v14H7z"/><path d="M17 3v5h4M3 7v14h4M10 12h8m-8 4h8"/></symbol>
+  </defs>
+  <rect width="390" height="844" fill="#F6F7F9"/>
+
+  <rect width="390" height="58" fill="#FFFFFF"/>
+  <path d="M0 57.5H390" stroke="#D8DEE7"/>
+  <rect x="16" y="14" width="30" height="30" rx="8" fill="#2457A7"/>
+  <path d="M24.75 23.375h12.5M24.75 28.375h12.5M24.75 33.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
+  <text x="56" y="28" font-size="14" font-weight="650">Planus Manus</text>
+  <text x="56" y="43" class="tiny muted">planus-manus</text>
+  <rect x="242" y="7" width="132" height="44" rx="6" fill="#2457A7"/>
+  <path d="M254 29h10m-5-5v10" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="270" y="33" class="small inverse" font-weight="600">Ticket erstellen</text>
+
+  <rect x="12" y="65" width="366" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <circle cx="29" cy="87" r="5" fill="none" stroke="#5A687A" stroke-width="1.3"/>
+  <path d="m32.5 90.5 3 3" stroke="#5A687A" stroke-width="1.3" stroke-linecap="round"/>
+  <text x="44" y="91" class="small muted">Im Projekt suchen</text>
+
+  <rect x="0" y="114" width="390" height="44" fill="#FFFFFF"/>
+  <path d="M0 157.5H390" stroke="#D8DEE7"/>
+  <use href="#nav-house" x="13" y="126" width="20" height="20" class="nav-icon"/>
+  <text x="39" y="141" class="small muted">Übersicht</text>
+  <use href="#nav-ticket" x="120" y="126" width="20" height="20" class="nav-icon-active"/>
+  <text x="146" y="141" class="small" fill="#2457A7" font-weight="650">Tickets</text>
+  <use href="#nav-documents" x="205" y="126" width="20" height="20" class="nav-icon"/>
+  <text x="231" y="141" class="small muted">Planungsdokumente</text>
+  <rect x="118" y="154" width="74" height="3" rx="1.5" fill="#2457A7"/>
+
+  <rect x="12" y="166" width="366" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <path d="M20 188h13m-5-5-5 5 5 5" fill="none" stroke="#2457A7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="41" y="193" class="small" fill="#2457A7" font-weight="600">Zurück zur Ticketliste</text>
+
+  <text x="20" y="214" class="tiny muted">UI-Programm</text>
+  <path d="m94 209 4 4-4 4" fill="none" stroke="#768294" stroke-width="1.3"/>
+  <text x="105" y="214" class="tiny muted">Ticketdetails</text>
+
+  <text x="20" y="250" font-size="22" font-weight="650">Planungsdokumente und</text>
+  <text x="20" y="277" font-size="22" font-weight="650">Projektübersicht</text>
+  <text x="20" y="304" font-size="22" font-weight="650">gestalten</text>
+
+  <rect x="20" y="320" width="78" height="28" rx="14" fill="#F0F3F7"/>
+  <circle cx="34" cy="334" r="4" fill="#5A687A"/>
+  <text x="45" y="338" class="small" font-weight="600">Offen</text>
+  <text x="108" y="338" class="small muted">Priorität</text>
+  <rect x="165" y="320" width="78" height="28" rx="14" fill="#F0F3F7"/>
+  <text x="179" y="338" class="small" font-weight="600">Normal</text>
+
+  <rect x="20" y="362" width="350" height="78" rx="7" fill="#FDECEC" stroke="#F1C6C6"/>
+  <path d="M38 382 46 397H30z" fill="none" stroke="#9B1C1C" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M38 386v5m0 3v.2" stroke="#9B1C1C" stroke-width="1.4" stroke-linecap="round"/>
+  <text x="58" y="384" class="small critical" font-weight="650">Bereitschaft: Blockiert</text>
+  <text x="58" y="403" class="tiny muted">Wartet auf das UI-Konzept</text>
+  <text x="58" y="419" class="tiny muted">„Schlichtes UI-Konzept …“</text>
+
+  <text x="20" y="473" class="section">Beschreibung</text>
+  <text x="20" y="498" class="body">Projektübersicht und Planungsdokumente als</text>
+  <text x="20" y="519" class="body">getrennte, erreichbare Arbeitsbereiche</text>
+  <text x="20" y="540" class="body">gestalten.</text>
+
+  <rect x="20" y="564" width="350" height="58" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="36" y="589" class="section">Unteraufgaben</text>
+  <text x="36" y="608" class="small muted">6 · öffnen</text>
+  <rect x="202" y="571" width="144" height="44" rx="6" fill="#FFFFFF" stroke="#2457A7"/>
+  <text x="274" y="598" class="tiny" fill="#2457A7" font-weight="650" text-anchor="middle">Unterticket anlegen</text>
+  <path d="m348 587 5 5 5-5" fill="none" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="20" y="632" width="350" height="58" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="36" y="657" class="section">Beziehungen · 4</text>
+  <text x="36" y="676" class="small muted">1 wartet auf · 1 blockiert · 2 Verknüpfungen</text>
+  <path d="m348 655 5 5 5-5" fill="none" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="20" y="700" width="350" height="58" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
+  <text x="36" y="725" class="section">Kommentare</text>
+  <text x="36" y="744" class="small muted">Lesbar gruppiert</text>
+  <path d="m348 723 5 5 5-5" fill="none" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="20" y="808" class="tiny muted">Entwurf · keine finale Icon- oder Navigationsfreigabe</text>
+</svg>

@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="930" viewBox="0 0 820 930" role="img" aria-labelledby="title desc">
+  <title id="title">Planus Manus — mobiler Listen- und Detailwechsel im fp.dev-Stil</title>
+  <desc id="desc">Zwei statische Mobilzustände bei jeweils 390 mal 844 CSS-Pixeln: Ticketliste und scrollbar geöffnetes Detail desselben UI-Konzepttickets. Suche, Filter, Ticketziel und Listenposition bleiben beim Zurückwechsel erhalten. Das Detail zeigt zwei 44px-Beziehungsziele und eine 44px-Aktion zu allen 34 Blockern.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
+      .muted { fill: #5A687A; }
+      .tiny { font-size: 11px; }
+      .small { font-size: 12px; }
+      .body { font-size: 14px; }
+      .label { font-size: 11px; font-weight: 650; letter-spacing: .04em; }
+      .section { font-size: 15px; font-weight: 650; }
+      .heading { font-size: 21px; font-weight: 650; }
+      .divider { stroke: #E1E5EA; }
+      .control { fill: #FFFFFF; stroke: #AEB8C4; }
+      .selected { fill: #F1F3F5; }
+      .primary { fill: #202A36; }
+      .inverse { fill: #FFFFFF; }
+      .icon { fill: none; stroke: #697586; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+  <rect width="820" height="930" fill="#F7F8FA"/>
+  <text x="16" y="28" class="section">Liste · 390 × 844</text>
+  <text x="414" y="28" class="section">Detail · 390 × 844</text>
+
+  <!-- List state -->
+  <g transform="translate(16 46)">
+    <rect width="390" height="844" rx="10" fill="#F7F8FA" stroke="#D8DEE7"/>
+    <rect width="390" height="56" rx="10" fill="#FFFFFF"/>
+    <path d="M0 55.5H390" class="divider"/>
+    <rect x="14" y="13" width="30" height="30" rx="7" fill="#202A36"/>
+    <path d="M21 21h16m-16 6h16m-16 6h11" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="54" y="34" class="section">Planus Manus</text>
+    <rect x="314" y="6" width="64" height="44" rx="6" class="primary"/>
+    <path d="M326 28h12m-6-6v12" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round"/>
+    <text x="344" y="32" class="tiny inverse" font-weight="650">Neu</text>
+
+    <text x="16" y="82" class="tiny muted">PLANUS-MANUS</text>
+    <text x="16" y="109" class="heading">Tickets</text>
+    <rect x="16" y="123" width="358" height="44" rx="6" class="control"/>
+    <circle cx="34" cy="144" r="6" fill="none" stroke="#697586" stroke-width="1.5"/>
+    <path d="m38 148 4 4" class="icon"/>
+    <text x="52" y="149" class="small muted">Im Projekt suchen</text>
+    <rect x="16" y="177" width="145" height="44" rx="6" class="control"/>
+    <text x="30" y="204" class="small">Status · Alle</text>
+    <path d="m143 196 4 4 4-4" class="icon"/>
+    <rect x="171" y="177" width="161" height="44" rx="6" class="control"/>
+    <text x="185" y="204" class="small">Priorität · Alle</text>
+    <path d="m314 196 4 4 4-4" class="icon"/>
+
+    <text x="16" y="249" class="section">UI-Programm</text>
+    <text x="374" y="249" text-anchor="end" class="small muted">10 Pakete</text>
+    <path d="M16 263h358" class="divider"/>
+    <circle cx="28" cy="286" r="5" fill="none" stroke="#697586" stroke-width="1.5"/>
+    <text x="44" y="283" class="small">UI-Richtung und Informationsarchitektur</text>
+    <text x="44" y="301" class="tiny muted">Offen · Hoch</text>
+    <rect x="36" y="312" width="338" height="52" rx="5" class="selected"/>
+    <rect x="36" y="312" width="3" height="52" rx="1.5" fill="#2457A7"/>
+    <circle cx="53" cy="331" r="4.5" fill="none" stroke="#697586" stroke-width="1.4"/>
+    <text x="68" y="335" class="small" font-weight="600">Schlichtes UI-Konzept festhalten</text>
+    <text x="68" y="353" class="tiny muted">Offen · Hoch · Unter UI-Richtung</text>
+    <circle cx="28" cy="390" r="5" fill="none" stroke="#697586" stroke-width="1.5"/>
+    <text x="44" y="387" class="small">Konsistentes Icon-System auswählen</text>
+    <text x="44" y="405" class="tiny muted">Offen · Normal · blockiert</text>
+    <circle cx="28" cy="437" r="5" fill="none" stroke="#697586" stroke-width="1.5"/>
+    <text x="44" y="434" class="small">Ticketnavigation, Liste und Filter</text>
+    <text x="44" y="452" class="tiny muted">Offen · Hoch · blockiert</text>
+    <circle cx="28" cy="484" r="5" fill="none" stroke="#697586" stroke-width="1.5"/>
+    <text x="44" y="481" class="small">Ticketdetail und Bearbeitungsfluss</text>
+    <text x="44" y="499" class="tiny muted">Offen · Hoch · blockiert</text>
+    <circle cx="28" cy="531" r="5" fill="none" stroke="#697586" stroke-width="1.5"/>
+    <text x="44" y="528" class="small">Projektübersicht und Dokumente</text>
+    <text x="44" y="546" class="tiny muted">Offen · Normal · blockiert</text>
+    <circle cx="28" cy="578" r="5" fill="none" stroke="#697586" stroke-width="1.5"/>
+    <text x="44" y="575" class="small">Responsive und Barrierefreiheit</text>
+    <text x="44" y="593" class="tiny muted">Offen · Normal · blockiert</text>
+    <circle cx="28" cy="625" r="5" fill="none" stroke="#697586" stroke-width="1.5"/>
+    <text x="44" y="622" class="small">Visuelle Prüfung</text>
+    <text x="44" y="640" class="tiny muted">Offen · Normal · blockiert</text>
+    <circle cx="28" cy="672" r="5" fill="#EAF1FD" stroke="#2457A7" stroke-width="1.4"/>
+    <text x="44" y="669" class="small">Regelmäßiges UI-Review</text>
+    <text x="44" y="687" class="tiny muted">In Arbeit · Normal</text>
+    <text x="16" y="710" class="tiny muted">2 weitere direkte Pakete folgen beim Scrollen.</text>
+    <rect x="16" y="746" width="358" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="30" y="773" class="small">Planungsdokumente</text>
+    <path d="m350 763 4 4 4-4" class="icon"/>
+  </g>
+
+  <!-- Detail state -->
+  <g transform="translate(414 46)">
+    <rect width="390" height="844" rx="10" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <rect width="390" height="56" rx="10" fill="#FFFFFF"/>
+    <path d="M0 55.5H390" class="divider"/>
+    <rect x="12" y="6" width="172" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <path d="m35 28-7-7m0 0 7-7m-7 7h14" transform="translate(0 7)" class="icon"/>
+    <text x="48" y="33" class="small" font-weight="600">Zurück zur Liste</text>
+    <text x="16" y="83" class="tiny muted">UI-PROGRAMM  /  UI-RICHTUNG</text>
+    <text x="16" y="116" class="heading">Schlichtes UI-Konzept mit</text>
+    <text x="16" y="142" class="heading">klaren Planungsabläufen</text>
+    <text x="16" y="164" class="small">festhalten</text>
+    <path d="M16 181h358" class="divider"/>
+
+    <text x="16" y="207" class="label muted">EIGENSCHAFTEN</text>
+    <text x="16" y="233" class="tiny muted">STATUS</text>
+    <rect x="16" y="241" width="112" height="34" rx="17" fill="#F0F3F7"/>
+    <circle cx="33" cy="258" r="4" fill="#697586"/>
+    <text x="46" y="262" class="small">Offen</text>
+    <text x="150" y="233" class="tiny muted">PRIORITÄT</text>
+    <rect x="150" y="241" width="112" height="34" rx="17" fill="#F0F3F7"/>
+    <path d="M166 252h6m-6 5h5m-5 5h3" class="icon"/>
+    <text x="181" y="262" class="small">Hoch</text>
+
+    <text x="16" y="309" class="label muted">ELTERN-TICKET</text>
+    <rect x="16" y="320" width="358" height="58" rx="6" fill="#F7F8FA" stroke="#E1E5EA"/>
+    <text x="30" y="343" class="small" font-weight="600">UI-Richtung und Informationsarchitektur</text>
+    <text x="30" y="362" class="tiny muted">Direkt darüber · öffnen</text>
+
+    <text x="16" y="411" class="label muted">BESCHREIBUNG</text>
+    <text x="16" y="438" class="body">Schlichter fp.dev-Startentwurf;</text>
+    <text x="16" y="459" class="body">später änderbar, Liste links, Detail rechts.</text>
+
+    <path d="M16 483h358" class="divider"/>
+    <text x="16" y="509" class="label muted">BLOCKIERT 34 TICKETS</text>
+    <rect x="16" y="526" width="358" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="30" y="553" class="small">Ticketnavigation, Liste und Filter</text>
+    <path d="m350 543 4 4-4 4" class="icon"/>
+    <rect x="16" y="574" width="358" height="44" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
+    <text x="30" y="601" class="small">Ticketdetail und Bearbeitungsfluss</text>
+    <path d="m350 591 4 4-4 4" class="icon"/>
+    <rect x="16" y="622" width="358" height="44" rx="6" fill="#FFFFFF" stroke="#AEB8C4"/>
+    <text x="30" y="649" class="small" font-weight="600">Alle 34 Blocker ansehen</text>
+    <path d="m350 639 4 4-4 4" class="icon"/>
+    <path d="M16 680h358" class="divider"/>
+    <text x="16" y="707" class="label muted">KOMMENTARE</text>
+    <text x="16" y="733" class="small muted">Verlauf und Rückmeldung zum Entwurf</text>
+    <rect x="16" y="746" width="358" height="44" rx="6" fill="#FFFFFF" stroke="#AEB8C4"/>
+    <text x="30" y="773" class="small muted">Kommentar hinzufügen</text>
+    <text x="16" y="820" class="tiny muted">Zurück erhält Suche, Filter und Listenposition.</text>
+  </g>
+</svg>
