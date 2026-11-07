@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b615-0510-732d-a49c-4f9be5d59f30",
+  "ticketId": "01a189b0-0f28-7715-8ac6-c689065acab1",
+  "body": "Checked with 6,063 tickets at 390x844, 699, 700, 701 and 768 px: on phones selecting a ticket switches to a single-column detail at the top (h1 at y≈166, page height = viewport), 'Back to tickets' restores filter text, list scroll position and marks the last opened ticket (data-recent, not aria-current); wider layouts keep list and detail side by side. Desktop: list and detail now scroll independently (app shell has viewport height), so navigation stays reachable while reading long tickets/documents. Fixed: navigating during the initial tree load was reset to Overview when loading finished.",
+  "author": "claude",
+  "createdAt": "2026-11-07T12:56:33.296Z"
+}
