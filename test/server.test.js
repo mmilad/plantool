@@ -109,3 +109,14 @@ test('relations endpoint returns both directions with counterpart tickets',async
   assert.deepEqual(rels.map(r=>[r.type,r.direction,r.ticket.title]).sort(),[['blocks','incoming','A'],['implements','outgoing','C']]);
   assert.equal((await send(`${app.url}/api/tickets/01a189ac-28ff-73c2-8a77-000000000000/relations`,'GET',host)).status,404);
 });
+
+test('comments API pages from the newest window and can centre on one comment',async t=>{
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-comments-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const tk=await p.tickets.create({title:'T'});const ids=[];for(let i=0;i<45;i++)ids.push((await p.comments.add(tk.id,{body:`c${i}`})).id);
+  const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};const get=async q=>JSON.parse((await send(`${app.url}/api/tickets/${tk.id}/comments${q}`,'GET',host)).body);
+  const newest=await get('');assert.equal(newest.total,45);assert.equal(newest.offset,25);assert.deepEqual(newest.items.map(c=>c.body).slice(-1),['c44']);
+  const first=await get('?offset=0&limit=10');assert.equal(first.items[0].body,'c0');assert.equal(first.items.length,10);
+  const around=await get(`?around=${ids[3]}`);assert.equal(around.found,true);assert.ok(around.items.some(c=>c.id===ids[3]));assert.equal(around.offset,0);
+  assert.equal((await get('?around=01a189ac-28ff-73c2-8a77-000000000000')).found,false);
+  assert.equal((await send(`${app.url}/api/tickets/01a189ac-28ff-73c2-8a77-000000000000/comments`,'GET',host)).status,404);
+});

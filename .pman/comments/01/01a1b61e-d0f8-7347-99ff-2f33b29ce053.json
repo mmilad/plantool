@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b61e-d0f8-7347-99ff-2f33b29ce053",
+  "ticketId": "01a189d7-bdd9-7e6d-8ca7-db30cffdef3f",
+  "body": "GET /api/tickets/:id/comments returns {items,total,offset,limit}; default is the newest window of 20, ?offset paging, ?around=<commentId> centres the window on a comment (found:false if missing), 404 for unknown tickets. Detail shows 'Comments (total)', 'Show earlier comments (n)' keeps the reading position (anchor shift 0 px), 'Show newer comments' after deep links, focus moves to loaded comments; stale responses ignored. Verified in Chromium with 60 comments.",
+  "author": "claude",
+  "createdAt": "2026-11-07T13:07:15.320Z"
+}

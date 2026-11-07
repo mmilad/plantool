@@ -44,7 +44,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
       if(m&&req.method==='PATCH'){const input=await body(req);const {expectedRevision,...patch}=input;return send(res,200,await project.tickets.update(m[1],patch,{expectedRevision}));}
       if(url.pathname==='/api/tickets'&&req.method==='POST')return send(res,201,await project.tickets.create(await body(req)));
       m=/^\/api\/tickets\/([0-9a-f-]+)\/comments$/.exec(url.pathname);
-      if(m&&req.method==='GET')return send(res,200,await project.comments.list(m[1]));
+      if(m&&req.method==='GET'){await project.tickets.get(m[1]);const all=await project.comments.list(m[1]),limit=intParam(url,'limit',20,1,200),around=url.searchParams.get('around');let offset;let found=null;if(around){const i=all.findIndex(c=>c.id===around);found=i>=0;offset=i>=0?Math.max(0,Math.min(i-Math.floor(limit/2),all.length-limit)):Math.max(0,all.length-limit);}else offset=url.searchParams.has('offset')?intParam(url,'offset',0,0):Math.max(0,all.length-limit);return send(res,200,{items:all.slice(offset,offset+limit),total:all.length,offset,limit,...(around?{found}:{})});}
       if(m&&req.method==='POST')return send(res,201,await project.comments.add(m[1],await body(req)));
       if(url.pathname==='/api/documents'&&req.method==='GET'){const kind=url.searchParams.get('kind'),offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',200,1,1000);const all=await project.documents.list(kind,{body:false});return send(res,200,{items:all.slice(offset,offset+limit),total:all.length,offset,limit});}
       m=/^\/api\/documents\/([a-z]+)\/([0-9a-f-]+)$/.exec(url.pathname);
