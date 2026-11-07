@@ -209,11 +209,12 @@ function documentApi(p) {
     if(!input.title?.trim()) throw new ValidationError('Document title is required');
     const id=uuidv7(), date=nowIso(), links=input.links??[];if(!Array.isArray(links))throw new ValidationError('Document links must be an array of entity IDs');for(const x of links)checkId(x);const value={schemaVersion:1,id,title:input.title.trim(),status:input.status??'todo',links,createdAt:date,updatedAt:date,body:input.body??''};
     const file=idPath(path.join(p.dir,kind),id,'.md'); await assertSafePath(p.dir,path.dirname(file));await fs.mkdir(path.dirname(file),{recursive:true});await assertSafePath(p.dir,file);await fs.writeFile(file,docText(value),{flag:'wx'}); return value;
-  }, async list(kind) {
+  }, async list(kind,{body=true}={}) {
     if(!kinds.includes(kind)) throw new ValidationError(`Unknown document type: ${kind}`);
     const base=path.join(p.dir,kind), out=[];await assertSafePath(p.dir,base); if(!await exists(base)) return out;
     for(const sh of (await fs.readdir(base,{withFileTypes:true})).filter(x=>x.isDirectory()).sort((a,b)=>a.name.localeCompare(b.name))) {const shard=path.join(base,sh.name);await assertSafePath(p.dir,shard);for(const f of (await fs.readdir(shard)).filter(x=>x.endsWith('.md')).sort()){const file=path.join(shard,f);await assertSafePath(p.dir,file);const st=await fs.lstat(file);if(!st.isFile())throw new ValidationError(`Planning document is not a regular file: ${file}`);out.push(parseDoc(await fs.readFile(file,'utf8'),f));}}
-    return out.sort(sortRecords);
+    out.sort(sortRecords);
+    return body?out:out.map(({body:_,...meta})=>meta);
   }, async get(kind,id) { checkId(id); if(!kinds.includes(kind))throw new ValidationError(`Unknown document type: ${kind}`);const f=idPath(path.join(p.dir,kind),id,'.md');await assertSafePath(p.dir,f);try{return parseDoc(await fs.readFile(f,'utf8'),f);}catch(e){if(e.code==='ENOENT')throw new NotFoundError(`Document not found: ${id}`);throw e;} } };
 }
 function commentApi(p) { return {

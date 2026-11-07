@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b59a-6b1e-7e1e-90a0-817b7cd87576",
+  "ticketId": "01a189d5-d409-79de-b8b2-d59fb0516979",
+  "body": "GET /api/documents returns paginated metadata without bodies; GET /api/documents/:kind/:id fetches one document (400 for unknown kind, 404 if missing). Reader loads on selection, ignores stale responses, caches by updatedAt, shows loading/missing/error states. Search hits for goals/plans/decisions now open the reader (type was plural). Verified in Chromium; server tests added.",
+  "author": "claude",
+  "createdAt": "2026-11-07T10:42:38.494Z"
+}

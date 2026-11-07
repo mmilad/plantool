@@ -5,8 +5,8 @@ import { openProject, ValidationError } from './index.js';
 import { renderAppHtml } from './ui.js';
 
 export async function serve({ cwd = process.cwd(), port = 4000, open = false } = {}) {
-  if (!Number.isInteger(port) || port < 1 || port > 65535) {
-    throw new ValidationError('Port must be an integer between 1 and 65535');
+  if (!Number.isInteger(port) || port < 0 || port > 65535) {
+    throw new ValidationError('Port must be an integer between 0 and 65535 (0 picks a free port)');
   }
   const project = await openProject({ cwd });
   const token = randomBytes(32).toString('hex');
@@ -34,11 +34,13 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
       m=/^\/api\/tickets\/([0-9a-f-]+)\/comments$/.exec(url.pathname);
       if(m&&req.method==='GET')return send(res,200,await project.comments.list(m[1]));
       if(m&&req.method==='POST')return send(res,201,await project.comments.add(m[1],await body(req)));
-      if(url.pathname==='/api/documents'&&req.method==='GET'){const kind=url.searchParams.get('kind');return send(res,200,await project.documents.list(kind));}
+      if(url.pathname==='/api/documents'&&req.method==='GET'){const kind=url.searchParams.get('kind'),offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',200,1,1000);const all=await project.documents.list(kind,{body:false});return send(res,200,{items:all.slice(offset,offset+limit),total:all.length,offset,limit});}
+      m=/^\/api\/documents\/([a-z]+)\/([0-9a-f-]+)$/.exec(url.pathname);
+      if(m&&req.method==='GET')return send(res,200,await project.documents.get(m[1],m[2]));
       m=/^\/api\/context\/([0-9a-f-]+)$/.exec(url.pathname);if(m&&req.method==='GET')return send(res,200,await project.context(m[1]));
       if(url.pathname==='/api/validate'&&req.method==='GET')return send(res,200,await project.validate());
       return send(res,404,{error:'Not found'});
-    } catch(e) { return send(res,e.code==='NOT_FOUND'?404:e.code==='VALIDATION'?400:e.code==='CONFLICT'?409:e.code==='CYCLE'?409:500,{error:e.message,code:e.code??'ERROR'}); }
+    } catch(e) { return send(res,e.code==='NOT_FOUND'?404:e.code==='VALIDATION'?400:e.code==='CONFLICT'?409:e.code==='CYCLE'||e.code==='OPEN_WORK'?409:500,{error:e.message,code:e.code??'ERROR'}); }
   });
   await new Promise((resolve,reject)=>{
     server.once('error',error=>{
@@ -57,6 +59,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
   if(open) openBrowser(url);
   return { server, url, project };
 }
+function intParam(url,name,fallback,min,max=Number.MAX_SAFE_INTEGER){const raw=url.searchParams.get(name);if(raw===null)return fallback;const n=Number(raw);if(!Number.isInteger(n)||n<min||n>max)throw new ValidationError(`${name} must be an integer between ${min} and ${max}`);return n;}
 function safeToken(a,b){if(typeof a!=='string'||a.length!==b.length)return false;return timingSafeEqual(Buffer.from(a),Buffer.from(b));}
 async function body(req){let data='';for await(const c of req){data+=c;if(data.length>1_000_000)throw new ValidationError('Request body is too large');}try{return JSON.parse(data||'{}')}catch{throw new ValidationError('Request body must be JSON');}}
 function send(res,status,value){res.writeHead(status,{'content-type':'application/json; charset=utf-8','x-content-type-options':'nosniff','cache-control':'no-store'});res.end(JSON.stringify(value));}
