@@ -177,7 +177,8 @@ async function ensureCanParent(p, id, parentId) {
   let cur=parentId; const seen=new Set();
   while(cur) { if(cur===id) throw new CycleError('Move would create a parent cycle',{id,parentId}); if(seen.has(cur)) throw new CycleError('Existing parent cycle detected',{id:cur}); seen.add(cur); cur=map.get(cur)?.parentId??null; }
 }
-export async function buildTree(p, id = null, { maxDepth = Infinity, limit = 5000, offset = 0 } = {}) {
+/** Preorder tree rows with derived rollups. fields:'row' returns a lightweight projection for navigation; withTotal returns {items,total}. */
+export async function buildTree(p, id = null, { maxDepth = Infinity, limit = 5000, offset = 0, fields = 'full', withTotal = false } = {}) {
   const all=await listJson(p,'tickets'), idx=childIndex(all), roots=id?[await p.tickets.get(id)]:idx.get(null)??[];
   const ordered=[], stack=[];
   for(let i=roots.length-1;i>=0;i--) stack.push({ticket:roots[i],depth:0});
@@ -192,7 +193,12 @@ export async function buildTree(p, id = null, { maxDepth = Infinity, limit = 500
     rollups.set(ticket.id,rollup);
     stats.set(ticket.id,{active:ticket.status==='in_progress'||childStats.some(x=>x.active),remaining:(ticket.status!=='done'&&ticket.status!=='cancelled')||childStats.some(x=>x.remaining)});
   }
-  const visible=ordered.filter(x=>x.depth<=maxDepth);return visible.slice(Math.max(0,offset),Math.max(0,offset)+Math.max(0,limit)).map(({ticket,depth})=>({...ticket,depth,rollup:rollups.get(ticket.id)}));
+  const visible=ordered.filter(x=>x.depth<=maxDepth),page=visible.slice(Math.max(0,offset),Math.max(0,offset)+Math.max(0,limit));
+  const rows=fields==='row'
+    ? page.map(({ticket,depth})=>({id:ticket.id,parentId:ticket.parentId,depth,title:ticket.title,kind:ticket.kind??'task',status:ticket.status,priority:ticket.priority,labels:ticket.labels??[],assignee:ticket.assignee?.agent??null,childCount:(idx.get(ticket.id)??[]).length,rollup:rollups.get(ticket.id)}))
+    : page.map(({ticket,depth})=>({...ticket,depth,rollup:rollups.get(ticket.id)}));
+  if(withTotal)return {items:rows,total:visible.length};
+  return rows;
 }
 
 function parseDoc(text, file) {

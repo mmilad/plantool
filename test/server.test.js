@@ -41,3 +41,14 @@ test('finishing a parent with open children over HTTP is a 409 conflict',async t
   const r=await send(`${app.url}/api/tickets/${parent.id}`,'PATCH',{host,origin:app.url,'x-pman-csrf':token,'content-type':'application/json'},JSON.stringify({status:'done'}));
   assert.equal(r.status,409);assert.equal(JSON.parse(r.body).code,'OPEN_WORK');
 });
+
+test('tree API returns lightweight paginated rows with child counts',async t=>{
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-tree-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const {openProject}=await import('../src/index.js');const p=await openProject({cwd});
+  const root=await p.tickets.create({title:'Root',description:'y'.repeat(5000),properties:{big:'z'.repeat(5000)}});for(let i=0;i<3;i++)await p.tickets.create({title:`Child ${i}`,parentId:root.id});
+  const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};
+  const page=JSON.parse((await send(`${app.url}/api/tree?limit=2`,'GET',host)).body);
+  assert.equal(page.total,4);assert.equal(page.items.length,2);assert.equal(page.items[0].childCount,3);assert.equal(page.items[1].depth,1);
+  assert.equal('description' in page.items[0],false);assert.equal('properties' in page.items[0],false);
+  assert.equal((await send(`${app.url}/api/tree?limit=9999`,'GET',host)).status,400);
+});
