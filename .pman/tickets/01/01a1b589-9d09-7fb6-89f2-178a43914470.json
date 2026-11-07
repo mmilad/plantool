@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b589-9d09-7fb6-89f2-178a43914470",
+  "title": "Translate remaining German planning content to English",
+  "kind": "task",
+  "description": "Owner decision 2026-11-07: project language is English. Titles, goals, plans and UI labels are translated. Remaining: long ticket descriptions of the UI programme (~170k characters), historical comments (keep meaning, may be summarised), docs/ui-review.md, docs/ui-wireframe.md and text inside docs/ui-*.svg mockups.",
+  "status": "todo",
+  "priority": "low",
+  "labels": [
+    "i18n"
+  ],
+  "properties": {},
+  "parentId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
+  "createdAt": "2026-11-07T10:24:17.161Z",
+  "updatedAt": "2026-11-07T10:24:17.161Z"
+}

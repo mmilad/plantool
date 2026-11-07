@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b589-9aab-7fb6-800d-4baf5acf70e2",
+  "ticketId": "01a189de-0250-7a08-91c5-9cab74a14d8f",
+  "body": "UI labels, messages, aria labels and html lang switched to English in src/ui.js.",
+  "author": "claude",
+  "createdAt": "2026-11-07T10:24:16.555Z"
+}

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "01a189a9-42a6-7a27-adb9-e30a8df78d54",
-  "title": "Konsistentes Icon-System auswählen und integrieren",
+  "title": "Select and integrate a consistent icon system",
   "description": "Ein konsistentes, lokales Icon-System für Navigation, vorhandene Ticket-/Planungsbereiche, Status, Priorität und Aktionen definieren und später integrieren. Die heutige Ticketstruktur hat kein Tickettyp-Feld; deshalb keine Epic/Story/Bug-Typicons vortäuschen oder durch Icons neue Semantik einführen. Zuerst mit dem UI-Konzept abstimmen, welche Symbole tatsächlich Orientierung schaffen. Einheitliche Größen und Strichstärke; bevorzugt Inline-SVG ohne externe Assets oder Laufzeitabhängigkeiten. Icons haben zugängliche Namen; zentrale Aktionen erhalten zusätzlich sichtbaren Text. Status/Priorität nicht allein über Farbe unterscheiden. Zugehörigkeit bleibt Kind des UI-Programms; Symbolauswahl folgt dem Konzept-Ticket unter Informationsarchitektur.",
   "status": "todo",
   "priority": "normal",
@@ -9,6 +9,6 @@
   "properties": {},
   "parentId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
   "createdAt": "2026-10-29T21:55:33.670Z",
-  "updatedAt": "2026-11-07T10:13:33.319Z",
+  "updatedAt": "2026-11-07T10:22:45.841Z",
   "kind": "task"
 }

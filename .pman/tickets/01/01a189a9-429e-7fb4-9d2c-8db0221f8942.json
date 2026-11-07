@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
-  "title": "Schlichte Planungsoberfläche für Planus Manus gestalten und umsetzen",
+  "title": "Design and build a simple planning UI for Planus Manus",
   "description": "UI-Programm für eine eigenständige lokale Planungsoberfläche mit schlichter, vorläufig an fp.dev angelehnter visueller Richtung; Jira dient nur als Orientierung für Planungsabläufe. Die konzeptionelle Phase ist eingefroren: keine weitere Vorabplanung. docs/ui-wireframe.md und SVGs bleiben passive Referenz und werden nur bei konkretem Umsetzungsbedarf gepflegt. Aktive Arbeit läuft in kleinen sichtbaren Ausschnitten: nach Abnahme eines Ausschnitts jeweils genau ein nächstes bestehendes UI-Arbeitspaket umsetzen. Spätere Pakete sind keine Vorbedingungen; fachliche Parents und Relations bleiben erhalten. Fester Serverstart unter 127.0.0.1:4000 ist abgeschlossen; bei belegtem Port klar abbrechen, keinen Zufallsport oder Doppelstart. Die UI darf iterativ näher an fp.dev gebracht werden, wenn ein konkreter Arbeitsschritt ansteht.",
   "status": "in_progress",
   "priority": "high",
@@ -9,6 +9,6 @@
   "properties": {},
   "parentId": null,
   "createdAt": "2026-10-29T21:55:33.662Z",
-  "updatedAt": "2026-11-07T10:13:33.167Z",
+  "updatedAt": "2026-11-07T10:22:45.679Z",
   "kind": "task"
 }

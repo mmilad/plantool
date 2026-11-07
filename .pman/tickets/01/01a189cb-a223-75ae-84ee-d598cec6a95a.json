@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "01a189cb-a223-75ae-84ee-d598cec6a95a",
-  "title": "Schnelle Ticketwechsel gegen veraltete Detailantworten absichern",
+  "title": "Guard fast ticket switching against stale detail responses",
   "description": "Quellstandbefund am 2026-10-29: `show(id)` wartet auf Ticketdaten, ersetzt den Detail-DOM, wartet anschließend auf Kommentare und schreibt diese danach in das aktuell vorhandene `#comments`-Element. Schnelle Wechsel zwischen Tickets können Antworten in anderer Reihenfolge beenden; ein alter Aufruf könnte neuere Ticketdaten/Kommentare überschreiben oder seine Eventhandler an die falsche sichtbare Auswahl binden.\n\nVor jeder Detailaktualisierung sicherstellen, dass die Antwort noch zur aktuell ausgewählten Ticket-ID bzw. Auswahlgeneration gehört; veraltete Detail-, Kommentar- und Kontextantworten verwerfen oder abbrechen. Formulare und Aktionen immer an die sichtbare Ticket-ID binden. Lade-/Fehlerzustände dürfen die zuletzt bestätigte Auswahl nicht als ein anderes Ticket ausgeben. Bei Ticketwechseln, Suchtreffern sowie Zurück/Vorwärts denselben Schutz verwenden.\n\nDas ist ein anderer Fall als veraltete Revisionen beim Speichern, die im bestehenden Konfliktticket geplant sind. Keine Implementierung in dieser Planungsrunde. Direktes Kind von „Ticketdetail und Bearbeitungsfluss verbessern“.",
   "status": "todo",
   "priority": "normal",
@@ -9,6 +9,6 @@
   "properties": {},
   "parentId": "01a189a9-42af-7e67-93b4-dcdb41bbad6a",
   "createdAt": "2026-10-29T22:33:06.338Z",
-  "updatedAt": "2026-11-07T10:13:36.606Z",
+  "updatedAt": "2026-11-07T10:22:49.305Z",
   "kind": "task"
 }
