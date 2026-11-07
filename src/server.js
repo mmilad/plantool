@@ -31,7 +31,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
         const origin=req.headers.origin;
         if (!origin || origin !== `http://${host}` || !safeToken(req.headers['x-pman-csrf'], token)) return send(res,403,{error:'Origin or CSRF validation failed'});
       }
-      if (req.method === 'GET' && url.pathname === '/') { res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','content-security-policy':"default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'none'"}); return res.end(renderAppHtml(token, project.config)); }
+      if (req.method === 'GET' && url.pathname === '/') { res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','content-security-policy':"default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'none'"}); return res.end(renderAppHtml(token, project.config, { folder: path.basename(project.root) })); }
       if (req.method === 'OPTIONS') return send(res,405,{error:'CORS disabled'});
       if (req.method==='GET'&&url.pathname==='/api/version')return send(res,200,await version());
       if (req.method==='GET'&&url.pathname==='/api/tree'){const offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',5000,1,5000);const {items,total}=await project.tree(null,{limit,offset,fields:'row',withTotal:true});return send(res,200,{items,total,offset,limit});}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b60f-a648-7c38-801f-e0884b304290",
+  "ticketId": "01a189b3-4333-7e1b-b876-5033943bcc37",
+  "body": "Overview heading shows config.name; a context line names the project folder (basename only, no full path) and that changes go to Git-tracked .pman files; header name has a tooltip with project and folder. Verified with projects named Shop and Big. Also: Design view hides the ticket sidebar on mobile and the mobile nav has four columns.",
+  "author": "claude",
+  "createdAt": "2026-11-07T12:50:41.352Z"
+}
