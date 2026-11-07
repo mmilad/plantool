@@ -16,6 +16,8 @@ This project plans its work in \`.pman/\` (Git-tracked). Use the project-local C
 5. \`npx pman done <id> --agent <your-name> --note "<what changed, how it was verified>"\` when finished, or \`npx pman release <id>\` if you stop.
 6. Run \`npx pman validate\` before committing; commit \`.pman/\` changes together with the code they describe.
 
+Before implementing code that other parts call or depend on, plan it centrally: \`npx pman component add\`, \`npx pman type set\`, \`npx pman contract set\`, then attach it to the ticket with \`npx pman codeplan add <id> implements|consumes|changes <Component>\` (use \`--requires\` for the fields you need). Run \`npx pman check\` and resolve errors before writing code; change a contract centrally instead of working around it.
+
 A parent ticket can only be marked done after its children and blockers are finished.
 ${END}
 `;

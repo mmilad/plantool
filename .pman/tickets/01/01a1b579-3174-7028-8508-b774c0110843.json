@@ -3,12 +3,13 @@
   "id": "01a1b579-3174-7028-8508-b774c0110843",
   "title": "Central types as a JSON Schema subset with $ref",
   "description": ".pman/types/: string, number, boolean, array, object, required, $ref. Example: User { userId, email, firstName, lastName }.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [],
   "properties": {},
   "parentId": "01a1b579-3155-7187-9b03-0d5d8cf23f4d",
   "createdAt": "2026-11-07T10:06:21.044Z",
-  "updatedAt": "2026-11-07T10:13:41.053Z",
-  "kind": "task"
+  "updatedAt": "2026-11-07T10:28:58.063Z",
+  "kind": "task",
+  "assignee": null
 }

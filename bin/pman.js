@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 import { initProject, openProject, PmanError, NotFoundError } from '../src/index.js';
 import { agentInit } from '../src/agent.js';
+import { qualifiedNames } from '../src/design.js';
+const qname=async(p,id)=>qualifiedNames(await p.components.list()).get(id);
+const json=(v,flag)=>{if(v===undefined)throw new Error(`Missing ${flag}`);try{return JSON.parse(v);}catch{return v;}};
 const labels=v=>v===undefined?undefined:String(v).split(',').map(x=>x.trim()).filter(Boolean);
 import { serve } from '../src/server.js';
 
@@ -28,6 +31,22 @@ Agent workflow (agent name defaults to $PMAN_AGENT):
   pman release ID [--agent NAME] [--force]
   pman done ID [--note TEXT] [--agent NAME] [--force]
   pman agent init [--file AGENTS.md] [--write]
+
+Code plans (components, types and contracts are maintained centrally):
+  pman component add --kind KIND --name NAME [--parent COMPONENT] [--description TEXT]
+  pman component list [--format json]
+  pman component show COMPONENT [--format json]
+  pman type set NAME --schema JSON [--description TEXT]
+  pman type list [--format json]
+  pman contract set COMPONENT [--input JSON] [--output JSON] [--description TEXT]
+  pman contract show COMPONENT [--format json]
+  pman codeplan add TICKET_ID implements|consumes|changes COMPONENT [--requires a,b.c:type] [--provides x,y]
+  pman codeplan remove TICKET_ID implements|consumes|changes COMPONENT
+  pman codeplan show TICKET_ID
+  pman check [--format json]
+
+COMPONENT is a qualified name (UserService.getUser), a unique short name or an ID.
+Schemas: full JSON Schema subset or shorthand, e.g. '{"userId":"string","nick":"string?","tags":"string[]","owner":"User"}'.
 
   pman search QUERY [--format json]
   pman context ID [--budget BYTES] [--format json]
@@ -74,6 +93,17 @@ async function main(argv) {
   if(command==='release') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const t=await project.release(positional[0],{agent:opts.agent??process.env.PMAN_AGENT,force:!!opts.force});out(opts.format==='json'?t:`Released ${t.id}`,opts.format);return;}
   if(command==='done') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const r=await project.finish(positional[0],{note:opts.note,agent:opts.agent??process.env.PMAN_AGENT,force:!!opts.force});if(opts.format==='json'){out(r,'json');return;}console.log(`Done ${r.ticket.id}  ${r.ticket.title}`);if(r.unblocked.length){console.log('Now ready:');for(const x of r.unblocked)console.log(`  ${x.id}  ${x.title}`);}return;}
   if(command==='agent'&&sub==='init') {const {opts}=parse(rest);const r=await agentInit(project,{file:opts.file??'AGENTS.md',write:!!opts.write});console.log(r.write?`Updated ${r.file}`:`Preview for ${r.file} (run again with --write to apply):\n\n${r.section}`);return;}
+  if(command==='component'&&sub==='add') {const {opts}=parse(rest);const c=await project.components.create({kind:opts.kind,name:opts.name,parentId:opts.parent,description:opts.description});out(opts.format==='json'?c:`component ${c.id}  ${c.kind} ${await qname(project,c.id)}`,opts.format);return;}
+  if(command==='component'&&sub==='list') {const {opts}=parse(rest);const all=await project.components.list(),q=qualifiedNames(all),ks=new Map((await project.contracts.list()).map(k=>[k.componentId,k]));const rows=all.map(c=>({...c,qualifiedName:q.get(c.id),contractVersion:ks.get(c.id)?.version??null})).sort((a,b)=>a.qualifiedName.localeCompare(b.qualifiedName));if(opts.format==='json'){out(rows,'json');return;}if(!rows.length)console.log('No components.');for(const r of rows)console.log(`${r.id}  ${r.kind.padEnd(12)}  ${r.qualifiedName}${r.contractVersion?`  (contract v${r.contractVersion})`:''}`);return;}
+  if(command==='component'&&sub==='show') {const {opts,positional}=parse(rest);const c=await project.components.resolve(positional[0]);const k=(await project.contracts.list()).find(x=>x.componentId===c.id)??null;out({...c,qualifiedName:await qname(project,c.id),contract:k},'json');return;}
+  if(command==='type'&&sub==='set') {const {opts,positional}=parse(rest);const r=await project.types.set(positional[0],json(opts.schema,'--schema'),{description:opts.description});out(opts.format==='json'?r:`type ${r.name}`,opts.format);return;}
+  if(command==='type'&&sub==='list') {const {opts}=parse(rest);const all=await project.types.list();if(opts.format==='json'){out(all,'json');return;}if(!all.length)console.log('No types.');for(const x of all)console.log(`${x.name}  ${JSON.stringify(x.schema)}`);return;}
+  if(command==='contract'&&sub==='set') {const {opts,positional}=parse(rest);const k=await project.contracts.set(positional[0],{input:opts.input===undefined?undefined:json(opts.input,'--input'),output:opts.output===undefined?undefined:json(opts.output,'--output'),description:opts.description});out(opts.format==='json'?k:`contract ${await qname(project,k.componentId)} v${k.version}`,opts.format);return;}
+  if(command==='contract'&&sub==='show') {const {positional}=parse(rest);out(await project.contracts.get(positional[0]),'json');return;}
+  if(command==='codeplan'&&sub==='add') {const {opts,positional}=parse(rest);const t=await project.codePlan.add(positional[0],positional[1],positional[2],{requires:labels(opts.requires),provides:labels(opts.provides)});out(opts.format==='json'?t.codePlan:`codeplan ${t.id} ${positional[1]} ${positional[2]}`,opts.format);return;}
+  if(command==='codeplan'&&sub==='remove') {const {positional}=parse(rest);await project.codePlan.remove(positional[0],positional[1],positional[2]);out(`Removed ${positional[1]} ${positional[2]} from ${positional[0]}`);return;}
+  if(command==='codeplan'&&sub==='show') {const {positional}=parse(rest);out((await project.context(positional[0],{budget:1e9})).codePlan??{},'json');return;}
+  if(command==='check') {const {opts}=parse([sub,...rest].filter(Boolean));const r=await project.check();if(opts.format==='json')out(r,'json');else{for(const e of r.errors)console.log(`✗ ${e.code}  ${e.message}`);for(const w of r.warnings)console.log(`! ${w.code}  ${w.message}`);console.log(r.valid?`Design is consistent (${r.warnings.length} warning(s)).`:`Design has ${r.errors.length} error(s) and ${r.warnings.length} warning(s).`);}if(!r.valid)process.exitCode=1;return;}
   if(command==='search') {const {opts,positional}=parse([sub,...rest].filter(Boolean));out(await project.search(positional.join(' ')),opts.format);return;}
   if(command==='context') {const {opts,positional}=parse([sub,...rest].filter(Boolean));out(await project.context(positional[0],{budget:Number(opts.budget??8000)}),opts.format);return;}
   if(command==='validate') {const {opts}=parse([sub,...rest].filter(Boolean));const result=await project.validate();out(result,opts.format);if(!result.valid)process.exitCode=1;return;}

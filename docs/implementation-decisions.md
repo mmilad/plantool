@@ -53,6 +53,15 @@ This file records material choices made while implementing the first usable rele
 - `pman agent init` previews by default and with `--write` adds or refreshes a section between `<!-- pman:start -->` and `<!-- pman:end -->` in `AGENTS.md`; text outside the markers is never changed.
 - Line endings: `.gitattributes` enforces LF for text files; planning-document parsing also tolerates CRLF.
 
+## Code plans and contracts (implemented 2026-11-07)
+
+- Storage: `.pman/components/`, `.pman/types/`, `.pman/contracts/`, same sharded UUIDv7 JSON format as tickets. A ticket stores its plan in `codePlan { implements, consumes, changes }`, each entry referencing a component ID; `consumes` entries carry `requires` (output paths, optionally `path:type`) and optional `provides` (input fields supplied).
+- Components have a kind from `config.componentKinds` (default `module`, `service`, `class`, `method`, `function`, `ui-component`), a name without dots, and a parent; names are unique among siblings and addressed by qualified name (`UserService.getUser`), unique short name or ID. An exact qualified name wins over a short-name match.
+- One contract per component; any component kind may have one (for example UI component props), method and function are expected to. Versions start at 1 and increase only when input or output change. Version history and breaking-change detection remain open.
+- Schema language: JSON Schema subset plus a shorthand that normalises to it on write; stored data is always the normalised form. Path lookup follows `$ref`s and descends into array items implicitly.
+- `pman validate` stays structural (dangling references, duplicate contracts or type names). `pman check` is the design check and exits non-zero on errors; warnings never fail it.
+- A consumer ticket implicitly depends on every open ticket that implements the consumed component or one of its ancestors. These implicit edges count for readiness, `next` ranking, the parent-done rule and cycle detection, but are not stored as relationships.
+
 ## Verification and remaining release work
 
 - Local checks were run on Node 24.22.1/Linux: package syntax checks, 11 tests (including a 10,000-deep parent chain and HTTP security checks), JSON Schema parsing, `npm pack --dry-run`, local tarball install, `npm exec -- pman --help`, and a public API import smoke check.

@@ -3,12 +3,13 @@
   "id": "01a1b579-3166-71ea-9e77-800e401fec8c",
   "title": "Component records (module, service, class, method, function, ui-component) with hierarchy",
   "description": ".pman/components/, UUIDv7, nested via parentId. Component kinds are project configuration like statuses.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [],
   "properties": {},
   "parentId": "01a1b579-3155-7187-9b03-0d5d8cf23f4d",
   "createdAt": "2026-11-07T10:06:21.030Z",
-  "updatedAt": "2026-11-07T10:13:40.925Z",
-  "kind": "task"
+  "updatedAt": "2026-11-07T10:28:56.448Z",
+  "kind": "task",
+  "assignee": null
 }

@@ -3,11 +3,14 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { TICKET_KINDS, workGraph, readinessOf, nextTickets, claimTicket, releaseTicket, finishTicket } from './workflow.js';
 export { TICKET_KINDS } from './workflow.js';
+import { attachDesignApi, validateCodePlanShape, resolvedCodePlan } from './design.js';
+export { DEFAULT_COMPONENT_KINDS, normalizeSchema } from './design.js';
 
 export const DEFAULT_STATUSES = Object.freeze(['todo', 'in_progress', 'done', 'cancelled']);
 export const RELATION_TYPES = Object.freeze(['blocks', 'relates_to', 'duplicates', 'implements', 'validates', 'supersedes']);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const kinds = ['goals', 'plans', 'decisions'];
+const designFolders = ['components', 'types', 'contracts'];
 
 export class PmanError extends Error { constructor(message, code = 'PMAN_ERROR', details = {}) { super(message); this.name = this.constructor.name; this.code = code; this.details = details; } }
 export class NotFoundError extends PmanError { constructor(message, details) { super(message, 'NOT_FOUND', details); } }
@@ -53,7 +56,7 @@ export async function initProject({ cwd = process.cwd(), name = path.basename(pa
   await fs.mkdir(dir, { recursive: true });
   const config = { schemaVersion: 1, projectId: uuidv7(), name: String(name || 'Project'), statuses: [...DEFAULT_STATUSES], properties: {}, createdAt: nowIso() };
   await fs.writeFile(configPath, canonical(config), { flag: 'wx' });
-  for (const d of ['tickets', 'comments', 'relationships', ...kinds]) await fs.mkdir(path.join(dir, d), { recursive: true });
+  for (const d of ['tickets', 'comments', 'relationships', ...kinds, ...designFolders]) await fs.mkdir(path.join(dir, d), { recursive: true });
   return config;
 }
 
@@ -73,6 +76,7 @@ export async function openProject({ cwd = process.cwd() } = {}) {
   p.search = query => searchProject(p, query);
   p.context = (id, options) => contextFor(p, id, options);
   p.tree = (id, options) => buildTree(p, id, options);
+  attachDesignApi(p);
   p.next = options => nextTickets(p, options);
   p.claim = (id, options) => claimTicket(p, id, options);
   p.release = (id, options) => releaseTicket(p, id, options);
@@ -123,6 +127,7 @@ function validateTicketInput(input, statuses) {
   if(input.labels!==undefined&&(!Array.isArray(input.labels)||input.labels.some(x=>typeof x!=='string')))throw new ValidationError('Ticket labels must be an array of strings');
   if(input.kind!==undefined&&!TICKET_KINDS.includes(input.kind))throw new ValidationError(`Invalid ticket kind: ${input.kind}`);
   if(input.assignee!=null&&(typeof input.assignee!=='object'||typeof input.assignee.agent!=='string'||!input.assignee.agent.trim()||Number.isNaN(Date.parse(input.assignee.expiresAt))))throw new ValidationError('Ticket assignee must have an agent name and an expiresAt timestamp');
+  validateCodePlanShape(input.codePlan);
   if(input.properties!==undefined&&(!input.properties||typeof input.properties!=='object'||Array.isArray(input.properties)))throw new ValidationError('Ticket properties must be an object');
 }
 
@@ -132,7 +137,7 @@ function ticketApi(p) {
     async create(input) {
       validateTicketInput(input, statuses);
       if (input.parentId) await readJson(idPath(path.join(p.dir, 'tickets'), input.parentId));
-      const date = nowIso(); const rec = { schemaVersion: 1, id: uuidv7(), title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status: input.status ?? statuses[0], priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, createdAt: date, updatedAt: date };
+      const date = nowIso(); const rec = { schemaVersion: 1, id: uuidv7(), title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status: input.status ?? statuses[0], priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.codePlan ? { codePlan: input.codePlan } : {}), createdAt: date, updatedAt: date };
       return writeJson(p, 'tickets', rec, { create: true });
     },
     async get(id) { return (await this.getVersioned(id)).ticket; },
@@ -156,6 +161,13 @@ function ticketApi(p) {
   };
 }
 const isFinished = t => t?.status==='done' || t?.status==='cancelled';
+/** Internal generic JSON record storage used by the design module. */
+export const _store = {
+  list: (p, folder) => listJson(p, folder),
+  async get(p, folder, id) { checkId(id); const file = idPath(path.join(p.dir, folder), id); await assertSafePath(p.dir, file); return (await readJson(file)).value; },
+  create: (p, folder, rec) => writeJson(p, folder, rec, { create: true }),
+  write: (p, folder, rec) => writeJson(p, folder, rec),
+};
 function sortRecords(a,b) { return String(a.createdAt).localeCompare(String(b.createdAt)) || a.id.localeCompare(b.id); }
 function descendants(all, id) { const map = childIndex(all), out = [], stack = [...(map.get(id) ?? [])].reverse(); while(stack.length) { const cur=stack.pop(); out.push(cur); const c=map.get(cur.id)??[]; for(let i=c.length-1;i>=0;i--) stack.push(c[i]); } return out; }
 function childIndex(all) { const m=new Map(); for(const t of all) { if(!m.has(t.parentId)) m.set(t.parentId,[]); m.get(t.parentId).push(t); } for(const v of m.values()) v.sort(sortRecords); return m; }
@@ -233,11 +245,17 @@ export async function validateProject(p) {
   const rs=await listJson(p,'relationships'),comments=await listJson(p,'comments'),docIds=new Set(),documents=[];for(const kind of kinds)try{for(const d of await p.documents.list(kind)){try{checkId(d.id);}catch(e){errors.push(e.message);}if(docIds.has(d.id))errors.push(`Duplicate document id ${d.id}`);docIds.add(d.id);documents.push(d);}}catch(e){errors.push(e.message);}
   const unique=new Set(ids);for(const rec of [...comments,...rs]){try{checkId(rec.id);}catch(e){errors.push(e.message);}if(unique.has(rec.id))errors.push(`Duplicate entity id ${rec.id}`);unique.add(rec.id);}
   for(const id of docIds){if(unique.has(id))errors.push(`Duplicate entity id ${id}`);unique.add(id);}
+  const components=await listJson(p,'components'),types=await listJson(p,'types'),contracts=await listJson(p,'contracts'),componentIds=new Set(components.map(c=>c.id));
+  for(const rec of [...components,...types,...contracts]){try{checkId(rec.id);}catch(e){errors.push(e.message);}if(unique.has(rec.id))errors.push(`Duplicate entity id ${rec.id}`);unique.add(rec.id);}
+  for(const c of components)if(c.parentId&&!componentIds.has(c.parentId))errors.push(`Component ${c.id} refers to missing parent ${c.parentId}`);
+  const contractFor=new Set();for(const k of contracts){if(!componentIds.has(k.componentId))errors.push(`Contract ${k.id} refers to missing component ${k.componentId}`);if(contractFor.has(k.componentId))errors.push(`Component ${k.componentId} has more than one contract`);contractFor.add(k.componentId);}
+  const typeNames=new Set();for(const ty of types){if(typeNames.has(ty.name))errors.push(`Duplicate type name ${ty.name}`);typeNames.add(ty.name);}
+  for(const t of tickets)for(const [key,list] of Object.entries(t.codePlan??{}))for(const e of list??[])if(!componentIds.has(e.component))errors.push(`Ticket ${t.id} codePlan.${key} refers to missing component ${e.component}`);
   for(const c of comments)if(!ids.has(c.ticketId))errors.push(`Comment ${c.id} refers to missing ticket ${c.ticketId}`);
   for(const d of documents)for(const target of d.links??[])if(!ids.has(target)&&!docIds.has(target))errors.push(`Document ${d.id} links to missing entity ${target}`);
   for(const r of rs){if(!ids.has(r.sourceId)||!ids.has(r.targetId))errors.push(`Dangling relationship ${r.id}`);if(!RELATION_TYPES.includes(r.type))errors.push(`Invalid relationship type ${r.id}`);}
   const cycles=blockingCycleNodes(rs);if(cycles.size)errors.push(`Blocking dependency cycle involves ${[...cycles].sort().join(', ')}`);
-  return { valid:errors.length===0, errors, counts:{tickets:tickets.length,documents:docIds.size,relationships:rs.length,comments:comments.length} };
+  return { valid:errors.length===0, errors, counts:{tickets:tickets.length,documents:docIds.size,relationships:rs.length,comments:comments.length,components:components.length,types:types.length,contracts:contracts.length} };
 }
 export async function searchProject(p, query) {
   const q=String(query??'').toLocaleLowerCase(); if(!q) throw new ValidationError('Search query is required');const hits=[];
@@ -255,9 +273,11 @@ export async function contextFor(p,id,{budget=8000}={}) {
   const docs=[];for(const kind of kinds)for(const d of await p.documents.list(kind))if((d.links??[]).includes(id)||d.body.includes(id)||d.title.toLowerCase().includes(ticket.title.toLowerCase()))docs.push({id:d.id,type:kind,title:d.title,path:path.relative(p.root,idPath(path.join(p.dir,kind),d.id,'.md')).split(path.sep).join('/')});
   const brief=x=>({id:x.id,title:x.title,status:x.status,priority:x.priority,parentId:x.parentId,description:x.description??''});
   const ticketPath=path.relative(p.root,idPath(path.join(p.dir,'tickets'),id)).split(path.sep).join('/');
-  const g=await workGraph(p),ready=readinessOf(g,ticket);const packet={readiness:{ready:ready.ready,reasons:ready.reasons},ticket:{...brief(ticket),kind:ticket.kind??'task',assignee:ticket.assignee??null},ancestors:ancestors.map(brief),descendants:selectedDesc.map(brief),relationships:rel,comments,documents:docs,sources:{ticket:ticketPath,ancestors:ancestors.map(x=>path.relative(p.root,idPath(path.join(p.dir,'tickets'),x.id)).split(path.sep).join('/'))}},omitted={comments:0,relationships:0,documents:0,ancestors:0,descendants:Math.max(0,descendantsList.length-selectedDesc.length),descriptionBytes:0};
+  const g=await workGraph(p),ready=readinessOf(g,ticket);const packet={readiness:{ready:ready.ready,reasons:ready.reasons},ticket:{...brief(ticket),kind:ticket.kind??'task',assignee:ticket.assignee??null},codePlan:await resolvedCodePlan(p,ticket),ancestors:ancestors.map(brief),descendants:selectedDesc.map(brief),relationships:rel,comments,documents:docs,sources:{ticket:ticketPath,ancestors:ancestors.map(x=>path.relative(p.root,idPath(path.join(p.dir,'tickets'),x.id)).split(path.sep).join('/'))}},omitted={comments:0,relationships:0,documents:0,ancestors:0,descendants:Math.max(0,descendantsList.length-selectedDesc.length),descriptionBytes:0};
   const size=()=>Buffer.byteLength(JSON.stringify({...packet,omitted},null,2));
   for(const key of ['comments','relationships','documents','descendants'])while(size()>max&&packet[key].length){packet[key].pop();omitted[key]++;}
+  if(size()>max&&packet.codePlan?.types&&Object.keys(packet.codePlan.types).length){omitted.codePlanTypes=Object.keys(packet.codePlan.types).length;packet.codePlan.types={};}
+  if(size()>max&&packet.codePlan){packet.codePlan=null;omitted.codePlan=true;}
   while(size()>max&&packet.ancestors.length){packet.ancestors.pop();packet.sources.ancestors.pop();omitted.ancestors++;}
   if(size()>max&&packet.ticket.description){const original=packet.ticket.description;let low=0,high=original.length;while(low<high){const mid=Math.ceil((low+high)/2);packet.ticket.description=original.slice(0,mid)+'…';if(size()<=max)low=mid;else high=mid-1;}packet.ticket.description=original.slice(0,low)+'…';omitted.descriptionBytes=Buffer.byteLength(original.slice(low));}
   if(size()>max&&packet.ticket.title){const original=packet.ticket.title;packet.ticket.title=original.slice(0,64)+'…';}

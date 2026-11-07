@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "id": "01a1b579-31c7-7cfb-aa3c-8850b2e69e0b",
   "title": "Contract versions and breaking-change detection",
-  "description": "",
+  "description": "Version numbers already increase on input/output changes. Remaining: keep previous versions, classify changes (removed/renamed field, narrowed type, new required input) as breaking or compatible, and report affected consumer tickets when a contract is set.",
   "status": "todo",
   "priority": "low",
   "labels": [],
   "properties": {},
   "parentId": "01a1b579-3155-7187-9b03-0d5d8cf23f4d",
   "createdAt": "2026-11-07T10:06:21.127Z",
-  "updatedAt": "2026-11-07T10:13:41.848Z",
+  "updatedAt": "2026-11-07T10:29:07.090Z",
   "kind": "task"
 }

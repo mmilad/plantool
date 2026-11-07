@@ -3,6 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { ConflictError, NotFoundError, ValidationError } from './index.js';
+import { designModel } from './design.js';
 
 export const TICKET_KINDS = Object.freeze(['task', 'feature', 'bug']);
 export const PRIORITY_RANK = Object.freeze({ low: 0, normal: 1, high: 2, urgent: 3 });
@@ -16,15 +17,19 @@ export async function workGraph(p) {
   const byId = new Map(tickets.map(t => [t.id, t]));
   const children = new Map();
   for (const t of tickets) { if (!children.has(t.parentId)) children.set(t.parentId, []); children.get(t.parentId).push(t); }
-  const blockersOf = new Map(), blocksOut = new Map();
-  for (const r of rels) {
+  const blockersOf = new Map(), blocksOut = new Map(), providerOf = new Map();
+  // Consumers implicitly wait for the tickets that implement the components they consume.
+  const design = await designModel(p, tickets);
+  for (const e of design.providerEdges) { if (!providerOf.has(e.targetId)) providerOf.set(e.targetId, new Set()); providerOf.get(e.targetId).add(e.sourceId); }
+  for (const r of [...rels, ...design.providerEdges]) {
     if (!blockersOf.has(r.targetId)) blockersOf.set(r.targetId, []); blockersOf.get(r.targetId).push(r.sourceId);
     if (!blocksOut.has(r.sourceId)) blocksOut.set(r.sourceId, []); blocksOut.get(r.sourceId).push(r.targetId);
   }
   const ancestors = id => { const out = []; const seen = new Set(); let cur = byId.get(id)?.parentId; while (cur && byId.has(cur) && !seen.has(cur)) { seen.add(cur); out.push(byId.get(cur)); cur = byId.get(cur).parentId; } return out; };
   const descendants = id => { const out = [], stack = [...(children.get(id) ?? [])]; while (stack.length) { const t = stack.pop(); out.push(t); stack.push(...(children.get(t.id) ?? [])); } return out; };
-  const openBlockers = id => (blockersOf.get(id) ?? []).map(x => byId.get(x)).filter(t => t && !isFinished(t));
-  return { tickets, byId, children, blockersOf, blocksOut, ancestors, descendants, openBlockers };
+  const openBlockers = id => [...new Set(blockersOf.get(id) ?? [])].map(x => byId.get(x)).filter(t => t && !isFinished(t));
+  const isProviderEdge = (source, target) => !!providerOf.get(target)?.has(source);
+  return { tickets, byId, children, blockersOf, blocksOut, ancestors, descendants, openBlockers, isProviderEdge, design };
 }
 
 const leaseActive = (t, now) => !!t.assignee?.expiresAt && Date.parse(t.assignee.expiresAt) > now;
@@ -36,7 +41,9 @@ export function readinessOf(g, ticket, now = Date.now()) {
   const openChildren = (g.children.get(ticket.id) ?? []).filter(c => !isFinished(c));
   if (openChildren.length) reasons.push(`${openChildren.length} open child ticket(s)`);
   const own = g.openBlockers(ticket.id);
-  if (own.length) reasons.push(`blocked by ${own.map(t => t.id).join(', ')}`);
+  const viaProvider = own.filter(t => g.isProviderEdge(t.id, ticket.id)), explicit = own.filter(t => !viaProvider.includes(t));
+  if (explicit.length) reasons.push(`blocked by ${explicit.map(t => t.id).join(', ')}`);
+  if (viaProvider.length) reasons.push(`waits for provider ticket(s) ${viaProvider.map(t => t.id).join(', ')}`);
   for (const a of g.ancestors(ticket.id)) {
     if (a.status === 'cancelled') reasons.push(`ancestor ${a.id} is cancelled`);
     const ab = g.openBlockers(a.id);

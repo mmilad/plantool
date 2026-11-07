@@ -48,7 +48,24 @@ npx pman agent init --write            # add the workflow to AGENTS.md between m
 
 A ticket is ready when it is `todo`, has no open children, and neither it nor any ancestor has an open `blocks` dependency. `next` ranks by priority (an explicit priority wins; `normal` inherits from the nearest ancestor with an explicit one), then by how many tickets finishing it transitively unblocks, then by proximity to work already in progress, then by age. A parent cannot be set to `done` while descendants or blockers are open unless `--force` is passed. Expired leases are offered again by `next`. `PMAN_AGENT` sets the default agent name.
 
-Tickets have a `kind` of `task`, `feature` or `bug`. Planned next: ticket code plans that reference centrally maintained components, contracts and types, with `pman check` validating consumer requirements against provider contracts before implementation (see `docs/implementation-decisions.md`).
+Tickets have a `kind` of `task`, `feature` or `bug`.
+
+## Code plans and contracts
+
+Agents can plan code before writing it and check the plan for consistency. Components (`module`, `service`, `class`, `method`, `function`, `ui-component`), shared types and contracts live centrally in `.pman/components/`, `.pman/types/` and `.pman/contracts/`; tickets only reference them in an optional code plan, so a contract is never copied or edited per ticket. Plain tasks such as a colour change need no code plan.
+
+```sh
+npx pman type set User --schema '{"email":"string","firstName":"string","lastName":"string"}'
+npx pman component add --kind service --name UserService
+npx pman component add --kind method --name getUser --parent UserService
+npx pman contract set UserService.getUser --input '{"userId":"string"}' --output User
+npx pman codeplan add <user-ticket> implements UserService
+npx pman codeplan add <cart-ticket> consumes UserService.getUser --requires userId,email:string --provides userId
+npx pman check
+# ✗ REQUIRED_FIELD_MISSING  Ticket … needs UserService.getUser → output.userId, but the contract returns: email, firstName, lastName
+```
+
+Schemas use a JSON Schema subset (`string`, `number`, `integer`, `boolean`, `null`, `any`, `array`, `object`, `required`, `enum`, `$ref`) or a shorthand: `"string"`, `"string?"` for optional properties, `"string[]"`, a type name such as `"User"`, `[{"sku":"string"}]`. `requires` entries are output paths, optionally typed (`address.city:string`); `provides` lists the input fields the consumer supplies. `pman check` reports missing or mistyped fields, missing input, unknown types, components without contracts, methods without an owning class or service, consumed components no ticket implements, consumers affected by `changes`, and dependency cycles. A ticket that consumes a component waits for the tickets implementing it (or an ancestor component), and `pman next` orders work accordingly. `pman context` includes the resolved code plan with contracts and referenced types. Contract versions increase when input or output change.
 
 ## TypeScript API
 
