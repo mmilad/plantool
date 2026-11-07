@@ -51,7 +51,7 @@ Code plans (components, types and contracts are maintained centrally):
 COMPONENT is a qualified name (UserService.getUser), a unique short name or an ID.
 Schemas: full JSON Schema subset or shorthand, e.g. '{"userId":"string","nick":"string?","tags":"string[]","owner":"User"}'.
 
-  pman search QUERY [--format json]
+  pman search QUERY [--type ticket,comment,goal,plan,decision] [--limit N] [--offset N] [--format json]
   pman context ID [--budget BYTES] [--format json]
   pman validate [--format json]
   pman serve [--port N] [--open] (default: 127.0.0.1:4000)
@@ -108,7 +108,7 @@ async function main(argv) {
   if(command==='codeplan'&&sub==='remove') {const {positional}=parse(rest);await project.codePlan.remove(positional[0],positional[1],positional[2]);out(`Removed ${positional[1]} ${positional[2]} from ${positional[0]}`);return;}
   if(command==='codeplan'&&sub==='show') {const {positional}=parse(rest);out((await project.context(positional[0],{budget:1e9})).codePlan??{},'json');return;}
   if(command==='check') {const {opts}=parse([sub,...rest].filter(Boolean));const r=await project.check();if(opts.format==='json')out(r,'json');else{for(const e of r.errors)console.log(`✗ ${e.code}  ${e.message}`);for(const w of r.warnings)console.log(`! ${w.code}  ${w.message}`);console.log(r.valid?`Design is consistent (${r.warnings.length} warning(s)).`:`Design has ${r.errors.length} error(s) and ${r.warnings.length} warning(s).`);}if(!r.valid)process.exitCode=1;return;}
-  if(command==='search') {const {opts,positional}=parse([sub,...rest].filter(Boolean));out(await project.search(positional.join(' ')),opts.format);return;}
+  if(command==='search') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const page=await project.searchPage(positional.join(' '),{offset:Number(opts.offset??0),limit:Number(opts.limit??20),types:labels(opts.type)});if(opts.format==='json'){out(page,'json');return;}if(!page.items.length){console.log('No results.');return;}for(const h of page.items)console.log(`${h.id}  ${h.type.padEnd(8)}  ${h.title}`);console.log(`${page.offset+1}-${page.offset+page.items.length} of ${page.total}${page.nextOffset!==null?`; next: --offset ${page.nextOffset}`:''}`);return;}
   if(command==='context') {const {opts,positional}=parse([sub,...rest].filter(Boolean));out(await project.context(positional[0],{budget:Number(opts.budget??8000)}),opts.format);return;}
   if(command==='validate') {const {opts}=parse([sub,...rest].filter(Boolean));const result=await project.validate();out(result,opts.format);if(!result.valid)process.exitCode=1;return;}
   throw new Error(`Unknown command: ${command}\n\n${usage}`);

@@ -18,3 +18,16 @@ test('documents, comments, offline search and bounded context',async t=>{const p
 test('fresh checkout data is project-local',async t=>{const p=await project(t);await p.tickets.create({title:'Tracked plan'});assert.ok((await fs.readdir(path.join(p.dir,'tickets'))).length>0);});
 test('planning documents with CRLF line endings stay valid',async t=>{const p=await project(t);const d=await p.documents.create('goals',{title:'CRLF goal',body:'line one\nline two'});const file=path.join(p.dir,'goals',d.id.slice(0,2),d.id+'.md');await fs.writeFile(file,(await fs.readFile(file,'utf8')).replace(/\n/g,'\r\n'));assert.equal((await p.documents.get('goals',d.id)).title,'CRLF goal');assert.equal((await p.validate()).valid,true);});
 test('finished blockers no longer block rollups or readiness',async t=>{const p=await project(t);const a=await p.tickets.create({title:'blocker'}),c=await p.tickets.create({title:'cancelled blocker'}),b=await p.tickets.create({title:'target'});await p.relations.add(a.id,b.id,'blocks');await p.relations.add(c.id,b.id,'blocks');assert.equal(await p.tickets.rollup(b.id),'blocked');await p.tickets.update(a.id,{status:'done'});await p.tickets.update(c.id,{status:'cancelled'});assert.equal(await p.tickets.rollup(b.id),'todo');assert.equal((await p.tickets.readiness(b.id)).ready,true);});
+test('search ranks title matches first, pages deterministically and detects stale snapshots',async t=>{const p=await project(t);
+  const body=await p.tickets.create({title:'Unrelated',description:'mentions cart deep inside'});const exact=await p.tickets.create({title:'Cart'});const starts=await p.tickets.create({title:'Cart service'});const contains=await p.tickets.create({title:'Shopping cart'});
+  await p.comments.add(exact.id,{body:'cart comment'});await p.documents.create('plans',{title:'Plan',body:'cart plan'});
+  const all=await p.search('cart');assert.deepEqual(all.slice(0,4).map(x=>x.id),[exact.id,starts.id,contains.id,...all.slice(3,4).map(x=>x.id)]);assert.equal(all.length,6);
+  assert.equal(all.find(x=>x.type==='comment').ticketId,exact.id);assert.ok(all.some(x=>x.type==='plan'));
+  assert.deepEqual((await p.search('cart',{types:['ticket']})).map(x=>x.type),['ticket','ticket','ticket','ticket']);
+  const first=await p.searchPage('  CART ',{limit:4});assert.equal(first.total,6);assert.equal(first.items.length,4);assert.equal(first.nextOffset,4);
+  const second=await p.searchPage('cart',{limit:4,offset:4,snapshot:first.snapshot});assert.equal(second.items.length,2);assert.equal(second.nextOffset,null);
+  assert.equal(new Set([...first.items,...second.items].map(x=>x.id)).size,6);
+  await p.tickets.update(body.id,{title:'Cart again'});
+  await assert.rejects(()=>p.searchPage('cart',{limit:4,offset:4,snapshot:first.snapshot}),{code:'STALE_SEARCH'});
+  await assert.rejects(()=>p.searchPage('cart',{limit:500}),{code:'VALIDATION'});await assert.rejects(()=>p.search('cart',{types:['secret']}),{code:'VALIDATION'});
+});

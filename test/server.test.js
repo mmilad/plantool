@@ -52,3 +52,14 @@ test('tree API returns lightweight paginated rows with child counts',async t=>{
   assert.equal('description' in page.items[0],false);assert.equal('properties' in page.items[0],false);
   assert.equal((await send(`${app.url}/api/tree?limit=9999`,'GET',host)).status,400);
 });
+
+test('search API pages results and rejects stale snapshots with 409',async t=>{
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-search-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const {openProject}=await import('../src/index.js');const p=await openProject({cwd});for(let i=0;i<25;i++)await p.tickets.create({title:`Task ${String(i).padStart(2,'0')}`});
+  const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};
+  const a=JSON.parse((await send(`${app.url}/api/search?q=task`,'GET',host)).body);assert.equal(a.items.length,20);assert.equal(a.total,25);assert.equal(a.nextOffset,20);
+  const b=JSON.parse((await send(`${app.url}/api/search?q=task&offset=20&snapshot=${a.snapshot}`,'GET',host)).body);assert.equal(b.items.length,5);assert.equal(b.nextOffset,null);
+  await p.tickets.create({title:'Task new'});
+  assert.equal((await send(`${app.url}/api/search?q=task&offset=20&snapshot=${a.snapshot}`,'GET',host)).status,409);
+  assert.equal((await send(`${app.url}/api/search?q=task&limit=101`,'GET',host)).status,400);
+});

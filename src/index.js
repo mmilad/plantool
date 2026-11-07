@@ -73,7 +73,8 @@ export async function openProject({ cwd = process.cwd() } = {}) {
   const p = { root, dir, config };
   p.tickets = ticketApi(p); p.documents = documentApi(p); p.comments = commentApi(p); p.relations = relationApi(p);
   p.validate = () => validateProject(p);
-  p.search = query => searchProject(p, query);
+  p.search = (query, options) => searchProject(p, query, options);
+  p.searchPage = (query, options) => searchPage(p, query, options);
   p.context = (id, options) => contextFor(p, id, options);
   p.tree = (id, options) => buildTree(p, id, options);
   attachDesignApi(p);
@@ -264,12 +265,34 @@ export async function validateProject(p) {
   const cycles=blockingCycleNodes(rs);if(cycles.size)errors.push(`Blocking dependency cycle involves ${[...cycles].sort().join(', ')}`);
   return { valid:errors.length===0, errors, counts:{tickets:tickets.length,documents:docIds.size,relationships:rs.length,comments:comments.length,components:components.length,types:types.length,contracts:contracts.length} };
 }
-export async function searchProject(p, query) {
-  const q=String(query??'').toLocaleLowerCase(); if(!q) throw new ValidationError('Search query is required');const hits=[];
-  for(const t of await listJson(p,'tickets')){const text=`${t.title}\n${t.description}`.toLocaleLowerCase();if(text.includes(q))hits.push({id:t.id,type:'ticket',title:t.title,path:path.relative(p.root,idPath(path.join(p.dir,'tickets'),t.id)).split(path.sep).join('/'),snippet:text.slice(Math.max(0,text.indexOf(q)-70),text.indexOf(q)+q.length+90)});}
-  for(const c of await listJson(p,'comments')){const at=c.body.toLocaleLowerCase().indexOf(q);if(at>=0)hits.push({id:c.id,type:'comment',title:`Comment on ${c.ticketId}`,path:path.relative(p.root,idPath(path.join(p.dir,'comments'),c.id)).split(path.sep).join('/'),snippet:c.body.slice(Math.max(0,at-70),at+q.length+90)});}
-  for(const kind of kinds)for(const d of await p.documents.list(kind)){if(`${d.title}\n${d.body}`.toLocaleLowerCase().includes(q))hits.push({id:d.id,type:kind,title:d.title,path:path.relative(p.root,idPath(path.join(p.dir,kind),d.id,'.md')).split(path.sep).join('/'),snippet:d.body.slice(0,160)});}
-  return hits.sort((a,b)=>a.path.localeCompare(b.path)||a.id.localeCompare(b.id));
+const DOC_TYPE = { goals: 'goal', plans: 'plan', decisions: 'decision' };
+export const SEARCH_TYPES = Object.freeze(['ticket', 'comment', 'goal', 'plan', 'decision']);
+/**
+ * Ranked keyword search over canonical data. Rank: exact title > title starts with > title contains >
+ * body contains, then normalised title, type and id as stable tie-breaks.
+ */
+export async function searchProject(p, query, { types } = {}) {
+  const q=String(query??'').trim().toLocaleLowerCase(); if(!q) throw new ValidationError('Search query is required');
+  const wanted=types?.length?new Set(types):null; if(wanted)for(const x of wanted)if(!SEARCH_TYPES.includes(x))throw new ValidationError(`Unknown search type: ${x}`);
+  const hits=[], rel=(folder,id,ext)=>path.relative(p.root,idPath(path.join(p.dir,folder),id,ext)).split(path.sep).join('/');
+  const rank=(title,body)=>{const t=String(title??'').toLocaleLowerCase();if(t===q)return 0;if(t.startsWith(q))return 1;if(t.includes(q))return 2;return String(body??'').toLocaleLowerCase().includes(q)?3:-1;};
+  const snippet=(text)=>{const s=String(text??''),at=s.toLocaleLowerCase().indexOf(q);return at<0?s.slice(0,160):s.slice(Math.max(0,at-70),at+q.length+90);};
+  const tickets=await listJson(p,'tickets'),titles=new Map(tickets.map(x=>[x.id,x.title]));
+  if(!wanted||wanted.has('ticket'))for(const t of tickets){const r=rank(t.title,t.description);if(r>=0)hits.push({id:t.id,type:'ticket',title:t.title,rank:r,updatedAt:t.updatedAt,path:rel('tickets',t.id),snippet:r<3?String(t.description??'').slice(0,160):snippet(t.description)});}
+  if(!wanted||wanted.has('comment'))for(const c of await listJson(p,'comments')){const r=rank('',c.body);if(r>=0)hits.push({id:c.id,type:'comment',ticketId:c.ticketId,title:`Comment on ${titles.get(c.ticketId)??c.ticketId}`,rank:r,updatedAt:c.createdAt,path:rel('comments',c.id),snippet:snippet(c.body)});}
+  for(const kind of kinds){const type=DOC_TYPE[kind];if(wanted&&!wanted.has(type))continue;for(const d of await p.documents.list(kind)){const r=rank(d.title,d.body);if(r>=0)hits.push({id:d.id,type,kind,title:d.title,rank:r,updatedAt:d.updatedAt,path:rel(kind,d.id,'.md'),snippet:r<3?String(d.body??'').slice(0,160):snippet(d.body)});}}
+  const norm=x=>String(x.title).toLocaleLowerCase();
+  return hits.sort((a,b)=>a.rank-b.rank||norm(a).localeCompare(norm(b))||a.type.localeCompare(b.type)||a.id.localeCompare(b.id));
+}
+/** One page of search results plus a snapshot token; passing a stale snapshot fails with STALE_SEARCH. */
+export async function searchPage(p, query, { offset = 0, limit = 20, types, snapshot } = {}) {
+  if(!Number.isInteger(offset)||offset<0)throw new ValidationError('offset must be a non-negative integer');
+  if(!Number.isInteger(limit)||limit<1||limit>100)throw new ValidationError('limit must be an integer between 1 and 100');
+  const all=await searchProject(p,query,{types});
+  const current=hash(all.map(x=>`${x.type}:${x.id}:${x.updatedAt}`).join('\n')).slice(0,16);
+  if(snapshot&&snapshot!==current)throw new PmanError('Search results changed since the first page; restart from the first page',`STALE_SEARCH`,{snapshot:current});
+  const items=all.slice(offset,offset+limit);
+  return {query:String(query).trim(),items,total:all.length,offset,limit,nextOffset:offset+items.length<all.length?offset+items.length:null,snapshot:current};
 }
 export async function contextFor(p,id,{budget=8000}={}) {
   checkId(id);if(!Number.isFinite(Number(budget))||Number(budget)<512)throw new ValidationError('Context budget must be at least 512 bytes');const max=Number(budget);const ticket=await p.tickets.get(id),all=await listJson(p,'tickets'),map=new Map(all.map(x=>[x.id,x])),ancestors=[];let cur=ticket.parentId;

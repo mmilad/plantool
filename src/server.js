@@ -23,7 +23,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
       if (req.method === 'GET' && url.pathname === '/') { res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','content-security-policy':"default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'none'"}); return res.end(renderAppHtml(token, project.config)); }
       if (req.method === 'OPTIONS') return send(res,405,{error:'CORS disabled'});
       if (req.method==='GET'&&url.pathname==='/api/tree'){const offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',5000,1,5000);const {items,total}=await project.tree(null,{limit,offset,fields:'row',withTotal:true});return send(res,200,{items,total,offset,limit});}
-      if (req.method==='GET'&&url.pathname==='/api/search')return send(res,200,await project.search(url.searchParams.get('q')));
+      if (req.method==='GET'&&url.pathname==='/api/search'){const types=(url.searchParams.get('types')||'').split(',').map(x=>x.trim()).filter(Boolean);return send(res,200,await project.searchPage(url.searchParams.get('q'),{offset:intParam(url,'offset',0,0),limit:intParam(url,'limit',20,1,100),types,snapshot:url.searchParams.get('snapshot')||undefined}));}
       let m=/^\/api\/tickets\/([0-9a-f-]+)$/.exec(url.pathname);
       if(m&&req.method==='GET')return send(res,200,await project.tickets.get(m[1]));
       m=/^\/api\/tickets\/([0-9a-f-]+)\/versioned$/.exec(url.pathname);
@@ -40,7 +40,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
       m=/^\/api\/context\/([0-9a-f-]+)$/.exec(url.pathname);if(m&&req.method==='GET')return send(res,200,await project.context(m[1]));
       if(url.pathname==='/api/validate'&&req.method==='GET')return send(res,200,await project.validate());
       return send(res,404,{error:'Not found'});
-    } catch(e) { return send(res,e.code==='NOT_FOUND'?404:e.code==='VALIDATION'?400:e.code==='CONFLICT'?409:e.code==='CYCLE'||e.code==='OPEN_WORK'?409:500,{error:e.message,code:e.code??'ERROR'}); }
+    } catch(e) { return send(res,e.code==='NOT_FOUND'?404:e.code==='VALIDATION'?400:e.code==='CONFLICT'?409:e.code==='CYCLE'||e.code==='OPEN_WORK'||e.code==='STALE_SEARCH'?409:500,{error:e.message,code:e.code??'ERROR'}); }
   });
   await new Promise((resolve,reject)=>{
     server.once('error',error=>{

@@ -34,6 +34,10 @@ Create children at any level by passing `--parent <ticket-id>`. The server uses 
 
 Run `pman --help` for the current command reference. The first release supports project initialization; ticket create/list/show/update/move; trees; goal, plan and decision creation; comments; typed relationships; offline search; bounded context; validation; and the project-local web UI. Output is JSON by default where useful; pass `--format json` where supported for an explicit machine-readable contract.
 
+## Search
+
+`pman search QUERY` is an offline keyword search over tickets, comments, goals, plans and decisions. Results are ranked (exact title, title prefix, title contains, body) with stable tie-breaks and paged: `--limit` (max 100), `--offset`, `--type ticket,comment,goal,plan,decision`. JSON output includes `total`, `nextOffset` and a `snapshot`; passing a stale snapshot to a follow-up page fails with `STALE_SEARCH` instead of mixing old and new results. Comment hits carry their `ticketId`. Search reads the canonical files on every query; there is no index yet.
+
 ## Agent workflow
 
 pman is built so coding agents can pick work in a sensible order without a human triaging every step:
