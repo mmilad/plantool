@@ -77,3 +77,13 @@ test('documents can be created and updated over HTTP with revision checks',async
   assert.equal((await send(`${app.url}/api/documents/decisions/${d.id}`,'PATCH',w,JSON.stringify({title:'No revision'}))).status,400);
   const got=JSON.parse((await send(`${app.url}/api/documents/decisions/${d.id}`,'GET',{host})).body);assert.equal(got.title,'Use JSON files');assert.equal(got.revision,u.revision);
 });
+
+test('version endpoint changes per area when files change on disk',async t=>{
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-version-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const tk=await p.tickets.create({title:'A'});
+  const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};
+  const get=async()=>JSON.parse((await send(`${app.url}/api/version`,'GET',host)).body);
+  const a=await get();await new Promise(r=>setTimeout(r,2100));await p.documents.create('goals',{title:'G'});const b=await get();
+  assert.notEqual(a.version,b.version);assert.equal(a.parts.tree,b.parts.tree);assert.notEqual(a.parts.documents,b.parts.documents);
+  await new Promise(r=>setTimeout(r,2100));await p.tickets.update(tk.id,{title:'B'});const c=await get();assert.notEqual(b.parts.tree,c.parts.tree);assert.equal(b.parts.documents,c.parts.documents);
+});

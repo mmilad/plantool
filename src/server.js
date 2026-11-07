@@ -1,5 +1,7 @@
 import http from 'node:http';
-import { randomBytes, timingSafeEqual } from 'node:crypto';
+import { randomBytes, timingSafeEqual, createHash } from 'node:crypto';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { openProject, ValidationError } from './index.js';
 import { renderAppHtml } from './ui.js';
@@ -11,6 +13,15 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
   const project = await openProject({ cwd });
   const token = randomBytes(32).toString('hex');
   let boundPort;
+  // Cheap change detection: size and mtime of every canonical file, cached for 2 s.
+  let cached=null;
+  async function version(){
+    if(cached&&Date.now()-cached.at<2000)return cached.value;
+    const groups={tree:['tickets','relationships','components','types','contracts'],documents:['goals','plans','decisions'],comments:['comments']},parts={};
+    for(const [name,folders] of Object.entries(groups)){const h=createHash('sha256');for(const folder of folders)await fingerprint(path.join(project.dir,folder),h);parts[name]=h.digest('hex').slice(0,16);}
+    const config=await fs.stat(path.join(project.dir,'config.json')).catch(()=>null);parts.config=config?`${config.size}:${config.mtimeMs}`:'missing';
+    const value={version:createHash('sha256').update(JSON.stringify(parts)).digest('hex').slice(0,16),parts};cached={at:Date.now(),value};return value;
+  }
   const server = http.createServer(async (req, res) => {
     try {
       const host = req.headers.host;
@@ -22,6 +33,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
       }
       if (req.method === 'GET' && url.pathname === '/') { res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','content-security-policy':"default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'none'"}); return res.end(renderAppHtml(token, project.config)); }
       if (req.method === 'OPTIONS') return send(res,405,{error:'CORS disabled'});
+      if (req.method==='GET'&&url.pathname==='/api/version')return send(res,200,await version());
       if (req.method==='GET'&&url.pathname==='/api/tree'){const offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',5000,1,5000);const {items,total}=await project.tree(null,{limit,offset,fields:'row',withTotal:true});return send(res,200,{items,total,offset,limit});}
       if (req.method==='GET'&&url.pathname==='/api/search'){const types=(url.searchParams.get('types')||'').split(',').map(x=>x.trim()).filter(Boolean);return send(res,200,await project.searchPage(url.searchParams.get('q'),{offset:intParam(url,'offset',0,0),limit:intParam(url,'limit',20,1,100),types,snapshot:url.searchParams.get('snapshot')||undefined}));}
       let m=/^\/api\/tickets\/([0-9a-f-]+)$/.exec(url.pathname);
@@ -63,6 +75,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
   return { server, url, project };
 }
 function intParam(url,name,fallback,min,max=Number.MAX_SAFE_INTEGER){const raw=url.searchParams.get(name);if(raw===null)return fallback;const n=Number(raw);if(!Number.isInteger(n)||n<min||n>max)throw new ValidationError(`${name} must be an integer between ${min} and ${max}`);return n;}
+async function fingerprint(dir,h){let entries;try{entries=await fs.readdir(dir,{withFileTypes:true});}catch{h.update(`${dir}:missing\n`);return;}entries.sort((a,b)=>a.name.localeCompare(b.name));for(const e of entries){const full=path.join(dir,e.name);if(e.isDirectory()){await fingerprint(full,h);continue;}if(e.name.endsWith('.tmp'))continue;const st=await fs.stat(full).catch(()=>null);if(st)h.update(`${e.name}:${st.size}:${st.mtimeMs}\n`);}}
 function safeToken(a,b){if(typeof a!=='string'||a.length!==b.length)return false;return timingSafeEqual(Buffer.from(a),Buffer.from(b));}
 async function body(req){let data='';for await(const c of req){data+=c;if(data.length>1_000_000)throw new ValidationError('Request body is too large');}try{return JSON.parse(data||'{}')}catch{throw new ValidationError('Request body must be JSON');}}
 function send(res,status,value){res.writeHead(status,{'content-type':'application/json; charset=utf-8','x-content-type-options':'nosniff','cache-control':'no-store'});res.end(JSON.stringify(value));}

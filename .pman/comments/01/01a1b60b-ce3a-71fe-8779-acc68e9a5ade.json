@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b60b-ce3a-71fe-8779-acc68e9a5ade",
+  "ticketId": "01a18a1b-10d2-78c8-a6e7-db86e706a490",
+  "body": "GET /api/version: per-area fingerprints (tree, documents, comments, config) from file size+mtime, cached 2 s. UI polls every 5 s while visible (and on tab focus) plus a Refresh button; refreshes only changed areas, keeps selection, expanded branches, scroll position, active search and open document; open ticket edit and document drafts are never replaced (warning shown, saving uses the revision check); removed tickets/documents are explained. Verified in Chromium with CLI writes while the UI was open.",
+  "author": "claude",
+  "createdAt": "2026-11-07T12:46:29.434Z"
+}
