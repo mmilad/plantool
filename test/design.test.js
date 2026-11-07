@@ -107,3 +107,31 @@ test('validate catches dangling code-plan and contract references; names resolve
   assert.equal(v.valid, false);
   assert.ok(v.errors.some(e => e.includes(`Ticket ${consumer.id} codePlan.implements`)) && v.errors.some(e => e.includes('Contract')));
 });
+
+test('contract changes are classified and affected consumers reported', async t => {
+  const p = await project(t); const { consumer } = await shop(p);
+  await p.types.set('User', { userId: 'string', email: 'string', firstName: 'string', lastName: 'string' });
+  const preview = await p.contracts.set('UserService.getUser', { output: { userId: 'string', firstName: 'string', lastName: 'string', nickname: 'string?' } , dryRun: true });
+  assert.equal(preview.impact.breaking, true);
+  assert.deepEqual(preview.impact.changes.filter(c => c.breaking).map(c => `${c.side}.${c.path} ${c.change}`), ['output.email removed']);
+  assert.ok(preview.impact.changes.some(c => c.path === 'nickname' && c.change === 'added' && !c.breaking));
+  assert.deepEqual(preview.impact.affectedConsumers.map(a => a.ticketId), [consumer.id]);
+  assert.equal((await p.contracts.get('UserService.getUser')).version, 1, 'dry run writes nothing');
+  const input = await p.contracts.set('UserService.getUser', { input: { userId: 'string', tenant: 'string' } });
+  assert.deepEqual(input.impact.changes.map(c => [c.path, c.change, c.breaking]), [['tenant', 'added-required', true]]);
+  assert.deepEqual(input.impact.affectedConsumers.map(a => a.ticketId), [consumer.id], 'consumer provides only userId');
+  assert.equal(input.version, 2); assert.equal((await p.contracts.get('UserService.getUser')).history[0].version, 1);
+  const widen = await p.contracts.set('UserService.getUser', { input: { userId: 'string', tenant: 'string?' } });
+  assert.equal(widen.impact.breaking, false);
+});
+
+test('type changes report impact through every contract that uses the type', async t => {
+  const p = await project(t); const { consumer } = await shop(p);
+  await p.types.set('User', { userId: 'string', email: 'string', firstName: 'string', lastName: 'string' });
+  const r = await p.types.set('User', { userId: 'integer', email: 'string?', firstName: 'string', lastName: 'string' });
+  assert.equal(r.version, 3);
+  assert.deepEqual(r.impact.changes.filter(c => c.breaking).map(c => `${c.path} ${c.change}`).sort(), ['email now-optional', 'userId type']);
+  assert.deepEqual(r.impact.affectedConsumers.map(a => a.ticketId), [consumer.id]);
+  const unrelated = await p.types.set('User', { userId: 'integer', email: 'string?', firstName: 'string', lastName: 'string', avatar: 'string?' });
+  assert.equal(unrelated.impact.breaking, false); assert.equal(unrelated.impact.affectedConsumers.length, 0);
+});

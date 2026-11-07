@@ -65,7 +65,17 @@ npx pman check
 # ✗ REQUIRED_FIELD_MISSING  Ticket … needs UserService.getUser → output.userId, but the contract returns: email, firstName, lastName
 ```
 
-Schemas use a JSON Schema subset (`string`, `number`, `integer`, `boolean`, `null`, `any`, `array`, `object`, `required`, `enum`, `$ref`) or a shorthand: `"string"`, `"string?"` for optional properties, `"string[]"`, a type name such as `"User"`, `[{"sku":"string"}]`. `requires` entries are output paths, optionally typed (`address.city:string`); `provides` lists the input fields the consumer supplies. `pman check` reports missing or mistyped fields, missing input, unknown types, components without contracts, methods without an owning class or service, consumed components no ticket implements, consumers affected by `changes`, and dependency cycles. A ticket that consumes a component waits for the tickets implementing it (or an ancestor component), and `pman next` orders work accordingly. `pman context` includes the resolved code plan with contracts and referenced types. Contract versions increase when input or output change.
+Schemas use a JSON Schema subset (`string`, `number`, `integer`, `boolean`, `null`, `any`, `array`, `object`, `required`, `enum`, `$ref`) or a shorthand: `"string"`, `"string?"` for optional properties, `"string[]"`, a type name such as `"User"`, `[{"sku":"string"}]`. `requires` entries are output paths, optionally typed (`address.city:string`); `provides` lists the input fields the consumer supplies. `pman check` reports missing or mistyped fields, missing input, unknown types, components without contracts, methods without an owning class or service, consumed components no ticket implements, consumers affected by `changes`, and dependency cycles. A ticket that consumes a component waits for the tickets implementing it (or an ancestor component), and `pman next` orders work accordingly. `pman context` includes the resolved code plan with contracts and referenced types. Contract and type versions increase when they change, and earlier versions are kept in `history` (`pman contract history`). Every `contract set` and `type set` classifies the change as breaking or compatible and lists the open consumer tickets it may break; add `--dry-run` to preview without writing:
+
+```sh
+npx pman type set User --schema '{"userId":"string","mail":"string"}' --dry-run
+# [dry run] type User v2
+#   ✗ breaking  UserService.getUser output.email removed
+#   · compatible  UserService.getUser output.mail added
+#   Affected open consumer tickets: … (requires email)
+```
+
+For outputs, removing a field, making it optional, adding enum values or changing its type incompatibly is breaking; for inputs, a new required field, narrowing a type or removing enum values is breaking.
 
 ## TypeScript API
 

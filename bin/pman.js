@@ -3,6 +3,8 @@ import { initProject, openProject, PmanError, NotFoundError } from '../src/index
 import { agentInit } from '../src/agent.js';
 import { qualifiedNames } from '../src/design.js';
 const qname=async(p,id)=>qualifiedNames(await p.components.list()).get(id);
+const qualifiedMap=async p=>qualifiedNames(await p.components.list());
+function impactText(head,impact,dryRun,names){console.log(`${dryRun?'[dry run] ':''}${head}`);for(const c of impact.changes)console.log(`  ${c.breaking?'✗ breaking':'· compatible'}  ${c.componentId?names.get(c.componentId)+' ':''}${c.side}.${c.path||'(root)'} ${c.change}${c.from?` (${c.from} → ${c.to})`:''}`);if(impact.affectedConsumers.length){console.log('  Affected open consumer tickets:');for(const a of impact.affectedConsumers)console.log(`    ${a.ticketId}  ${a.title}\n      ${a.reasons.join('; ')}`);}}
 const json=(v,flag)=>{if(v===undefined)throw new Error(`Missing ${flag}`);try{return JSON.parse(v);}catch{return v;}};
 const labels=v=>v===undefined?undefined:String(v).split(',').map(x=>x.trim()).filter(Boolean);
 import { serve } from '../src/server.js';
@@ -36,9 +38,10 @@ Code plans (components, types and contracts are maintained centrally):
   pman component add --kind KIND --name NAME [--parent COMPONENT] [--description TEXT]
   pman component list [--format json]
   pman component show COMPONENT [--format json]
-  pman type set NAME --schema JSON [--description TEXT]
+  pman type set NAME --schema JSON [--description TEXT] [--dry-run]
   pman type list [--format json]
-  pman contract set COMPONENT [--input JSON] [--output JSON] [--description TEXT]
+  pman contract set COMPONENT [--input JSON] [--output JSON] [--description TEXT] [--dry-run]
+  pman contract history COMPONENT [--format json]
   pman contract show COMPONENT [--format json]
   pman codeplan add TICKET_ID implements|consumes|changes COMPONENT [--requires a,b.c:type] [--provides x,y]
   pman codeplan remove TICKET_ID implements|consumes|changes COMPONENT
@@ -57,7 +60,7 @@ All commands operate on the nearest project-local .pman/ directory.`;
 
 function parse(args) {
   const opts={}, positional=[];
-  for(let i=0;i<args.length;i++){const a=args[i];if(a.startsWith('--')){const k=a.slice(2);if(['open','force','write'].includes(k)){opts[k]=true;continue;}if(i+1>=args.length)throw new Error(`Missing value for ${a}`);opts[k.replaceAll('-','_')]=args[++i];}else positional.push(a);}
+  for(let i=0;i<args.length;i++){const a=args[i];if(a.startsWith('--')){const k=a.slice(2);if(['open','force','write','dry-run'].includes(k)){opts[k]=true;continue;}if(i+1>=args.length)throw new Error(`Missing value for ${a}`);opts[k.replaceAll('-','_')]=args[++i];}else positional.push(a);}
   return {opts,positional};
 }
 const out=(value,format='text',kind)=>{
@@ -96,9 +99,10 @@ async function main(argv) {
   if(command==='component'&&sub==='add') {const {opts}=parse(rest);const c=await project.components.create({kind:opts.kind,name:opts.name,parentId:opts.parent,description:opts.description});out(opts.format==='json'?c:`component ${c.id}  ${c.kind} ${await qname(project,c.id)}`,opts.format);return;}
   if(command==='component'&&sub==='list') {const {opts}=parse(rest);const all=await project.components.list(),q=qualifiedNames(all),ks=new Map((await project.contracts.list()).map(k=>[k.componentId,k]));const rows=all.map(c=>({...c,qualifiedName:q.get(c.id),contractVersion:ks.get(c.id)?.version??null})).sort((a,b)=>a.qualifiedName.localeCompare(b.qualifiedName));if(opts.format==='json'){out(rows,'json');return;}if(!rows.length)console.log('No components.');for(const r of rows)console.log(`${r.id}  ${r.kind.padEnd(12)}  ${r.qualifiedName}${r.contractVersion?`  (contract v${r.contractVersion})`:''}`);return;}
   if(command==='component'&&sub==='show') {const {opts,positional}=parse(rest);const c=await project.components.resolve(positional[0]);const k=(await project.contracts.list()).find(x=>x.componentId===c.id)??null;out({...c,qualifiedName:await qname(project,c.id),contract:k},'json');return;}
-  if(command==='type'&&sub==='set') {const {opts,positional}=parse(rest);const r=await project.types.set(positional[0],json(opts.schema,'--schema'),{description:opts.description});out(opts.format==='json'?r:`type ${r.name}`,opts.format);return;}
+  if(command==='type'&&sub==='set') {const {opts,positional}=parse(rest);const r=await project.types.set(positional[0],json(opts.schema,'--schema'),{description:opts.description,dryRun:!!opts['dry-run']});if(opts.format==='json')out(r,'json');else impactText(`type ${r.name} v${r.version}`,r.impact,!!opts['dry-run'],await qualifiedMap(project));return;}
   if(command==='type'&&sub==='list') {const {opts}=parse(rest);const all=await project.types.list();if(opts.format==='json'){out(all,'json');return;}if(!all.length)console.log('No types.');for(const x of all)console.log(`${x.name}  ${JSON.stringify(x.schema)}`);return;}
-  if(command==='contract'&&sub==='set') {const {opts,positional}=parse(rest);const k=await project.contracts.set(positional[0],{input:opts.input===undefined?undefined:json(opts.input,'--input'),output:opts.output===undefined?undefined:json(opts.output,'--output'),description:opts.description});out(opts.format==='json'?k:`contract ${await qname(project,k.componentId)} v${k.version}`,opts.format);return;}
+  if(command==='contract'&&sub==='set') {const {opts,positional}=parse(rest);const k=await project.contracts.set(positional[0],{input:opts.input===undefined?undefined:json(opts.input,'--input'),output:opts.output===undefined?undefined:json(opts.output,'--output'),description:opts.description});if(opts.format==='json')out(k,'json');else impactText(`contract ${await qname(project,k.componentId)} v${k.version}`,k.impact,!!opts['dry-run'],await qualifiedMap(project));return;}
+  if(command==='contract'&&sub==='history') {const {opts,positional}=parse(rest);const k=await project.contracts.get(positional[0]);const rows=[...(k.history??[]),{version:k.version,input:k.input,output:k.output,updatedAt:k.updatedAt}];if(opts.format==='json'){out(rows,'json');return;}for(const r of rows)console.log(`v${r.version}  ${r.updatedAt}\n  input:  ${JSON.stringify(r.input)}\n  output: ${JSON.stringify(r.output)}`);return;}
   if(command==='contract'&&sub==='show') {const {positional}=parse(rest);out(await project.contracts.get(positional[0]),'json');return;}
   if(command==='codeplan'&&sub==='add') {const {opts,positional}=parse(rest);const t=await project.codePlan.add(positional[0],positional[1],positional[2],{requires:labels(opts.requires),provides:labels(opts.provides)});out(opts.format==='json'?t.codePlan:`codeplan ${t.id} ${positional[1]} ${positional[2]}`,opts.format);return;}
   if(command==='codeplan'&&sub==='remove') {const {positional}=parse(rest);await project.codePlan.remove(positional[0],positional[1],positional[2]);out(`Removed ${positional[1]} ${positional[2]} from ${positional[0]}`);return;}

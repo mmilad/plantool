@@ -79,6 +79,72 @@ export function schemaAt(schema, path, types) {
 const compatible = (actual, wanted) => wanted === 'any' || actual === 'any' || actual === wanted || (wanted === 'number' && actual === 'integer');
 const describe = s => !s ? 'unknown' : s.type === 'array' ? `${describe(s.items?.$ref ? { type: s.items.$ref } : s.items)}[]` : s.type ?? s.$ref;
 
+// ---------- change classification ----------
+
+const assignable = (from, to) => to === 'any' || from === to || (from === 'integer' && to === 'number');
+
+/**
+ * Compares two versions of a schema. side 'output': consumers read the value, so removing,
+ * making optional or widening is breaking. side 'input': consumers supply the value, so new
+ * required fields or narrowing is breaking.
+ */
+export function diffSchemas(before, after, { side, typesBefore, typesAfter }) {
+  const changes = [], visited = new Set();
+  const walk = (o, n, path) => {
+    const key = `${path}|${o?.$ref ?? ''}|${n?.$ref ?? ''}`; if (visited.has(key) || path.split('.').length > 32) return; visited.add(key);
+    o = deref(o, typesBefore); n = deref(n, typesAfter); if (!o || !n) return;
+    const add = (change, breaking, extra = {}) => changes.push({ side, path, change, breaking, ...extra });
+    if (o.type !== n.type) {
+      const ok = side === 'output' ? assignable(n.type, o.type) : assignable(o.type, n.type);
+      add('type', !ok, { from: describe(o), to: describe(n) }); return;
+    }
+    if (o.enum || n.enum) {
+      const ov = o.enum ?? null, nv = n.enum ?? null;
+      const added = nv && ov ? nv.filter(x => !ov.includes(x)) : [], removed = ov && nv ? ov.filter(x => !nv.includes(x)) : [];
+      if (!ov && nv) add('enum-restricted', side === 'input'); else if (ov && !nv) add('enum-removed', side === 'output');
+      if (added.length) add('enum-values-added', side === 'output', { values: added });
+      if (removed.length) add('enum-values-removed', side === 'input', { values: removed });
+    }
+    if (o.type === 'array') { walk(o.items, n.items, path); return; }
+    if (o.type !== 'object') return;
+    const op = o.properties ?? {}, np = n.properties ?? {}, or = new Set(o.required ?? []), nr = new Set(n.required ?? []);
+    const at = k => (path ? `${path}.${k}` : k);
+    for (const k of Object.keys(op)) {
+      if (!(k in np)) { changes.push({ side, path: at(k), change: 'removed', breaking: side === 'output' }); continue; }
+      if (or.has(k) && !nr.has(k)) changes.push({ side, path: at(k), change: 'now-optional', breaking: side === 'output' });
+      if (!or.has(k) && nr.has(k)) changes.push({ side, path: at(k), change: 'now-required', breaking: side === 'input' });
+      walk(op[k], np[k], at(k));
+    }
+    for (const k of Object.keys(np)) if (!(k in op)) changes.push({ side, path: at(k), change: nr.has(k) ? 'added-required' : 'added', breaking: side === 'input' && nr.has(k) });
+  };
+  walk(before, after, '');
+  return changes;
+}
+
+/** Open consumer tickets that a set of breaking changes to one component may break. */
+function affectedConsumers(tickets, componentId, changes) {
+  const breaking = changes.filter(c => c.breaking); if (!breaking.length) return [];
+  const out = [];
+  for (const t of tickets) {
+    if (t.status === 'done' || t.status === 'cancelled') continue;
+    for (const e of t.codePlan?.consumes ?? []) {
+      if (e.component !== componentId) continue;
+      const reasons = [];
+      for (const c of breaking) {
+        if (c.side === 'output') {
+          const hit = (e.requires ?? []).map(r => r.split(':')[0].trim()).filter(r => !c.path || r === c.path || r.startsWith(`${c.path}.`) || c.path.startsWith(`${r}.`));
+          if (hit.length) reasons.push(`output.${c.path || '(root)'} ${c.change} (requires ${hit.join(', ')})`);
+        } else if (!e.provides) reasons.push(`input.${c.path || '(root)'} ${c.change} (ticket does not declare provides)`);
+        else if (c.change === 'added-required' || c.change === 'now-required' ? !e.provides.includes(c.path) : e.provides.some(f => !c.path || f === c.path || f.startsWith(`${c.path}.`))) reasons.push(`input.${c.path || '(root)'} ${c.change}`);
+      }
+      if (reasons.length) out.push({ ticketId: t.id, title: t.title, reasons });
+    }
+  }
+  return out;
+}
+
+function summarise(changes, consumers) { return { breaking: changes.some(c => c.breaking), changes, affectedConsumers: consumers }; }
+
 // ---------- records ----------
 
 function componentApi(p) {
@@ -133,11 +199,21 @@ function typeApi(p) {
   const api = {
     async list() { return _store.list(p, 'types'); },
     async get(name) { const t = (await api.list()).find(x => x.name === name); if (!t) throw new NotFoundError(`Type not found: ${name}`); return t; },
-    async set(name, schema, { description } = {}) {
+    async set(name, schema, { description, dryRun = false } = {}) {
       if (!NAME_RE.test(name ?? '') || PRIMITIVES.includes(name)) throw new ValidationError(`Invalid type name "${name}"`);
       const normal = normalizeSchema(schema, name), all = await api.list(), current = all.find(x => x.name === name), now = new Date().toISOString();
-      if (!current) return _store.create(p, 'types', { schemaVersion: 1, id: uuidv7(), name, description: description ?? '', schema: normal, createdAt: now, updatedAt: now });
-      return _store.write(p, 'types', { ...current, schema: normal, description: description ?? current.description, updatedAt: now });
+      if (!current) { const rec = { schemaVersion: 1, id: uuidv7(), name, version: 1, description: description ?? '', schema: normal, history: [], createdAt: now, updatedAt: now }; if (!dryRun) await _store.create(p, 'types', rec); return { ...rec, impact: summarise([], []) }; }
+      const changed = JSON.stringify(normal) !== JSON.stringify(current.schema), version = (current.version ?? 1) + (changed ? 1 : 0);
+      const rec = { ...current, version, schema: normal, description: description ?? current.description, history: changed ? [...(current.history ?? []), { version: current.version ?? 1, schema: current.schema, updatedAt: current.updatedAt }] : (current.history ?? []), updatedAt: now };
+      // impact: every contract whose input or output reaches this type
+      const typesBefore = new Map(all.map(x => [x.name, x])), typesAfter = new Map(typesBefore); typesAfter.set(name, rec);
+      const tickets = await p.tickets.list({ limit: Infinity }), changes = [], consumers = [];
+      if (changed) for (const k of await p.contracts.list()) {
+        const c = [...diffSchemas(k.input, k.input, { side: 'input', typesBefore, typesAfter }), ...diffSchemas(k.output, k.output, { side: 'output', typesBefore, typesAfter })].map(x => ({ ...x, componentId: k.componentId }));
+        changes.push(...c); consumers.push(...affectedConsumers(tickets, k.componentId, c).map(x => ({ ...x, componentId: k.componentId })));
+      }
+      if (!dryRun) await _store.write(p, 'types', rec);
+      return { ...rec, impact: summarise(changes, consumers) };
     },
   };
   return api;
@@ -148,12 +224,16 @@ function contractApi(p) {
     async list() { return _store.list(p, 'contracts'); },
     async get(componentRef) { const c = await p.components.resolve(componentRef); const k = (await api.list()).find(x => x.componentId === c.id); if (!k) throw new NotFoundError(`No contract for ${componentRef}`); return k; },
     /** Creates or replaces the contract of a component; the version increases when input or output change. */
-    async set(componentRef, { input, output, description } = {}) {
+    async set(componentRef, { input, output, description, dryRun = false } = {}) {
       const comp = await p.components.resolve(componentRef), all = await api.list(), current = all.find(x => x.componentId === comp.id), now = new Date().toISOString();
       const next = { input: normalizeSchema(input ?? current?.input ?? {}, 'input'), output: normalizeSchema(output ?? current?.output ?? 'null', 'output') };
-      if (!current) return _store.create(p, 'contracts', { schemaVersion: 1, id: uuidv7(), componentId: comp.id, version: 1, description: description ?? '', ...next, createdAt: now, updatedAt: now });
+      if (!current) { const rec = { schemaVersion: 1, id: uuidv7(), componentId: comp.id, version: 1, description: description ?? '', ...next, history: [], createdAt: now, updatedAt: now }; if (!dryRun) await _store.create(p, 'contracts', rec); return { ...rec, impact: summarise([], []) }; }
       const changed = JSON.stringify(next) !== JSON.stringify({ input: current.input, output: current.output });
-      return _store.write(p, 'contracts', { ...current, ...next, description: description ?? current.description, version: current.version + (changed ? 1 : 0), updatedAt: now });
+      const types = new Map((await p.types.list()).map(x => [x.name, x])), ctx = { typesBefore: types, typesAfter: types };
+      const changes = changed ? [...diffSchemas(current.input, next.input, { ...ctx, side: 'input' }), ...diffSchemas(current.output, next.output, { ...ctx, side: 'output' })] : [];
+      const rec = { ...current, ...next, description: description ?? current.description, version: current.version + (changed ? 1 : 0), history: changed ? [...(current.history ?? []), { version: current.version, input: current.input, output: current.output, updatedAt: current.updatedAt }] : (current.history ?? []), updatedAt: now };
+      if (!dryRun) await _store.write(p, 'contracts', rec);
+      return { ...rec, impact: summarise(changes, affectedConsumers(await p.tickets.list({ limit: Infinity }), comp.id, changes)) };
     },
   };
   return api;
