@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b61b-897f-74a3-b443-0dc75cf22688",
+  "ticketId": "01a189b6-43ac-78a2-a06b-345c6fa56083",
+  "body": "Core semantics aligned earlier (rollup and readiness share the set of open blockers; done resolves a blocker; decision: cancelled also resolves, see docs/implementation-decisions.md – differs from the rule proposed here). UI now labels the three values separately: 'Status (stored)', 'Derived from children' or 'Readiness: Waiting on a blocker' in the detail properties (with explanatory tooltip), 'Waiting on a blocker' / 'Children: …' in tree rows (text, not colour only), and readiness reasons naming the blocking/provider tickets in 'Plan & readiness'.",
+  "author": "claude",
+  "createdAt": "2026-11-07T13:03:40.415Z"
+}
