@@ -87,3 +87,15 @@ test('version endpoint changes per area when files change on disk',async t=>{
   assert.notEqual(a.version,b.version);assert.equal(a.parts.tree,b.parts.tree);assert.notEqual(a.parts.documents,b.parts.documents);
   await new Promise(r=>setTimeout(r,2100));await p.tickets.update(tk.id,{title:'B'});const c=await get();assert.notEqual(b.parts.tree,c.parts.tree);assert.equal(b.parts.documents,c.parts.documents);
 });
+
+test('plan and design endpoints expose readiness, code plans and check results',async t=>{
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-design-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const {openProject}=await import('../src/index.js');const p=await openProject({cwd});
+  await p.types.set('User',{email:'string'});await p.components.create({kind:'service',name:'UserService'});await p.components.create({kind:'method',name:'getUser',parentId:'UserService'});await p.contracts.set('getUser',{input:{userId:'string'},output:'User'});
+  const prov=await p.tickets.create({title:'Build users'}),cons=await p.tickets.create({title:'Cart'});await p.codePlan.add(prov.id,'implements','UserService');await p.codePlan.add(cons.id,'consumes','getUser',{requires:['userId']});
+  const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};
+  const plan=JSON.parse((await send(`${app.url}/api/tickets/${cons.id}/plan`,'GET',host)).body);
+  assert.equal(plan.readiness.ready,false);assert.match(plan.readiness.reasons[0],/provider/);assert.equal(plan.codePlan.consumes[0].name,'UserService.getUser');assert.deepEqual(plan.errors.map(e=>e.code),['REQUIRED_FIELD_MISSING']);
+  const design=JSON.parse((await send(`${app.url}/api/design`,'GET',host)).body);
+  assert.deepEqual(design.components.map(c=>c.qualifiedName),['UserService','UserService.getUser']);assert.equal(design.components[1].contract.version,1);assert.equal(design.components[0].tickets[0].relation,'implements');assert.equal(design.check.valid,false);
+});
