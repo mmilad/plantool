@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b61a-8f11-79c0-af1e-45f5b9f17651",
+  "ticketId": "01a18c6a-02dd-7a37-986f-f8cdd3931325",
+  "body": "Comment bodies are escaped text with white-space:pre-wrap and overflow-wrap:anywhere: line breaks and blank lines are kept, long lines/URLs wrap. Verified in Chromium with a multi-line comment in a temporary fixture (no test comments in canonical data).",
+  "author": "claude",
+  "createdAt": "2026-11-07T13:02:36.305Z"
+}

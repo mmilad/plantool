@@ -99,3 +99,13 @@ test('plan and design endpoints expose readiness, code plans and check results',
   const design=JSON.parse((await send(`${app.url}/api/design`,'GET',host)).body);
   assert.deepEqual(design.components.map(c=>c.qualifiedName),['UserService','UserService.getUser']);assert.equal(design.components[1].contract.version,1);assert.equal(design.components[0].tickets[0].relation,'implements');assert.equal(design.check.valid,false);
 });
+
+test('relations endpoint returns both directions with counterpart tickets',async t=>{
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-rel-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const a=await p.tickets.create({title:'A'}),b=await p.tickets.create({title:'B'}),c=await p.tickets.create({title:'C'});
+  await p.relations.add(a.id,b.id,'blocks');await p.relations.add(b.id,c.id,'implements');
+  const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};
+  const rels=JSON.parse((await send(`${app.url}/api/tickets/${b.id}/relations`,'GET',host)).body);
+  assert.deepEqual(rels.map(r=>[r.type,r.direction,r.ticket.title]).sort(),[['blocks','incoming','A'],['implements','outgoing','C']]);
+  assert.equal((await send(`${app.url}/api/tickets/01a189ac-28ff-73c2-8a77-000000000000/relations`,'GET',host)).status,404);
+});

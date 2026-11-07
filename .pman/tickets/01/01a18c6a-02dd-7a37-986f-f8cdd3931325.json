@@ -3,12 +3,13 @@
   "id": "01a18c6a-02dd-7a37-986f-f8cdd3931325",
   "title": "Render multi-line comment text readably in the detail view",
   "description": "Quellstandbefund am 2026-10-30: Das UI-Kommentarformular nimmt mehrzeiligen Klartext an, der Renderer escaped den Body aber als Text in einen normalen Absatz. Browser-HTML fasst diese Zeilenumbrüche zusammen; mehrzeilige Kommentare verlieren beim Lesen ihre Absätze.\n\nPlanen, gespeicherte Klartext-Zeilenumbrüche und Leerzeilen sichtbar zu erhalten, lange Zeilen auf schmalen Ansichten umzubrechen und den Text weiterhin sicher zu escapen. Keine Markdown-/HTML-Ausführung voraussetzen. Kommentar-Paging und Formularmeldungen bleiben in ihren eigenen Aufgaben; diese Aufgabe betrifft nur Darstellung und Lesbarkeit des Kommentar-Bodys.\n\nSpätere Abnahme mit isolierter Fixture: Einzelzeile, mehrere Zeilen, Leerzeile/Absatz, lange URL oder Textzeile, Mobilansicht und Screenreader. Keine Testkommentare in kanonische Projektdaten schreiben.\n\nZugehörigkeit: Kind von 01a189a9-42af-7e67-93b4-dcdb41bbad6a (Ticketdetail). Vor Umsetzung durch das UI-Konzept blockiert. Per relates_to mit Kommentarpaging 01a189d7-bdd9-7e6d-8ca7-db30cffdef3f, Rückmeldungen 01a189b2-43b1-775a-89f1-388cdd0af53c und Accessibility 01a189b2-a6a6-74d9-b7c4-d9e344090079 abgestimmt. Keine Umsetzung in dieser Planungsrunde.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
   "parentId": "01a189a9-42af-7e67-93b4-dcdb41bbad6a",
   "createdAt": "2026-10-30T10:45:20.186Z",
-  "updatedAt": "2026-11-07T10:22:51.173Z",
-  "kind": "task"
+  "updatedAt": "2026-11-07T13:02:35.646Z",
+  "kind": "task",
+  "assignee": null
 }

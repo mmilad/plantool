@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b61a-988c-74e1-a333-e4398daf6b25",
+  "ticketId": "01a189b2-ea5f-7585-abc7-e3c858ccc37c",
+  "body": "The ticket edit form loads /api/tickets/:id/versioned and sends expectedRevision; the server returns 409 CONFLICT on a stale revision. Verified live: editing while the CLI changed the same ticket kept the user's input, showed 'This ticket was changed elsewhere … Your input is kept' with 'Load current version', and the external-change refresh did not replace the open form.",
+  "author": "claude",
+  "createdAt": "2026-11-07T13:02:38.732Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b61a-85c2-72a6-9ebd-254bed183bcf",
+  "ticketId": "01a189cb-a223-75ae-84ee-d598cec6a95a",
+  "body": "Verified in Chromium with a 1.2 s delayed response for the first ticket: selecting a second ticket meanwhile keeps the second ticket's detail and URL; detail, plan and relationship requests all check state.detailRequest before rendering.",
+  "author": "claude",
+  "createdAt": "2026-11-07T13:02:33.922Z"
+}
