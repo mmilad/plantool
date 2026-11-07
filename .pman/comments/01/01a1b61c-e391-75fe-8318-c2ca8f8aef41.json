@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b61c-e391-75fe-8318-c2ca8f8aef41",
+  "ticketId": "01a189cc-4797-7974-9f3d-010740b102de",
+  "body": "Combinable local filters on existing fields: text, stored status (config values), priority, kind (task/feature/bug), label (values present in the project) and hierarchy scope ('Show only this branch in the list' from the ticket detail). Active filters appear as removable chips with 'Reset all' and an 'n of m tickets' count; filter matches show their ancestor path, the open detail is never switched. Filters are kept in the tab history state, not in shareable URLs. No assignee/sprint/saved views invented. Verified in Chromium.",
+  "author": "claude",
+  "createdAt": "2026-11-07T13:05:09.009Z"
+}
