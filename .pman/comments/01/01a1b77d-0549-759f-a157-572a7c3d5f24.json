@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b77d-0549-759f-a157-572a7c3d5f24",
+  "ticketId": "01a189d6-6aa6-713b-9d56-2ad00bb3fe36",
+  "body": "Core fix: contextFor() now returns omitted counters, a truncated flag and the budget (previously computed but dropped), with a final guard that keeps the packet within budget. UI: collapsible 'Agent context packet' (loaded on open) with a per-part included/omitted table, an explicit incomplete notice naming missing counts and shortened description, pointer to the full sections above and --budget, raw JSON only as a technical detail. Verified in Chromium (60 comments, 41 omitted at 8 KB).",
+  "author": "claude",
+  "createdAt": "2026-11-07T19:29:46.314Z"
+}

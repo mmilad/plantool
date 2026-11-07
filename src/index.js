@@ -369,7 +369,7 @@ export async function contextFor(p,id,{budget=8000}={}) {
   const brief=x=>({id:x.id,title:x.title,status:x.status,priority:x.priority,parentId:x.parentId,description:x.description??''});
   const ticketPath=path.relative(p.root,idPath(path.join(p.dir,'tickets'),id)).split(path.sep).join('/');
   const g=await workGraph(p),ready=readinessOf(g,ticket);const packet={readiness:{ready:ready.ready,reasons:ready.reasons},ticket:{...brief(ticket),kind:ticket.kind??'task',assignee:ticket.assignee??null},codePlan:await resolvedCodePlan(p,ticket),ancestors:ancestors.map(brief),descendants:selectedDesc.map(brief),relationships:rel,comments,documents:docs,sources:{ticket:ticketPath,ancestors:ancestors.map(x=>path.relative(p.root,idPath(path.join(p.dir,'tickets'),x.id)).split(path.sep).join('/'))}},omitted={comments:0,relationships:0,documents:0,ancestors:0,descendants:Math.max(0,descendantsList.length-selectedDesc.length),descriptionBytes:0};
-  const size=()=>Buffer.byteLength(JSON.stringify({...packet,omitted},null,2));
+  const size=()=>Buffer.byteLength(JSON.stringify({...packet,omitted,truncated:false,budget:max},null,2));
   for(const key of ['comments','relationships','documents','descendants'])while(size()>max&&packet[key].length){packet[key].pop();omitted[key]++;}
   if(size()>max&&packet.codePlan?.types&&Object.keys(packet.codePlan.types).length){omitted.codePlanTypes=Object.keys(packet.codePlan.types).length;packet.codePlan.types={};}
   if(size()>max&&packet.codePlan){packet.codePlan=null;omitted.codePlan=true;}
@@ -377,5 +377,8 @@ export async function contextFor(p,id,{budget=8000}={}) {
   if(size()>max&&packet.ticket.description){const original=packet.ticket.description;let low=0,high=original.length;while(low<high){const mid=Math.ceil((low+high)/2);packet.ticket.description=original.slice(0,mid)+'…';if(size()<=max)low=mid;else high=mid-1;}packet.ticket.description=original.slice(0,low)+'…';omitted.descriptionBytes=Buffer.byteLength(original.slice(low));}
   if(size()>max&&packet.ticket.title){const original=packet.ticket.title;packet.ticket.title=original.slice(0,64)+'…';}
   if(size()>max)packet.ticket.properties={};
-  return packet;
+  const result=()=>({...packet,omitted,truncated:Object.values(omitted).some(v=>v===true||(typeof v==='number'&&v>0)),budget:max});
+  // final guard: counters written above can add a few bytes; shorten the description until the packet fits
+  for(let out=result(),excess=Buffer.byteLength(JSON.stringify(out,null,2))-max;excess>0&&packet.ticket.description.length>1;out=result(),excess=Buffer.byteLength(JSON.stringify(out,null,2))-max){const d=packet.ticket.description.replace(/…$/,'');const cut=Math.max(1,d.length-excess-8);omitted.descriptionBytes+=Buffer.byteLength(d.slice(cut));packet.ticket.description=d.slice(0,cut)+'…';}
+  return result();
 }

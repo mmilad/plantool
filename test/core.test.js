@@ -60,3 +60,7 @@ test('record cache is revalidated by size and mtime and never serves stale or mu
   await other.documents.update('goals',g.id,{title:'G2'});assert.equal((await p.documents.list('goals'))[0].title,'G2');
   await fs.rm(path.join(p.dir,'tickets',a.id.slice(0,2),a.id+'.json'));assert.equal((await p.tickets.list()).length,1,'external delete is visible');
 });
+test('context packets report omitted entries and stay within budget',async t=>{const p=await project(t);const a=await p.tickets.create({title:'Root',description:'d'.repeat(3000)});for(let i=0;i<25;i++)await p.tickets.create({title:`Child ${i}`,parentId:a.id});for(let i=0;i<10;i++)await p.comments.add(a.id,{body:'note '.repeat(40)});
+  const full=await p.context(a.id,{budget:1e9});assert.equal(full.truncated,true,'descendants beyond 20 are always omitted');assert.equal(full.omitted.descendants,5);assert.equal(full.omitted.comments,0);
+  const small=await p.context(a.id,{budget:2048});assert.equal(small.truncated,true);assert.ok(small.omitted.comments>0);assert.ok(Buffer.byteLength(JSON.stringify(small,null,2))<=2048);
+  const leaf=await p.tickets.create({title:'Leaf'});const c=await p.context(leaf.id);assert.equal(c.truncated,false);assert.equal(c.budget,8000);});
