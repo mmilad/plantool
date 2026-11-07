@@ -22,6 +22,9 @@ Usage:
   pman ticket move ID [--parent ID]
   pman tree [ID] [--max-depth N] [--limit N] [--offset N] [--format json]
   pman goal|plan|decision create --title TITLE [--body TEXT] [--links ID,ID]
+  pman goal|plan|decision list [--format json]
+  pman goal|plan|decision show ID [--format json]
+  pman goal|plan|decision update ID [--title T] [--status S] [--body TEXT] [--links ID,ID]
   pman comment add TICKET_ID TEXT
   pman relation add SOURCE_ID TARGET_ID TYPE
   pman relation list [ID]
@@ -87,6 +90,10 @@ async function main(argv) {
   if(command==='ticket'&&sub==='move') {const {opts,positional}=parse(rest);out(await project.tickets.move(positional[0],opts.parent??null),opts.format,'ticket');return;}
   if(command==='tree') {const {opts,positional}=parse([sub,...rest].filter(Boolean));out(await project.tree(positional[0]??null,{maxDepth:opts.max_depth===undefined?Infinity:Number(opts.max_depth),limit:Number(opts.limit??5000),offset:Number(opts.offset??0)}),opts.format);return;}
   if(['goal','plan','decision'].includes(command)&&sub==='create') {const {opts}=parse(rest);const kind={goal:'goals',plan:'plans',decision:'decisions'}[command];out(await project.documents.create(kind,{title:opts.title,body:opts.body??'',links:opts.links?opts.links.split(',').filter(Boolean):[]}),opts.format);return;}
+  if(['goal','plan','decision'].includes(command)&&['list','show','update'].includes(sub)) {const {opts,positional}=parse(rest);const kind={goal:'goals',plan:'plans',decision:'decisions'}[command];
+    if(sub==='list'){const all=await project.documents.list(kind,{body:false});if(opts.format==='json'){out(all,'json');return;}if(!all.length)console.log('No documents.');for(const d of all)console.log(`${d.id}  ${d.status}  ${d.title}`);return;}
+    if(sub==='show'){const r=await project.documents.getVersioned(kind,positional[0]);if(opts.format==='json'){out({...r.document,revision:r.revision},'json');return;}console.log(`${command} ${r.document.id}  ${r.document.status}  ${r.document.title}\nlinks: ${(r.document.links??[]).join(', ')||'none'}\n\n${r.document.body??''}`);return;}
+    const patch={};for(const k of ['title','status','body'])if(opts[k]!==undefined)patch[k]=opts[k];if(opts.links!==undefined)patch.links=labels(opts.links);const r=await project.documents.update(kind,positional[0],patch);out(opts.format==='json'?{...r.document,revision:r.revision,changed:r.changed}:(r.changed?`Updated ${command} ${r.document.id}`:'No changes.'),opts.format);return;}
   if(command==='comment'&&sub==='add') {const {positional}=parse(rest);out(await project.comments.add(positional[0],{body:positional.slice(1).join(' ')}));return;}
   if(command==='relation'&&sub==='add') {const {positional}=parse(rest);out(await project.relations.add(...positional));return;}
   if(command==='relation'&&sub==='list') {const {positional,opts}=parse(rest);out(await project.relations.list(positional[0]),opts.format);return;}
