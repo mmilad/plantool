@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19282-2336-7476-bacb-04c7642ade0c",
+  "ticketId": "01a189b0-0f28-7715-8ac6-c689065acab1",
+  "body": "Review 2026-10-31: parent and relation target affordances tightened in docs/ui-ticket-relations-mobile.svg and ui-ticket-detail-320.svg. Full canonical parent remains available in image description, visible form is shortened; relation target titles are visibly underlined/blue. Keep 44px link targets and restore list/query/position on return. Parent and relation data unchanged.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:09:24.662Z"
+}

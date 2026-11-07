@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d28-17f2-7111-b501-27f25306d624",
+  "ticketId": "01a18a1b-10d2-78c8-a6e7-db86e706a490",
+  "body": "Ergänzung 2026-10-30: Lokale Writes müssen denselben Refresh-Vertrag wie externe Projektänderungen einhalten. src/server.js lädt nach Ticket-PATCH/POST den unfiltrierten Baum, obwohl das Search-Feld den Querytext behält; Kommentar-POST aktualisiert die globale Suche nicht. Alle bestätigten lokalen Änderungen sollen den aktiven Query-/Filter-/Paging-/Auswahlzustand erhalten und passende Treffer neu laden. Review und Wireframe dokumentieren die konkreten Fälle; vorhandene Parent-/Relationskanten bleiben bestehen.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:12:57.459Z"
+}

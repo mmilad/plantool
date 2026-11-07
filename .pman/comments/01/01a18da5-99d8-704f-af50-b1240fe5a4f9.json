@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18da5-99d8-704f-af50-b1240fe5a4f9",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Prüfserver-Recheck 2026-10-30: pman serve --port 4000 meldete die URL als bereit, aber Browser und Invoke-WebRequest konnten den Loopback-Socket aus dieser Prüfungsumgebung nicht erreichen (Timeout bzw. Socket-Zugriff verweigert). Vordergrundprozess danach beendet. Als Umgebungsgrenze dokumentiert, nicht als bestätigter Produktfehler; visuelle Abnahme bleibt offen.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:30:02.712Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1926b-a584-753b-805f-7873b27da094",
+  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
+  "body": "BOARD-DATENABGLEICH 2026-10-31: pman tree bestätigt am UI-Programm genau zehn direkte Kinder: todo=9, in_progress=1, done=0, cancelled=0. Die Desktop-/390px-/320px-Entwürfe zeigen neun Offen-Karten und eine In-Arbeit-Karte; die sichtbaren Ausschnitte und Hinweise auf weitere Karten gehen in den Summen auf. Die Projektkonfiguration führt todo, in_progress, done, cancelled in dieser Reihenfolge; erledigte und abgebrochene Spalten sind im Beispiel deshalb leer. Das ist ein datierter Datenstand, kein Umordnen der Arbeit oder Statusänderung. Das Board-Ticket bleibt Kind der Ticketnavigation; bestehende Blocks-/relates_to-Beziehungen unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:44:50.693Z"
+}

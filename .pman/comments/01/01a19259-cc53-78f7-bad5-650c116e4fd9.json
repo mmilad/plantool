@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19259-cc53-78f7-bad5-650c116e4fd9",
+  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
+  "body": "Konzeptvorschauen 2026-10-31: pman führt dieses Ticket als todo/high. docs/ui-fp-layout.svg, ui-fp-layout-mobile.svg und die Konzeptkarten im ui-layout-options.svg zeigten noch Normal; sichtbare Priorität auf Hoch aktualisiert. 34 ausgehende blocks-Beziehungen gegengeprüft und die passende Angabe ‚Blockiert 34 Tickets‘ im mobilen Konzeptdetail unverändert gelassen. Parent und sämtliche Blocks-/relates_to-Kanten bleiben unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:25:20.979Z"
+}

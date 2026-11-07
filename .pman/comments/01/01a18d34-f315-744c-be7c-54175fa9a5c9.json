@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d34-f315-744c-be7c-54175fa9a5c9",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review 2026-10-30: Desktop-Projektübersicht zeigte Statusmetadaten bei Zielen, nicht bei Plänen. Kanonische zwei Pläne haben status todo; docs/ui-prototype-overview.svg zeigt jetzt  Plan · Offen auf beiden Karten. Mobiler Überblick bleibt kompakt. Keine neue Aufgabe oder Zuordnung.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:26:59.989Z"
+}

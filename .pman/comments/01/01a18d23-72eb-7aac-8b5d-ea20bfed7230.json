@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d23-72eb-7aac-8b5d-ea20bfed7230",
+  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
+  "body": "UI-ENTWURF 2026-10-30: docs/ui-layout-options.svg vergleicht die bisher empfohlene horizontale Hauptnavigation mit einer permanenten 208px-Jira-inspirierten Bereichsleiste. Bei gleicher Desktopbreite ergeben sich ca. 914px vs. 716px Detailfläche. Beide behalten dieselben pman-Bereiche und vermeiden Projektumschaltung. Die Layoutwahl bleibt vor Umsetzung offen; keine Parent-/Blocks-Kante geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:07:53.067Z"
+}

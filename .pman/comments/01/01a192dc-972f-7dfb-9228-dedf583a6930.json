@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a192dc-972f-7dfb-9228-dedf583a6930",
+  "ticketId": "01a189a9-42a4-7e89-8ab8-2f6a204818ed",
+  "body": "Umsetzung 2026-10-31: zentrale Richtungsentscheidungen wurden an mich delegiert und in docs/ui-wireframe.md festgehalten; die pman-Beschreibung ist auf diese Arbeitsbasis aktualisiert. Konzept bleibt in Arbeit, während der erste unabhängige Implementierungsschritt am festen Serverport läuft. Fach-Parents und Relations unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T16:48:12.591Z"
+}

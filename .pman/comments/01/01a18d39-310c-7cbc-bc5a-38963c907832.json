@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d39-310c-7cbc-bc5a-38963c907832",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "LIVE-APP-RECHECK 2026-10-30: Ein frischer In-App-Browseraufruf von http://127.0.0.1:59456/ endete erneut mit ERR_CONNECTION_TIMED_OUT; der geöffnete Tab enthält damit keine aktuelle Oberfläche zur visuellen Abnahme. docs/ui-review.md hält das als offenen Reviewblocker fest. Entwurfs- und pman-Planarbeit läuft weiter; für die visuelle Live-Abnahme ist ein erreichbarer lokaler Server nötig. Keine neue Ticketanlage oder Beziehungsänderung.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:31:37.996Z"
+}

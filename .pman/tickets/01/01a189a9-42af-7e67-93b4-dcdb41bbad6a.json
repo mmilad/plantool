@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "01a189a9-42af-7e67-93b4-dcdb41bbad6a",
+  "title": "Ticketdetail und Bearbeitungsfluss verbessern",
+  "description": "Ticketdetail und Bearbeitungsfluss iterativ verbessern. Keine weitere Vorabplanung: jeweils nur den nächsten sichtbaren Ausschnitt umsetzen; übrige Untertickets bleiben passive Referenz und sind keine Vorbedingungen. Erster aktiver Ausschnitt: Ticketfelder Titel, Beschreibung, gespeicherter Status und Priorität direkt im Detail bearbeiten. Erwartete Sicherheit: Revision beim Lesen erfassen, beim Speichern mitsenden, Konflikt als 409 verständlich anzeigen und Entwurf bis zur bewussten Aktualisierung erhalten. Danach erst den nächsten kleinen Schritt wählen. Zugehörige bestehende Untertickets und Blocks-Kanten bleiben fachlich unverändert.",
+  "status": "in_progress",
+  "priority": "high",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
+  "createdAt": "2026-10-29T21:55:33.679Z",
+  "updatedAt": "2026-11-07T10:13:33.566Z",
+  "kind": "task"
+}

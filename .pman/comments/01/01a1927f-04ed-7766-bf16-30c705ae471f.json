@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1927f-04ed-7766-bf16-30c705ae471f",
+  "ticketId": "01a189af-d766-703b-a961-52a10b86081f",
+  "body": "UI-Review-Quellabgleich 2026-10-31 bestätigt: Formular editierbar title/status/description; priority nur angezeigt, labels/properties ohne Controls. Bestehende Ticketbeschreibung deckt diese Lücke und begrenzt Properties mangels Schema korrekt. Kein neues Ticket; Priorität/Labels-Vertrag mit Ticketanlage und Projektkonfiguration abstimmen, Parent beibehalten.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:06:00.302Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dc1-949e-74e9-8e20-478d891f2385",
+  "ticketId": "01a189ad-9320-7ba9-a8ad-4656341eb4e5",
+  "body": "Namens-/Konzeptabgleich 2026-10-30: Goal 01a189a9-429a-7005-8722-2847de61b01b und beide UI-Pläne 01a189a9-42b7-7724-92e3-8da8d2a2dcfe / 01a189ac-2905-7324-b64b-59d828960a48 führen noch Jira-inspirierte Titel; Goal/Plantext beschreibt außerdem Tickettyp-Icons, obwohl kein Tickettyp-Feld existiert. Bei der bereits geplanten in-app Revision-Editierung Titel und Text anpassen: fp.dev ist die schlichte visuelle Referenz, Jira nur Arbeitsablauf; generische Ticketicons; Review-Plan-Programmtitel aktualisieren; danach Overview-Vorschau und Goal-Links abgleichen. IDs erhalten, Links nur gezielt und ohne Duplikate ändern. Diese Aufgabe bleibt durch 01a189f8-f7bf-7921-b4cf-b3269ac6239d geblockt; keine kanonische .pman-Datei außerhalb der App geändert, keine Parent-/Blocks-/relates_to-Kante verändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T17:00:36.384Z"
+}

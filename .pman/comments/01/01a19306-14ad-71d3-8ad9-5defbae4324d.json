@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19306-14ad-71d3-8ad9-5defbae4324d",
+  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
+  "body": "Umsetzung begonnen 2026-10-31: neuer schlichter Shell in src/ui.js mit horizontaler Hauptnavigation, kompakter paginierter Ticketliste, Titel-/Status-/Prioritätsfiltern, getrennten gespeicherten/abgeleiteten Werten und Ticketdetail als Lesefläche. Suchnavigation ist typabhängig; Dokumente und Kommentare öffnen ihre zugehörigen Ziele. Desktop-/Mobilwechsel ist enthalten. Runtime-Browserabnahme und verbleibende Detailfunktionen sind offen. Existing Parent/Relations unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T17:33:31.693Z"
+}

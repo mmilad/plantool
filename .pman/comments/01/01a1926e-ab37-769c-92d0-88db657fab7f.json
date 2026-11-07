@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1926e-ab37-769c-92d0-88db657fab7f",
+  "ticketId": "01a189af-d766-703b-a961-52a10b86081f",
+  "body": "STATUS-NULL-UPDATE 2026-10-31: Zusatz zum bestehenden STATUSVALIDIERUNG-FÜR-UPDATES-Vertrag: `validateTicketInput()` lässt auch `status: null` durch, weil die Statusprüfung truthy-gated ist. Beim Create greift danach der Nullish-Default und speichert den ersten konfigurierten Status; beim Update bleibt null im zusammengeführten Datensatz und kann gespeichert werden. Update muss explizites null ebenso wie den leeren String als VALIDATION/HTTP 400 ablehnen und den Datensatz samt Revision unverändert lassen; fehlendes Statusfeld beim Create darf weiter den konfigurierten Default verwenden. Whitespace wird bereits als unbekannter Wert abgelehnt. Core-Korrektur separat nur bei vorhandenem Core-Parent einplanen; dieses Ticket bleibt Kind des Ticketdetails, seine zehn bestehenden Beziehungen bleiben unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:48:08.759Z"
+}

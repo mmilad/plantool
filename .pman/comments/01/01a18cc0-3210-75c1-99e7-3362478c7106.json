@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cc0-3210-75c1-99e7-3362478c7106",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "PROJEKTKONTEXT- UND DOKUMENTREFERENZ-REVIEW 2026-10-30: config.name=planus-manus passt plausibel zur sichtbaren Form Planus Manus; das bestehende Kontextticket 01a189b3-4333-7e1b-b876-5033943bcc37 plant weiterhin dynamische Ausgabe für anders benannte Projekte. Review ist jetzt zusätzlich per relates_to direkt diesem Kontext-Unterticket zugeordnet. Abgleich aller UUIDs in docs/* gegen den aktuellen pman-Bestand: 45 Tickets und 4 Dokumente, keine verwaisten Produktverweise; zwei abweichende UUIDs stehen nur im ausdrücklich illustrativen Beispielticket in architecture-proposal.md. Parent-/Blocks-Kanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:19:28.400Z"
+}

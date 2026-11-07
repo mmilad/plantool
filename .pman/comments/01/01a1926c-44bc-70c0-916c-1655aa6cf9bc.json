@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1926c-44bc-70c0-916c-1655aa6cf9bc",
+  "ticketId": "01a189b2-a6a6-74d9-b7c4-d9e344090079",
+  "body": "QUELLABGLEICH 2026-10-31: `src/server.js` enthält weiterhin einen unbenannten `#tree`-Container mit generischen `.row`-divs und nativen Buttons; `show()` ersetzt `#detail` per `innerHTML`, ohne Fokusziel oder Live-Region. Das bestätigt statisch die bereits geplanten Semantik-/Fokusanforderungen. Die frühere Live-DOM-Zahl 39 von 2026-10-30 bleibt historisch; der pman-Bestand zählt jetzt 46 Tickets, daraus wird keine neue Live-DOM-Messung abgeleitet. Ticket bleibt Kind von Responsive/Barrierefreiheit; alle bestehenden Blocks-/relates_to-Beziehungen unverändert. Keine neue Aufgabe.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:45:31.452Z"
+}

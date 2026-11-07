@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dad-a7ec-7677-8a65-2dc945845ae9",
+  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
+  "body": "Accessibility-Präzisierung zum bestehenden 44×44px-Suchfeld-Löschziel: Das icon-only X benötigt einen zugänglichen Namen, z.B. „Suche leeren“, konsistent mit der sichtbaren Aktion/Semantik. docs/ui-wireframe.md ergänzt; 320px-/390px-Mockups zeigen 44×44px-Zielflächen. Query, Filter und Fokus bleiben nach der Aktion nachvollziehbar. Keine Parent-/Relationänderung.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:38:50.604Z"
+}

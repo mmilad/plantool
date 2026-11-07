@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d88-0a58-7524-947f-136d89ce15ab",
+  "ticketId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
+  "body": "UI-RICHTUNG 2026-10-30: Nutzerreferenz ist der gezeigte fp.dev-Screenshot. Stil als schlichtes, helles Zweispalten-Layout mit kompakter Suche, Ticketliste links und Detail rechts; Jira bleibt Prozessinspiration. User bat zusätzlich um festen Standardport 4000 ohne zufälligen Port/Fallback und ohne stillen Doppelstart; dafür wurde das Kindticket 01a18d87-251e-7ff7-9678-7a437fd0ef76 unter diesem Root angelegt. Root bleibt high priorisiert; keine Produktänderung.",
+  "author": "local",
+  "createdAt": "2026-10-30T15:57:45.432Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d2b-408a-7e86-9be9-7ad34e420f0d",
+  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
+  "body": "Layoutvergleich erweitert (docs/ui-layout-options.svg): Neben horizontaler Navigation A und breiter Sidebar B gibt es nun C als nutzerkontrollierten Iconmodus derselben Sidebar. Standardzustand bleibt mit sichtbaren Textlabels; kompakt 64px mit Screenreader-Namen, Fokus-/Hoverlabels und benanntem Umschalter. Bei 1280px Detailbreite A≈914, B≈716, C≈850. Noch offene Entscheidung, keine Freigabe; keine Zugehörigkeit oder Blocks-Kante geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:16:24.458Z"
+}

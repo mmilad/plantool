@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cf7-c473-7985-807a-ca883a187cfb",
+  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
+  "body": "Review 2026-10-30: Der bestehende Responsive-Prüfpunkt für 320 CSS-Pixel enthält jetzt die statische Ticketdetailvorschau docs/ui-ticket-detail-320.svg. Am realen UI-Programmticket geprüft: sechs direkte Kinder und vier Relationskanten; die Vorschau unterscheidet eingehende/wartende und ausgehende/blockierende Beziehungen von relates_to. Keine Parent-, Blocks- oder Relationskante geändert; kein neues Ticket erstellt. SVG-Zeilen passen bei 320px in die Leinwand, Live-/Screenreaderabnahme bleibt ausstehend, weil Browser-URL nicht sicher zuordenbar war und Loopbackzugriff verweigert wurde.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:20:10.355Z"
+}

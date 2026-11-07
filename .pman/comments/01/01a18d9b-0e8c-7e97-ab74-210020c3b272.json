@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d9b-0e8c-7e97-ab74-210020c3b272",
+  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
+  "body": "Reproduzierbarer API-Recheck 2026-10-30: p.search('Quellrecheck 2026-10-30') liefert Treffer \type=comment mit eigener Kommentar-ID. Ein anschließendes p.tickets.get(hit.id) gibt NOT_FOUND zurück. Das bestätigt den UI-Fehler unabhängig vom Browser: weil src/server.js jeden Treffer als Ticket-ID an show() gibt, kann die Kommentarzeile ihr Ziel nicht erreichen. Bestehender Ticketvertrag (Kommentar-Ticket-ID im Treffer und Fokusnavigation) löst es; kein neues Ticket oder Relation.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:18:31.692Z"
+}

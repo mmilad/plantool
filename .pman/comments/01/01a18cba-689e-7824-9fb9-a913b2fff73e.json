@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cba-689e-7824-9fb9-a913b2fff73e",
+  "ticketId": "01a189bd-b44d-7e95-84fc-66d307543b12",
+  "body": "SUCHVORSCHAU-ABGLEICH 2026-10-30: pman-Suche nach UI liefert Treffer aus Tickets, Kommentaren, Zielen und Plänen; die statische Vorschau enthielt zuvor keine Plankarte. docs/ui-search-preview.svg zeigt jetzt auch den existierenden Plan 01a189ac-2905-7324-b64b-59d828960a48 mit nachvollziehbarem Suchausschnitt und dem Ziel Dokumentleser. Entscheidungen bleiben Filtertyp ohne erfundenen Treffer, weil aktuell kein Entscheidungsdokument existiert. Parent unter Ticketnavigation und relates_to zur visuellen Prüfarbeit sowie vorhandene Blocks-Kanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:13:09.150Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cf2-2a67-7374-b74c-dbeacfbece0c",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "UI-REVIEW 2026-10-30: Beim Quervergleich aller statischen SVGs war die neue Navigations-Icon-Richtung noch nicht konsistent in Übersicht, Suche, Board und Dokumentleser übernommen. Die bestehenden Vorschauen verwenden jetzt dieselben house/ticket/files-Kandidaten plus sichtbare Textlabels; die Dokument-Unterarten behalten ihre eigenen Symbole. Die Ergänzung steht in docs/ui-review.md und bleibt beim bestehenden Icon-Inventar. Keine neue Ticket-/Beziehungskante; Review bleibt dem UI-Programm zugeordnet.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:14:03.239Z"
+}

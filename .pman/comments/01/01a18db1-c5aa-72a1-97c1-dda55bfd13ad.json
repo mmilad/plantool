@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18db1-c5aa-72a1-97c1-dda55bfd13ad",
+  "ticketId": "01a189a9-42b1-7518-a6e0-89b4577b1270",
+  "body": "Abgleich der drei Übersichtsmocks 2026-10-30: Zählungen (10 direkte Pakete, 2 bereit, 1 in Arbeit, 7 blockiert; 2 Ziele, 2 Pläne, 0 Entscheidungen) stimmen aktuell mit Baum, Readiness und Dateien überein. Zwei kanonische Dokumenttitel nennen weiterhin Jira-inspiriert; Mocks zeigen diese Titel datentreu. Nach Freigabe/Verfügbarkeit revision-sicherer Dokumentbearbeitung bitte vorhandenes Ziel und UI-Plan auf die aktualisierte Referenz ausrichten (fp.dev visuell, Jira nur Ablauf), über bestehendes Ticket 01a189f8-f7bf-7921-b4cf-b3269ac6239d. Keine Parent-/Blocks-Änderung. Details: docs/ui-review.md.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:43:20.362Z"
+}

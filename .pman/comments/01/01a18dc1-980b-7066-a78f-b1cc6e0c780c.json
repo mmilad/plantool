@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dc1-980b-7066-a78f-b1cc6e0c780c",
+  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
+  "body": "Querkonsistenz gefunden: Das kanonische UI-Goal und der UI-Plan fordern noch Symbole für Tickettypen, obwohl dieses Inventarticket korrekt keine Epic-/Story-/Bug-Semantik vorsieht. Bei der geplanten app-gestützten Goal-/Planbearbeitung den widersprüchlichen alten Text entfernen; nur generisches Ticketsymbol beibehalten. Befund und Eigentümerschaft zusätzlich in docs/ui-review.md / Konsolidierungsticket festgehalten; dieses Icon-Unterticket bleibt unter Icon-System.",
+  "author": "local",
+  "createdAt": "2026-10-30T17:00:37.259Z"
+}

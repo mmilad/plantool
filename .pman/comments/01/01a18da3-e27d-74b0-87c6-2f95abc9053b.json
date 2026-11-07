@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18da3-e27d-74b0-87c6-2f95abc9053b",
+  "ticketId": "01a189b0-0f28-7715-8ac6-c689065acab1",
+  "body": "Mobile FP-Listenaudit 2026-10-30 gegen kanonischen pman-Baum: Icon-System war in der sichtbaren Listenfolge ausgelassen, obwohl es direkt nach UI-Richtung steht. Eintrag an richtiger Reihenfolge eingefügt und Scrollhinweis auf genau zwei verbleibende direkte UI-Pakete präzisiert. Das Konzept-Unterticket bleibt zusätzlich als eingerücktes Kind der UI-Richtung sichtbar; keine Parent-/Blocks-/relates_to-Änderung.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:28:10.237Z"
+}

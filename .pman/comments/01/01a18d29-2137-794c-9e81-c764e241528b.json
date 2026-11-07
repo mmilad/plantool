@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d29-2137-794c-9e81-c764e241528b",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review 2026-10-30: Historische mobile Seitenflussmessungen basieren auf 39–40 Tickets; validierter aktueller pman-Baum hat 45. Keine Höhe hochgerechnet, weil 59456/59457 derzeit nicht lauschen. Nächste Sichtprüfung bei 390×844 und 320 CSS-Pixel explizit mit 45 Tickets und Liste/Detail/Rückkehr/Search-/Scroll-Erhalt durchführen. Im docs/ui-review.md festgehalten, bestehendes Mobile-Ticket unter Responsive-Zugehörigkeit behalten, keine neue Kante.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:14:05.367Z"
+}

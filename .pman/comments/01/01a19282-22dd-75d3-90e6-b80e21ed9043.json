@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19282-22dd-75d3-90e6-b80e21ed9043",
+  "ticketId": "01a189af-d764-72c3-a674-f5601919f131",
+  "body": "Review 2026-10-31: Mobiler Relationsmock zeigte Parent nur als generisches UI-Programm und Gegen-Tickets nicht eindeutig als Navigationsziele. Beispiel 01a189a9-42b1-7518-a6e0-89b4577b1270 hat tatsächlich Parent  Schlichte Planungsoberfläche für Planus Manus gestalten und umsetzen; Vollname jetzt in SVG-Bildbeschreibung, sichtbarer Titel gekürzt. Gegen-Ticketnamen in Relationskarten als Linkziele markiert; Typ/Richtung bleiben Text. Keine Kantenänderung.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:09:24.573Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d88-0f8a-70e4-8a5d-716f379f4f8d",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Planreview 2026-10-30: Nutzer hat fp.dev-Screenshot als schlichte, änderbare Stilreferenz gewählt. Wireframe empfiehlt Variante A mit kompaktem Kopf, Suche, Ticketliste links und Detail rechts; kein Assignee-Feld. Kernaufgaben UI-Richtung, Navigation/Liste, Detail, Unterticketanlage und fester Serverport 4000 sind high priorisiert. Portticket hängt unter UI-Programm, blocks Visual-QA, relates_to dieses Review. Kein Produktcode geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T15:57:46.762Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19348-0037-70ec-9f62-e546ea549e0a",
+  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
+  "body": "Umgesetzt im UI-Quellstand: kontextbezogene Aktion  + Unterticket, sichtbarer Elternbezug im Dialog, parentId aus dem geöffneten Elternticket und Öffnen des neu angelegten Tickets nach Aktualisierung. Syntax und git diff geprüft; Browserabnahme nach Serverneustart offen.",
+  "author": "local",
+  "createdAt": "2026-10-31T18:45:31.831Z"
+}

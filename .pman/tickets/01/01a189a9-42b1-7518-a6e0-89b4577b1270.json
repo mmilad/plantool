@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "01a189a9-42b1-7518-a6e0-89b4577b1270",
+  "title": "Planungsdokumente und Projektübersicht gestalten",
+  "description": "Projektübersicht und Planungsdokumente als getrennte, erreichbare Arbeitsbereiche gestalten. Browserbefund 1280×720: alle Dokumente erscheinen als lange, nicht auswählbare Textblöcke in der Ticket-Seitenleiste; Markdown-Marker wie ## werden roh angezeigt und konkurrieren mit dem Ticketbaum um dieselbe Scrollfläche. Plan: Dokumentliste als Navigation, ausgewähltes Dokument mit lesbar gerenderter Vorschau/Detail im Arbeitsbereich, Beziehungen zu Tickets erkennbar machen. Übersicht soll aus vorhandenen pman-Daten offene Arbeit/Fortschritt zeigen. Bearbeitungsaktionen nur vorsehen, wenn API sie unterstützt; heute existiert für Dokumente nur create/list/get.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
+  "createdAt": "2026-10-29T21:55:33.681Z",
+  "updatedAt": "2026-11-07T10:13:33.692Z",
+  "kind": "task"
+}

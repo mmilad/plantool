@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cd1-cc4b-706c-b732-7c6bb47e687f",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "REVIEW-RECHECK 2026-10-30: Neuer Versuch, die gemeldete App unter 127.0.0.1:59456 zu öffnen, endet erneut mit net::ERR_CONNECTION_TIMED_OUT. Daher keine Live-/Screenshot-Abnahme. Im Quellabgleich src/server.js bleiben English UI-Chrome und fehlendes html[lang] als konkrete offene Punkte; sie sind im bestehenden deutschen UI-Ticket 01a189de-0250-7a08-91c5-9cab74a14d8f geplant und nun direkt per relates_to verknüpft. Kein neues Ticket, keine Parent-/Blocks-Änderung.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:38:41.995Z"
+}

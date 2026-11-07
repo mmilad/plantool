@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d20-6795-7f25-a6e9-db9813c7645a",
+  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
+  "body": "UI-Review 2026-10-30: Hauptnavigationsicons in allen UI-Vorschauen auf das bestehende Inventar-Raster 20×20px/1,8px gebracht. 320px bleibt innerhalb der Leinwand: Dokumenticon x=172, Label x=198, Labelende nach vorhandener Segoe-UI-Messung ca. x=314. Mindestabstand zu Ticketlabel ca. 9,8px, zum eigenen Label 6px. Zusätzliche relates_to-Kante vom Icon-Inventar stimmt Größen mit dem Responsive-Check ab; Parent-/Blocks unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:04:33.557Z"
+}

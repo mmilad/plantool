@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19262-3dcc-7b73-a25c-1a1e2e97abc2",
+  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
+  "body": "Desktoplisten-Abgleich 2026-10-31: In ui-fp-layout.svg war das ausgewählte Konzept-Unterticket sichtbar, sein Parent „UI-Richtung und Informationsarchitektur festlegen“ fehlte; dadurch wirkten zehn Zeilen fälschlich wie zehn direkte Programmpakete. Mock korrigiert: Parent ergänzt, Konzept eingerückt, direkte Arbeitspakete auf Geschwisterebene. Keine pman-Parent-/Relationänderung.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:34:34.316Z"
+}

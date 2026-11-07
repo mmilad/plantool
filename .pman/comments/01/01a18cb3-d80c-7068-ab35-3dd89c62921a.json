@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cb3-d80c-7068-ab35-3dd89c62921a",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Messkorrektur 2026-10-30: Die frühere SVG-Textbreitenprüfung verglich System.Drawing-Punktgrößen mit CSS-Pixeln und überschätzte Werte um 4/3. Icon-Kartenfußnoten sind wieder auf ihre ursprünglichen, aussagekräftigen Texte zurückgesetzt; korrekte CSS-Pixelmessung bestätigt deren Passform. 390×844-Mobilvorschau zeigt ebenfalls keinen Textüberlauf, daher kein zusätzlicher Mobile-Defekt. Korrektur in docs/ui-review.md dokumentiert; bestehende Fachticket-Eltern bleiben erhalten.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:05:58.924Z"
+}

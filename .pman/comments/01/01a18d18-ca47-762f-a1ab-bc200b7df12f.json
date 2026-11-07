@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d18-ca47-762f-a1ab-bc200b7df12f",
+  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
+  "body": "UI-ENTWURF 2026-10-30: Statischer Farbtoken-Abgleich in docs/*: schwache Kontrollkontur #AEBBD0 (1,94:1 auf Weiß) in UI-SVGs durch vorläufig #768294 ersetzt (mindestens 3,50:1 auf vorgesehenen Flächen); Trennlinien bleiben separat. Browser-/Fokusabnahme weiterhin erst an erreichbarer Live-UI. Die geplante lokale optionale Semantik bleibt nach bestehender ONNX-/all-MiniLM-L6-v2-/SQLite-Aufgabenfolge, Keyword-Fallback bleibt Muss.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:56:14.535Z"
+}

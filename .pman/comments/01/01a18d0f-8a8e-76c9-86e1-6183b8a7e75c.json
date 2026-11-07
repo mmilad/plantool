@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d0f-8a8e-76c9-86e1-6183b8a7e75c",
+  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
+  "body": "UI-Review 2026-10-30: docs/ui-ticket-create-feedback.svg ergänzt die gemeinsamen Zustände für Unterticketanlage: Eingaben/Parent bei Fehler bewahren, bestätigte Validierungsablehnung von unklarem POST-Ausgang trennen und bei erfolgreicher Anlage plus fehlgeschlagenem Refresh nur GET wiederholen. Die aktuelle API hat serverseitige ID-Erzeugung ohne Idempotenzschlüssel; daher keine zweite Unterticketanlage nach möglichem Verbindungsabbruch anbieten, bis ein idempotenter Korrelationsvertrag geplant ist. Bestehende relates_to-Abstimmung mit Rückmeldungen, Responsive, Accessibility und Ticketfeldern bleibt; Parent/Blocks unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:46:08.398Z"
+}

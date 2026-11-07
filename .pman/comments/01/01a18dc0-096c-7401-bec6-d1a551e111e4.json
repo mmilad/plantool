@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dc0-096c-7401-bec6-d1a551e111e4",
+  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
+  "body": "Datenabgleich Board-Karten 2026-10-30: pman führt UI-Richtung/Informationsarchitektur, Ticketnavigation und Ticketdetail mit Priorität high. Die Desktop-, Mobil- und 320px-Board-Vorschauen zeigten dafür noch Normal; sichtbare Werte auf Hoch aktualisiert. Icon-System und Dokumente bleiben Normal; Status und Readiness nicht verändert. Parent und Beziehungen unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:58:55.212Z"
+}

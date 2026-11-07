@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d2b-4273-739d-ad9f-a1f91af9bb8d",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Layoutreview 2026-10-30: docs/ui-layout-options.svg erweitert A/B um C (208px-Bereichsleiste, bei Bedarf 64px-Iconmodus). Trade-off bei 1280px: Detail A≈914, B≈716, C≈850; C bleibt nutzerkontrolliert, Textlabels Standard. Wireframe, Review und bestehende Navigations-/Visual-QA-Tickets sind ergänzt; keine neue Aufgabe/Relation. Entscheidung bleibt offen.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:16:24.947Z"
+}

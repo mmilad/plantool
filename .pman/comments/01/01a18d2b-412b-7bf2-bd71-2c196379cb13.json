@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d2b-412b-7bf2-bd71-2c196379cb13",
+  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
+  "body": "Navigationsvergleich docs/ui-layout-options.svg jetzt mit C: dieselbe 208px-Jira-inspirierte Bereichsleiste kann auf Nutzerwunsch zu 64px Iconbreite einklappen. Sichtbare Labels bleiben Standard; kompakt braucht zugängliche Bereichsnamen, Fokus-/Hoverlabel und benannten Tastatur-Umschalter. Detailfläche bei 1280px: B≈716px erweitert, C≈850px kompakt; horizontales A≈914px. Desktopentscheidung bleibt offen. Vorhandener Parent und Blocks-Vertrag unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:16:24.620Z"
+}

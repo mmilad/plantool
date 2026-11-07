@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18c9b-19d1-7b6c-abc3-653d333d5eba",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Suchvorschau-Nachschärfung 2026-10-30: Quellprüfung von src/server.js bestätigt, dass die aktuelle Keyword-Ausgabe nur Titel und Trefferart enthält. docs/ui-search-preview.svg kennzeichnet deshalb die reichere Ergebnisliste ausdrücklich als geplantes Zielbild; das bestehende Such-Ticket hält denselben Ist-/Soll-Vertrag fest. Keine Parent- oder Blocks-Kante geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T11:38:57.361Z"
+}

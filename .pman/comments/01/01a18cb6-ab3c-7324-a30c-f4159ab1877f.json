@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cb6-ab3c-7324-a30c-f4159ab1877f",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "UI-Review 2026-10-30 fortgesetzt: In-App-Aufruf 59456 und bestehender Tab 59457 enden mit ERR_CONNECTION_TIMED_OUT. Portstatus ließ sich wegen Socket-Zugriffsverweigerung nicht zuverlässig feststellen; Prozess/Produktfehler daraus nicht ableiten. Schreibgeschützter Quell-/Baumabgleich bestätigt: fehlende Rückmeldungen gehören zum bestehenden Ticket 01a189b2-43b1-775a-89f1-388cdd0af53c, Navigation zu 01a189a9-42ad-7d98-bb63-7d9d4d25351d und Accessibility zu 01a189b2-a6a6-74d9-b7c4-d9e344090079. Kein neuer Befund außerhalb der vorhandenen Aufgaben, keine Dublette; Eltern-/Blocks-Zuordnungen unverändert. Live-Screenshotprüfung nach wiederhergestelltem Browserzugriff fortsetzen.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:09:04.060Z"
+}

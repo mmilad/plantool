@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19278-3db2-7d81-b565-21ad696d2beb",
+  "ticketId": "01a189a9-42b1-7518-a6e0-89b4577b1270",
+  "body": "Projektübersicht-Planungsabgleich 2026-10-31: pman zeigt zwei bereite todo-Arbeitspakete (UI-Richtung und fester Serverstart, beide high), das Review in_progress sowie sieben blockierte direkte Kinder. Die bisherigen Desktop-/Mobil-Entwürfe zählten beide bereiten Aufgaben, boten aber nur die UI-Richtung als sichtbaren Einstieg an; das priorisierte Port-4000-Ticket fehlte. docs/ui-prototype-overview.svg, beide mobilen Übersichten und docs/ui-wireframe.md zeigen jetzt auch den Serverstart als zweiten Einstieg. Keine Parent-/Relations-Änderung.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:58:36.082Z"
+}

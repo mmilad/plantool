@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19280-1beb-741d-90ca-bfe1bffe7b2e",
+  "ticketId": "01a189bd-b44d-7e95-84fc-66d307543b12",
+  "body": "Abhängigkeitsreview 2026-10-31: geprüft, Konzept/stabile Ziele/Typrouting/Accessibility/Paging blockieren diesen optionalen Roadmap-Einstieg; ONNX-Embedding und SQLite-Index blockieren jeweils die Hybridintegration. relates_to zur visuellen Prüfung/Responsive-Arbeit, daher blockiert semantische Suche nicht Keyword-MVP/Browserabnahme. Beschreibung deckt Node.js, lokalen Betrieb, mehrsprachiges Qualitätsgate, rebuildbaren SQLite-Index, Fallback und Datenschutz. Keine neue Aufgabe oder Relation nötig; Parent/Kanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:07:11.723Z"
+}

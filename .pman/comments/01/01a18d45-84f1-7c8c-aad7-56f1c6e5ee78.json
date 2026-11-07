@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d45-84f1-7c8c-aad7-56f1c6e5ee78",
+  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
+  "body": "UI-Review 2026-10-30: Transform-bewusster Textzeilenabgleich fand im Desktop-Unterticketdialog einen sichtbaren Hintergrundrest links neben dem weißen Panel (Überschrift Ticketdetail). docs/ui-ticket-create-desktop.svg verbreitert das Panel zentriert auf 552px; die Root-Dialogfläche ist bereits ebenso breit. Keine neue Anforderung oder Beziehung; Parent und bestehende Verknüpfungen bleiben erhalten. Live-Abnahme ausstehend, da die App auf 59456 aktuell nicht erreichbar ist.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:45:05.905Z"
+}

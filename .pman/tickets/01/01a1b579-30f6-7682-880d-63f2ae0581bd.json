@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b579-30f6-7682-880d-63f2ae0581bd",
+  "title": "Add ticket kind task/feature/bug and expose kind, priority and labels in the CLI",
+  "description": "Field kind (task, feature, bug; default task). CLI: --kind, --priority, --labels on ticket create/update. Migrate existing properties.kind values on write.",
+  "status": "done",
+  "priority": "high",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1b579-30e5-7eae-8f69-696da06abfea",
+  "createdAt": "2026-11-07T10:06:20.918Z",
+  "updatedAt": "2026-11-07T10:14:44.535Z",
+  "kind": "task",
+  "assignee": null
+}

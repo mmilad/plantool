@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d9e-a9e5-7e91-bd69-f22af8c00ac7",
+  "ticketId": "01a189d4-0a9c-718d-9aed-be4cb53e46d4",
+  "body": "Quellrecheck 2026-10-30: src/server.js startet in #q.oninput für jeden Eingabeschritt sofort \u0007pi('/api/search?...'); weder Debounce noch AbortController/Sequenzschutz sind vorhanden. Damit können langsame Antworten älterer Queries nach neueren eintreffen und den Ergebnisbereich überschreiben; das gilt auch, wenn eine noch offene Suche nach dem Leeren des Felds load()-Baumzustand ersetzt. Plan-Abnahme ergänzen: jede Queryänderung inklusive Leerung invalidiert vorherige Requests; nur Antwort des aktuellsten Queries darf Ergebnisse/Fehlerzustand aktualisieren. Reverse-order-Antworten in clientseitiger Abnahme prüfen. Die zuvor behauptete bestehende Entprellung im Tickettext ist korrigiert. Parent und vorhandene Suchrouting-/Review-Beziehungen bleiben unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:22:28.069Z"
+}

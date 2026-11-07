@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d23-74c4-7844-b009-dd41150800da",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "FORTGESETZTER UI-REVIEW 2026-10-30: Die bisherige Wireframe-Empfehlung für horizontale Navigation war nicht gegen eine Jira-inspirierte permanente Seitenleiste dargestellt. docs/ui-layout-options.svg ergänzt den konkreten Vergleich: bei 1280px ca. 914px vs. 716px Detailbreite, gleiche pman-Funktionen, keine Projektumschaltung. Konzept, Navigation und Visual-QA über vorhandene Parents/Blocks/Relations zuständig; keine neue Aufgabe und keine Kantenverschiebung.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:07:53.541Z"
+}

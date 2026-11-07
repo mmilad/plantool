@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d96-9778-7539-83df-f3a9b33c4108",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Planreview 2026-10-30: docs/ui-fp-layout-mobile.svg ergänzt den FP-inspirierten Desktopentwurf um Liste/Detail bei 390×844. Der mobile Listen-/Detailwechsel bleibt im bestehenden Responsive-Unterticket 01a189b0-0f28-7715-8ac6-c689065acab1 unter Responsive/Accessibility; keine neue Aufgabe oder Relationskante. Suchkontext und Listenposition sind im Rückweg festgehalten. Browserabnahme bleibt wegen nicht erreichbarer Live-App offen.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:13:39.064Z"
+}

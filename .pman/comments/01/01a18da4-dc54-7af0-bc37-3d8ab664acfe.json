@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18da4-dc54-7af0-bc37-3d8ab664acfe",
+  "ticketId": "01a18d87-251e-7ff7-9678-7a437fd0ef76",
+  "body": "Recheck 2026-10-30: HTTP auf 127.0.0.1:4000, :59456 und :59457 ist aktuell nicht erreichbar; deshalb kann Visual-QA nicht live abgenommen werden. Port 4000 bleibt ein eigenständiges hoch priorisiertes Paket und blockiert bereits Visual-QA. Reihenfolge im Gesamtplan: Konzept abstimmen; Port-/Doppelstartpaket bei Bedarf vor Live-UI-Abnahmen; bestehende Parents und Blocks-Kanten unverändert lassen.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:29:14.196Z"
+}

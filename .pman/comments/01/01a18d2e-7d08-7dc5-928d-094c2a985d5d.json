@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d2e-7d08-7dc5-928d-094c2a985d5d",
+  "ticketId": "01a189a9-42a6-7a27-adb9-e30a8df78d54",
+  "body": "Layoutvergleich 2026-10-30 abgeglichen: Icon-System-Ticket ist status todo/Offen, priority normal, rollup blocked und wird durch das bestehende UI-Konzept blockiert. SVG trennt jetzt Status/Priorität von Readiness und benennt das UI-Konzept als Voraussetzung. Kanonische Parent-/Blocks-Kanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:19:56.552Z"
+}

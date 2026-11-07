@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18ced-cca0-7917-8b33-652cdb4f2205",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "LIVE-RECHECK 2026-10-30: Frischer direkter HTTP-Abruf von http://127.0.0.1:59456/ wurde diesmal bereits auf Socket-Ebene durch die Zugriffsrechte der Umgebung abgewiesen. Frühere Browseraufrufe auf 59456 sowie einen temporären pman-Prüfserver auf Port 57544 endeten mit Timeout; den temporären Server habe ich gestoppt. Es gibt keinen neuen Screenshot-/DOM-Befund. docs/ui-review.md ergänzt den aktuellen Versuch; Review-Ticket bleibt in_progress als Kind des UI-Programms, keine Produktänderung und keine Parent-/Blocks-Verschiebung.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:09:17.088Z"
+}

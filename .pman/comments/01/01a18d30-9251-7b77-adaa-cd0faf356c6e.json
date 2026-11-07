@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d30-9251-7b77-adaa-cd0faf356c6e",
+  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
+  "body": "Beziehungsdarstellung in docs/ui-layout-options.svg korrigiert: pman tree zeigt genau ein direktes Kind (Ticket 01a189b2-43b1-775a-89f1-388cdd0af53c, Rückmeldungszustände); relation list zeigt acht eingehende blocks-Kanten. Bisherige SVG-Unteraufgabenliste vermischte drei dieser Blocker mit Kindern. Jetzt Richtung/Typ getrennt, drei Blocker plus  5 weitere und das echte Unterticket separat. Keine Kante verändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:22:13.074Z"
+}

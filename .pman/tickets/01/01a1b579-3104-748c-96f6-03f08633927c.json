@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b579-3104-748c-96f6-03f08633927c",
+  "title": "Only allow done on a parent after all children and blockers are finished",
+  "description": "ticket update --status done is rejected while children or blockers are open (unless --force). Status still never cascades.",
+  "status": "done",
+  "priority": "high",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1b579-30e5-7eae-8f69-696da06abfea",
+  "createdAt": "2026-11-07T10:06:20.932Z",
+  "updatedAt": "2026-11-07T10:14:46.025Z",
+  "kind": "task",
+  "assignee": null
+}

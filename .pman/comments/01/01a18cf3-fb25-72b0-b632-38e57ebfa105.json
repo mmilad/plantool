@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cf3-fb25-72b0-b632-38e57ebfa105",
+  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
+  "body": "320PX-NAVIGATION 2026-10-30: Textmaß-Prüfung des Icon-Updates zeigte im Entwurf eine rechnerische Überlappung: Tickets (Segoe UI 12px, 41,2px) ab x=118 endete bei 159,2; das Dokumenticon begann bei x=158. docs/ui-prototype-overview-320.svg verteilt die Gruppen neu: Ticketslabel endet x=157,2, Dokumenticon startet x=169 (11,8px Abstand); Planungsdokumente endet nach 116,1px ab x=189 bei x=305,1. Im später erreichbaren Live-Browser Abstand, Schriftmetrik und Überlauf erneut messen. Dieses Ticket bleibt unter dem UI-Programm; keine Parent-/Blocks-Kante geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:16:02.213Z"
+}

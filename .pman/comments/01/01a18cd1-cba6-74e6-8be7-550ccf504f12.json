@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cd1-cba6-74e6-8be7-550ccf504f12",
+  "ticketId": "01a189de-0250-7a08-91c5-9cab74a14d8f",
+  "body": "QUELLRECHECK 2026-10-30: Der aktuelle src/server.js rendert weiterhin feste englische UI-Texte: Search / Search this project, Planning documents, New ticket / Create root ticket, Load more tickets, Title, Description, Status, Priority, Save ticket, Show context packet, Comments / Add comment, No comments yet und No planning documents yet. Das HTML-Wurzelelement ist weiterhin <html> ohne lang-Attribut. Die bestehende deutsche Textliste deckt diese Bereiche ab; Browser-DOM und tatsächliches Nutzerverhalten konnten wegen ERR_CONNECTION_TIMED_OUT an 127.0.0.1:59456 heute nicht geprüft werden. Bestehende Parent-/Blocks-Zuordnungen unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:38:41.831Z"
+}

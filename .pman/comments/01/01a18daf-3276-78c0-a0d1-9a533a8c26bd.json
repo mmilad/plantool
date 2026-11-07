@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18daf-3276-78c0-a0d1-9a533a8c26bd",
+  "ticketId": "01a189a9-42a4-7e89-8ab8-2f6a204818ed",
+  "body": "Planungsvorschlag 2026-10-30: Das bestehende UI-Ziel fortführen, kein neues Ziel eröffnen. Reihenfolge zur Abstimmung: (1) Konzept-Unterticket 01a189ad-5c7c-7e68-b165-79fb9f674539: fp.dev-inspirierte Schlichtheit, Startfläche, Navigation und Kernabläufe entscheiden; (2) festes Port-4000-Ticket 01a18d87-251e-7ff7-9678-7a437fd0ef76 als Voraussetzung für Live-QA in seiner direkten Zugehörigkeit belassen; (3) Navigation und Ticketdetail gemeinsam verfeinern, Untertickets bei ihren Fach-Parents lassen; (4) Dokumente/Übersicht; (5) deutsche UI-Texte, Icons, Responsive und Zustände; (6) visuelle QA danach. ONNX/all-MiniLM-L6-v2/SQLite bleibt optionale spätere Stufe unter der vorhandenen Suchroadmap, Keyword-Suche bleibt MVP. Reihenfolge ist Vorschlag, keine Statusänderung oder Umsetzungsfreigabe; Eltern-/Blockerbeziehungen nicht ändern. Details in docs/ui-review.md.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:40:31.608Z"
+}

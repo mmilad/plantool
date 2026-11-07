@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cdc-10ad-7e79-8a32-5a8420f4b9b8",
+  "ticketId": "01a189af-50ab-71b9-9f11-92e13989409f",
+  "body": "UI-Review 2026-10-30: Mobile Dokumentvorschau nutzt für Ziele/Pläne dieselben lokalen target-/clipboard-Kandidaten wie das Icon-Inventar 01a189b0-9e75-77bd-ab31-a73a0dd328b5; sichtbare Textart bleibt zur eindeutigen Erkennung erhalten. Die beiden Fachtickets sind per relates_to verknüpft. ONNX/Node.js/SQLite gehört weiterhin zum bestehenden Suchplan und wird nicht als Dokumentnavigation dupliziert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:49:54.862Z"
+}

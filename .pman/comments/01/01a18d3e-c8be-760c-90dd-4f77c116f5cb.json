@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d3e-c8be-760c-90dd-4f77c116f5cb",
+  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
+  "body": "MOBILE-BOARD-320-VIEWPORT-CORRECTION 2026-10-30: Die erste 320px-Boardvorschau platzierte den Scrollhinweis bei y=914 und zeigte bei 844px eine angeschnittene vierte Karte. Korrigiert auf drei vollständige Karten plus sichtbaren Scrollhinweis ab y=798. Damit ist die 320×844 Erstsichtfläche als Planungsbild nachvollziehbar; tatsächlicher Browser-/Touchcheck bleibt offene Abnahme. Vorhandene relates_to zum Board unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:37:44.510Z"
+}

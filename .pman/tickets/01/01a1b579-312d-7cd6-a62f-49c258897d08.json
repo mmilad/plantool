@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b579-312d-7cd6-a62f-49c258897d08",
+  "title": "pman done with a completion note and the list of newly unblocked tickets",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1b579-30e5-7eae-8f69-696da06abfea",
+  "createdAt": "2026-11-07T10:06:20.973Z",
+  "updatedAt": "2026-11-07T10:14:50.810Z",
+  "kind": "task",
+  "assignee": null
+}

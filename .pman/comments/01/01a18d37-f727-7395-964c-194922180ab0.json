@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d37-f727-7395-964c-194922180ab0",
+  "ticketId": "01a189b0-0f28-7715-8ac6-c689065acab1",
+  "body": "MOBIL-PRIORITÄT-RECHECK 2026-10-30: Die 390px- und 320px-SVGs zeigten gespeicherten Status und Bereitschaft, ließen gespeicherte Priorität aber aus, obwohl der Desktopvertrag sie enthält. Beide Entwürfe und docs/ui-wireframe.md aktualisiert: Status + Priorität als beschriftete Metadatenzeile, Bereitschaft separat darunter, mit angepasster Kartenhöhe und ohne horizontales Abschneiden. Aktuelle sieben Beispiele haben priority=normal. Zugehörigkeit unter Responsive/Barrierefreiheit und vorhandene relates_to-/blocks-Kanten bleiben unverändert; kein neues Ticket.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:30:17.639Z"
+}

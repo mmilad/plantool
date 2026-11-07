@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d34-f279-7774-9cb5-6553b96a5652",
+  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
+  "body": "Desktop-Projektübersicht 2026-10-30: Kanonische Dokumente sind zwei goals und zwei plans, alle status todo/Offen, plus null decisions. SVG zeigte Planstatus nicht, während Ziele  Ziel · Offen trugen. docs/ui-prototype-overview.svg ergänzt jetzt Plan · Offen auf beiden Plan-Karten. Mobile Übersicht bleibt bei Zählern und Einstieg; keine Dokument- oder Ticketkanten geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:26:59.833Z"
+}

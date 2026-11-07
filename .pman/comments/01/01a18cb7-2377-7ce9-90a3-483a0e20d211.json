@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cb7-2377-7ce9-90a3-483a0e20d211",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Zugehörigkeitspräzisierung im Review 2026-10-30: Die bestehende Review-Aufgabe ist jetzt zusätzlich per relates_to direkt mit dem zuständigen Accessibility-Unterticket 01a189b2-a6a6-74d9-b7c4-d9e344090079 verbunden. Parent-Zuordnung unter dem UI-Programm und alle Blocks-Kanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:09:34.839Z"
+}

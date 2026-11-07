@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "01a189af-d766-703b-a961-52a10b86081f",
+  "title": "Ticketfelder und Projektstatus in der Bearbeitung berücksichtigen",
+  "description": "Aktiver erster Ausschnitt des Ticketdetails: Titel, Beschreibung, gespeicherten Status und Priorität im bestehenden Detail lesen und bearbeiten. Bearbeitungsformular startet erst nach explizitem Klick; Speichern aktualisiert die kanonische Ticketdatei über pman. Beim Lesen wird die Revision geladen und beim Update geprüft. Bei Konflikt bleiben die Eingaben erhalten; Neuladen der inzwischen aktuellen Version ist eine bewusste Aktion. Abgeleiteter Arbeitsstand bleibt separat und wird nicht editierbar gemacht. Weitere Felder oder Folgeaktionen erst in einem späteren kleinen Schritt.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a189a9-42af-7e67-93b4-dcdb41bbad6a",
+  "createdAt": "2026-10-29T22:02:44.966Z",
+  "updatedAt": "2026-11-07T10:13:34.821Z",
+  "kind": "task"
+}

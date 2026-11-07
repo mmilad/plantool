@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1925f-63b7-7c72-a760-4ccd02e7f44b",
+  "ticketId": "01a189ad-9320-7ba9-a8ad-4656341eb4e5",
+  "body": "Mockupabgleich 2026-10-31: Der sichtbare Zähler in docs/ui-documents-links-mobile.svg stimmte mit dem aktuellen Review-Plan-Audit (11 Einträge/10 eindeutige Ziele) überein, die SVG-desc für Screenreader war noch 10/9. Desc auf zehn Ticketlinks zu neun Tickets (Review-Ticket doppelt) plus ein UI-Zieldokument aktualisiert. Dieses bestehende Konsolidierungsticket bleibt beim UI-Review; Parent/Relations und kanonische Links unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:31:27.415Z"
+}

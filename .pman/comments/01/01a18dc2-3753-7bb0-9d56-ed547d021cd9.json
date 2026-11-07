@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dc2-3753-7bb0-9d56-ed547d021cd9",
+  "ticketId": "01a189ad-9320-7ba9-a8ad-4656341eb4e5",
+  "body": "Linkabgleich UI-Plan 2026-10-30: Die aktuelle links-Liste hat 8 IDs (Programm plus Architektur, Icons, Navigation, Detail, Dokumente, Responsive, Visual QA). Zwei inzwischen vorhandene, direkt zugehörige Arbeitspakete fehlen als Linkziele: 01a18d87-251e-7ff7-9678-7a437fd0ef76 (fester Port; high; blocks Visual QA) und 01a189de-0250-7a08-91c5-9cab74a14d8f (deutsche Beschriftungen; blocks Visual QA und ist selbst vom Konzept geblockt). Bei der späteren app-gestützten Linkkonsolidierung beide gezielt genau einmal aufnehmen. Keine Parent-/Relationsänderung jetzt; Planbearbeitung bleibt durch Revision-Edit-Ticket geblockt.",
+  "author": "local",
+  "createdAt": "2026-10-30T17:01:18.035Z"
+}

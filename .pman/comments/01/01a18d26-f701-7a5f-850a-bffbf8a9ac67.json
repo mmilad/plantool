@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d26-f701-7a5f-850a-bffbf8a9ac67",
+  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
+  "body": "Quellstandabgleich 2026-10-30: Nach einem erfolgreichen PATCH ruft die Ticketdetail-UI load() auf, das Suchergebnisse durch den unfiltrierten Baum ersetzt, während das Suchfeld seinen Querytext behält. Den vorhandenen Suchvertrag daher auch auf lokale Ticketänderungen anwenden: Query/Modus/Typfilter und Auswahlzustand erhalten und Treffer gegen den bestätigten Stand neu laden; Ergebnis-/Detailzuordnung bei geändertem Treffer mit dem bestehenden Stale-Vertrag behandeln. Keine Implementierung in dieser Runde; docs/ui-review.md hält den Befund fest.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:11:43.489Z"
+}

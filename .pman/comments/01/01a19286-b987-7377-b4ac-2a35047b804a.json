@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19286-b987-7377-b4ac-2a35047b804a",
+  "ticketId": "01a18d87-251e-7ff7-9678-7a437fd0ef76",
+  "body": "Quellabgleich 2026-10-31: bin/pman.js setzt ohne --port weiterhin 0; src/server.js hat ebenfalls port = 0 als Standard. Ein expliziter Start mit --port 4000 meldete die feste URL, aber das erfüllt noch nicht den geforderten Standardstart. Das Ticket bleibt der vorhandene Owner und blockiert bereits die visuelle Abnahme; keine neue Aufgabe oder Relationsänderung. Browserdarstellung auf 4000 war in dieser Umgebung wegen In-App-Browser-Timeout und Socketzugriffsverweigerung nicht verifizierbar; der Testprozess wurde beendet.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:14:25.287Z"
+}

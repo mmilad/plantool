@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18db4-c407-7cad-ad3c-6c08e884b42d",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review-Konsistenzpflege 2026-10-30: Der Kopfabschnitt in docs/ui-review.md behauptete noch, das Konsolidierungsticket zähle 45 Tickets, obwohl dessen Momentaufnahme bereits per pman auf 46 und aktualisierte Nichtverknüpfungszahlen gebracht wurde. Aktueller Vermerk korrigiert; datierte ältere 45-Ticket-Messpunkte bleiben als historische Stände erkennbar. Keine Ticketlinks oder Zugehörigkeiten geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:46:36.552Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cdc-0fe9-7d53-9c66-248420fb2309",
+  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
+  "body": "UI-Review 2026-10-30: Die mobilen Dokumentkarten und der Leser verwenden jetzt die vorhandenen Kandidaten target (Ziel) und clipboard (Plan) aus docs/ui-icon-preview.svg; gleiche 1.8px-Strichstärke, Textlabels bleiben sichtbar. Nur Konzept, nicht als finales Icon freigegeben. Mit Dokumentnavigation 01a189af-50ab-71b9-9f11-92e13989409f per relates_to verknüpft; Parent und bestehende Beziehungen unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:49:54.665Z"
+}

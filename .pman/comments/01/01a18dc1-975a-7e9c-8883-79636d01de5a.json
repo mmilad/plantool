@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dc1-975a-7e9c-8883-79636d01de5a",
+  "ticketId": "01a189f8-f7bf-7921-b4cf-b3269ac6239d",
+  "body": "Zusätzlicher Abgleich für den bestehenden Goal-/Plan-Editierumfang: Nach app-gestützter revision-sicherer Bearbeitung sollen Goal 01a189a9-429a-7005-8722-2847de61b01b und UI-Plan 01a189a9-42b7-7724-92e3-8da8d2a2dcfe ihre Titel/Texte an die bestätigte fp.dev-Stilrichtung anpassen; Jira bleibt nur Workflow-Referenz. Tickettypen-Icons aus Goal/Plan entfernen, da das Modell kein Typfeld hat. Review-Plan 01a189ac-2905-7324-b64b-59d828960a48 und seine veraltete Programmnennung ebenfalls aktualisieren. IDs/Links erhalten; Ziel-Linkzuordnung erst mit der nachfolgenden Konsolidierungsaufgabe bereinigen. Bestehende Parent- und Blocks-Kette unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T17:00:37.082Z"
+}

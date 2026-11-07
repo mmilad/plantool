@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19306-1438-780e-9297-88e9b8ed23c5",
+  "ticketId": "01a18d87-251e-7ff7-9678-7a437fd0ef76",
+  "body": "Abnahme 2026-10-31: Standardstart meldet http://127.0.0.1:4000. Ein zweiter Standardstart endet reproduzierbar mit PORT_IN_USE und verständlichem Hinweis; er bindet keinen Ersatzport und öffnet keinen Browser. Die laufende Instanz ist die einzige gestartete Instanz. Shell-HTTP-Aufruf wurde von der Umgebung mit EACCES blockiert; Live-Browserzugriff bleibt beim Visual-QA-Ticket zu prüfen.",
+  "author": "local",
+  "createdAt": "2026-10-31T17:33:31.576Z"
+}

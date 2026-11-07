@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1925e-0ef6-7b72-90b2-374e8d7ddf63",
+  "ticketId": "01a189a9-42b1-7518-a6e0-89b4577b1270",
+  "body": "Mobiler Mockupabgleich 2026-10-31: ui-prototype-mobile.svg und ui-ticket-detail-320.svg mit den aktuellen Ticketdaten geprüft. Titel, todo/normal, Parent UI-Programm, sechs direkte Untertickets und vier Beziehungen stimmen; Richtung der einen eingehenden und einen ausgehenden blocks-Kante sowie der zwei relates_to ist korrekt. Parent/Relations unverändert; nur statische Prüfung, keine Liveabnahme.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:30:00.183Z"
+}

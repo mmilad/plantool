@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "01a189d5-d409-79de-b8b2-d59fb0516979",
+  "title": "Dokumentlisten leicht laden und Inhalte gezielt abrufen",
+  "description": "Quellstandbefund am 2026-10-29: documents.list(kind) liest und liefert für jeden Eintrag das vollständige Markdown-body-Feld. Beim initialen UI-load werden alle drei Dokumentarten komplett geladen; nach Ticket speichern ruft load() die Dokumentlisten erneut ab. Zwar kann der pman-Core documents.get(kind,id), der lokale HTTP-Server stellt aktuell aber nur GET /api/documents?kind bereit und keine Route zum gezielten Abruf eines Dokuments. Mit wachsenden/längeren Dokumenten steigen so unnötig Ladezeit, Übertragung und Browser-Speicherverbrauch.\n\nPlan für getrennte Dokumentnavigation und -inhalt: Listenabfrage liefert nur erforderliche Metadaten (kind, id, title, status, links, ggf. Änderungszeit), paginiert bei großen Beständen; den body einer ausgewählten Datei über einen typ-/ID-sicheren Einzelabruf laden. API-Routen gegen erlaubte kinds und IDs validieren und echte NOT_FOUND-Zustände liefern. Dokumentliste nicht bei jedem Ticket-/Kommentar-Speichern erneut vollständig mit Bodies laden. Lesepanel zeigt Lade-, Fehler-, leeren und stale-selection-Zustand; verspätete Antwort eines zuvor ausgewählten Dokuments darf die neue Auswahl nicht überschreiben. Optionalen Cache anhand updatedAt/Revision invalidieren, nie veralteten Inhalt als aktuell ausgeben.\n\nSichere Markdown-Regeln, stabile Dokumentroute kind/id, Ticketlinks, keine Dokumentbearbeitung/-archivierung und Git-native .pman-Quelle aus dem Eltern-/Suchrouting-Ticket beibehalten. Akzeptanz: Start lädt keine kompletten Dokumenttexte, Auswahl lädt nur dieses Dokument, erneute Navigation bleibt korrekt, fehlendes Dokument wird verständlich behandelt. Keine Implementierung in dieser Planungsrunde.\n\nDirektes Kind von „Dokumentnavigation und Lesemodus an die pman-API anpassen“; der UI-Konzeptentwurf blockiert es. Der gezielte Dokumentabruf ist Voraussetzung dafür, Dokumenttreffer aus dem Suchrouting im Lesemodus zu öffnen.\nLIVE-DOKUMENTLISTE 2026-10-30: Die Startseite rendert vier Dokumente (zwei Ziele und zwei Pläne) mit je 120–140 px Vorschauhöhe. `load()` ruft für alle drei kinds die vollständigen Listen samt Bodies beim Erstaufruf ab; das DOM zeigt lediglich `body.slice(0,180)`, ohne auf einen gezielten Einzelabruf umschalten zu können. Das bestätigt die geplante Metadatenliste plus kind/id-Einzelabruf. Das aktuelle Beispiel ist klein und belegt keinen Lastgrenzwert; große Dokumente/Bestände bleiben eigene Abnahmefälle. Parent-Zuordnung und bestehende Blocks-Kanten bleiben unverändert.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a189af-50ab-71b9-9f11-92e13989409f",
+  "createdAt": "2026-10-29T22:44:14.472Z",
+  "updatedAt": "2026-11-07T10:13:37.349Z",
+  "kind": "task"
+}

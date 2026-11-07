@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18ca7-13f7-7e0f-b5a2-e411dbd8de77",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review-Lauf 2026-10-30: Der aktuelle In-App-Browser zeigt 127.0.0.1:59457 mit ERR_CONNECTION_TIMED_OUT; erneutes Öffnen von 59456 endet ebenfalls mit net::ERR_CONNECTION_TIMED_OUT. Deshalb keine neue Live-/Screenshot-Abnahme. Aktueller src/server.js-Quellabgleich: bekannte Lücken sind den bestehenden fachlichen UI-Tickets zugeordnet; keine Dublette und keine Parent-/Blocks-/relates_to-Änderung. Nächste Abnahme bei erreichbarer App: Startansicht und Ticketdetail bei 1280×720 sowie Listen-/Detailwechsel bei 390×844, Abweichungen bestehenden Fach-Tickets zuordnen.",
+  "author": "local",
+  "createdAt": "2026-10-30T11:52:02.295Z"
+}

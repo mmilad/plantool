@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cd5-8815-7718-a4cf-64dce5d64c1f",
+  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
+  "body": "ERGÄNZTE 320PX-ABNAHME 2026-10-30: Neben Formular-Boxmodell und Projektübersicht auch die mobile Ticketdetailansicht bei 320 CSS-Pixeln prüfen: Rückkehr-zur-Liste-Aktion, Elternpfad, mehrzeiliger Ticketname, Status/Priorität/Readiness und Abschnittsnavigation ohne horizontalen Überstand; Aktionsziele mindestens 44px. Das ist ein geplanter Viewport-Check, kein live bestätigter Fehler. Parent-/Blocks-Kanten bleiben unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:42:46.677Z"
+}

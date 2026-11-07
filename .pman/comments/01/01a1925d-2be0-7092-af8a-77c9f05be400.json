@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1925d-2be0-7092-af8a-77c9f05be400",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review 2026-10-31: Projektübersichtsvorschau gegen pman tree abgeglichen: 10 direkte Pakete, 2 offen/bereit, 1 in Arbeit, 7 blockiert; Beispielkarten stimmen. Bestätigung in docs/ui-review.md und Kommentar am zuständigen Projektübersichtsticket. Konzept-/Visual-QA-Blocks und Responsive-relates_to sowie Parents nicht verändert. Live-App weiter nicht erreichbar.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:29:02.048Z"
+}

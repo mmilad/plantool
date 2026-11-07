@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d2e-7e47-792f-930f-d9fcb46c10b1",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review 2026-10-30: Layoutvergleich zeigte falschen Status (Visual-QA als In Arbeit) und nicht getrennte gespeicherte Status-/Readinesswerte. Pman weist Visual-QA und Icon-System todo/normal plus rollup blocked aus; UI-Konzept todo/normal plus rollup todo. SVG zeigt jetzt die aktuellen 45 Tickets, vollständige Beispieltitel und getrennte Felder. In docs/ui-review.md festgehalten; Beziehungen unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:19:56.871Z"
+}

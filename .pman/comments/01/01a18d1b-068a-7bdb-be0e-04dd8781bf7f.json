@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d1b-068a-7bdb-be0e-04dd8781bf7f",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "PLANÜBERSICHT 2026-10-30: docs/ui-review.md enthält jetzt eine aktuelle Zuständigkeitsmatrix über alle neun direkten UI-Programmkinder: Navigationsliste, Übersicht/Dokumente, Ticketdetail/Beziehungen, Such-Roadmap, Sprache/Formulare, Icons/Visual-QA und laufendes Review. Parent-IDs und pman-tree-Rollups wurden vor Eintrag geprüft; blocked bleibt als Readiness und nicht als neue Parent-/Blocks-Kante dargestellt. Keine Dublette erstellt.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:58:41.034Z"
+}

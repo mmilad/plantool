@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a192dc-caaf-72ad-bb5b-45f97e8b439c",
+  "ticketId": "01a189a9-42a4-7e89-8ab8-2f6a204818ed",
+  "body": "Konzept abgeschlossen 2026-10-31: Nutzer hat autonome UI-Entscheidungen delegiert; die festgelegte Arbeitsrichtung und ihre messbaren Startwerte stehen in docs/ui-wireframe.md. Die aktuelle Arbeitsbasis genügt zum Start der fachlichen Umsetzung; die visuelle Live-Abnahme bleibt dem bestehenden Visual-QA-Paket vorbehalten. Parents/Relations unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T16:48:25.776Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1928b-7d05-7151-bc93-e918983e7e1f",
+  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
+  "body": "Aktueller Quellabgleich 2026-10-31: Der Suchhandler ruft für jedes Ergebnis show(hit.id) auf; Trefferart wird nicht ausgewertet. Das führt Ticket-, Kommentar- und Dokumenttreffer alle in /api/tickets/:id, obwohl nur der Tickertyp dort ein gültiges Ziel ist. Bestehenden Routing-Owner um typgerechte Navigation ergänzen: Ticket direkt, Kommentar zum Ticket plus Fokus, Ziel/Plan/Entscheidung zum Dokumentleser. Keine neue Aufgabe; Parent unter Navigation unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:19:37.477Z"
+}

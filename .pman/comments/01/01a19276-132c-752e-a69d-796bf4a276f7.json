@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19276-132c-752e-a69d-796bf4a276f7",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Laufzeitabgleich 2026-10-31: Die aktuelle Browserinventur in CUA zeigt keinen offenen lokalen App-Tab. HTTP-Aufrufe an 127.0.0.1:4000 und 127.0.0.1:59456 werden mit Socket-Berechtigungsfehler abgewiesen; das beweist keinen geschlossenen Port. Keine Live-UI-Aussage und kein zusätzlicher Serverstart. docs/ui-review.md wurde korrigiert, damit der frühere Portcheck nicht als Listenernachweis formuliert ist. Fester Port bleibt über das bestehende Serverticket geplant; Relations unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:56:14.124Z"
+}

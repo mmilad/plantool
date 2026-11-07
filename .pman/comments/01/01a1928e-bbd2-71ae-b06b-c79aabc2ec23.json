@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1928e-bbd2-71ae-b06b-c79aabc2ec23",
+  "ticketId": "01a189d9-4947-72a1-b472-becb5d135e79",
+  "body": "Datenbeispiel für die Übersichtsvorschau geprüft: aktuelle Top 3 nach updatedAt und ID-Tie-Break sind 01a189ac-28f7-7250-b817-2026a531a7b5 (UI-Review, in_progress, Programmwurzel), 01a189ad-5c7c-7e68-b165-79fb9f674539 (Konzept, todo, UI-Richtung) und 01a189b6-43ac-78a2-a06b-345c6fa56083 (Status/Rollup/Bereitschaft, todo, Ticketdetail). Die drei SVGs zeigen diese Beispiele samt Elternkontext und Datum 31.10.2026; UI-Review-Dokument kennzeichnet sie als Momentaufnahme. Der reale /api/tree liefert keine zuletzt-geändert-Übersicht und ist auf 5.000 Einträge je Abruf begrenzt; Summary bleibt gebündelt/read-only und darf im UI nicht readiness() je Ticket auffächern. Keine API-Implementierung in dieser Planungsrunde, Parent unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:23:10.162Z"
+}

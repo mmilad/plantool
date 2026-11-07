@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19281-7755-7523-895f-8d1b01ad316a",
+  "ticketId": "01a189cc-4797-7974-9f3d-010740b102de",
+  "body": "Review 2026-10-31: 390px-/320px-Listenmockups zeigten nur einen Statusfilter, obwohl dieses Ticket kombinierbare Status-, Prioritäts-, Label- und Hierarchiebereichsfilter plant. Die beiden Entwürfe zeigen jetzt einen 44px-Filtereinstieg mit allen vier vorhandenen Feldern; Details zu aktiv/entfernbar in docs/ui-wireframe.md. Keine neuen Filtersemantiken und keine Parent-/Relationänderung. Responsives Liste/Detail-Verhalten bleibt im bestehenden Responsive-Ticket.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:08:40.661Z"
+}

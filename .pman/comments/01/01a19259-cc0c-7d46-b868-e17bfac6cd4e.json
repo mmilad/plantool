@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19259-cc0c-7d46-b868-e17bfac6cd4e",
+  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
+  "body": "Projektkopf-Abgleich 2026-10-31: docs/ui-fp-layout.svg zeigte ‚Mein Projekt‘ plus Dropdown, obwohl config.name=planus-manus und die lokale App genau ein Projekt bindet. Vorschau auf planus-manus ohne nicht verfügbare Projektumschaltung aktualisiert; mobil identische Projektbenennung. Parent und bestehende Relations unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:25:20.908Z"
+}

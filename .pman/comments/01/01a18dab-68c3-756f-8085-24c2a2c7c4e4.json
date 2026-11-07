@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dab-68c3-756f-8085-24c2a2c7c4e4",
+  "ticketId": "01a189d0-4063-7c51-8f35-13c58e86e9d6",
+  "body": "UI-Suchvorschau-Recheck: docs/ui-search-preview-320.svg beschrieb den SQLite-Vektorindex als „bereitgestellt“, was einem mitgelieferten Artefakt statt lokal abgeleitetem, rebuildbarem Index ähnelte. Auf „SQLite-Vektorindex, lokal neu aufbaubar“ korrigiert. Technischer Vertrag/Parent bleiben bei diesem Rebuild-Lebenszykluspaket unter dem bestehenden ONNX-Suchbereich; keine Relation oder Parent geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:36:23.363Z"
+}

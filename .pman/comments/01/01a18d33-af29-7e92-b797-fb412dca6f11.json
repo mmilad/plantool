@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d33-af29-7e92-b797-fb412dca6f11",
+  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
+  "body": "Projektübersichts-Mockup 2026-10-30: Sechs direkte Programmpakete sind vom UI-Konzept blockiert; Visual-QA ist das siebte blockierte Paket, hat aber insgesamt acht eingehende blocks-Kanten. Neben den sechs Hauptpaketen blockieren revisionssichere Entscheidungsbearbeitung und Ticketbeziehungen die Abnahme. Desktop-, 390px- und 320px-Vorschau unterscheiden das jetzt explizit. Counts und Beziehungen unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:25:37.066Z"
+}

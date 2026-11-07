@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d20-6700-7afc-9dc2-ef4664da4b25",
+  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
+  "body": "UI-Review 2026-10-30: Der Abgleich mit docs/ui-icon-preview.svg ergab 20px Navigation/1,8px Strich, während Desktop-/Mobilprototypen noch 16px/1,5px bzw. 15px/1,4px zeigten. Alle Hauptnavigationsvorschauen sind jetzt auf 20×20px/1,8px vereinheitlicht; der kompakte Kontextkopf nutzt 16px. Die 320px-Text-/Icon-Abstände und aktive Unterstreichung sind mitgeprüft. Zusätzliche relates_to zu Responsive und Visual-QA für direkte Größen-/Darstellungsabnahme; Parent und Blocks unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:04:33.408Z"
+}

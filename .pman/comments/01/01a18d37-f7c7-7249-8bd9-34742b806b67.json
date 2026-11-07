@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d37-f7c7-7249-8bd9-34742b806b67",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "MOBIL-PRIORITÄT-RECHECK 2026-10-30: Wiederkehrender Abgleich fand eine Abweichung zwischen Desktopvertrag und mobilen Ticketlisten: beide SVGs ließen priority aus. Planung in docs/ui-wireframe.md und docs/ui-review.md präzisiert; beide mobilen SVGs zeigen Status/Priorität beschriftet und Bereitschaft getrennt. Befund dem bestehenden mobilen Responsiveness-Ticket zugeordnet; Parent- und vorhandene Beziehungs-/Blocks-Ketten unverändert, kein neues Ticket.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:30:17.799Z"
+}

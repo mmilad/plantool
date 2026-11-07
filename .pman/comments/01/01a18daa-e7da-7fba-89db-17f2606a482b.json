@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18daa-e7da-7fba-89db-17f2606a482b",
+  "ticketId": "01a189ad-9320-7ba9-a8ad-4656341eb4e5",
+  "body": "Aktueller Audit-Recheck 2026-10-30: pman validate/tree enthält jetzt 46 Tickets; die Beschreibungsmomentaufnahme hier nennt noch 45. Linkzahlen erneut bestätigt: UI-Ziel 0; Review-Ziel 10/9 eindeutig mit Review-ID doppelt; UI-Plan 8 eindeutige; Review-Plan 11/10 eindeutig mit derselben Review-ID doppelt plus Review-Zieldokument. Alte Jira-Titel bleiben kanonische Dokumentdaten und sollen erst über den geplanten revision-sicheren App-Editor angepasst werden; Vorschauen zeigen sie bis dahin bewusst datentreu. Keine Links, Parents oder Relations direkt geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:35:50.362Z"
+}

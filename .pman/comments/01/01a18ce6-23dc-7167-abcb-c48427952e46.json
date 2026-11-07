@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18ce6-23dc-7167-abcb-c48427952e46",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "DOKUMENTLINK-ABDECKUNG 2026-10-30: Kanonischer Review-Plan enthält 10 Ticketlink-Einträge/9 eindeutige Tickets plus ein UI-Zieldokument; ein Review-Ticket steht doppelt. Die vorhandene mobile Vorschau deckte nur den anderen UI-Plan mit acht eindeutigen Ticketzielen ab. docs/ui-documents-links-mobile.svg ergänzt den echten gemischten Linkfall: Ticket- und Dokumentziele getrennt, doppeltes Ticket sichtbar gruppiert als 2×, keine stille Bereinigung. Zuständige Dokumentnavigation 01a189af-50ab-71b9-9f11-92e13989409f und Linkkonsolidierung 01a189ad-9320-7ba9-a8ad-4656341eb4e5 kommentiert; bestehende Parents/Blocks bleiben. Kanonische Dokumente nicht verändert; Browser-Liveprüfung in dieser Umgebung weiter nicht verfügbar.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:00:55.132Z"
+}

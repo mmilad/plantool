@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d23-738e-7e52-8084-9002a5776f0c",
+  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
+  "body": "UI-ENTWURF 2026-10-30: docs/ui-layout-options.svg zeigt zwei Desktop-Navigationsvarianten bei 1280px: horizontale Kopfzeile (Detail ca. 914px) oder permanente 208px-Bereichsleiste (Detail ca. 716px). Ticketliste, Hierarchie und Detail bleiben gleich; nur vorhandene Bereiche, kein Projektumschalter. Konzeptwahl ist offen; bestehende Parent-/Blocks-Abhängigkeiten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:07:53.230Z"
+}

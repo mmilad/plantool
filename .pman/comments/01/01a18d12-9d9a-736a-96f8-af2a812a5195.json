@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d12-9d9a-736a-96f8-af2a812a5195",
+  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
+  "body": "UI-Review 2026-10-30: docs/ui-ticket-create-discard.svg ergänzt die Verwerfbestätigung auch für Untertickets. Geänderte Eingaben lösen vor Escape/X/Zurück eine \u0007lertdialog-Bestätigung aus;  Weiter bearbeiten ist Standardfokus, Verwerfen löscht nur den lokalen Entwurf und stellt den Detail-/Listen-Kontext wieder her. Fester Parent und unveränderte Defaults zählen nicht als Eingaben; während POST keine Abbruchaktion. Parent- und Blocks-Zuordnung sowie bestehende Accessibility-/Feedback-Abstimmungen bleiben unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:49:29.882Z"
+}

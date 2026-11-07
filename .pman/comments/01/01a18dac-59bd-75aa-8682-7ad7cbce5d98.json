@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dac-59bd-75aa-8682-7ad7cbce5d98",
+  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
+  "body": "Zusätzlicher Inhaltsabgleich der mobilen Kommentarvorschauen: Der gezeigte Treffer ist ein tatsächlicher Kommentar-Snippet, dessen gespeicherter Anfang „UI-Review 2026-10-30: Live-Auswahl des …“ lautet. 390px- und 320px-Preview zeigten zuvor „UI-Review: Live-Auswahl …“ ohne echtes Datum; auf den gespeicherten Snippet-Anfang korrigiert. Zielticket/Kommentar-ID stimmen; bestehende Zuordnung bleibt.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:37:25.053Z"
+}

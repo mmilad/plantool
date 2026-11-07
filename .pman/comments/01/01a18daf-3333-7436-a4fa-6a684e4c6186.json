@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18daf-3333-7436-a4fa-6a684e4c6186",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review-Folgeplanung 2026-10-30: nächster Review-Durchgang soll die Konzeptentscheidungen und Abnahmekriterien gegen Navigation, Ticketdetail und Projektstartseite prüfen; danach offene Abhängigkeiten und Umsetzungsreife aktualisieren. Portticket 01a18d87-251e-7ff7-9678-7a437fd0ef76 bleibt Voraussetzung für Live-Visual-QA. Fachliche Eltern und bestehende Blocks-/Relates-Beziehungen unverändert lassen. Reihenfolge-Vorschlag und Begründung: docs/ui-review.md.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:40:31.795Z"
+}

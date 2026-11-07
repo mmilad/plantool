@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d05-22ba-74b7-85a9-26c0fafb2cd3",
+  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
+  "body": "UI-Review 2026-10-30: Status-Board gegen aktuellen pman-Bestand geprüft. Die neun direkten UI-Programmkinder ergeben 8 todo und 1 in_progress; der Projektstatuskatalog lautet todo/in_progress/done/cancelled. Desktop-Vorschau zeigt 5 von 8 offenen Karten plus 3 per Scrollhinweis, mobil 4 plus 4; die übrigen Spalten haben 0 und einen expliziten Leerzustand. Sieben blockierte Bereitschaften bleiben getrennt vom gespeicherten todo-Status. Zählung und Kanten stimmen; keine Vorschaukorrektur, kein neues Ticket und keine Parent-/Blocks-/relates_to-Änderung.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:34:46.458Z"
+}

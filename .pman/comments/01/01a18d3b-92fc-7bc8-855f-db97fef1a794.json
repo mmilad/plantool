@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d3b-92fc-7bc8-855f-db97fef1a794",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "BOARD-PRIORITÄT-RECHECK 2026-10-30: Beim Abgleich der beiden Status-Board-Vorschauen mit dem Ticketfeldvertrag fehlte Priorität auf Karten. Desktop, Mobil und Wireframe ergänzt; alle gezeigten echten UI-Programmkinder haben priority=normal. Die vorhandene \blocks-Abhängigkeit zum Ticketfeld-/Projektstatus-Ticket deckt die Zugehörigkeit bereits ab; keine Eltern-/Beziehungsänderung und kein zusätzliches Ticket.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:34:14.140Z"
+}

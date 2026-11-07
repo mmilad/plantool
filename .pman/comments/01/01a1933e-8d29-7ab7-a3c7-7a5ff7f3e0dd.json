@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1933e-8d29-7ab7-a3c7-7a5ff7f3e0dd",
+  "ticketId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
+  "body": "Live-Abgleich 2026-10-31 anhand Nutzerrückmeldung und Screenshot: aktueller UI-Ausschnitt ist erreichbar und  an sich schon gut; Navigation/URL und fester Serverstart gelten als abgenommen. Nutzer findet die Umsetzung noch nicht sehr nah an fp.dev, kann mit dem jetzigen Zwischenstand aber leben. FP.dev-Nähe bleibt als spätere schrittweise Verfeinerung, kein Blocker. Planungsphase bleibt eingefroren; nach jedem Ausschnitt nur ein nächstes Paket aktivieren.",
+  "author": "local",
+  "createdAt": "2026-10-31T18:35:12.554Z"
+}

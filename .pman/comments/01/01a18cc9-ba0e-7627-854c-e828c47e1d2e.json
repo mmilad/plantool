@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cc9-ba0e-7627-854c-e828c47e1d2e",
+  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
+  "body": "Review der statischen Boardentwürfe 2026-10-30: Statusaktionen sind jetzt 40px hoch im Desktop-Entwurf und 44px hoch im Touch-Entwurf, gemäß dem vorhandenen allgemeinen UI-Ziel. Die Desktopvorschau zeigt fünf Karten plus Scrollhinweis, mobil vier plus Scrollhinweis; dies vermeidet eine zu kleine Aktion, ohne die echte Boarddatenmenge umzudeuten. Keine Parent-/Blocks-Zuordnung geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:29:53.038Z"
+}

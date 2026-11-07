@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d45-d780-7cf8-a2a7-8735630883fb",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Fortgesetzter UI-Review 2026-10-30: Der Live-Aufruf auf 127.0.0.1:59456 endet weiterhin mit ERR_CONNECTION_TIMED_OUT, daher keine neue Browserabnahme. Statischer Dialogabgleich fand ein weiteres sichtbares Hintergrundfragment im Desktop-Unterticketdialog; docs/ui-ticket-create-desktop.svg deckt es jetzt mit der zentrierten 552px-Dialogfläche ab. Befund und Zuordnung sind im bestehenden Ticketanlage-Unterticket 01a189b1-f688-7fd0-9d9d-33b3016a1acc vermerkt. Keine Parent-, Blocks- oder relates_to-Kanten geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:45:27.041Z"
+}

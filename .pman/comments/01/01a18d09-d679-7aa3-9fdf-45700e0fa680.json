@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d09-d679-7aa3-9fdf-45700e0fa680",
+  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
+  "body": "UI-Review 2026-10-30: docs/ui-ticket-create-mobile.svg zeigt die Root-Anlage aus der Projektübersicht als eigenen mobilen Flow: Projektkontext sichtbar, keine Elternzuordnung, Titelpflicht und optionale Beschreibung/Labels, Status Offen und Priorität Normal, klarer Abbruch und Speichern. Die Mobile-Anlage dieses bestehenden Tickets ist jetzt per relates_to mit Responsive/Barrierefreiheit 01a189a9-42b2-70df-956e-b163f531de32 abgestimmt. Parent und Blocks bleiben unverändert; kein neues Ticket.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:39:54.617Z"
+}

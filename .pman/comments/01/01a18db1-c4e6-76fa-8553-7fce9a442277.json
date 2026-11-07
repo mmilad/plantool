@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18db1-c4e6-76fa-8553-7fce9a442277",
+  "ticketId": "01a189f8-f7bf-7921-b4cf-b3269ac6239d",
+  "body": "Planungsdokument-Konsistenzreview 2026-10-30: nach Erreichen revision-sicherer Bearbeitung die Titel und Zielbildtexte der bestehenden UI-Zieldatei 01a189a9-429a-7005-8722-2847de61b01b und des UI-Plans 01a189a9-42b7-7724-92e3-8da8d2a2dcfe mit der inzwischen präzisierten Referenz abstimmen: schlichte eigenständige UI, fp.dev als vorläufige visuelle Richtung, Jira nur für Arbeitsabläufe und keine Markenübernahme. Übersichtsmocks spiegeln die aktuellen kanonischen Titel korrekt; nicht vor der Dokumentänderung fingierte Titel einsetzen. Dieses Bearbeitungsticket bleibt im bestehenden Dokumente-/Projektübersicht-Parent. Details: docs/ui-review.md.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:43:20.166Z"
+}

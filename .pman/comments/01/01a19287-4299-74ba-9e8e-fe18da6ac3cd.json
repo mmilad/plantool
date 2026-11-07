@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19287-4299-74ba-9e8e-fe18da6ac3cd",
+  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
+  "body": "Priorisierung 2026-10-31: Dieses hoch priorisierte Konzeptticket ist laut aktuellem Baum nicht blockiert und kann parallel zum festen Portticket 01a18d87-251e-7ff7-9678-7a437fd0ef76 vorangetrieben werden. Der Port blockiert die spätere Live-Browserabnahme, nicht die Konzeptarbeit. Nach dem Konzeptabgleich bleiben Navigation, Detail, Suche, Dokumente, Responsive und Icons bei ihren bestehenden Parents; keine Relation ergänzen oder umhängen.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:15:00.377Z"
+}

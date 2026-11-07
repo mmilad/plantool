@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d24-43b4-7d30-9490-b30f7903111c",
+  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
+  "body": "UI-Review 2026-10-30: In docs/ui-layout-options.svg waren aktive Ticketzeilen und die permanente Bereichsauswahl nur mit #EAF1FD gefüllt. Das zentrale visuelle Konzept fordert eine klare Kontur zusätzlich zur hellen Auswahlfläche; Vergleichsentwurf verwendet deshalb #2457A7 als sichtbaren Rand. Zugehörigkeit zum Konzept und bestehende Blocks-Ketten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:08:46.516Z"
+}

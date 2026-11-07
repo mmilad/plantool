@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18da6-b58d-7bc1-a80a-643a862fecf8",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Planungsiteration: Die offenen Empfehlungen vor UI-Start sind jetzt kompakt im Wireframe gebündelt und jedem vorhandenen Fachpaket zugeordnet. Empfohlene Reihenfolge: Konzept abstimmen, Navigation/Ticketdetail als Desktopfluss, danach mobile Übergänge/Icons; Board bleibt außerhalb MVP. Keine neue Aufgabe, Parent- oder Blocks-Kante geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:31:15.341Z"
+}

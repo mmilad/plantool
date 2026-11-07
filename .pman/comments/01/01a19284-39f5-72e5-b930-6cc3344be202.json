@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19284-39f5-72e5-b930-6cc3344be202",
+  "ticketId": "01a189de-0250-7a08-91c5-9cab74a14d8f",
+  "body": "UI-Sprachreview 2026-10-31: In den Projektübersichts-/Board-/Listenentwürfen verblieb noch sichtbares/assistives  Readiness und ein ASCII-Label Rollup. In docs/* jetzt als Bereitschaft und Abgeleiteter Arbeitsstand formuliert. Diese Begriffe strikt vom gespeicherten Status Offen trennen; blockiert beschreibt Bereitschaft und wird keine Statusoption. Parent-Zuordnung des Querschnittstickets bleibt unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:11:41.557Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d9a-b42d-7230-80e8-6fb79a9ae889",
+  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
+  "body": "Quellrecheck 2026-10-30: bestätigt in aktuellem src/index.js und src/server.js. searchProject() gibt Kommentarhits mit id=Kommentar-ID, type=comment und title Comment on  zurück, aber ohne strukturiertes ticketId. Der Such-Handler ignoriert type und ruft für alle IDs show(id) auf; show lädt nur /api/tickets/:id. Kommentarhits landen daher nicht beim Zielkommentar/-ticket. Bestehender Lösungsvertrag dieses Tickets bleibt passend: API liefert ticketId; UI routet Kommentar zum Ticket und fokussiert Kommentar, Dokumente zum Reader, Tickets zum Detail. Keine neue Parent-/Blocks-Kante nötig; bestehende Relations und Bezug zum Feedback-/Review-Ticket bleiben erhalten.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:18:08.557Z"
+}

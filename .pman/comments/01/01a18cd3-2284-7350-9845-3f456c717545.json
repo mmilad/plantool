@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cd3-2284-7350-9845-3f456c717545",
+  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
+  "body": "SCHMALE MOBILÜBERSICHT 2026-10-30: docs/ui-prototype-overview-320.svg ergänzt den vorhandenen 390px-Entwurf bei 320×900. Die Erstellen-Aktion steht wegen der verfügbaren Breite in einer eigenen 44px-Zeile; Statuszusammenfassung und Arbeitstitel umbrechen, Dokumente bleiben erreichbar. Wireframe und Review sind aktualisiert. Parent bleibt dieses Übersichtspaket; keine neue Ticketkante.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:40:09.605Z"
+}

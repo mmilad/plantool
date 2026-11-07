@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19290-67f8-777b-a514-e4b913ea9083",
+  "ticketId": "01a189b6-43ac-78a2-a06b-345c6fa56083",
+  "body": "Datenabgleich der Projektübersicht 2026-10-31: Für alle 46 aktuellen Tickets stimmt tree.rollup=blocked mit tickets.readiness().ready=false überein; die zehn UI-Programmkinder ergeben 2 offene bereite, 1 in Arbeit, 7 blockierte. Das schließt den bekannten Algorithmusunterschied nicht: buildTree() behandelt jede eingehende blocks-Kante als blockiert, readiness() löst done-Quellen auf. Aktuell gibt es kein Gegenbeispiel im Dataset; done-/cancelled-Blocker daher in den bestehenden synthetischen Abnahmefällen behalten. Keine neue Aufgabe oder Relationsänderung.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:24:59.768Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d28-1898-7f15-be73-f63d6b479ddb",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review-Fortsetzung 2026-10-30: Der Quellabgleich umfasst jetzt auch lokale Ticketanlage und Kommentar-POST: Ticketerstellung setzt die Trefferliste auf den Vollbaum zurück, Kommentar-Anlage hinterlässt globale Treffer unverändert. Gemeinsamer Befund und erwarteter Refresh-Vertrag stehen in docs/ui-review.md und docs/ui-wireframe.md; die bestehenden Such-/Aktualisierungstickets bleiben zuständig, kein neues Ticket und keine Beziehung geändert. Live-App weiterhin nicht erreichbar; Quellbefund, keine Live-Reproduktion.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:12:57.624Z"
+}

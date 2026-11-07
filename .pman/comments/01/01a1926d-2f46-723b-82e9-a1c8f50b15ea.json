@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1926d-2f46-723b-82e9-a1c8f50b15ea",
+  "ticketId": "01a189d9-4947-72a1-b472-becb5d135e79",
+  "body": "READINESS-SNAPSHOT 2026-10-31: Neuberechnung via project.tickets.readiness() und Baumrollup bestätigt für die einzige UI-Programmwurzel zehn direkte Kinder: todo=9, in_progress=1, done=0, cancelled=0. Innerhalb der neun todo-Kinder sind zwei bereit und sieben blockiert; das eine in_progress-Kind ist bereit. Die sieben Blocker bestehen aus sechs direkten Arbeitspaketen mit dem Konzept als offenem Blocker plus Visual-QA mit diesen sechs und drei weiteren Voraussetzungen. Desktop-/Mobilstartseiten zeigen dieselben Zahlen und benennen Readiness getrennt vom gespeicherten Status. Der Root selbst bleibt gespeichert todo bei Rollup in_progress; die Übersicht darf diese Werte nicht vermischen. /api/tree liefert weiterhin kein Readiness-Batch, daher bleibt die gebündelte Summary-Voraussetzung dieses Tickets relevant. Parent bleibt unter Projektstartseite/Übersicht; alle bestehenden Blocks-/relates_to-Beziehungen unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:46:31.495Z"
+}

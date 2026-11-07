@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cec-87e5-7573-b43f-1541feac5bf0",
+  "ticketId": "01a189af-d764-72c3-a674-f5601919f131",
+  "body": "KURZFORM-PRÄZISIERUNG 2026-10-30: Beim erneuten Abgleich von docs/ui-prototype-mobile.svg war  2 Blocker für die beiden gegengerichteten blocks-Kanten missverständlich. Die eingeklappte Zusammenfassung sagt jetzt 1 wartet auf · 1 blockiert · 2 Verknüpfungen; die geöffnete Ansicht führt beide Richtungen einzeln auf. Keine Beziehung oder Zugehörigkeit geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:07:53.957Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d3b-2c8c-779e-9ea4-2750c2a71e83",
+  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
+  "body": "BOARD-PRIORITÄT-RECHECK 2026-10-30: Die Desktop- und Mobilkarten zeigten Titel, Statusspalte, Bereitschaft und Statusänderungsaktion, aber keine Priorität. Beide statischen Boards zeigen jetzt Priorität · Normal als Text neben der getrennten Bereitschaft; der Spaltenstatus bleibt der gespeicherte Status. docs/ui-wireframe.md konkretisiert die Anzeige, Icons dürfen Text nicht ersetzen. Bestehende Parent- und Blocks-Kante vom Ticketfeld-Ticket bleiben unverändert; kein neues Ticket.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:33:47.916Z"
+}

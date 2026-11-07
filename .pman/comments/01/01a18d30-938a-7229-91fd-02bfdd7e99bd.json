@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d30-938a-7229-91fd-02bfdd7e99bd",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review 2026-10-30: pman-Abgleich des Layoutdetails: Visual-QA hat 1 direktes Kind (Rückmeldungszustände) und 8 eingehende blocks-Beziehungen. Die Vorschau stellte drei Blocker fälschlich als Unteraufgaben dar. In docs/ui-layout-options.svg korrigiert: 3 sichtbare Blocker + 5 weitere sowie das echte Unterticket separat. Keine Kanten geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:22:13.386Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cf2-269e-7e25-8959-b10e1ffd5dbe",
+  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
+  "body": "KONSISTENZ-CHECK 2026-10-30: Die Iconvorschau war zunächst nur im Ticketprototyp eingebunden; Übersicht, Suche, Board und Dokumentleser zeigten die Navigation weiterhin text-only. docs/ui-prototype*.svg, ui-search-preview*.svg, ui-board-preview*.svg, ui-documents*.svg und ui-ticket-relations-mobile.svg verwenden jetzt konsistent house/\ticket/\files für die Hauptziele. \target/clipboard/scale bleiben den einzelnen Dokumentarten vorbehalten, Textlabels sichtbar. Vorschlagsstatus bleibt bestehen; Parent unter Icon-System und alle bestehenden Blocks-/relates_to-Beziehungen erhalten.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:14:02.270Z"
+}

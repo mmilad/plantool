@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d2c-2c0a-763c-a787-686d8047ee10",
+  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
+  "body": "Review-Abgleich 2026-10-30: In beiden Layoutvarianten ist der Beispiel-Elternpfad jetzt pman-getreu: Visual-QA-Ticket 01a189a9-42b5-71b8-a846-9dc1985e3102 ist direkt unter 01a189a9-429e-7fb4-9d2c-8db0221f8942 eingeordnet; das UI-Konzept ist kein Zwischenknoten. docs/ui-review.md hält die Korrektur fest. Keine Parent-/Blocks-/Relationsänderung.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:17:24.746Z"
+}

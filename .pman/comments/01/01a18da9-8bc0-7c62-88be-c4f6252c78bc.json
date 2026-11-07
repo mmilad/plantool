@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18da9-8bc0-7c62-88be-c4f6252c78bc",
+  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
+  "body": "Quellabgleich 2026-10-30: tickets.create() setzt status auf input.status oder config.statuses[0]. Im aktuellen .pman/config.json steht todo an erster Stelle; die Wireframe-Regel ist jetzt projektneutral, und Offen bleibt ein Beispiel des aktuellen Projekts. Die Ticket-ID dient intern zum Öffnen des bestätigten Ergebnisses und wird nicht als technische UI-Meldung angezeigt. Parent-Zuordnung unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:34:21.248Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d9c-9a46-7874-9b84-2fbee56617cf",
+  "ticketId": "01a189ad-9320-7ba9-a8ad-4656341eb4e5",
+  "body": "Linkaudit aktualisiert 2026-10-30 bei 46 Tickets: UI-Ziel 0 Links; Review-Ziel 10/9 eindeutige Ticketziele (Review-Ticket doppelt); UI-Plan 8 eindeutige Ziele; Review-Plan 11/10 eindeutige Ticketziele (Review-Ticket doppelt) plus Link auf das Review-Zieldokument. Alle Links zeigen auf vorhandene Tickets/Dokumente; kein dangling target. Die bisherige Beschreibung mit 45 Tickets ist historische Momentaufnahme. Portticket 01a18d87-251e-7ff7-9678-7a437fd0ef76 ist neu im Reviewumfang und als Kandidat für den Review-Plan zu prüfen. Dokumentlinks nicht außerhalb der App ändern; geplante revisionssichere Dokumentbearbeitung ist Voraussetzung. Parent und vorhandene Relationen unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:20:12.999Z"
+}

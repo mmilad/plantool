@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cd3-217b-7b6a-b1c1-e29e99ccc377",
+  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
+  "body": "MOBILE-REVIEW 2026-10-30: docs/ui-prototype-overview-320.svg ergänzt den schmalen Projektübersichts-Zustand. Abnahme bei 320px soll zusätzlich zur Formular-Boxbreite auch Kopfzeile/primäre Aktion, Navigation, Status-/Titelumbrüche, horizontalen Überstand und vertikales Scrollen prüfen; bestehende 44px-Ziele und dauerhafte Labels erhalten. Die 390px-Ansicht bleibt separat. Keine Parent-/Blocks-Zuordnung geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:40:09.339Z"
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b579-311f-75f5-a6f9-c15e33a5b499",
+  "title": "pman claim and release with agent name and expiring lease",
+  "description": "claim sets in_progress, assignee and lease expiry with revision checks; expired leases count as free again. release frees the ticket.",
+  "status": "done",
+  "priority": "high",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1b579-30e5-7eae-8f69-696da06abfea",
+  "createdAt": "2026-11-07T10:06:20.959Z",
+  "updatedAt": "2026-11-07T10:14:49.166Z",
+  "kind": "task",
+  "assignee": null
+}

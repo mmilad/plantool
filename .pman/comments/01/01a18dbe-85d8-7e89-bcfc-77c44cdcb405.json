@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dbe-85d8-7e89-bcfc-77c44cdcb405",
+  "ticketId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
+  "body": "Planabgleich 2026-10-30: Die Programmreihenfolge nennt jetzt ausdrücklich das bestehende hoch priorisierte Serverticket 01a18d87-251e-7ff7-9678-7a437fd0ef76 als Voraussetzung vor der visuellen Browserabnahme. Es bleibt beim festen Loopback-Port 4000, klarem Fehlschlag bei Belegung, keinem Zufallsport/zweiter Instanz und bewusstem Override. Bestehende Blocks-Kante zur visuellen Prüfung und Parentstruktur bleiben unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:57:15.992Z"
+}

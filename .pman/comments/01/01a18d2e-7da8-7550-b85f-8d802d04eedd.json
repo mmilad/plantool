@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d2e-7da8-7550-b85f-8d802d04eedd",
+  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
+  "body": "Layoutvorschau A/B/C mit pman-Stichprobe abgeglichen: drei Beispiel-Tickets, genaue Namen, Status/Priorität, Rollup und 45er-Zähler stimmen nun. \todo wird als  Offen gezeigt; \blocked als separate Bereitschaft. Siehe docs/ui-review.md und docs/ui-layout-options.svg. Keine neue Kante oder Parent-Verschiebung.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:19:56.712Z"
+}

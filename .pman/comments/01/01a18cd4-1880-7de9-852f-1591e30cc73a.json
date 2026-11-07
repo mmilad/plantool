@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cd4-1880-7de9-852f-1591e30cc73a",
+  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
+  "body": "KORREKTUR 320PX-VORSCHAU 2026-10-30: Im 44px-Erstellen-Button waren Icon und Label zusammen um etwa 10px links der Buttonmitte ausgerichtet. docs/ui-prototype-overview-320.svg zentriert jetzt beide als Gruppe. Keine inhaltliche oder Parent-/Beziehungskante geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:41:12.576Z"
+}

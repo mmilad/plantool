@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cde-3ae3-71bb-87eb-3c8600b58464",
+  "ticketId": "01a189af-d766-703b-a961-52a10b86081f",
+  "body": "FORMULARLABELS 2026-10-30: Statischer DOM-/Quellabgleich: Titel- und Beschreibungsfelder verwenden nur Platzhalter, das Status-Select hat keine sichtbare Feldbezeichnung; das Suchfeld besitzt dagegen bereits ein umschließendes label. Der vorhandene Kommentar dokumentiert das Kommentar-Textarea, deckt die übrigen Felder nicht ab. Planungsabnahme ergänzen: jedes editierbare Feld (Titel, Status, Beschreibung und Kommentar) erhält eine dauerhaft sichtbare, programmatisch zugeordnete Beschriftung; Platzhalter ergänzen sie nur. Tastatur-/Screenreader-Prüfung der Zuordnung sowie Validierungs- und Fehlerfokus mit Accessibility- und Rückmeldungstickets abstimmen. Die bestehenden relates_to-Kanten zu deutscher Beschriftung, Responsive/Accessibility und Rückmeldungen sowie Parent-/Blocks-Kanten bleiben bestehen.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:52:16.739Z"
+}

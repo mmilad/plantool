@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d31-530b-7da2-90fb-032a79ca2cc2",
+  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
+  "body": "Visual-QA-Hinweis 2026-10-30: In kompaktem Layout C Auswahlmarker hinter Overview, aber geöffnetes Beispiel ist Ticketdetail. docs/ui-layout-options.svg korrigiert die Fläche hinter Tickets; alle Varianten markieren nun denselben Bereich. Keine neue Beziehung oder Hierarchieänderung.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:23:02.411Z"
+}

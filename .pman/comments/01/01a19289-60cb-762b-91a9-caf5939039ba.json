@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19289-60cb-762b-91a9-caf5939039ba",
+  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
+  "body": "Ergänzung des abstimmbaren Inventars 2026-10-31: Die aktuelle pman-Beziehungsansicht nutzt echte blocks- und relates_to-Kanten; ui-icon-preview.svg enthält dafür jetzt einen generischen Link-Symbolkandidaten. Er markiert nur den Beziehungsabschnitt. Richtung, Typ und Gegen-Ticket bleiben ausgeschrieben. Kandidat noch nicht final ausgewählt und keine Bibliothek eingebaut; Parent bleibt das Icon-System-Unterpaket, keine neue Aufgabe oder Relation.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:17:19.179Z"
+}

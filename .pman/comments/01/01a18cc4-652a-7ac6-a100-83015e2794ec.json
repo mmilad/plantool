@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cc4-652a-7ac6-a100-83015e2794ec",
+  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
+  "body": "MOBILE-BOARD-VORSCHAU 2026-10-30: docs/ui-board-preview-mobile.svg zeigt bei 390×844 genau eine volle Statusspalte, ein beschriftetes Spaltenauswahlfeld mit Kartenanzahl und den Kontext UI-Programm. Die acht direkten todo-Kinder sind vollständig im ersten Zustand erreichbar; sieben Readiness-Blocker bleiben Zusatztext und keine Statusspalte. Auswahl wechselt zwischen konfigurierten Spalten; Liste/Board-Umschalter bewahrt den Bereich. Die längste einzelne Beschriftung misst 329,2px bei 338px Kartenbreite. Bestehender Board-Parent, blocks und relates_to-Kanten unverändert; keine Implementierung.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:24:03.626Z"
+}

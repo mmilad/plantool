@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1925a-f520-777c-b652-afd28559b125",
+  "ticketId": "01a189b6-43ac-78a2-a06b-345c6fa56083",
+  "body": "Detailmock-Abgleich 2026-10-31: Der sichtbare Status der UI-Programmzeile zeigt nun ‚Offen · Unteraufgaben: In Arbeit‘ statt des technischen Labels ‚Rollup‘; Wireframe und bestehender Sprachvertrag mit 01a189de-0250-7a08-91c5-9cab74a14d8f stimmen überein. Der gespeicherte Status des Wurzel-Tickets bleibt separat ‚todo‘/ Offen. Keine Parent-/Relationsänderung.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:26:36.960Z"
+}

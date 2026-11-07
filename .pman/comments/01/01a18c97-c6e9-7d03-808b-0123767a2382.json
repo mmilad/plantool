@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18c97-c6e9-7d03-808b-0123767a2382",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Mockup-Beziehungsabgleich 2026-10-30: Die Übersicht stimmt weiterhin mit den neun direkten UI-Programmkindern überein (ein offenes bereites Paket, ein laufendes Review, sieben blockierte Pakete). Das Dokument-/Übersichtspaket hat als eingehende Blockierung genau das UI-Konzept und blockiert die visuelle Endprüfung; die im Desktop-/Mobilentwurf benannte Blockierung ist daher vollständig. Direkte Kinderzahl dieses Pakets ist sechs. Keine Relationship- oder Parent-Änderung erforderlich. Live-UI bleibt über den Browser-Tab unerreichbar; Abgleich anhand kanonischem pman-Baum und Beziehungen.",
+  "author": "local",
+  "createdAt": "2026-10-30T11:35:19.529Z"
+}

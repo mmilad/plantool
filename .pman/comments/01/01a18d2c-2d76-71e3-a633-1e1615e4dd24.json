@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d2c-2d76-71e3-a633-1e1615e4dd24",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review 2026-10-30: Beim pman-Abgleich des Layoutvergleichs war der Beispiel-Breadcrumb falsch (UI-Konzept als Zwischenknoten). Korrigiert in docs/ui-layout-options.svg auf die echte direkte ParentId des Visual-QA-Tickets und im Review dokumentiert. Keine neue Aufgabe oder Relation; bestehende Zugehörigkeiten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:17:25.110Z"
+}

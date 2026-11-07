@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b579-313b-7bb9-ad4e-48fabdab8c37",
+  "title": "Remove relationships from the CLI (relation remove)",
+  "description": "",
+  "status": "done",
+  "priority": "low",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1b579-30e5-7eae-8f69-696da06abfea",
+  "createdAt": "2026-11-07T10:06:20.986Z",
+  "updatedAt": "2026-11-07T10:14:52.307Z",
+  "kind": "task",
+  "assignee": null
+}

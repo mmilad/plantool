@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18db5-9e58-7888-b999-58e59f43d375",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Priorisierung anhand aktuellen direkten pman-Kindern und Blocks-Kanten ergänzt: Konzept zuerst; Port 4000 unabhängig davon und nur Voraussetzung für Visual-QA (später parallel zum Gestaltungsstrang); danach high-priority Navigation/Ticketdetail mit URL-Abhängigkeit; Visual-QA nach neun Voraussetzungen. Bestehende Status, Prioritäten und Relationen bleiben unverändert. Details: docs/ui-review.md.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:47:32.440Z"
+}

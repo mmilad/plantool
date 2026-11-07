@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d0c-b117-7f00-85d5-065fc8fac56e",
+  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
+  "body": "UI-Review 2026-10-30: docs/ui-ticket-create-desktop.svg zeigt neben dem bestehenden mobilen Entwurf den Desktopdialog für ein Unterticket aus Ticketdetail und mit fest sichtbarem Elternticket. Beide Plattformen halten denselben Feld-/Defaultvertrag; Abbrechen/Escape gibt Fokus zurück, Fehler behalten Eingaben, Erfolg und Aktualisieren bleiben getrennt. Bestehende Accessibility-, Rückmeldungs-, Responsive- und Feldabstimmungen bleiben erhalten; Parent und Blocks unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:43:01.655Z"
+}

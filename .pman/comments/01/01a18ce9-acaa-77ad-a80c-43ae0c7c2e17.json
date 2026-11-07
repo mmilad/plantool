@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18ce9-acaa-77ad-a80c-43ae0c7c2e17",
+  "ticketId": "01a189af-d764-72c3-a674-f5601919f131",
+  "body": "UI-Review 2026-10-30: Die mobile Vorschau docs/ui-ticket-relations-mobile.svg deckt am Ticket  Planungsdokumente und Projektübersicht gestalten alle vier vorhandenen Kanten ab: eingehendes blocks vom UI-Konzept, ausgehendes blocks zur visuellen Prüfung sowie zwei relates_to-Verknüpfungen (deutsche UI-Beschriftungen; Responsive/Accessibility). Eingeklappt steht Beziehungen · 4; geöffnet sind Richtung/Typ und jeweils der echte Gegen-Ticket-Titel sichtbar. Der Elternpfad bleibt getrennt. docs/ui-prototype-mobile.svg zeigt die passende Vierer-Zusammenfassung. Keine Parent-, blocks- oder relates_to-Kanten geändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:04:46.762Z"
+}

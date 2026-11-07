@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dad-4f4f-77ae-a2bb-2d16d4413057",
+  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
+  "body": "Mobile Suchvorschau-Recheck: bei 320px war die 13px-Kommentarzeile 267.5px breit bei 272px verfügbarer Breite. Den Snippet an der Wortgrenze nach „UI-Review 2026-10-30:“ umbrechen lassen (ca. 155px/226.4px); Suchkreuz erhält die geplante 44×44px-Zielfläche. 390px hat dieselbe 44px-Aktion. Suchrouting-Parent und bestehende Kanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:38:27.919Z"
+}

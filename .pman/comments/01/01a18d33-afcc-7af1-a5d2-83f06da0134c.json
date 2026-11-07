@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d33-afcc-7af1-a5d2-83f06da0134c",
+  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
+  "body": "Projektübersichtsaussage präzisiert: Visual-QA hat acht eingehende blocks-Kanten – sechs Hauptpakete plus Entscheidungen revision-sicher bearbeiten und Ticketbeziehungen sicher verwalten. Alle drei Übersichtsvorschauen benennen die zwei zusätzlichen Voraussetzungen. Kanonische Kanten unverändert; docs/ui-review.md hält den Abgleich fest.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:25:37.228Z"
+}

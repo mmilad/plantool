@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cfa-eeb6-75c9-916f-3b0f199c4a97",
+  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
+  "body": "UI-Review 2026-10-30: docs/ui-search-preview-320.svg ergänzt die Suche beim schmalen 320px-Check: Query, Typfilter und  Weitere Treffer laden behalten 44px-Flächen; Keyword ist aktiv, ONNX/all-MiniLM-L6-v2 plus SQLite-Vektorindex sind als spätere Verfügbarkeit kenntlich. Kommentarresultate zeigen lesbaren Treffertext und Ticketziel statt Comment-on-UUID. Abstimmung mit Such-UI 01a189bd-b44d-7e95-84fc-66d307543b12 über die bestehende relates_to-Kante; Parent-, Blocks- und Relationskanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:23:37.782Z"
+}

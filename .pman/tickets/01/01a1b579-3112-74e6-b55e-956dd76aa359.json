@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b579-3112-74e6-b55e-956dd76aa359",
+  "title": "pman next: list ready tickets by priority with reasons",
+  "description": "Leaf tickets in todo without open blockers. Order: priority, transitively unblocked tickets, proximity to active work (sibling in_progress), age. JSON with a reason per entry, --limit.",
+  "status": "done",
+  "priority": "high",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1b579-30e5-7eae-8f69-696da06abfea",
+  "createdAt": "2026-11-07T10:06:20.946Z",
+  "updatedAt": "2026-11-07T10:14:47.685Z",
+  "kind": "task",
+  "assignee": null
+}

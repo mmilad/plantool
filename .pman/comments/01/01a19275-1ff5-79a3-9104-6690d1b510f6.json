@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19275-1ff5-79a3-9104-6690d1b510f6",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Quellstand-Recheck 2026-10-31: Drei bekannte Befunde erneut bestätigt, ohne Duplikate anzulegen: leerer Detailstart und fehlende Status-/Prioritätsanzeige gehören zur Navigation/Übersicht 01a189a9-42ad-7d98-bb63-7d9d4d25351d / 01a189a9-42b1-7518-a6e0-89b4577b1270; direkt offener Editor, doppelte Beschreibung und fehlender Eltern-/Beziehungspfad gehören zum Detailticket 01a189a9-42af-7e67-93b4-dcdb41bbad6a. Statischer Quellbefund; keine aktuelle Live-Abnahme. Dokumentiert in docs/ui-review.md. Zugehörigkeiten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:55:11.861Z"
+}

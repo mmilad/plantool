@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d96-96c3-7f90-9204-d30b796d5683",
+  "ticketId": "01a189b0-0f28-7715-8ac6-c689065acab1",
+  "body": "MOBILVORSCHAU 2026-10-30: docs/ui-fp-layout-mobile.svg zeigt zwei 390×844-Zustände derselben UI-Arbeit im schlichten fp.dev-Stil: eigenständige scrollbare Liste und fokussiertes Detail. Der Rückweg stellt Query, Filter, Ticketziel und Listenposition wieder her; dauerhaft beschriftete Status-/Prioritätswerte und sichtbarer Elternlink bleiben erhalten. Gehört zu diesem Responsive-Unterticket; die vorhandenen Blocks-/relates_to-Kanten und der Parent bleiben unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:13:38.883Z"
+}

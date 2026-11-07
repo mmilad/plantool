@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1927f-c2cf-750b-b904-19b2eb665ca7",
+  "ticketId": "01a189ad-9320-7ba9-a8ad-4656341eb4e5",
+  "body": "Review-Handoff 2026-10-31: Nach verfügbarer revision-sicherer Bearbeitung die abgeleiteten Datenproben gemeinsam nachziehen: docs/ui-documents-mobile.svg, ui-documents-links-mobile.svg, ui-prototype-overview*.svg, ui-search-preview*.svg und ASCII-Raster in ui-wireframe.md. Kanonische Titel bis dahin nicht in Vorschauen vorwegnehmen. Zielrollen getrennt halten; vorhandenen Review-Zieldokument-Link bewahren; doppelte Reviewticketlinks gezielt einzeln bereinigen. Parent und bestehende Relations unverändert; dieses Ticket bleibt Kind des UI-Reviews und durch 01a189f8-f7bf-7921-b4cf-b3269ac6239d blockiert.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:06:48.911Z"
+}

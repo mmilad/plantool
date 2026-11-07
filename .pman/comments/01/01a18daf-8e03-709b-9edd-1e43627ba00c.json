@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18daf-8e03-709b-9edd-1e43627ba00c",
+  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
+  "body": "Konsistenzfund 2026-10-30: Diese Beschreibung enthält weiter die alte Momentaufnahme mit neun direkten UI-Kindern (1 bereit, Review in Arbeit, 7 blockiert). Der aktuelle Baum hat zehn direkte Kinder: 2 ohne offene Blocker, 1 in Arbeit, 7 blockiert. docs/ui-wireframe.md und die aktualisierten Übersichtsmocks zählen zehn. Bitte die Momentaufnahme in dieser bestehenden Konzeptbeschreibung bei nächster Pflege auf zehn/die aktuellen Rollups korrigieren, datieren und gespeicherten Status getrennt von Readiness halten. Kein neues Ticket; Parents/Relations unverändert. Auch Übersichts-Unterticket 01a189b1-a4e4-7227-aca6-1283ecc6d8bd bleibt fachlicher Ort für die Zähllogik. Details: docs/ui-review.md.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:40:55.043Z"
+}

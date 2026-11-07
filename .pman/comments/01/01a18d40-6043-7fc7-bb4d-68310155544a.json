@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d40-6043-7fc7-bb4d-68310155544a",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "LIVE-PORTSTATE-RECHECK 2026-10-30: In-App-Aufruf von http://127.0.0.1:59456/ endet mit ERR_CONNECTION_TIMED_OUT. pman serve --port 59456 scheitert mit EADDRINUSE, während netstat, Get-NetTCPConnection und die lokale Node-Prozessliste keinen Besitzer/Listener zeigen. Weder Prozess beendet noch überschrieben. docs/ui-review.md dokumentiert den ungeklärten Laufzeit-/Umgebungszustand; bestehende Beziehungen und Elternstruktur unverändert. Live-/Screenshot-Abnahme bleibt offen.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:39:28.835Z"
+}

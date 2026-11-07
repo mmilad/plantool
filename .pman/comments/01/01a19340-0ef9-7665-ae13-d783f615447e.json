@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19340-0ef9-7665-ae13-d783f615447e",
+  "ticketId": "01a189a9-42af-7e67-93b4-dcdb41bbad6a",
+  "body": "Umsetzung begonnen 2026-10-31: erster Ausschnitt umfasst Bearbeiten von Titel, Beschreibung, Status und Priorität. GET /versioned liefert die Revision; PATCH prüft expectedRevision und bildet Konflikte als 409 ab. Weitere Detailschritte bleiben passiv, bis dieser Ablauf benutzt und abgenommen ist.",
+  "author": "local",
+  "createdAt": "2026-10-31T18:36:51.321Z"
+}

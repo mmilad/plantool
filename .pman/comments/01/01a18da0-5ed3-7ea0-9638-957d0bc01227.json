@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18da0-5ed3-7ea0-9638-957d0bc01227",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "UI-Review 2026-10-30: fp.dev-Desktopmock gegen den im Wireframe dokumentierten 40px-Mindestwert geprüft; Suche/Hauptaktion waren 38px, Filter 32px. Statische docs/ui-fp-layout.svg korrigiert und relevante Konzept-/Responsive-Tickets mit bestehenden Zugehörigkeiten informiert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:24:19.924Z"
+}

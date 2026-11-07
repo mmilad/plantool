@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d28-174b-7fb1-9ab5-6b95dfdbba05",
+  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
+  "body": "Ergänzung aus Quellflussprüfung 2026-10-30: Das gleiche Suchzustandsproblem betrifft alle lokalen Writes: Ticket-PATCH und Ticket-POST rufen load() auf und ersetzen Treffer durch den Vollbaum, Kommentar-POST aktualisiert nur show(id) und lässt globale Treffer unverändert. Nach bestätigten Ticketänderungen/-anlage und Kommentar-POST Query, Modus, Typfilter, Paging und Auswahl erhalten und Treffer neu abfragen; bei entfernten Treffern bestehenden Ziel-/Stale-Vertrag nutzen. Details in docs/ui-review.md, gemeinsamer Wireframe-Vertrag in docs/ui-wireframe.md.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:12:57.291Z"
+}

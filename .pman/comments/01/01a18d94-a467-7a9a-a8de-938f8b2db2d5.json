@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d94-a467-7a9a-a8de-938f8b2db2d5",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Fortgesetzter Planreview 2026-10-30: docs/ui-fp-layout.svg konkretisiert jetzt die bestätigte fp.dev-Richtung als kompakte Zweispalten-Ticketarbeitsfläche. Stichprobe und Detail beziehen sich auf pman-Daten; der ausgewählte Konzepttask bleibt unter UI-Richtung und zeigt dessen bestehende Blocks-Beziehungen. Keine Parent- oder Relationsänderungen, kein Produktcode. Live-App weiterhin für Browserabnahme nicht erreichbar.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:11:31.303Z"
+}

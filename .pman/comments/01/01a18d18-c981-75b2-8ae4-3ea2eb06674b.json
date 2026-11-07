@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d18-c981-75b2-8ae4-3ea2eb06674b",
+  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
+  "body": "UI-ENTWURF 2026-10-30: Docs/UI-SVGs und docs/ui-wireframe.md auf gemeinsame vorläufige Farbrollen abgeglichen. Interaktive Kontur #768294 erreicht rechnerisch mindestens 3:1 auf Weiß, #F6F7F9 und #F0F3F7; Trennlinien bleiben #D8DEE7. Status-/Fehlerrollen und Textlabels bleiben getrennt verständlich. Noch Entwurf zur Abstimmung, keine Produktänderung. Die bestätigte optionale Suche Node.js/ONNX/all-MiniLM-L6-v2/SQLite-Vektorindex bleibt in ihrem vorhandenen Ticket-Ast.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:56:14.337Z"
+}

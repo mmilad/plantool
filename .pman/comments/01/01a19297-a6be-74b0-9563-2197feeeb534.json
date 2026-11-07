@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19297-a6be-74b0-9563-2197feeeb534",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review 2026-10-31: Der Nutzer delegiert UI-Richtungsentscheidungen; die Arbeitsbasis ist in docs/ui-wireframe.md festgehalten und im docs/ui-review.md protokolliert. Vorhandene Parents/Relations und fachliche Owners bleiben bestehen; keine neuen Tickets. Weiterer Review prüft nur konkrete Widersprüche oder Befunde gegen diese Basis.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:32:54.590Z"
+}

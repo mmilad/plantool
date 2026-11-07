@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18db5-24ab-75a8-8aa9-e4627a04d49f",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "SVG-/Review-Konsistenzprüfung 2026-10-30: Alle 27 ui-*.svg-Verweise aus Wireframe/Review sind vorhanden und XML-gültig. Ein älterer Absatz bei docs/ui-review.md hielt acht Visual-QA-Blocker und neun direkte UI-Kinder noch im Präsens fest; auf historische Momentaufnahme mit ausdrücklichem Verweis auf den aktuellen Stand (9 Visual-QA-Blocker, 10 direkte UI-Kinder) umgestellt. Keine Planbeziehungen verändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:47:01.292Z"
+}

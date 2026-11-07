@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1927d-b2b5-74ab-87b8-3c427dc791d2",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review-Fortschreibung 2026-10-31: vollständiger Stil-/Semantikabgleich dokumentiert in docs/ui-review.md. Betroffen sind UI-Ziel 01a189a9-429a-7005-8722-2847de61b01b, UI-Plan 01a189a9-42b7-7724-92e3-8da8d2a2dcfe, Review-Ziel 01a189ac-28ff-73c2-8a77-2320703d3924 und Review-Plan 01a189ac-2905-7324-b64b-59d828960a48. Nach erreichbarem Port 4000 zuerst Ziel/Plan konsistent nachschärfen, dann abhängige visuelle Pakete priorisieren. Bestehende Zugehörigkeiten/Relations unverändert; kein neues Ziel nötig.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:04:33.717Z"
+}

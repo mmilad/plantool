@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19280-dea2-7170-91fc-5fe35eddbf55",
+  "ticketId": "01a189a9-42b1-7518-a6e0-89b4577b1270",
+  "body": "Review 2026-10-31: Die drei Zusatzblocker der Visual-QA in Desktop/390/320-Projektübersicht jetzt namentlich benannt: fester Port 4000, revision-sichere Entscheidungsbearbeitung, Beziehungsverwaltung. pman Blocks-Kanten gegen Ticket 01a189a9-42b5-71b8-a846-9dc1985e3102 geprüft; keine Kante/Parent geändert. Readiness bleibt statische Momentaufnahme, bis Browserdatenvertrag verfügbar ist.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:08:01.571Z"
+}

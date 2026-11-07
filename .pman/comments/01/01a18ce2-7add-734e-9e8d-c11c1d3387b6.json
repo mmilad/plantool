@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18ce2-7add-734e-9e8d-c11c1d3387b6",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "BEZIEHUNGSAUDIT 2026-10-30: Aktueller pman-tree-Abgleich bestätigt neun direkte Kinder des UI-Programms mit unverändertem fachlichem Parent. UI-Richtung/Informationsarchitektur hat keine offene Blockierung; Icon, Navigation, Detail, Dokumente/Übersicht, Responsive und deutsche UI stehen wie vorgesehen hinter Konzept-/Paket-Blocks. Visuelle Prüfung wartet auf ihre Umsetzungs-/Sprachvoraussetzungen; das fortlaufende Review ist in_progress und kann weiterarbeiten. Die neuen Formlabel- und Schreib/Refresh-Befunde wurden bestehenden Fachtickets zugeordnet; Feedback ist per relates_to mit kontextbezogener Ticketanlage verknüpft. Keine Parent- oder Blocks-Kante geändert. pman validate: 45 Tickets, 4 Dokumente, 195 Beziehungen, 53 Kommentare vor diesem Auditkommentar.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:56:55.261Z"
+}

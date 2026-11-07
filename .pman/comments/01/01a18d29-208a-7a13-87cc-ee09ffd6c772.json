@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d29-208a-7a13-87cc-ee09ffd6c772",
+  "ticketId": "01a189b0-0f28-7715-8ac6-c689065acab1",
+  "body": "Abnahmestand 2026-10-30 aktualisiert: Die bisherigen dokumentierten Seitenhöhen beruhen auf 39–40 Tickets. Der kanonische pman-Baum enthält jetzt 45 Tickets und vier Dokumente; eine aktuelle Pixelhöhe ist mangels laufendem lokalen Server nicht gemessen. Die nächste Browserabnahme muss 390×844 und 320 CSS-Pixel mit aktuellem Bestand, leerer Ansicht, Liste, Detail, Rückkehr, Sucherhalt und Listenposition umfassen. Vorhandene Parent-Zugehörigkeit bleibt unter Responsive/Barrierefreiheit.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:14:05.195Z"
+}

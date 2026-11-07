@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d9b-e385-73a8-946d-4098a44a6a0b",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review 2026-10-30: Ticketdetail-Statuswerte sind im UI weiterhin hardcodiert. Aktuelle Werte passen zur Projektconfig, aber Custom-Status aus dem pman-Vertrag haben kein sicheres Select-/No-op-Verhalten. Den Erhaltvertrag im Wireframe geschärft und am bestehenden Ticketfelder-Ticket vermerkt; dessen Blocks-/relates_to-Zuordnungen bereits passend, keine neue Kante.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:19:26.213Z"
+}

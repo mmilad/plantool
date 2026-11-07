@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d1c-7f5b-7163-821b-49f4cc2f2b41",
+  "ticketId": "01a189b2-a6a6-74d9-b7c4-d9e344090079",
+  "body": "UI-Review 2026-10-30: Der statische Fokusrahmen in docs/ui-ticket-create-discard.svg war #1A1A1A, während das UI-Konzept eine sichtbare 2px-Aktionskontur mit Abstand vorsieht. Entwurf jetzt auf #2457A7 angeglichen; 3px-Abstand bleibt. Spätere Abnahme muss sichtbaren Fokus, Tastaturfluss und Zoom im echten Dialog prüfen. Bestehende relates_to- und Parent-/Blocks-Zuordnungen bleiben bestehen.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:00:17.499Z"
+}

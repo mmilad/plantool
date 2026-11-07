@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cb9-2556-796b-875c-f472cda23376",
+  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
+  "body": "ICON-REVIEW 2026-10-30: Die statische Vorschau docs/ui-icon-preview.svg zeigt für Astnavigation jetzt beide sichtbaren Chevron-Zustände: geschlossen nach rechts, geöffnet nach unten. Damit ist der visuelle Vorschlag mit der Forderung nach benanntem Auf-/Zu-Zustand abgestimmt. Accessible Name und aria-expanded bleiben im verwandten Accessibility-Ticket 01a189b2-a6a6-74d9-b7c4-d9e344090079; bestehende Parent- und relates_to-Zuordnungen unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:11:46.390Z"
+}

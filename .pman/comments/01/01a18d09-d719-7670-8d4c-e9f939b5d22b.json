@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d09-d719-7670-8d4c-e9f939b5d22b",
+  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
+  "body": "UI-Review 2026-10-30: docs/ui-ticket-create-mobile.svg und docs/ui-ticket-create-320.svg ergänzen den kontextbezogenen Unterticket-Flow. Die Detailvorschauen docs/ui-prototype-mobile.svg und docs/ui-ticket-detail-320.svg zeigen am Abschnitt Unteraufgaben nun die sichtbare 44px-Aktion zum Start. Das Formular hält den konkreten Elternnamen sichtbar, setzt parentId ausschließlich aus diesem Elterndetail, lässt den Elternstatus unverändert und zeigt Pflicht-/optionale Felder. Dieses bestehende Ticket ist per relates_to mit Responsive/Barrierefreiheit 01a189a9-42b2-70df-956e-b163f531de32 verknüpft; Parent und Blocks unverändert. Erfolgs-/Refresh-Rückmeldung bleibt beim bestehenden Feedbackticket abgestimmt.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:39:54.778Z"
+}

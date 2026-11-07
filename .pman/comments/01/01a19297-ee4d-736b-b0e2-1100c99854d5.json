@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19297-ee4d-736b-b0e2-1100c99854d5",
+  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
+  "body": "Richtungsentscheidung 2026-10-31: Desktop nutzt kompakte horizontale Hauptnavigation und im Ticketbereich eine schmale, eigene Scrollliste neben dem Detail; Suche bleibt global erreichbar. Status, Priorität und Bereitschaft werden getrennt. Mobil fokussiert Liste oder Detail und erhält Query/Filter/Position beim Rückweg. Details in docs/ui-wireframe.md; Parent und bestehende Relations unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:33:12.909Z"
+}

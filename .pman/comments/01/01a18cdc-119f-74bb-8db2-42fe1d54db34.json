@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cdc-119f-74bb-8db2-42fe1d54db34",
+  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
+  "body": "UI-Review 2026-10-30: Nutzerhinweis bestätigt: die spätere lokale Semantiksuche ist Teil der bestehenden Planung mit Node.js, ONNX und all-MiniLM-L6-v2 plus SQLite-Vektorsuche. Kanonischer Abgleich: Embedding-Pipeline inkl. Sprachqualitätsvergleich, SQLite-Index/Rebuild und hybride API mit dauerhaftem Keyword-Fallback sind drei zugeordnete Kinder des Such-Roadmaptickets 01a189bd-b44d-7e95-84fc-66d307543b12; der UI-Suchplan deckt Modus/Bereitschaft/Fallback ab. Keine Dublette erstellt und keine Umsetzung in dieser Runde.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:49:55.103Z"
+}

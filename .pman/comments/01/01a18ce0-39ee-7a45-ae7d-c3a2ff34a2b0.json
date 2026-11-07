@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18ce0-39ee-7a45-ae7d-c3a2ff34a2b0",
+  "ticketId": "01a189b2-43b1-775a-89f1-388cdd0af53c",
+  "body": "MUTATION VS. REFRESH 2026-10-30: Der Quellablauf bestätigt eine Lücke im Fehlervertrag: POST/PATCH kann erfolgreich committen und danach scheitert load()/show() beim Aktualisieren der Ansicht. Diese Fälle dürfen nicht als fehlgeschlagene Mutation behandelt werden und keine Wiederholung des POST auslösen. Erfolg/ID/Status der bestätigten Schreibantwort getrennt vom Zustand der anschließenden Listen-/Detailaktualisierung darstellen; bei Refreshfehler eine erneute Aktualisierung anbieten, ohne den bereits erfolgreichen Schreibvorgang zu wiederholen oder den lokalen Inhalt zu verlieren. Dasselbe Muster für Kommentar-POST plus anschließendes show() prüfen. Mit kontextbezogener Ticketanlage 01a189b1-f688-7fd0-9d9d-33b3016a1acc verknüpft.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:54:27.566Z"
+}

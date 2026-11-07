@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d33-b06c-70e6-b70f-09960d36582b",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review 2026-10-30: In Desktop-/Mobil-/320px-Übersicht war unklar, dass Visual-QA neben sechs Hauptpaketen noch zwei weitere Blocker hat. Gegen relation list geprüft (8 incoming blocks); Text jetzt mit Entscheidungsbearbeitung und Ticketbeziehungen als weitere Voraussetzungen präzisiert. Neun Root-Kinder und ihre Parent-/Blocks-Kanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:25:37.388Z"
+}

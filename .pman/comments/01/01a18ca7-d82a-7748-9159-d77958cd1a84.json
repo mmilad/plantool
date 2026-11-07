@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18ca7-d82a-7748-9159-d77958cd1a84",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Server-Prüfung 2026-10-30: pman serve --port 59456 kann wegen EADDRINUSE nicht parallel starten, der Port ist also belegt; der Browserzugriff und ein read-only HTTP-Abruf laufen jedoch in Time-out. Keine neue Live-Abnahme möglich. Den Portinhaber nicht beenden; erst die vorhandene Sitzung/den laufenden Serverzustand identifizieren. Bestehende UI-Themen bleiben ihren Fach-Tickets zugeordnet.",
+  "author": "local",
+  "createdAt": "2026-10-30T11:52:52.522Z"
+}

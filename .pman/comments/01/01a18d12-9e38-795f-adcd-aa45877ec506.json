@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d12-9e38-795f-adcd-aa45877ec506",
+  "ticketId": "01a189b2-a6a6-74d9-b7c4-d9e344090079",
+  "body": "UI-Review 2026-10-30: Die Root-/Unterticketformulare haben jetzt in docs/ui-ticket-create-discard.svg einen bestätigten Verwerfzustand. Accessibility-Vertrag: dirty detection nur für tatsächliche Nutzeränderungen, \u0007lertdialog mit \u0007ria-labelledby/\u0007ria-describedby, Fokusstandard  Weiter bearbeiten, Tab innerhalb, Escape schließt zunächst nur den Alertdialog, Verwerfen stellt Ursprungsaktion und Listenposition her. Mobil wird Browser-/Zurückweg abgefangen; feste Parent-/Statusdefaults lösen keine Warnung aus. Beide Anlage-Tickets bereits per relates_to verbunden; keine Parent-/Blocks-/Relationsänderung.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:49:30.040Z"
+}

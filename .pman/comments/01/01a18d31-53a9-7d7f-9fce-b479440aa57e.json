@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d31-53a9-7d7f-9fce-b479440aa57e",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review 2026-10-30: Dritter Layoutzustand C markierte visuell Übersicht, während das Beispiel ein Ticketdetail zeigt. Auswahlfläche in docs/ui-layout-options.svg auf den Ticketbereich verschoben und unter aktiver Navigation dokumentiert. Zugehörigkeiten/Kanten bleiben unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T14:23:02.569Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d9f-c5f6-7894-b4f2-108ede00556c",
+  "ticketId": "01a189a9-42a4-7e89-8ab8-2f6a204818ed",
+  "body": "Richtungsabgleich 2026-10-30: Nach Nutzerklarstellung fp.dev als schlichte, änderbare visuelle Referenz; Jira nur als Ablauf-/Workflow-Inspiration. Aufgabenbeschreibung jetzt präzisiert. Das Konzept-Unterticket bleibt Kind dieser UI-Richtung; bestehende Blocks/Parents unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:23:40.790Z"
+}

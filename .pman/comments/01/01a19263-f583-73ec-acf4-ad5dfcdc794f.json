@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a19263-f583-73ec-acf4-ad5dfcdc794f",
+  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
+  "body": "Listenvertrag-Recheck 2026-10-31: Die Mobilelisten zeigen Readiness je Paket, aber Browser /api/tree liefert derzeit keine Readiness/Blockerziele. Das vorhandene Status-/Rollupticket 01a189b6-43ac-78a2-a06b-345c6fa56083 ist per bestehender relates_to-Kante zugeordnet; dort ist jetzt gebündelte Readiness-Datenversorgung für sichtbare Tickets ergänzt, damit kein Vollprojekt-Scan pro Karte nötig wird. Navigation-Parent und Relations unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T14:36:26.883Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1928b-7c6d-7a56-b746-7b4ec4f98450",
+  "ticketId": "01a189c1-79a0-74ae-b519-20b51b0aefa8",
+  "body": "Vorschlag aus Quellabgleich 2026-10-31 für die noch offene URL-Form: /?ticket=<id>#comment=<id>. Der Server beantwortet GET / bereits und lehnt /tickets/<id> mit 404 ab; Query/Fragment vermeiden dafür eine zusätzliche Deep-Path-Route. Ticketwechsel pushState, Zurück/Vorwärts popstate; flüchtige Filter-/Scrollposition höchstens im History-State, Suchtext nicht in die teilbare URL. Dieser Vorschlag ist mit direktem Aufruf, Reload, Kommentaranker und Verlauf abzunehmen; keine Implementierung in dieser Planungsrunde. Parent unter Navigation unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-31T15:19:37.325Z"
+}

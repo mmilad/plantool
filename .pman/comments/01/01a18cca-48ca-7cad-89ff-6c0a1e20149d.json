@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cca-48ca-7cad-89ff-6c0a1e20149d",
+  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
+  "body": "Ergänzender Touch-Abgleich 2026-10-30: Neben den 44px-Statusaktionen muss auch der mobile Liste/Board-Umschalter mindestens 44px bedienen. Die Vorschau bildet jetzt beide Segmente als 44px-Ziel ab; die Detail-/App-Hitbox bleibt bis zur erreichbaren Live-Abnahme ungeprüft.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:30:29.578Z"
+}

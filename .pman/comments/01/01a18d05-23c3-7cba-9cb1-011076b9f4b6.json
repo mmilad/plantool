@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18d05-23c3-7cba-9cb1-011076b9f4b6",
+  "ticketId": "01a189b0-0f28-7715-8ac6-c689065acab1",
+  "body": "UI-Review 2026-10-30: docs/ui-ticket-list-mobile.svg und docs/ui-ticket-list-320.svg ergänzen den bisher nur als Detailzustand gezeichneten mobilen Wechselablauf. Sie zeigen sieben aktuelle direkte UI-Programmkinder und Scrollhinweis auf die übrigen zwei; gespeicherter Status und graphbasierte Bereitschaft bleiben getrennt, Filterfläche 44px. Zugehörigkeit bleibt Kind des Responsive-Tickets und nutzt bestehende relates_to-Kanten zur Ticketnavigation, Accessibility und Status-Board; keine neue Beziehung oder Ticketanlage.",
+  "author": "local",
+  "createdAt": "2026-10-30T13:34:46.723Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18dbd-feb3-75d5-8f00-eeb812c764ac",
+  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
+  "body": "Priorisierung 2026-10-30: auf high gesetzt, weil dieses Konzept-Unterticket die zentrale Voraussetzung für Navigation, Ticketdetail, Dokument-/Projektübersicht, Icons und Responsive-Arbeit ist. Es bleibt unter UI-Richtung und Informationsarchitektur; bestehende Blocks-/relates_to-Kanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:56:41.395Z"
+}

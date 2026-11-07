@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18da0-5d58-7f0d-8a37-9bae71053146",
+  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
+  "body": "Visueller Größenabgleich 2026-10-30: docs/ui-fp-layout.svg zeigte Desktop-Suche und Ticketaktion 38px hoch sowie Status-/Prioritätsfilter 32px. Das Wireframe verlangt für Desktop-Bedienelemente mindestens 40px. Die statische fp.dev-Vorschau ist korrigiert: Suche/Aktion 40px, Filter 40px; Listenabstand bleibt erhalten. Änderung ist Entwurfsabgleich, keine Produktimplementierung. Bestehende Parent-/Blocks-Kanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:24:19.544Z"
+}

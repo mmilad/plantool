@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cc2-eade-7a67-a029-e6a024340742",
+  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
+  "body": "BOARD-VORSCHAU 2026-10-30: docs/ui-board-preview.svg zeigt das UI-Programm mit genau seinen neun direkten Kindern, Spalten in config.statuses-Reihenfolge und Blocker-Readiness getrennt vom gespeicherten Status. Belegte Verteilung: todo=8 (davon 7 Readiness blocked, 1 bereit), in_progress=1, done=0, cancelled=0. Leere Statusspalten bleiben sichtbar; keine gemischten Baumtiefen, Assignees, Sprints oder Jira-Assets. Als statischer Vorschlag mit Review 01a189ac-28f7-7250-b817-2026a531a7b5 per relates_to verknüpft. Parent unter Ticketnavigation, bestehende Blocks-/relates_to-Kanten unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:22:26.782Z"
+}

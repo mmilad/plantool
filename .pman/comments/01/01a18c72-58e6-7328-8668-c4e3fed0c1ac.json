@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18c72-58e6-7328-8668-c4e3fed0c1ac",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review-Runde 2026-10-30: Der Live-Aufruf von http://127.0.0.1:59456 ist mit Verbindungszeitüberschreitung fehlgeschlagen; deshalb keine neue visuelle UI-Abnahme behaupten. Quellstand und Plan abgeglichen: bekannte UI-Lücken sind bereits den passenden Navigation-, Detail-, Dokument-, Icon- und Accessibility-Aufgaben zugeordnet. ONNX / all-MiniLM-L6-v2 / Node.js / SQLite-Vektorindex sind konsistent in docs/open-questions.md, UI-Konzept und den drei technischen Unteraufgaben geplant; Embedding und Index blockieren die hybride Integration. pman validate: 43 Tickets, 4 Dokumente, 161 Beziehungen, 6 Kommentare; alle 43 eindeutigen UUID-Verweise in docs/ui-review.md zeigen auf vorhandene Tickets, Dokumente, Beziehungen oder Kommentare. Keine neue Aufgabe und keine Parent-/Blocks-Kante geändert; nächste Runde setzt die visuelle Prüfung fort, sobald die lokale App erreichbar ist.",
+  "author": "local",
+  "createdAt": "2026-10-30T10:54:26.534Z"
+}

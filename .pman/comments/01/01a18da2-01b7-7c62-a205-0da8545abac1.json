@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18da2-01b7-7c62-a205-0da8545abac1",
+  "ticketId": "01a189af-d764-72c3-a674-f5601919f131",
+  "body": "Mobile Detailverfeinerung 2026-10-30: docs/ui-fp-layout-mobile.svg zeigt beim UI-Konzeptticket 34 ausgehende blocks-Kanten; bisher erschienen nur zwei Namen und ein Textverweis ohne erkennbares Navigationsziel. Vorschau konkretisiert zwei eigenständige 44px-Ticketziele plus die 44px-Aktion  Alle 34 Blocker ansehen in einem scrollbar gedachten Detail. Wireframe hält denselben Vertrag für große Gruppen fest. Anzeige-/Navigationsumfang bleibt in diesem lesbaren Beziehungsticket; kein neues Ticket und keine Relationsänderung.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:26:07.159Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18cd8-fc8f-7450-a889-2c27ed489028",
+  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
+  "body": "MOBILE-DOKUMENTABNAHME 2026-10-30: Mit docs/ui-documents-mobile.svg zwei getrennte Mobilzustände prüfen: Dokumentliste und Lesemodus, native Dokumentart-Auswahl, 44px-Rückweg, sichere Darstellung/Verknüpfungen und Leerzustand für 0 Entscheidungen. Listen-/Leserwechsel muss Auswahl nachvollziehbar halten; UI darf mangels Update-API keine Bearbeitung versprechen. Parent-/Blocks-Zuordnungen unverändert.",
+  "author": "local",
+  "createdAt": "2026-10-30T12:46:33.103Z"
+}

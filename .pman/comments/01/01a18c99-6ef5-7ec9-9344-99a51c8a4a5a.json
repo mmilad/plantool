@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18c99-6ef5-7ec9-9344-99a51c8a4a5a",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Suchansicht 2026-10-30: docs/ui-search-preview.svg ergänzt die bisher nur textlich beschriebene globale Suche. Vorhandene Such-UI-Aufgabe 01a189bd-b44d-7e95-84fc-66d307543b12 referenziert die SVG und ist per relates_to mit der visuellen Prüfarbeit verbunden. Beispielschnipsel/Reihenfolge sind als illustrativ markiert; lokale ONNX-/all-MiniLM-L6-v2-/Node.js-/SQLite-Ausbaustufe bleibt optional mit Keyword-Fallback. Keine neue Ticket- oder Parent-Zuordnung.",
+  "author": "local",
+  "createdAt": "2026-10-30T11:37:08.085Z"
+}

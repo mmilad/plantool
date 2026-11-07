@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a18da4-dcfb-72c1-a5b6-7b40ad8f35a6",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Recheck 2026-10-30: pman tree enthält 10 direkte UI-Pakete. UI-Richtung und dieses laufende Review sind startklar; das Konzept samt abhängigen Gestaltungs-/Umsetzungspaketen ist der richtige nächste Planabschnitt. Live-UI auf Ports 4000, 59456 und 59457 aktuell nicht erreichbar. Portticket 01a18d87-251e-7ff7-9678-7a437fd0ef76 bleibt hoch priorisiert und vor Live-Visual-QA relevant. Keine Parent-/Blocks-Kanten verschoben.",
+  "author": "local",
+  "createdAt": "2026-10-30T16:29:14.363Z"
+}
