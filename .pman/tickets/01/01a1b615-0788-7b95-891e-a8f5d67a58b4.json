@@ -4,7 +4,7 @@
   "title": "Cache canonical records in the server, invalidated by the file fingerprint",
   "kind": "task",
   "description": "Every /api/tree, /api/search and /api/tickets/:id/plan request re-reads all canonical files (6,063 tickets with 2 KB descriptions: tree page ~0.45 s, search ~1 s, plan ~1.3 s). Keep an in-memory snapshot of tickets, relationships, comments, documents and design records in pman serve, keyed by the per-area fingerprint from /api/version (size+mtime), so unchanged areas are served from memory. Writes through the server update or invalidate the snapshot. Files stay the source of truth; no on-disk index. Measure before/after with bench/scale.mjs and the 6k synthetic project.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [
     "performance"
@@ -12,5 +12,6 @@
   "properties": {},
   "parentId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
   "createdAt": "2026-11-07T12:56:33.928Z",
-  "updatedAt": "2026-11-07T12:56:33.928Z"
+  "updatedAt": "2026-11-07T12:58:35.509Z",
+  "assignee": null
 }

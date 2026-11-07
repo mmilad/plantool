@@ -60,7 +60,8 @@ export async function initProject({ cwd = process.cwd(), name = path.basename(pa
   return config;
 }
 
-export async function openProject({ cwd = process.cwd() } = {}) {
+/** cache: keep parsed records in memory, revalidated on every read by file size+mtime (for long-lived processes such as pman serve). */
+export async function openProject({ cwd = process.cwd(), cache = false } = {}) {
   const root = await findProject(cwd); if (!root) throw new NotFoundError(`No .pman project found from ${path.resolve(cwd)}`);
   const dir = path.join(root, '.pman');
   const st = await fs.lstat(dir); if (!st.isDirectory() || st.isSymbolicLink()) throw new ValidationError('.pman must be a real directory');
@@ -70,7 +71,7 @@ export async function openProject({ cwd = process.cwd() } = {}) {
   if (config.schemaVersion !== 1) throw new UnsupportedSchemaVersionError(`Unsupported project schema version: ${config.schemaVersion}`);
   try{checkId(config.projectId);}catch(e){throw new ValidationError(`Invalid projectId in .pman/config.json: ${e.message}`);}
   if (!Array.isArray(config.statuses) || !config.statuses.length || config.statuses.some(x=>typeof x!=='string'||!x.trim()) || new Set(config.statuses).size !== config.statuses.length) throw new ValidationError('Project statuses must be a non-empty list of unique strings');
-  const p = { root, dir, config };
+  const p = { root, dir, config, cache: cache ? new Map() : null };
   p.tickets = ticketApi(p); p.documents = documentApi(p); p.comments = commentApi(p); p.relations = relationApi(p);
   p.validate = () => validateProject(p);
   p.search = (query, options) => searchProject(p, query, options);
@@ -106,7 +107,32 @@ async function writeJson(p, folder, record, { expectedRevision, create = false }
   catch (e) { await fs.rm(temp, { force: true }).catch(() => {}); throw new StorageError(`Could not atomically write ${file}: ${e.message}`); }
   return record;
 }
-async function listJson(p, folder) {
+const deepFreeze = v => { if (v && typeof v === 'object' && !Object.isFrozen(v)) { Object.freeze(v); for (const x of Object.values(v)) deepFreeze(x); } return v; };
+/** Lists record files of a folder with their size and mtime; the joined string is the cache key. */
+async function folderStamp(p, folder, ext) {
+  const base = path.join(p.dir, folder); if (!await exists(base)) return { stamp: 'missing', files: [] };
+  const files = [], parts = [];
+  for (const shard of (await fs.readdir(base, { withFileTypes: true })).filter(x => x.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const shardPath = path.join(base, shard.name);
+    const entries = (await fs.readdir(shardPath, { withFileTypes: true })).filter(x => x.name.endsWith(ext)).sort((a, b) => a.name.localeCompare(b.name));
+    const stats = await Promise.all(entries.map(e => fs.lstat(path.join(shardPath, e.name))));
+    entries.forEach((e, i) => { files.push(path.join(shardPath, e.name)); parts.push(`${shard.name}/${e.name}:${stats[i].size}:${stats[i].mtimeMs}:${stats[i].isFile() ? 'f' : 'x'}`); });
+  }
+  return { stamp: parts.join('|'), files };
+}
+/** Returns cached records when the folder stamp is unchanged; otherwise runs load() and caches the frozen result. */
+async function cached(p, key, folder, ext, load) {
+  if (!p.cache) return load();
+  const { stamp } = await folderStamp(p, folder, ext);
+  const hit = p.cache.get(key);
+  if (hit && hit.stamp === stamp) return [...hit.value];
+  const value = await load();
+  const after = await folderStamp(p, folder, ext);
+  if (after.stamp === stamp) p.cache.set(key, { stamp, value: deepFreeze(value) }); else p.cache.delete(key);
+  return [...value];
+}
+async function listJson(p, folder) { return cached(p, `json:${folder}`, folder, '.json', () => listJsonUncached(p, folder)); }
+async function listJsonUncached(p, folder) {
   const base = path.join(p.dir, folder); await assertSafePath(p.dir,base); if (!await exists(base)) return [];
   const files = [];
   for (const shard of (await fs.readdir(base, { withFileTypes: true })).filter(x => x.isDirectory()).sort((a,b)=>a.name.localeCompare(b.name))) {
@@ -234,11 +260,16 @@ function documentApi(p) {
     const file=fileOf(kind,id); await assertSafePath(p.dir,path.dirname(file));await fs.mkdir(path.dirname(file),{recursive:true});await assertSafePath(p.dir,file);await fs.writeFile(file,docText(value),{flag:'wx'}); return value;
   }, async list(kind,{body=true}={}) {
     checkKind(kind);
+    const out=await cached(p,`doc:${kind}`,kind,'.md',()=>listDocsUncached(kind));
+    return body?out:out.map(({body:_,...meta})=>meta);
+  } };
+  async function listDocsUncached(kind) {
     const base=path.join(p.dir,kind), out=[];await assertSafePath(p.dir,base); if(!await exists(base)) return out;
     for(const sh of (await fs.readdir(base,{withFileTypes:true})).filter(x=>x.isDirectory()).sort((a,b)=>a.name.localeCompare(b.name))) {const shard=path.join(base,sh.name);await assertSafePath(p.dir,shard);for(const f of (await fs.readdir(shard)).filter(x=>x.endsWith('.md')).sort()){const file=path.join(shard,f);await assertSafePath(p.dir,file);const st=await fs.lstat(file);if(!st.isFile())throw new ValidationError(`Planning document is not a regular file: ${file}`);out.push(parseDoc(await fs.readFile(file,'utf8'),f));}}
     out.sort(sortRecords);
-    return body?out:out.map(({body:_,...meta})=>meta);
-  }, async get(kind,id) { return (await api.getVersioned(kind,id)).document; },
+    return out;
+  }
+  Object.assign(api, { async get(kind,id) { return (await api.getVersioned(kind,id)).document; },
   async getVersioned(kind,id) { checkId(id); checkKind(kind);const f=fileOf(kind,id);await assertSafePath(p.dir,f);let text;try{text=await fs.readFile(f,'utf8');}catch(e){if(e.code==='ENOENT')throw new NotFoundError(`Document not found: ${id}`);throw e;}return {document:parseDoc(text,f),revision:hash(text)}; },
   /** Revision-safe update of title, status, body and links. An unchanged patch writes nothing. */
   async update(kind,id,patch={},{expectedRevision}={}) {
@@ -255,7 +286,7 @@ function documentApi(p) {
     const recheck=hash(await fs.readFile(f,'utf8'));if(recheck!==revision)throw new ConflictError(`Document changed since it was read: ${id}`,{id,revision:recheck});
     try{await fs.writeFile(temp,text,{flag:'wx'});await fs.rename(temp,f);}catch(e){await fs.rm(temp,{force:true}).catch(()=>{});throw new StorageError(`Could not atomically write ${f}: ${e.message}`);}
     return {document:parseDoc(text,f),revision:hash(text),changed:true};
-  } };
+  } });
   return api;
 }
 function commentApi(p) { return {

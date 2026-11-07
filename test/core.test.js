@@ -50,3 +50,13 @@ test('documents update revision-safely, validate links and never add duplicates'
   await p.documents.update('goals',g.id,{links:[a.id,ghost]});assert.deepEqual((await p.documents.get('goals',g.id)).links,[a.id,ghost]);
   await assert.rejects(()=>p.documents.update('goals',g.id,{links:[a.id,a.id,ghost]}),{code:'VALIDATION'});
 });
+test('record cache is revalidated by size and mtime and never serves stale or mutable data',async t=>{const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman cache '));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const p=await openProject({cwd,cache:true}),other=await openProject({cwd});
+  const a=await p.tickets.create({title:'One'});assert.equal((await p.tickets.list()).length,1);
+  await other.tickets.create({title:'Two'});assert.equal((await p.tickets.list()).length,2,'external create is visible');
+  await other.tickets.update(a.id,{title:'One renamed'});assert.equal((await p.tickets.list()).find(x=>x.id===a.id).title,'One renamed','external update is visible');
+  const listed=await p.tickets.list();assert.throws(()=>{listed[0].title='mutated';},TypeError);
+  const g=await other.documents.create('goals',{title:'G'});assert.equal((await p.documents.list('goals')).length,1);
+  await other.documents.update('goals',g.id,{title:'G2'});assert.equal((await p.documents.list('goals'))[0].title,'G2');
+  await fs.rm(path.join(p.dir,'tickets',a.id.slice(0,2),a.id+'.json'));assert.equal((await p.tickets.list()).length,1,'external delete is visible');
+});

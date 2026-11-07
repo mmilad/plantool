@@ -64,6 +64,13 @@ This file records material choices made while implementing the first usable rele
 - `pman validate` stays structural (dangling references, duplicate contracts or type names). `pman check` is the design check and exits non-zero on errors; warnings never fail it.
 - A consumer ticket implicitly depends on every open ticket that implements the consumed component or one of its ancestors. These implicit edges count for readiness, `next` ranking, the parent-done rule and cycle detection, but are not stored as relationships.
 
+## Server record cache (implemented 2026-11-07)
+
+- `openProject({ cache: true })` keeps parsed records per folder in memory; `pman serve` enables it, the CLI does not. Every read first lists the folder and compares file names, sizes and mtimes with the cached stamp, so changes from the CLI, Git or other processes are picked up on the next read. Canonical files stay the only source of truth; there is no on-disk index.
+- A load is cached only if the folder stamp is unchanged before and after loading. Cached records are deep-frozen and arrays are copied per call, so callers cannot mutate shared state.
+- Measured with 6,063 synthetic tickets (2 KB descriptions): tree page 0.45 s → 0.13 s, search ~1 s → 0.11 s, ticket plan 1.3 s → 0.33 s.
+- `GET /api/version` exposes per-area fingerprints (size and mtime, cached for 2 s) that the UI polls every 5 s while visible to refresh changed areas.
+
 ## Verification and remaining release work
 
 - Local checks were run on Node 24.22.1/Linux: package syntax checks, 11 tests (including a 10,000-deep parent chain and HTTP security checks), JSON Schema parsing, `npm pack --dry-run`, local tarball install, `npm exec -- pman --help`, and a public API import smoke check.

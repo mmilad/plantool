@@ -10,7 +10,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
   if (!Number.isInteger(port) || port < 0 || port > 65535) {
     throw new ValidationError('Port must be an integer between 0 and 65535 (0 picks a free port)');
   }
-  const project = await openProject({ cwd });
+  const project = await openProject({ cwd, cache: true });
   const token = randomBytes(32).toString('hex');
   let boundPort;
   // Cheap change detection: size and mtime of every canonical file, cached for 2 s.
