@@ -91,7 +91,7 @@ async function readJson(file) {
     const text = await fs.readFile(file, 'utf8'); const value = JSON.parse(text);
     if (value.schemaVersion !== 1) throw new UnsupportedSchemaVersionError(`Unsupported record schema version in ${path.relative(process.cwd(), file)}`);
     return { value, revision: hash(text) };
-  } catch (e) { if (e instanceof PmanError) throw e; if(e.code==='ENOENT')throw new NotFoundError(`Record not found: ${file}`,{path:file}); throw new ValidationError(`Invalid JSON at ${file}: ${e.message}`, { path: file }); }
+  } catch (e) { if (e instanceof PmanError) throw e; if(e.code==='ENOENT')throw new NotFoundError(`Record not found: ${path.basename(file,'.json')}`,{id:path.basename(file,'.json')}); throw new ValidationError(`Invalid JSON at ${file}: ${e.message}`, { path: file }); }
 }
 async function writeJson(p, folder, record, { expectedRevision, create = false } = {}) {
   const file = idPath(path.join(p.dir, folder), record.id); await assertSafePath(p.dir,path.dirname(file)); await fs.mkdir(path.dirname(file), { recursive: true }); await assertSafePath(p.dir,file);

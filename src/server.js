@@ -59,7 +59,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false } =
       m=/^\/api\/context\/([0-9a-f-]+)$/.exec(url.pathname);if(m&&req.method==='GET')return send(res,200,await project.context(m[1]));
       if(url.pathname==='/api/validate'&&req.method==='GET')return send(res,200,await project.validate());
       return send(res,404,{error:'Not found'});
-    } catch(e) { return send(res,e.code==='NOT_FOUND'?404:e.code==='VALIDATION'?400:e.code==='CONFLICT'?409:e.code==='CYCLE'||e.code==='OPEN_WORK'||e.code==='STALE_SEARCH'?409:500,{error:e.message,code:e.code??'ERROR'}); }
+    } catch(e) { return send(res,e.code==='NOT_FOUND'?404:e.code==='VALIDATION'?400:e.code==='CONFLICT'?409:e.code==='CYCLE'||e.code==='OPEN_WORK'||e.code==='STALE_SEARCH'?409:500,{error:String(e.message).split(project.root+path.sep).join('').split(project.root).join('.'),code:e.code??'ERROR'}); }
   });
   await new Promise((resolve,reject)=>{
     server.once('error',error=>{
