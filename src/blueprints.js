@@ -31,6 +31,17 @@ export const BUILTIN_BLUEPRINTS = Object.freeze([
     ],
   },
   {
+    name: 'feature', title: 'Feature', description: 'What a user-facing feature needs before it is built: behaviour, edge cases, data and proof.',
+    match: ['feature', 'flow'],
+    items: [
+      item('behaviour', 'Describe what the user does and what happens, step by step', 'Agents build what is written; a vague sentence becomes a vague feature.'),
+      item('states', 'Define empty, loading, error and permission cases', 'The happy path is the easy part; the other states decide whether it feels finished.', { after: ['behaviour'] }),
+      item('data', 'Name the data it reads and writes, and where it comes from', 'Data decides storage, contracts and what can be tested.', { after: ['behaviour'] }),
+      item('contracts', 'Plan the contracts it uses or provides before the code', 'Other parts can start against an agreed shape instead of waiting.', { after: ['data'] }),
+      item('tests', 'Write down how it is proven to work', 'Agents need to know what "verified" means for this feature.', { after: ['behaviour'] }),
+    ],
+  },
+  {
     name: 'ui-component', title: 'UI component', description: 'What every visible piece of UI needs besides its happy-path markup.',
     match: ['component', 'widget', 'button', 'modal', 'dialog', 'card', 'banner', 'sidebar', 'carousel', 'tooltip'],
     items: [

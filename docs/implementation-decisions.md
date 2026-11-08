@@ -123,3 +123,11 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - GitHub Actions is configured for Windows, macOS and Linux on Node 22, 24 and 26. The matrix results should be checked on this branch before treating the release as validated.
 - No migration is needed from a prior released format; schema/store version 1 is the initial version. Windows/macOS execution remains subject to the pending GitHub Actions jobs.
 - Before publishing, resolve the npm package identity with the owner, rerun the cross-platform matrix, and review the remaining CLI/API coverage against the roadmap. This task does not publish or merge.
+
+## Decisions and stand-ins (2026-11-08)
+
+- Decisions belong to a person by default. An agent can decide only decisions it owns (`--owner agent --reversible`). The decider defaults to unknown, not human; a person's answer is recorded with `--by human`. The same rule applies to reopening. The tool guards against mistakes, not against an agent that invents an answer.
+- Ready work means every `blocks` blocker is finished. A stand-in changes only what a consumer waits for: `implements --stage mock` and `consumes --needs mock`. The default `full` keeps the previous behaviour.
+- Blueprint items may declare `after`; that becomes `blocks` relations when the blueprint is applied. The product blueprint orders platform after goal, stack after platform, UI structure after stack, core features and accounts.
+- Finishing a ticket with an active claim needs the claimant (`--agent`) or `--force`.
+- Local web view requests act for the person (`by` defaults to human); there is no separate authorisation.
