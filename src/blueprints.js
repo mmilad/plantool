@@ -13,6 +13,24 @@ const item = (id, title, why, extra = {}) => ({ id, title, why, ...extra });
 /** Starter set. Items are written as tickets an agent can pick up; `optional` items are decisions, not defaults. */
 export const BUILTIN_BLUEPRINTS = Object.freeze([
   {
+    name: 'product', title: 'Product / app', description: 'The questions every new product has to answer before the work can be planned.',
+    match: ['app', 'product', 'website', 'game', 'platform', 'saas'],
+    items: [
+      item('goal', 'Write the product goal, target users and what success looks like', 'Every later decision is judged against this.'),
+      item('platform', 'Which platforms does it run on?', 'Decides framework, distribution and UI patterns.', { kind: 'decision', owner: 'human', reversible: false, options: ['Web', 'iOS and Android', 'Desktop', 'Web and mobile'] }),
+      item('stack', 'Which framework and language?', 'Hard to change later; depends on the platform and the skills of the team.', { kind: 'decision', owner: 'human', reversible: false, criteria: 'Team knowledge:3, Fit for the platform:3, Ecosystem:2, Performance:1' }),
+      item('core-features', 'List the core features of the first release', 'Keeps the first version small and makes the rest of the plan concrete.'),
+      item('accounts', 'Do users need accounts?', 'Accounts pull in login, privacy and a backend.', { kind: 'decision', owner: 'human', options: ['No accounts', 'Email and password', 'Social login'] }),
+      item('data', 'Where does the data come from and where does it live?', 'Device only, own backend or a third-party service changes the whole architecture.', { kind: 'decision', owner: 'human', reversible: false, options: ['Only on the device', 'Own backend', 'Third-party API or backend service'] }),
+      item('ui-structure', 'Map the screens and the navigation (menu, tabs, sidebar …)', 'Decides which UI parts exist; apply the header, page and form blueprints to them.'),
+      item('visual', 'Define the visual direction (references, colours, typography)', 'Gives every UI ticket the same target.'),
+      item('quality', 'Decide how the product is tested and released', 'Agents need to know what "verified" means.'),
+      item('offline', 'Must it work offline?', 'Only relevant for mobile or field use.', { kind: 'decision', optional: true, options: ['Yes', 'No'] }),
+      item('monetization', 'How does it make money?', 'Only if it is a commercial product.', { kind: 'decision', optional: true, owner: 'human', options: ['Free', 'One-time purchase', 'Subscription', 'Ads', 'In-app purchases'] }),
+      item('legal', 'Check legal requirements (privacy, licences, trademarks, content rights)', 'Third-party brands, images and personal data need permission.', { optional: true }),
+    ],
+  },
+  {
     name: 'ui-component', title: 'UI component', description: 'What every visible piece of UI needs besides its happy-path markup.',
     match: ['component', 'widget', 'button', 'modal', 'dialog', 'card', 'banner', 'sidebar', 'carousel', 'tooltip'],
     items: [
@@ -127,7 +145,8 @@ function validateBlueprint(bp, source) {
     if (seen.has(it.id)) throw new ValidationError(`Blueprint ${bp.name}: duplicate item ${it.id}${where}`);
     seen.add(it.id);
     if (typeof it.title !== 'string' || !it.title.trim()) throw new ValidationError(`Blueprint ${bp.name}: item ${it.id} needs a title${where}`);
-    if (it.kind !== undefined && !['task', 'feature', 'bug'].includes(it.kind)) throw new ValidationError(`Blueprint ${bp.name}: item ${it.id} has an invalid kind${where}`);
+    if (it.options !== undefined && (!Array.isArray(it.options) || it.options.some(o => typeof o !== 'string'))) throw new ValidationError(`Blueprint ${bp.name}: item ${it.id} options must be a list of texts${where}`);
+    if (it.kind !== undefined && !['task', 'feature', 'bug', 'decision'].includes(it.kind)) throw new ValidationError(`Blueprint ${bp.name}: item ${it.id} has an invalid kind${where}`);
   }
   if (bp.match !== undefined && (!Array.isArray(bp.match) || bp.match.some(x => typeof x !== 'string'))) throw new ValidationError(`Blueprint ${bp.name}: match must be a list of words${where}`);
   return bp;
@@ -222,7 +241,9 @@ export function attachBlueprintApi(p) {
       const created = [];
       for (const i of chosen) {
         const description = [i.why, i.description, `From blueprint ${bp.title ?? bp.name} › ${i.id} (parent: ${ticket.title}).`].filter(Boolean).join('\n\n');
-        const child = await p.tickets.create({ title: i.title, description, kind: i.kind ?? 'task', parentId: ticket.id, labels: i.labels ?? [], origin: { blueprint: name, item: i.id } });
+        const child = i.kind === 'decision'
+          ? (await p.decisions.ask(i.title, { parentId: ticket.id, why: i.why, options: i.options ?? [], criteria: i.criteria ?? [], owner: i.owner, reversible: i.reversible, origin: { blueprint: name, item: i.id } })).decision
+          : await p.tickets.create({ title: i.title, description, why: i.why || undefined, acceptance: i.acceptance?.map(text => ({ text, met: false })), kind: i.kind ?? 'task', parentId: ticket.id, labels: i.labels ?? [], origin: { blueprint: name, item: i.id } });
         created.push({ item: i.id, id: child.id, key: p.ticketKey(child), title: child.title });
       }
       return { ticketId: ticket.id, blueprint: name, created, coverage: await coverage(ticket.id) };

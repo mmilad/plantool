@@ -5,8 +5,9 @@ import { createHash } from 'node:crypto';
 import { ConflictError, NotFoundError, ValidationError } from './index.js';
 import { designModel } from './design.js';
 import { sharedClaim, sharedRelease, claimsElsewhere } from './claims.js';
+import { decisionReasons } from './decisions.js';
 
-export const TICKET_KINDS = Object.freeze(['task', 'feature', 'bug']);
+export const TICKET_KINDS = Object.freeze(['task', 'feature', 'bug', 'decision', 'option']);
 export const PRIORITY_RANK = Object.freeze({ low: 0, normal: 1, high: 2, urgent: 3 });
 const DEFAULT_LEASE_MINUTES = 60;
 export const isFinished = t => t?.status === 'done' || t?.status === 'cancelled';
@@ -39,7 +40,8 @@ const leaseActive = (t, now) => !!t.assignee?.expiresAt && Date.parse(t.assignee
 export function readinessOf(g, ticket, now = Date.now()) {
   const reasons = [];
   if (isFinished(ticket)) reasons.push(`ticket is ${ticket.status}`);
-  const openChildren = (g.children.get(ticket.id) ?? []).filter(c => !isFinished(c));
+  const openChildren = (g.children.get(ticket.id) ?? []).filter(c => !isFinished(c) && !(ticket.kind === 'decision' && c.kind === 'option'));
+  reasons.push(...decisionReasons(g, ticket));
   if (openChildren.length) reasons.push(`${openChildren.length} open child ticket(s)`);
   const own = g.openBlockers(ticket.id);
   const viaProvider = own.filter(t => g.isProviderEdge(t.id, ticket.id)), explicit = own.filter(t => !viaProvider.includes(t));
@@ -130,13 +132,13 @@ export async function releaseTicket(p, id, { agent, force = false } = {}) {
   });
 }
 
-export async function finishTicket(p, id, { note, agent, force = false } = {}) {
+export async function finishTicket(p, id, { note, agent, force = false, outcome } = {}) {
   const before = new Set((await nextTickets(p, { limit: Infinity })).map(x => x.id));
   const ticket = await withLock(p, id, async () => {
     const { ticket, revision } = await p.tickets.getVersioned(id);
     if (agent && ticket.assignee && leaseActive(ticket, Date.now()) && ticket.assignee.agent !== agent && !force)
       throw new ConflictError(`Ticket is claimed by ${ticket.assignee.agent}, not ${agent}`, { id, assignee: ticket.assignee });
-    const r = await p.tickets.update(id, { status: 'done', assignee: null }, { expectedRevision: revision, force });
+    const r = await p.tickets.update(id, { status: 'done', assignee: null, ...(outcome ? { outcome } : {}) }, { expectedRevision: revision, force });
     await sharedRelease(p, ticket.id, { force: true });
     return r;
   });
