@@ -119,8 +119,9 @@ function parse(args) {
   for(let i=0;i<args.length;i++){const a=args[i];if(a.startsWith('--')){const k=a.slice(2);if(['open','force','write','dry-run','optional','evaluation','no-evaluation','files','all','reopen','reversible','irreversible','unmet'].includes(k)&&(k!=='files'||i+1>=args.length||args[i+1].startsWith('--'))){opts[k]=true;continue;}if(i+1>=args.length)throw new Error(`Missing value for ${a}`);const key=k.replaceAll('-','_'),v=args[++i];opts[key]=opts[key]===undefined?v:[].concat(opts[key],v);}else positional.push(a);}
   return {opts,positional};
 }
+const withKeys=v=>{const k=globalThis.__heistKey;if(!k)return v;const f=x=>x&&typeof x==='object'&&'id'in x&&Number.isInteger(x.number)&&x.key===undefined?{key:`${k}-${x.number}`,...x}:x;return Array.isArray(v)?v.map(f):f(v);};
 const out=(value,format='text',kind)=>{
-  if(format==='json'){console.log(JSON.stringify(value,null,2));return;}
+  if(format==='json'){console.log(JSON.stringify(withKeys(value),null,2));return;}
   if(typeof value==='string'){console.log(value);return;}
   if(Array.isArray(value)&&value.every(x=>x&&typeof x==='object'&&'id'in x&&'title'in x)){
     for(const x of value)console.log(`${(x.key??(Number.isInteger(x.number)&&globalThis.__heistKey?`${globalThis.__heistKey}-${x.number}`:x.id.slice(0,8))).padEnd(10)}  ${String(x.status??x.rollup??'').padEnd(11)}  ${'depth'in x?'  '.repeat(x.depth):''}${x.title}`);
