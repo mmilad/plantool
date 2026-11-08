@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb54-c255-7cb0-b88e-6432e8cc65ad",
+  "ticketId": "01a189d0-4004-7639-a6b5-705446c81ae4",
+  "body": "OWNER DECISION 2026-11-08: plans are English; default model Xenova/multilingual-e5-small (best English recall in the quality gate), per-project override via semantic.model. Duplicate detection uses query-embedded title identities and a relative threshold (z ≥ 3.5, unlinked, lineage excluded). See docs/implementation-decisions.md.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:24:16.597Z"
+}

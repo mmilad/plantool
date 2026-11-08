@@ -7,7 +7,8 @@ import { registryHome } from './registry.js';
  * docs/implementation-decisions.md); everything that influences the vectors is part of the
  * fingerprint, so changing any of it forces a re-embed.
  */
-export const DEFAULT_MODEL = 'Xenova/paraphrase-multilingual-MiniLM-L12-v2';
+// Owner decision 2026-11-08: plans are written in English; e5-small scored best on English queries in the quality gate.
+export const DEFAULT_MODEL = 'Xenova/multilingual-e5-small';
 export const KNOWN_MODELS = Object.freeze({
   'Xenova/paraphrase-multilingual-MiniLM-L12-v2': { dtype: 'q8', pooling: 'mean', normalize: true, prefix: '', maxTokens: 128, license: 'Apache-2.0' },
   'Xenova/all-MiniLM-L6-v2': { dtype: 'q8', pooling: 'mean', normalize: true, prefix: '', maxTokens: 256, license: 'Apache-2.0' },

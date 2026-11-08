@@ -10,6 +10,8 @@ import { getEmbedder } from './embedder.js';
  */
 const SCHEMA_VERSION = 1;
 const CHUNK_CHARS = 450;
+// Bump when chunking or embedding roles change: every source is then re-indexed.
+const INDEX_FORMAT = 3;
 const hash = s => createHash('sha256').update(s).digest('hex');
 export const cacheDir = projectId => path.join(registryHome(), 'cache', projectId);
 
@@ -106,6 +108,8 @@ export async function projectSources(p) {
   return sources;
 }
 
+const modelOpt = p => (p.config.semantic?.model ? { model: p.config.semantic.model } : {});
+const sourceHash = s => hash(`format:${INDEX_FORMAT}\n${s.chunks.join('\n\u0000')}`);
 const running = new Map();
 /**
  * Brings the index for this checkout up to date: only changed sources are re-chunked, only
@@ -116,7 +120,7 @@ export async function updateIndex(p, { embedder, rebuild = false, onProgress } =
   const key = `${p.root}`;
   if (running.has(key)) return running.get(key);
   const job = (async () => {
-    embedder ??= await getEmbedder();
+    embedder ??= await getEmbedder(modelOpt(p));
     const db = await openCache(p.config.projectId); const root = path.resolve(p.root), model = embedder.id;
     const now = new Date().toISOString();
     db.prepare(`INSERT INTO index_state(root, model, status, started_at) VALUES(?, ?, 'indexing', ?) ON CONFLICT(root, model) DO UPDATE SET status='indexing', started_at=excluded.started_at, error=NULL`).run(root, model, now);
@@ -134,18 +138,24 @@ export async function updateIndex(p, { embedder, rebuild = false, onProgress } =
       const putVec = db.prepare('INSERT OR IGNORE INTO embeddings(model, text_hash, vector) VALUES(?, ?, ?)');
       const putChunk = db.prepare('INSERT INTO chunks(root, model, source_type, source_id, ord, text_hash, text, title, ticket_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)');
       const putSource = db.prepare('INSERT INTO sources(root, model, source_type, source_id, content_hash) VALUES(?, ?, ?, ?, ?) ON CONFLICT(root, model, source_type, source_id) DO UPDATE SET content_hash=excluded.content_hash');
-      const todo = sources.filter(s => known.get(`${s.type}:${s.id}`) !== hash(s.chunks.join('\n\u0000')));
+      const keyOf = (s, ord, text) => (ord === -1 ? hash('identity\u0000' + text) : hash(text));
+      const entries = s => [...(s.type === 'ticket' ? [[-1, s.chunks[0]]] : []), ...s.chunks.map((c, ord) => [ord, c])];
+      const todo = sources.filter(s => known.get(`${s.type}:${s.id}`) !== sourceHash(s));
       for (let i = 0; i < todo.length; i += 32) {
         const batch = todo.slice(i, i + 32);
-        const texts = [...new Set(batch.flatMap(s => s.chunks))].filter(t => !hasVec.get(model, hash(t)));
-        const vecs = texts.length ? await embedder.embed(texts) : [];
+        const pending = new Map();
+        for (const s of batch) for (const [ord, c] of entries(s)) { const k = keyOf(s, ord, c); if (!pending.has(k) && !hasVec.get(model, k)) pending.set(k, { text: c, identity: ord === -1 }); }
+        const docs = [...pending].filter(([, v]) => !v.identity), ids = [...pending].filter(([, v]) => v.identity);
+        const docVecs = docs.length ? await embedder.embed(docs.map(([, v]) => v.text)) : [];
+        const idVecs = ids.length ? await embedder.embed(ids.map(([, v]) => v.text), { query: true }) : [];
+        const texts = [...docs, ...ids]; const vecs = [...docVecs, ...idVecs];
         db.exec('BEGIN');
         try {
-          texts.forEach((t, j) => putVec.run(model, hash(t), vecToBlob(vecs[j])));
+          texts.forEach(([k], j) => putVec.run(model, k, vecToBlob(vecs[j])));
           for (const s of batch) {
             delChunks.run(root, model, s.type, s.id);
-            s.chunks.forEach((c, ord) => putChunk.run(root, model, s.type, s.id, ord, hash(c), c, s.title, s.ticketId));
-            putSource.run(root, model, s.type, s.id, hash(s.chunks.join('\n\u0000')));
+            for (const [ord, c] of entries(s)) putChunk.run(root, model, s.type, s.id, ord, keyOf(s, ord, c), c, s.title, s.ticketId);
+            putSource.run(root, model, s.type, s.id, sourceHash(s));
           }
           db.exec('COMMIT');
         } catch (e) { db.exec('ROLLBACK'); throw e; }
@@ -168,7 +178,7 @@ export async function updateIndex(p, { embedder, rebuild = false, onProgress } =
 /** Readiness for the UI/API: never throws. */
 export async function semanticStatus(p, { load = false } = {}) {
   let embedder;
-  try { embedder = load ? await getEmbedder() : null; } catch (e) { return { available: false, reason: e.message, mode: 'keyword' }; }
+  try { embedder = load ? await getEmbedder(modelOpt(p)) : null; } catch (e) { return { available: false, reason: e.message, mode: 'keyword' }; }
   try {
     const db = await openCache(p.config.projectId);
     const rows = db.prepare('SELECT * FROM index_state WHERE root=?').all(path.resolve(p.root));
@@ -204,11 +214,11 @@ function bestPerSource(index, scores, filter = () => true) {
 /** Pure semantic ranking of a query. */
 export async function semanticSearch(p, query, { types, limit = 50, embedder } = {}) {
   const q = String(query ?? '').trim(); if (!q) throw Object.assign(new Error('Search query is required'), { code: 'VALIDATION' });
-  embedder ??= await getEmbedder();
+  embedder ??= await getEmbedder(modelOpt(p));
   const index = await vectors(p, embedder);
   const [qv] = await embedder.embed([q], { query: true });
   const wanted = types?.length ? new Set(types) : null;
-  return { generation: index.generation, hits: bestPerSource(index, scoreAll(index, qv), r => !wanted || wanted.has(r.source_type)).slice(0, limit) };
+  return { generation: index.generation, hits: bestPerSource(index, scoreAll(index, qv), r => r.ord >= 0 && (!wanted || wanted.has(r.source_type))).slice(0, limit) };
 }
 
 /**
@@ -234,11 +244,13 @@ export async function hybridSearch(p, query, { types, embedder } = {}) {
 }
 
 /** Tickets whose text is close to the given ticket; ancestors and descendants are excluded. */
-export async function similarTickets(p, ticketRef, { limit = 5, minScore = 0.5, embedder } = {}) {
+// Calibrated on this repository's plan (a planted duplicate scored z 3.7, related siblings up to 3.0); revisit with more data.
+export const OVERLAP_Z = 3.5;
+export async function similarTickets(p, ticketRef, { limit = 5, minScore = 0, minStrength = 1.5, embedder } = {}) {
   const id = await p.resolveTicket(ticketRef);
-  embedder ??= await getEmbedder();
+  embedder ??= await getEmbedder(modelOpt(p));
   const index = await vectors(p, embedder);
-  const mine = index.rows.map((r, i) => [r, i]).filter(([r]) => r.source_type === 'ticket' && r.source_id === id && r.ord === 0);
+  const mine = index.rows.map((r, i) => [r, i]).filter(([r]) => r.source_type === 'ticket' && r.source_id === id && r.ord === -1);
   if (!mine.length) throw Object.assign(new Error('This ticket is not indexed yet; run pman index update'), { code: 'NOT_INDEXED' });
   const tickets = await p.tickets.list({ limit: Infinity }); const byId = new Map(tickets.map(t => [t.id, t]));
   const lineage = new Set([id]); for (let cur = byId.get(id)?.parentId; cur; cur = byId.get(cur)?.parentId) { if (lineage.has(cur)) break; lineage.add(cur); }
@@ -247,10 +259,14 @@ export async function similarTickets(p, ticketRef, { limit = 5, minScore = 0.5, 
   for (const [, i] of mine) {
     const q = index.matrix.subarray(i * index.dim, (i + 1) * index.dim);
     const scores = scoreAll(index, q);
-    index.rows.forEach((r, j) => { if (r.source_type !== 'ticket' || r.ord !== 0 || lineage.has(r.source_id)) return; const cur = best.get(r.source_id) ?? 0; if (scores[j] > cur) best.set(r.source_id, scores[j]); });
+    index.rows.forEach((r, j) => { if (r.source_type !== 'ticket' || r.ord !== -1 || lineage.has(r.source_id)) return; const cur = best.get(r.source_id) ?? 0; if (scores[j] > cur) best.set(r.source_id, scores[j]); });
   }
   const rels = (await p.relations.list(id)).map(r => [r.sourceId === id ? r.targetId : r.sourceId, r.type]);
   const linked = new Map(rels);
-  return [...best].filter(([, s]) => s >= minScore).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, limit)
-    .map(([tid, score]) => { const t = byId.get(tid); return { id: tid, key: p.ticketKey(t), title: t?.title, status: t?.status, score: Math.round(score * 1000) / 1000, relation: linked.get(tid) ?? null }; });
+  // Models differ in how they spread scores, so "likely overlap" is judged relative to this ticket's
+  // own distribution: how many standard deviations a candidate stands above the mean of all others.
+  const values = [...best.values()]; const mean = values.reduce((s, x) => s + x, 0) / (values.length || 1);
+  const sd = Math.sqrt(values.reduce((s, x) => s + (x - mean) ** 2, 0) / (values.length || 1)) || 1;
+  return [...best].map(([tid, score]) => [tid, score, (score - mean) / sd]).filter(([, s, z]) => s >= minScore && z >= minStrength).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, limit)
+    .map(([tid, score, z]) => { const t = byId.get(tid); return { id: tid, key: p.ticketKey(t), title: t?.title, status: t?.status, score: Math.round(score * 1000) / 1000, strength: Math.round(z * 100) / 100, likelyOverlap: z >= OVERLAP_Z && !linked.has(tid), relation: linked.get(tid) ?? null }; });
 }

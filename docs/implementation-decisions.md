@@ -93,6 +93,13 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Concurrency: WAL journal mode (many readers in parallel with one writer), a busy timeout of a few seconds so concurrent writers wait instead of failing, and short write transactions. Index updates are best effort: if the database stays locked or is corrupt, pman falls back to keyword search over the files and retries later; canonical writes never wait for the cache. Use Node's built-in `node:sqlite` to avoid native dependencies.
 - Target audience for now is the solo developer on one machine: `~/.pman` (registry and cache) stays local. A hosted API for teams may come later; the file format and the API routes should keep that option open, but no remote features are built yet.
 
+## Embedding model and duplicate detection (owner decision 2026-11-08)
+
+- Plans are written in English. Default model: `Xenova/multilingual-e5-small` (q8 ONNX via the optional `@huggingface/transformers`), chosen by the quality gate in `bench/search-eval.mjs` (24 queries; Recall@5 English 0.67, overall 0.55; `all-MiniLM-L6-v2` 0.60/0.44, `paraphrase-multilingual-MiniLM-L12-v2` 0.44/0.51). A project can override it with `semantic.model` in `.pman/config.json`. Models download once into `~/.pman/cache/models/`.
+- e5 needs `query:` for queries and `passage:` for indexed text. Each ticket additionally stores its title as a `query:`-embedded identity vector, used only for similarity between tickets (symmetric task); search uses the passage vectors only.
+- e5 compresses cosine scores into a narrow band, so "likely overlap" is relative: a candidate must stand at least 3.5 standard deviations above the mean similarity of all other tickets (planted duplicate z 3.7, related siblings up to 3.0) and must not already be linked. Ancestors and descendants are excluded. Calibrate again with more real duplicates.
+- Keyword search remains available at all times; besides phrase matches it now also matches when all query words occur.
+
 ## Verification and remaining release work
 
 - Local checks were run on Node 24.22.1/Linux: package syntax checks, 11 tests (including a 10,000-deep parent chain and HTTP security checks), JSON Schema parsing, `npm pack --dry-run`, local tarball install, `npm exec -- pman --help`, and a public API import smoke check.

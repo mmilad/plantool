@@ -53,7 +53,7 @@ test('semantic, hybrid and similar search rank related texts and fall back to ke
   assert.ok(sem.hits.findIndex(h => h.id === other.id) < sem.hits.findIndex(h => h.title === 'Invoice PDF export'));
   const hybrid = await p.semantic.hybrid('navigation');
   assert.equal(hybrid.mode, 'hybrid'); assert.ok(hybrid.hits.some(h => h.matchedBy.includes('semantic')));
-  const similar = await p.semantic.similar(p.ticketKey(nav), { minScore: 0 });
+  const similar = await p.semantic.similar(p.ticketKey(nav), { minScore: 0, minStrength: -Infinity });
   assert.equal(similar[0].id, other.id, 'closest unrelated-by-hierarchy ticket first'); assert.ok(!similar.some(s => s.id === header.id), 'ancestors are excluded');
   await assert.rejects(() => p.semantic.search('   '), { code: 'VALIDATION' });
 });
