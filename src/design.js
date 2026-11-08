@@ -368,6 +368,9 @@ export async function checkProject(p) {
         if (unknown.length) warn('INPUT_UNKNOWN', `Ticket ${t.id} provides ${unknown.join(', ')}, which ${name(c.id)} does not accept`, { ticketId: t.id, componentId: c.id, unknown });
       }
       if (!m.providersOf(c.id).length) warn('NO_PROVIDER', `${name(c.id)} is consumed by ticket ${t.id} but no ticket implements it`, { ticketId: t.id, componentId: c.id });
+      const providers = m.providersOf(c.id);
+      const hasFull = providers.some(prov => (prov.codePlan?.implements ?? []).some(x => x.stage !== 'mock'));
+      if ((e.needs ?? 'full') === 'full' && providers.length && !hasFull) warn('ONLY_MOCK_PROVIDER', `${name(c.id)} is consumed by ticket ${t.id} as full, but only a mock is planned`, { ticketId: t.id, componentId: c.id });
     }
     for (const e of plan.changes ?? []) {
       const consumers = tickets.filter(x => x.id !== t.id && x.status !== 'done' && x.status !== 'cancelled' && (x.codePlan?.consumes ?? []).some(y => y.component === e.component));

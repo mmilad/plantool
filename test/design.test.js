@@ -158,3 +158,18 @@ test('a mock unblocks the consumer that needs only a mock; a full consumer still
   assert.equal((await p.context(checkout.id)).readiness.ready, true);
   await assert.rejects(p.codePlan.add(cart.id, 'implements', 'UserService', { needs: 'mock' }), { code: 'VALIDATION' });
 });
+
+test('check warns when a full consumer has only a mock planned', async t => {
+  const p = await project(t);
+  await p.types.set('User', { userId: 'string' });
+  await p.components.create({ kind: 'service', name: 'UserService' });
+  await p.components.create({ kind: 'method', name: 'getUser', parentId: 'UserService' });
+  await p.contracts.set('UserService.getUser', { input: { userId: 'string' }, output: 'User' });
+  const mock = await p.tickets.create({ title: 'Mock UserService' });
+  const cart = await p.tickets.create({ title: 'Checkout' });
+  await p.codePlan.add(mock.id, 'implements', 'UserService', { stage: 'mock' });
+  await p.codePlan.add(cart.id, 'consumes', 'UserService.getUser');
+  assert.ok((await p.check()).warnings.some(w => w.code === 'ONLY_MOCK_PROVIDER'));
+  await p.codePlan.add(mock.id, 'implements', 'UserService');
+  assert.ok(!(await p.check()).warnings.some(w => w.code === 'ONLY_MOCK_PROVIDER'));
+});
