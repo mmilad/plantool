@@ -7,7 +7,7 @@ import { qualifiedNames } from '../src/design.js';
 const qname=async(p,id)=>qualifiedNames(await p.components.list()).get(id);
 const qualifiedMap=async p=>qualifiedNames(await p.components.list());
 function impactText(head,impact,dryRun,names){console.log(`${dryRun?'[dry run] ':''}${head}`);for(const c of impact.changes)console.log(`  ${c.breaking?'✗ breaking':'· compatible'}  ${c.componentId?names.get(c.componentId)+' ':''}${c.side}.${c.path||'(root)'} ${c.change}${c.from?` (${c.from} → ${c.to})`:''}`);if(impact.affectedConsumers.length){console.log('  Affected open consumer tickets:');for(const a of impact.affectedConsumers)console.log(`    ${a.ticketId}  ${a.title}\n      ${a.reasons.join('; ')}`);}}
-const json=(v,flag)=>{if(v===undefined)throw new Error(`Missing ${flag}`);try{return JSON.parse(v);}catch{return v;}};
+const json=(v,flag)=>{if(v===undefined)throw new Error(`Missing ${flag}`);try{return JSON.parse(v);}catch(e){if(/^\s*[{[]/.test(v))throw new Error(`${flag} is not valid JSON: ${e.message}`);return v;}};
 const labels=v=>v===undefined?undefined:[].concat(v).flatMap(x=>String(x).split(',')).map(x=>x.trim()).filter(Boolean);
 // Sentences may contain commas: lists of sentences are separated with ';' or by repeating the flag.
 const items=v=>v===undefined?undefined:[].concat(v).flatMap(x=>String(x).split(';')).map(x=>x.trim()).filter(Boolean);

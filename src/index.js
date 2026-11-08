@@ -50,6 +50,7 @@ export const ticketKey = (p, t) => (t && Number.isInteger(t.number) ? `${p.key}-
 async function ticketRef(p, ref) {
   if (UUID_RE.test(ref ?? '')) return ref;
   const m = /^([A-Za-z][A-Za-z0-9]{1,9})-(\d+)$/.exec(String(ref ?? '').trim());
+  if (ref === undefined || ref === null || String(ref).trim() === '') throw new ValidationError('A ticket id or key is required, for example POKE-12');
   if (!m) throw new ValidationError(`Invalid ticket reference: ${ref}`, { ref });
   if (m[1].toUpperCase() !== p.key) throw new NotFoundError(`Ticket ${ref} is not in project ${p.key}`, { ref });
   const n = Number(m[2]); const hits = (await listJson(p, 'tickets')).filter(t => t.number === n);
