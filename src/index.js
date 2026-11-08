@@ -4,6 +4,7 @@ import path from 'node:path';
 import { TICKET_KINDS, workGraph, readinessOf, nextTickets, claimTicket, releaseTicket, finishTicket, withLock } from './workflow.js';
 export { TICKET_KINDS } from './workflow.js';
 import { attachDesignApi, validateCodePlanShape, resolvedCodePlan } from './design.js';
+import { semanticStatus, updateIndex, semanticSearch, hybridSearch, similarTickets } from './semantic.js';
 export { DEFAULT_COMPONENT_KINDS, normalizeSchema } from './design.js';
 
 export const DEFAULT_STATUSES = Object.freeze(['todo', 'in_progress', 'done', 'cancelled']);
@@ -109,6 +110,7 @@ export async function openProject({ cwd = process.cwd(), cache = false } = {}) {
   p.context = (id, options) => contextFor(p, id, options);
   p.tree = (id, options) => buildTree(p, id, options);
   attachDesignApi(p);
+  p.semantic = { status: o => semanticStatus(p, o), update: o => updateIndex(p, o), rebuild: o => updateIndex(p, { ...o, rebuild: true }), search: (q, o) => semanticSearch(p, q, o), hybrid: (q, o) => hybridSearch(p, q, o), similar: (id, o) => similarTickets(p, id, o) };
   p.next = options => nextTickets(p, options);
   p.claim = (id, options) => claimTicket(p, id, options);
   p.release = (id, options) => releaseTicket(p, id, options);
