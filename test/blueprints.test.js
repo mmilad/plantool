@@ -46,3 +46,16 @@ test('project blueprints in .heist/blueprints override built-ins and are validat
   await fs.writeFile(path.join(p.dir, 'blueprints', 'bad.json'), JSON.stringify({ name: 'bad', items: [{ id: 'X Y', title: 'x' }] }));
   await assert.rejects(p.blueprints.list(), { code: 'VALIDATION' });
 });
+
+test('product blueprint orders its items: the stack waits for the platform, the UI structure waits for stack and features', async t => {
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist order ')); t.after(() => fs.rm(cwd, { recursive: true, force: true }));
+  await initProject({ cwd, name: 'Shop' }); const p = await openProject({ cwd });
+  const root = await p.tickets.create({ title: 'Shop app' });
+  const r = await p.blueprints.apply(root.id, 'product');
+  const byItem = new Map(r.created.map(c => [c.item, c.id]));
+  const rels = await p.relations.list();
+  const has = (from, to) => rels.some(x => x.type === 'blocks' && x.sourceId === byItem.get(from) && x.targetId === byItem.get(to));
+  assert.ok(has('platform', 'stack')); assert.ok(has('stack', 'ui-structure')); assert.ok(has('core-features', 'ui-structure'));
+  assert.ok(has('goal', 'platform'));
+  assert.ok(!has('ui-structure', 'stack'));
+});

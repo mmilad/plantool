@@ -13,6 +13,7 @@ Getestet wurden die Abnahme mit dem Pokémon-Beispiel über die CLI (Agent-Sicht
 - Konsumenten mit `needs full` und nur geplantem Mock erhalten eine Warnung in `check`.
 - `done` ohne `--note` gibt einen Hinweis aus, blockiert aber nicht.
 - JSON-Ausgaben von Tickets enthalten jetzt den `key`.
+- Die Reihenfolge im Produkt-Blueprint ist umgesetzt (`after` erzeugt `blocks`-Relationen).
 - Server-Routen für Entscheidungen (anlegen, lesen, bewerten, empfehlen, entscheiden, wieder öffnen) sind vorhanden und getestet. Über HTTP gilt `by` standardmäßig als Mensch, weil die Web-Ansicht im Namen der Person handelt.
 
 ## Offen (nach Priorität)
@@ -21,6 +22,7 @@ Getestet wurden die Abnahme mit dem Pokémon-Beispiel über die CLI (Agent-Sicht
 2. `done` ohne Notiz ist erlaubt. Vermutlich sollte mindestens `--note` oder `--verified` verlangt werden.
 3. Die Dubletten-Warnung vergleicht nur identische Titel. Die semantische Ähnlichkeit (`similarTickets`) wird beim Anlegen noch nicht genutzt.
 4. Für Features wie „Trade offer flow“ gibt es kein Blueprint. Ein generisches Feature-Blueprint würde die Planung erleichtern.
+   Das Produkt-Blueprint hat jetzt eine Reihenfolge (`after`): Plattform wartet auf das Ziel, der Stack auf die Plattform, die UI-Struktur auf Stack, Kernfunktionen und Accounts.
 5. `decide --by human` ist eine Angabe, die jeder setzen kann. Das schützt vor Versehen, nicht vor einem Agenten, der die Antwort erfindet. Das muss im Briefing ehrlich stehen.
 6. Die Web-Ansicht zeigt Entscheidungen noch nicht an.
 7. Die HTTP-Routen haben keine eigene Berechtigung. Sie sind nur lokal erreichbar und mit CSRF-Token geschützt, ein Agent mit Zugriff auf den Server könnte also als Mensch entscheiden.

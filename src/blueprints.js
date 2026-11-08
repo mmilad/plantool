@@ -17,14 +17,14 @@ export const BUILTIN_BLUEPRINTS = Object.freeze([
     match: ['app', 'product', 'website', 'game', 'platform', 'saas'],
     items: [
       item('goal', 'Write the product goal, target users and what success looks like', 'Every later decision is judged against this.'),
-      item('platform', 'Which platforms does it run on?', 'Decides framework, distribution and UI patterns.', { kind: 'decision', owner: 'human', reversible: false, options: ['Web', 'iOS and Android', 'Desktop', 'Web and mobile'] }),
-      item('stack', 'Which framework and language?', 'Hard to change later; depends on the platform and the skills of the team.', { kind: 'decision', owner: 'human', reversible: false, criteria: 'Team knowledge:3, Fit for the platform:3, Ecosystem:2, Performance:1' }),
-      item('core-features', 'List the core features of the first release', 'Keeps the first version small and makes the rest of the plan concrete.'),
-      item('accounts', 'Do users need accounts?', 'Accounts pull in login, privacy and a backend.', { kind: 'decision', owner: 'human', options: ['No accounts', 'Email and password', 'Social login'] }),
-      item('data', 'Where does the data come from and where does it live?', 'Device only, own backend or a third-party service changes the whole architecture.', { kind: 'decision', owner: 'human', reversible: false, options: ['Only on the device', 'Own backend', 'Third-party API or backend service'] }),
-      item('ui-structure', 'Map the screens and the navigation (menu, tabs, sidebar …)', 'Decides which UI parts exist; apply the header, page and form blueprints to them.'),
-      item('visual', 'Define the visual direction (references, colours, typography)', 'Gives every UI ticket the same target.'),
-      item('quality', 'Decide how the product is tested and released', 'Agents need to know what "verified" means.'),
+      item('platform', 'Which platforms does it run on?', 'Decides framework, distribution and UI patterns.', { after: ['goal'],  kind: 'decision', owner: 'human', reversible: false, options: ['Web', 'iOS and Android', 'Desktop', 'Web and mobile'] }),
+      item('stack', 'Which framework and language?', 'Hard to change later; depends on the platform and the skills of the team.', { after: ['platform'],  kind: 'decision', owner: 'human', reversible: false, criteria: 'Team knowledge:3, Fit for the platform:3, Ecosystem:2, Performance:1' }),
+      item('core-features', 'List the core features of the first release', 'Keeps the first version small and makes the rest of the plan concrete.', { after: ['goal'] }),
+      item('accounts', 'Do users need accounts?', 'Accounts pull in login, privacy and a backend.', { after: ['core-features'],  kind: 'decision', owner: 'human', options: ['No accounts', 'Email and password', 'Social login'] }),
+      item('data', 'Where does the data come from and where does it live?', 'Device only, own backend or a third-party service changes the whole architecture.', { after: ['core-features'],  kind: 'decision', owner: 'human', reversible: false, options: ['Only on the device', 'Own backend', 'Third-party API or backend service'] }),
+      item('ui-structure', 'Map the screens and the navigation (menu, tabs, sidebar …)', 'Decides which UI parts exist; apply the header, page and form blueprints to them.', { after: ['stack', 'core-features', 'accounts'] }),
+      item('visual', 'Define the visual direction (references, colours, typography)', 'Gives every UI ticket the same target.', { after: ['platform'] }),
+      item('quality', 'Decide how the product is tested and released', 'Agents need to know what "verified" means.', { after: ['stack'] }),
       item('offline', 'Must it work offline?', 'Only relevant for mobile or field use.', { kind: 'decision', optional: true, options: ['Yes', 'No'] }),
       item('monetization', 'How does it make money?', 'Only if it is a commercial product.', { kind: 'decision', optional: true, owner: 'human', options: ['Free', 'One-time purchase', 'Subscription', 'Ads', 'In-app purchases'] }),
       item('legal', 'Check legal requirements (privacy, licences, trademarks, content rights)', 'Third-party brands, images and personal data need permission.', { optional: true }),
@@ -245,6 +245,13 @@ export function attachBlueprintApi(p) {
           ? (await p.decisions.ask(i.title, { parentId: ticket.id, why: i.why, options: i.options ?? [], criteria: i.criteria ?? [], owner: i.owner, reversible: i.reversible, origin: { blueprint: name, item: i.id } })).decision
           : await p.tickets.create({ title: i.title, description, why: i.why || undefined, acceptance: i.acceptance?.map(text => ({ text, met: false })), kind: i.kind ?? 'task', parentId: ticket.id, labels: i.labels ?? [], origin: { blueprint: name, item: i.id } });
         created.push({ item: i.id, id: child.id, key: p.ticketKey(child), title: child.title });
+      }
+      // `after` on an item makes its ticket wait for the tickets of the listed items (created now or earlier).
+      const idOf = new Map(created.map(c => [c.item, c.id]));
+      for (const c of before?.items ?? []) if (c.ticket?.id && !idOf.has(c.id)) idOf.set(c.id, c.ticket.id);
+      for (const i of chosen) for (const dep of i.after ?? []) {
+        const from = idOf.get(dep), to = idOf.get(i.id);
+        if (from && to && from !== to) await p.relations.add(from, to, 'blocks').catch(e => { if (e.code !== 'DUPLICATE_RELATION') throw e; });
       }
       return { ticketId: ticket.id, blueprint: name, created, coverage: await coverage(ticket.id) };
     },
