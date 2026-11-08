@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb6a-b868-729c-b14e-3aa226f539ef",
+  "ticketId": "01a189d9-4947-72a1-b472-becb5d135e79",
+  "body": "Summary is fed from the already loaded tree projection (status, roll-up, priority, kind, updatedAt) plus one /api/next call for 'Ready to start'; no per-ticket readiness loops. Stored status, waiting-on-blocker and roll-up are shown as separate counts.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:48:15.848Z"
+}

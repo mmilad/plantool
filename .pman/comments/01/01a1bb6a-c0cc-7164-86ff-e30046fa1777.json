@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb6a-c0cc-7164-86ff-e30046fa1777",
+  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
+  "body": "Project home is the Summary view (default when no ticket is selected): status cards, breakdown by status/priority/type, recent activity, and 'Ready to start' from pman next with direct links. Works for empty projects (call to action to create the first ticket).",
+  "author": "local",
+  "createdAt": "2026-11-08T13:48:17.996Z"
+}

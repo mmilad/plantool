@@ -3,13 +3,14 @@
   "id": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
   "title": "Create child tickets in context from the ticket view",
   "description": "Unterticket aus der geöffneten Ticketansicht anlegen. Unter dem Elternticket erscheint die Aktion ",
-  "status": "in_progress",
+  "status": "done",
   "priority": "high",
   "labels": [],
   "properties": {},
   "parentId": "01a189a9-42af-7e67-93b4-dcdb41bbad6a",
   "createdAt": "2026-10-29T22:05:04.007Z",
-  "updatedAt": "2026-11-07T10:22:48.140Z",
+  "updatedAt": "2026-11-08T13:48:21.282Z",
   "kind": "task",
-  "number": 20
+  "number": 20,
+  "assignee": null
 }

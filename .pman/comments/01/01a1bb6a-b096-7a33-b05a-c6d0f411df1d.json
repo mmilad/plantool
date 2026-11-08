@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb6a-b096-7a33-b05a-c6d0f411df1d",
+  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
+  "body": "Responsive layout: desktop three-pane, ticket detail switches to one column via a container query when the detail pane is narrower than 780 px (no more squeezed text next to the Details box), phone layout with bottom navigation and 'Back to list', no horizontal scrolling at 1300/1920/iPhone 13. Accessibility work is in PM-22.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:48:13.846Z"
+}

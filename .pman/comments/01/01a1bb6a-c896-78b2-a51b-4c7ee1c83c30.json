@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb6a-c896-78b2-a51b-4c7ee1c83c30",
+  "ticketId": "01a189a9-42b1-7518-a6e0-89b4577b1270",
+  "body": "Documents are their own area: list as navigation, rendered Markdown reader (safe renderer), create/edit with revision checks, links to tickets resolved; Summary covers the overview (PM-19).",
+  "author": "local",
+  "createdAt": "2026-11-08T13:48:19.990Z"
+}

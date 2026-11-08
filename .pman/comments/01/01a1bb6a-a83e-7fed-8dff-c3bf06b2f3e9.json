@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb6a-a83e-7fed-8dff-c3bf06b2f3e9",
+  "ticketId": "01a189a9-42a6-7a27-adb9-e30a8df78d54",
+  "body": "Icon system in place: inline SVG only, shared inventory in docs/ui-icons.md (PM-17).",
+  "author": "local",
+  "createdAt": "2026-11-08T13:48:11.710Z"
+}
