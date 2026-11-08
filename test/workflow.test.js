@@ -100,3 +100,12 @@ test('CLI exposes next, claim, done and relation remove', async t => {
   await cli('relation', 'remove', a.id, b.id, 'blocks');
   assert.equal((await p.relations.list()).length, 0);
 });
+
+test('finishing a ticket with an active claim needs the claimant or force', async t => {
+  const p = await project(t);
+  const a = await p.tickets.create({ title: 'Claimed work' });
+  await p.claim(a.id, { agent: 'one' });
+  await assert.rejects(p.finish(a.id, { note: 'no identity' }), { code: 'CONFLICT' });
+  await assert.rejects(p.finish(a.id, { agent: 'two', note: 'someone else' }), { code: 'CONFLICT' });
+  assert.equal((await p.finish(a.id, { agent: 'one', note: 'mine' })).ticket.status, 'done');
+});

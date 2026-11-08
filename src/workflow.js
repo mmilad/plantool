@@ -136,7 +136,7 @@ export async function finishTicket(p, id, { note, agent, force = false, outcome 
   const before = new Set((await nextTickets(p, { limit: Infinity })).map(x => x.id));
   const ticket = await withLock(p, id, async () => {
     const { ticket, revision } = await p.tickets.getVersioned(id);
-    if (agent && ticket.assignee && leaseActive(ticket, Date.now()) && ticket.assignee.agent !== agent && !force)
+    if (ticket.assignee && leaseActive(ticket, Date.now()) && ticket.assignee.agent !== agent && !force)
       throw new ConflictError(`Ticket is claimed by ${ticket.assignee.agent}, not ${agent}`, { id, assignee: ticket.assignee });
     const r = await p.tickets.update(id, { status: 'done', assignee: null, ...(outcome ? { outcome } : {}) }, { expectedRevision: revision, force });
     await sharedRelease(p, ticket.id, { force: true });
