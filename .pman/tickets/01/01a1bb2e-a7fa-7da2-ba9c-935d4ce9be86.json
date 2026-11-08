@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb2e-a7fa-7da2-ba9c-935d4ce9be86",
+  "number": 83,
+  "title": "Blueprints: checklists that expand a ticket into everything it really needs",
+  "kind": "feature",
+  "description": "Planning philosophy (docs/product-vision.md): a 'Header' ticket implies logo, menu, burger menu on mobile vs. navigation on desktop, states, accessibility, data contracts. Reusable, project-local blueprints (e.g. ui-component/header, service, form, page) suggest child tickets, acceptance criteria and code-plan entries when a ticket is created or reviewed; pman check / pman next can warn when a ticket of a known kind lacks expected parts. Agents and people can add their own blueprints in .pman/blueprints/.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [
+    "planning"
+  ],
+  "properties": {},
+  "parentId": null,
+  "createdAt": "2026-11-08T12:42:39.482Z",
+  "updatedAt": "2026-11-08T12:42:39.482Z"
+}

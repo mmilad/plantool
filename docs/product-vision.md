@@ -22,6 +22,12 @@ Session-local checklists disappear when a session ends; free-form Markdown plans
 
 This is intended product fit, not a claim that no other tool combines these traits. Beads is a particularly close agent-oriented, Git-backed reference. pman should distinguish itself through plain repository files, a first-class planning-document model, direct TypeScript embedding, and an explicit arbitrary-depth contract.
 
+## Planning philosophy: plan the heist (owner, 2026-11-08)
+
+A heist is planning and procurement for an undertaking: before anyone moves, the crew knows every part of the job and what each part needs. pman should plan work the same way. A ticket called "Header" is never just a header: it needs a logo, a menu, maybe a burger menu on mobile and a full navigation on desktop, states, accessibility and contracts for the data it shows. The product should help people and agents uncover these parts up front — through decomposition, dependencies, code plans and contracts, and reusable checklists — instead of discovering them during implementation.
+
+Working product name: **heistman** (candidate for the npm release; `planus-manus` stays the internal working name until then).
+
 ## Principles
 
 1. Repository-first durability: canonical plans live inside the project and are Git-tracked by default. A clone plus compatible Node runtime is enough to inspect and edit the same durable plan offline; no remote registration or service is needed. Users may opt out of tracking locally, but doing so opts out of sharing the plan with cloned checkouts.

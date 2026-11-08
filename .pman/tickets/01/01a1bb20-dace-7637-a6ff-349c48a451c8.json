@@ -4,7 +4,7 @@
   "number": 81,
   "title": "Choose the final product name and publish the package to npm",
   "kind": "task",
-  "description": "Owner decision 2026-11-08: after a usable version, pick a proper name and publish to the npm registry (currently @mmilad/pm, unpublished). Includes renaming package/bin if needed, README, LICENSE check and a release checklist.",
+  "description": "Owner decision 2026-11-08: after a usable version, pick a proper name and publish to the npm registry (currently @mmilad/pm, unpublished). Preferred name: heistman (a heist = planning and procurement for an undertaking; see docs/product-vision.md 'Planning philosophy'). Check npm/GitHub availability (pnpm view heistman → 404 means free), rename package and bin (heistman, maybe short alias), update README/LICENSE and add a release checklist.",
   "status": "todo",
   "priority": "low",
   "labels": [
@@ -13,5 +13,5 @@
   "properties": {},
   "parentId": null,
   "createdAt": "2026-11-08T12:27:34.990Z",
-  "updatedAt": "2026-11-08T12:27:34.990Z"
+  "updatedAt": "2026-11-08T12:42:39.260Z"
 }
