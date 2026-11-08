@@ -4,12 +4,15 @@ Planus Manus is a Git-native planning and ticket graph for people and coding age
 
 ## Install locally
 
+The project uses pnpm. For local development, `pnpm link --global` in this repository makes `pman` available everywhere.
+
+
 After a release is published, install the package as a project-local development dependency:
 
 ```sh
-npm install --save-dev @mmilad/pm
-npx pman init
-npx pman --help
+pnpm add -D @mmilad/pm
+pnpm exec pman init
+pnpm exec pman --help
 ```
 
 Node.js 22 or newer is required. No native binary, database, hosted service or FP installation is used. A small machine-local project list (`~/.pman/projects.json`) lets `pman serve` show all your projects; canonical data always stays in each repository. `pman init` creates tracked `.pman/` data and does not modify `.gitignore`.
@@ -27,13 +30,13 @@ Tickets have Jira-style keys such as `SHOP-42` (project key plus a sequential nu
 ## Quick start
 
 ```sh
-npx pman init --name "My project"
-npx pman goal create --title "First release" --body "Ship a usable feature set."
-npx pman ticket create --title "Build the core"
-npx pman ticket list
-npx pman tree
-npx pman validate
-npx pman serve
+pnpm exec pman init --name "My project"
+pnpm exec pman goal create --title "First release" --body "Ship a usable feature set."
+pnpm exec pman ticket create --title "Build the core"
+pnpm exec pman ticket list
+pnpm exec pman tree
+pnpm exec pman validate
+pnpm exec pman serve
 ```
 
 Create children at any level by passing `--parent <ticket-id>`. The server uses `http://127.0.0.1:4000` by default and stays in the foreground; stop it with Ctrl-C. If the port is occupied, it reports the conflict and starts no additional server. Choose another port explicitly with `pman serve --port N`. It serves only the project found from the current directory or its ancestors. `--open` asks the operating system to open the URL only after the server starts successfully.
@@ -51,11 +54,11 @@ Run `pman --help` for the current command reference. The first release supports 
 pman is built so coding agents can pick work in a sensible order without a human triaging every step:
 
 ```sh
-npx pman next                          # ready tickets, ranked, with reasons
-npx pman claim <id> --agent my-agent   # in_progress + assignee with a 60-minute lease
-npx pman context <id> --format json    # bounded context packet incl. readiness
-npx pman done <id> --note "tested"     # done + comment, prints newly ready tickets
-npx pman agent init --write            # add the workflow to AGENTS.md between markers
+pnpm exec pman next                          # ready tickets, ranked, with reasons
+pnpm exec pman claim <id> --agent my-agent   # in_progress + assignee with a 60-minute lease
+pnpm exec pman context <id> --format json    # bounded context packet incl. readiness
+pnpm exec pman done <id> --note "tested"     # done + comment, prints newly ready tickets
+pnpm exec pman agent init --write            # add the workflow to AGENTS.md between markers
 ```
 
 A ticket is ready when it is `todo`, has no open children, and neither it nor any ancestor has an open `blocks` dependency. `next` ranks by priority (an explicit priority wins; `normal` inherits from the nearest ancestor with an explicit one), then by how many tickets finishing it transitively unblocks, then by proximity to work already in progress, then by age. A parent cannot be set to `done` while descendants or blockers are open unless `--force` is passed. Expired leases are offered again by `next`. `PMAN_AGENT` sets the default agent name.
@@ -67,20 +70,20 @@ Tickets have a `kind` of `task`, `feature` or `bug`.
 Agents can plan code before writing it and check the plan for consistency. Components (`module`, `service`, `class`, `method`, `function`, `ui-component`), shared types and contracts live centrally in `.pman/components/`, `.pman/types/` and `.pman/contracts/`; tickets only reference them in an optional code plan, so a contract is never copied or edited per ticket. Plain tasks such as a colour change need no code plan.
 
 ```sh
-npx pman type set User --schema '{"email":"string","firstName":"string","lastName":"string"}'
-npx pman component add --kind service --name UserService
-npx pman component add --kind method --name getUser --parent UserService
-npx pman contract set UserService.getUser --input '{"userId":"string"}' --output User
-npx pman codeplan add <user-ticket> implements UserService
-npx pman codeplan add <cart-ticket> consumes UserService.getUser --requires userId,email:string --provides userId
-npx pman check
+pnpm exec pman type set User --schema '{"email":"string","firstName":"string","lastName":"string"}'
+pnpm exec pman component add --kind service --name UserService
+pnpm exec pman component add --kind method --name getUser --parent UserService
+pnpm exec pman contract set UserService.getUser --input '{"userId":"string"}' --output User
+pnpm exec pman codeplan add <user-ticket> implements UserService
+pnpm exec pman codeplan add <cart-ticket> consumes UserService.getUser --requires userId,email:string --provides userId
+pnpm exec pman check
 # ✗ REQUIRED_FIELD_MISSING  Ticket … needs UserService.getUser → output.userId, but the contract returns: email, firstName, lastName
 ```
 
 Schemas use a JSON Schema subset (`string`, `number`, `integer`, `boolean`, `null`, `any`, `array`, `object`, `required`, `enum`, `$ref`) or a shorthand: `"string"`, `"string?"` for optional properties, `"string[]"`, a type name such as `"User"`, `[{"sku":"string"}]`. `requires` entries are output paths, optionally typed (`address.city:string`); `provides` lists the input fields the consumer supplies. `pman check` reports missing or mistyped fields, missing input, unknown types, components without contracts, methods without an owning class or service, consumed components no ticket implements, consumers affected by `changes`, and dependency cycles. A ticket that consumes a component waits for the tickets implementing it (or an ancestor component), and `pman next` orders work accordingly. `pman context` includes the resolved code plan with contracts and referenced types. Contract and type versions increase when they change, and earlier versions are kept in `history` (`pman contract history`). Every `contract set` and `type set` classifies the change as breaking or compatible and lists the open consumer tickets it may break; add `--dry-run` to preview without writing:
 
 ```sh
-npx pman type set User --schema '{"userId":"string","mail":"string"}' --dry-run
+pnpm exec pman type set User --schema '{"userId":"string","mail":"string"}' --dry-run
 # [dry run] type User v2
 #   ✗ breaking  UserService.getUser output.email removed
 #   · compatible  UserService.getUser output.mail added
@@ -111,7 +114,7 @@ Agent launching, hosted accounts/sharing, remote sync, MCP, arbitrary extensions
 ## Development
 
 ```sh
-npm run check
+pnpm run check
 ```
 
 The test suite uses only Node's built-in test runner and temporary project directories.
