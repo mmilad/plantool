@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb6c-9b8b-7dd2-9f18-4fca003a3bb5",
+  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
+  "body": "Review cycle run on 2026-11-08 (see docs/ui-review.md); follow-up work was done directly in PM-7/PM-8/PM-21/PM-22/PM-28/PM-45. Future reviews: open a new review ticket per release instead of keeping this one open forever.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:50:19.531Z"
+}

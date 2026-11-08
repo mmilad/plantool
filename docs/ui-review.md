@@ -327,3 +327,22 @@ Live-Abgleich: Port 4000 liefert nach Reload aktuelle pman-Ticketdaten, aber noc
 
 Nach dem Neustart des lokalen Servers ist der erste Detailbearbeitungsschritt live erreichbar. Das Ticketformular öffnet explizit und zeigt beschriftete Eingaben für Titel, Beschreibung, konfigurierten Status und Priorität. Browseränderungen an Beschreibung sowie Status/Priorität wurden gespeichert und in Detail plus Liste aktualisiert. Ein parallel veralteter Entwurf erhielt HTTP 409; der Entwurf blieb erhalten, „Aktuelle Version laden“ zeigte den externen Stand. Alle für die Prüfung verwendeten Text-/Status-/Prioritätswerte wurden anschließend über die Oberfläche auf den Ausgangsstand zurückgesetzt. Das bestehende Ticket „Ticketfelder und Projektstatus in der Bearbeitung berücksichtigen“ steht auf `done`. Revisionsticket bleibt als separates Kind erhalten; Parent-/Relations wurden nicht verändert. Weitere Felder und Ticketaktionen bleiben passive Folgeschritte.
 
+
+### Visual review of the Jira-like workspace — 2026-11-08
+
+Checked in Chromium at 1366×820, 1300×850, 1920×1000 and iPhone 13, with a small sample project (nested header/cart tickets, a blocker, a goal) and an empty project. Views: projects, summary, board, list + detail, documents, search dropdown, relationship form, error states (500 injected per endpoint).
+
+| Finding | Fix |
+|---|---|
+| Ticket detail squeezed next to the 300 px Details box when the list pane is open (text column ~200 px at 1300 px) | container query: detail switches to one column below 780 px pane width |
+| `?view=list` / `?view=summary` showed an empty page | view aliases, unknown views fall back to Summary |
+| "0 tickets updated in the last 7 days" although tickets had just been created | tree row projection now includes `updatedAt` |
+| Child tickets in the detail had no key, type or priority | children use the same row pieces as the list (type icon, key, status lozenge, priority) |
+| Document list entries were centered | left aligned |
+| Failed project/tree loads looked like empty projects | explicit error states with "Try again" |
+| Search hits showed only title + type | icon, key, status, parent, highlighted snippet, "similar meaning" |
+| Tree chevrons, crosses and search icons were text glyphs/emoji | shared inline SVG set (docs/ui-icons.md) |
+
+Contrast: body text 14.6:1; input borders `#8590a2` on white ≈ 3.2:1 (meets the 3:1 non-text minimum); primary button white on `#0c66e4` ≈ 5.6:1. Subtle grey buttons keep a visible text label and focus ring, as in Jira.
+
+Open points (not blocking): board scoping is "all parents / one parent" plus "only work items" rather than strictly direct children; the projects page is reached via "Projects" because `/` opens the project `pman serve` was started in.

@@ -280,7 +280,7 @@ export async function buildTree(p, id = null, { maxDepth = Infinity, limit = 500
   }
   const visible=ordered.filter(x=>x.depth<=maxDepth),page=visible.slice(Math.max(0,offset),Math.max(0,offset)+Math.max(0,limit));
   const rows=fields==='row'
-    ? page.map(({ticket,depth})=>({id:ticket.id,parentId:ticket.parentId,depth,title:ticket.title,number:ticket.number??null,key:ticketKey(p,ticket),kind:ticket.kind??'task',status:ticket.status,priority:ticket.priority,labels:ticket.labels??[],assignee:ticket.assignee?.agent??null,childCount:(idx.get(ticket.id)??[]).length,rollup:rollups.get(ticket.id)}))
+    ? page.map(({ticket,depth})=>({id:ticket.id,parentId:ticket.parentId,depth,title:ticket.title,number:ticket.number??null,key:ticketKey(p,ticket),kind:ticket.kind??'task',status:ticket.status,priority:ticket.priority,labels:ticket.labels??[],assignee:ticket.assignee?.agent??null,childCount:(idx.get(ticket.id)??[]).length,rollup:rollups.get(ticket.id),updatedAt:ticket.updatedAt}))
     : page.map(({ticket,depth})=>({...ticket,depth,rollup:rollups.get(ticket.id)}));
   if(withTotal)return {items:rows,total:visible.length};
   return rows;
