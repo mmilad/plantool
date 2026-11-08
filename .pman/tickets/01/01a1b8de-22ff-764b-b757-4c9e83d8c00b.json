@@ -4,7 +4,7 @@
   "title": "Multi-project workspace with a Jira-like UI and ticket keys",
   "kind": "feature",
   "description": "Owner decision 2026-11-08: serve from anywhere, see all projects, Jira-like visuals, KEY-n ticket keys. See docs/implementation-decisions.md.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [
     "workspace"
@@ -12,6 +12,7 @@
   "properties": {},
   "parentId": null,
   "createdAt": "2026-11-08T01:55:28.127Z",
-  "updatedAt": "2026-11-08T01:55:28.127Z",
-  "number": 74
+  "updatedAt": "2026-11-08T12:13:32.754Z",
+  "number": 74,
+  "assignee": null
 }
