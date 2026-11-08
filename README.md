@@ -78,7 +78,7 @@ pnpm exec heist agent onboard                    # briefing for agents (prints o
 
 A ticket is ready when it is `todo`, has no open children, and neither it nor any ancestor has an open `blocks` dependency. `next` ranks by priority (an explicit priority wins; `normal` inherits from the nearest ancestor with an explicit one), then by how many tickets finishing it transitively unblocks, then by proximity to work already in progress, then by age. A parent cannot be set to `done` while descendants or blockers are open unless `--force` is passed. Expired leases are offered again by `next`. Claims are also shared between Git worktrees of the same repository (in `.git/heist/claims.json`, never committed), so two agents in different worktrees cannot claim the same ticket; set `HEIST_SHARED_CLAIMS=0` to turn this off. `HEIST_AGENT` sets the default agent name.
 
-Tickets have a `kind` of `task`, `feature` or `bug`.
+Tickets have a `kind` of `task`, `feature`, `bug`, `decision` or `option`. A decision asks a question; its options are children with pros, cons and weighted scores. A decision belongs to a person by default. Agents may decide only decisions they own (`--owner agent --reversible`); a person's answer is recorded with `--by human`. `heist decisions` lists what needs a person, `heist decide DECISION` shows the comparison and the suggestion.
 
 ## Blueprints: plan the whole heist
 
@@ -96,6 +96,17 @@ pnpm exec heist blueprint init header              # copy into .heist/blueprints
 ```
 
 Optional items are decisions, not defaults: they stay "undecided" until you create a ticket for them or skip them with a reason. `heist check` warns about missing and undecided items, `heist context` includes the checklist for agents, and the ticket view in `heist serve` has a **Checklist** section to preview, apply and decide items. Project blueprints in `.heist/blueprints/` override built-ins of the same name and can `extend` another blueprint.
+
+## Decisions
+
+```sh
+heist ask "Which framework?" --options "React Native;Flutter" --criteria "Team knowledge:3, Speed:2" --blocks SHOP-7
+heist option score SHOP-21 "Team knowledge=4" "Speed=5"
+heist recommend SHOP-8 SHOP-21 --why "the team already knows React"
+heist decide SHOP-8 SHOP-21 --by human --why "the person chose it"
+```
+
+Choosing an option cancels the other options and their plans, and releases the work that waits for the decision. `--reopen` restores it.
 
 ## Code plans and contracts
 
