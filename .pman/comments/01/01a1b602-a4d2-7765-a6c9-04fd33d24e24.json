@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b602-a4d2-7765-a6c9-04fd33d24e24",
-  "ticketId": "01a189af-50ab-71b9-9f11-92e13989409f",
-  "body": "Safe Markdown reader (src/markdown.js, escaped first; no raw HTML, images or external loads; only http(s) and resolvable pman IDs clickable; external links open in a new tab with noopener). Document list grouped by kind with per-kind empty states and link counts; reader shows a 'Linked tickets and documents' section with missing references marked; stable ?document=<id> URLs with back/forward support. Fixed a pre-existing bug: the app shell itself got the nav click handler, so every click pushed an extra history entry. Verified in Chromium: no external requests, no script execution, back/forward and direct links work.",
-  "author": "claude",
-  "createdAt": "2026-11-07T12:36:29.010Z"
-}

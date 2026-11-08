@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d41-5686-7ead-bd09-2dc841550e7c",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "STATIC-SVG-TEXT-AUDIT 2026-10-30: Sweep über alle 25 docs/*.svg: XML wohlgeformt; Segoe-UI-Textmessung in CSS-Pixeln findet keine horizontal über die viewBox laufenden Beschriftungen. ui-board-preview-320.svg zeigt drei vollständige Karten und den Hinweis auf fünf weitere bei y=798 innerhalb 320×844. Das ersetzt keine Browser-/Touchabnahme; keine neue Aufgabe und keine Beziehungsänderung.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:40:31.878Z"
-}

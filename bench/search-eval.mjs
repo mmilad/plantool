@@ -1,5 +1,5 @@
 // Search quality gate (PM-31): compares keyword, semantic and hybrid ranking per model.
-// Usage: node bench/search-eval.mjs [model ...]   (run inside a pman project; models download once)
+// Usage: node bench/search-eval.mjs [model ...]   (run inside a heist project; models download once)
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

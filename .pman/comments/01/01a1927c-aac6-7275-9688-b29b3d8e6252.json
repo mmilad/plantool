@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1927c-aac6-7275-9688-b29b3d8e6252",
-  "ticketId": "01a189a9-42a6-7a27-adb9-e30a8df78d54",
-  "body": "Plantext-Abgleich 2026-10-31: Die kanonische Icon-Leitlinie im UI-Plan 01a189a9-42b7-7724-92e3-8da8d2a2dcfe behauptet noch Tickettyp-Symbole für Status/Priorität. Der Plan soll mit diesem Ticket übereinstimmen: keine Tickettyp-Icons (pman hat kein Tickettyp-Feld); Status und Priorität getrennt von Tickettyp-Semantik und nie nur über Farbe. fp.dev bleibt visuelle Referenz, Jira nur Workflow. Korrektur über revision-sichere Dokumentbearbeitung 01a189f8-f7bf-7921-b4cf-b3269ac6239d; keine neue Relation oder Parent-Änderung.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:03:26.150Z"
-}

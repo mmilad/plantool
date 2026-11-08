@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1927b-f1c4-760f-9c42-4859bb5728f9",
-  "ticketId": "01a189b3-4333-7e1b-b876-5033943bcc37",
-  "body": "Projektkontext-/Dokumentabgleich 2026-10-31: .pman/config.json nennt name=planus-manus. Die Entwürfe zeigen  Planus Manus als Produktbezeichnung und planus-manus als aktuellen Projektkontext; für dieses Repository ist das konsistent. Die Aufgabe bleibt für anders benannte Projekte relevant, damit die UI den Kontext dynamisch aus config.name statt aus einem festen String übernimmt. Dokumentvorschau zählt aktuell 2 Ziele, 2 Pläne, 0 Entscheidungen; ausgewählter UI-Plan hat acht Links. Befund docs/ui-review.md; Parent unter Projektübersicht und Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:02:38.788Z"
-}

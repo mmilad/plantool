@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cf3-febf-7170-821c-d7fb13584e34",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "320PX-RECHECK 2026-10-30: Beim Vermessen der zuletzt ergänzten Icons auf der 320px-Navigation zeigte Segoe UI 12px eine Überschneidung von ca. 1,2px zwischen  Tickets und dem nächsten Icon. Die statische Vorschau ist neu verteilt und docs/ui-review.md dokumentiert Maße sowie verbleibende Live-Abnahme. Befund gehört zum bestehenden Responsive-Ticket; keine neue Aufgabe oder Verschiebung von Zugehörigkeiten.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:16:03.136Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19272-4057-7190-8713-ed84baf4dd22",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Planungsabgleich 2026-10-31: Das aktuelle UI-Ziel weiterführen, kein neues Ziel anlegen. Nächste Reihenfolge: (1) bestehendes hoch priorisiertes Serverticket 01a18d87-251e-7ff7-9678-7a437fd0ef76 für festen Start auf 127.0.0.1:4000 erledigen; dessen blocks-Beziehung hält die Live-Abnahme zurück. (2) Konzeptticket 01a189ad-5c7c-7e68-b165-79fb9f674539 entscheidungsreif machen: fp.dev-Stilrichtung ist bestätigt, konkrete Layout-/Ablaufentscheidungen noch nicht. (3) Fachpakete unter ihren bestehenden Parents konkretisieren. (4) Live-Abnahme nach Erreichbarkeit fortsetzen. Keine Parent-/Relations-Änderung; Details in docs/ui-review.md.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:52:03.543Z"
-}

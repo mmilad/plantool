@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19270-1721-7cd5-a4ca-3a2060102a3f",
-  "ticketId": "01a189ad-9320-7ba9-a8ad-4656341eb4e5",
-  "body": "STILREFERENZ-TITELABGLEICH 2026-10-31: Der Nutzer hat fp.dev als schlichte, änderbare visuelle Referenz bestätigt; Jira soll nur Planungsabläufe inspirieren. Das sagt ui-wireframe.md bereits klar, während die kanonischen UI-Ziel-/UI-Plantitel beide „Jira-inspiriert“ hervorheben. Bei späterer revisionssicherer Bearbeitung die Titel so präzisieren, dass visuelle Referenz und Workflow-Orientierung nicht verwechselt werden. Zielbild und fortlaufenden Reviewprozess weiterhin als getrennte, verknüpfte Dokumente erhalten; keine Zusammenlegung allein wegen ähnlicher Titel. Kanonische Dokumente jetzt nicht außerhalb der App bearbeiten. Dieses Ticket bleibt Kind des laufenden UI-Reviews; alle sieben bestehenden Beziehungen unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:49:41.921Z"
-}

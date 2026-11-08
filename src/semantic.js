@@ -5,8 +5,8 @@ import { registryHome } from './registry.js';
 import { getEmbedder } from './embedder.js';
 
 /**
- * Derived, rebuildable semantic index in ~/.pman/cache/<projectId>/db.sqlite.
- * Canonical data stays in .pman/; this database can be deleted at any time.
+ * Derived, rebuildable semantic index in ~/.heist/cache/<projectId>/db.sqlite.
+ * Canonical data stays in .heist/; this database can be deleted at any time.
  */
 const SCHEMA_VERSION = 1;
 const CHUNK_CHARS = 450;
@@ -183,7 +183,7 @@ export async function semanticStatus(p, { load = false } = {}) {
     const db = await openCache(p.config.projectId);
     const rows = db.prepare('SELECT * FROM index_state WHERE root=?').all(path.resolve(p.root));
     const row = embedder ? rows.find(r => r.model === embedder.id) : rows.sort((a, b) => String(b.finished_at).localeCompare(String(a.finished_at)))[0];
-    if (!row) return { available: false, reason: 'The semantic index has not been built yet (pman index update).', mode: 'keyword', indexing: running.has(p.root) };
+    if (!row) return { available: false, reason: 'The semantic index has not been built yet (heist index update).', mode: 'keyword', indexing: running.has(p.root) };
     return { available: row.status === 'ready' || (row.generation > 0 && row.status === 'indexing'), mode: row.generation > 0 ? 'hybrid' : 'keyword', status: row.status, generation: row.generation, sources: row.sources, chunks: row.chunks, finishedAt: row.finished_at, error: row.error, indexing: running.has(p.root) || row.status === 'indexing', model: embedder?.model };
   } catch (e) { return { available: false, reason: `Cache database unavailable: ${e.message}`, mode: 'keyword' }; }
 }
@@ -251,7 +251,7 @@ export async function similarTickets(p, ticketRef, { limit = 5, minScore = 0, mi
   embedder ??= await getEmbedder(modelOpt(p));
   const index = await vectors(p, embedder);
   const mine = index.rows.map((r, i) => [r, i]).filter(([r]) => r.source_type === 'ticket' && r.source_id === id && r.ord === -1);
-  if (!mine.length) throw Object.assign(new Error('This ticket is not indexed yet; run pman index update'), { code: 'NOT_INDEXED' });
+  if (!mine.length) throw Object.assign(new Error('This ticket is not indexed yet; run heist index update'), { code: 'NOT_INDEXED' });
   const tickets = await p.tickets.list({ limit: Infinity }); const byId = new Map(tickets.map(t => [t.id, t]));
   const lineage = new Set([id]); for (let cur = byId.get(id)?.parentId; cur; cur = byId.get(cur)?.parentId) { if (lineage.has(cur)) break; lineage.add(cur); }
   const stack = [id]; while (stack.length) { const x = stack.pop(); for (const t of tickets) if (t.parentId === x && !lineage.has(t.id)) { lineage.add(t.id); stack.push(t.id); } }

@@ -88,7 +88,7 @@ export async function nextTickets(p, { limit = 5, parentId, now = Date.now() } =
 
 /** Short cross-process lock outside the repository; protects claim against concurrent agents in one checkout. */
 export async function withLock(p, id, fn) {
-  const dir = path.join(os.tmpdir(), `pman-locks-${createHash('sha256').update(p.root).digest('hex').slice(0, 16)}`);
+  const dir = path.join(os.tmpdir(), `heist-locks-${createHash('sha256').update(p.root).digest('hex').slice(0, 16)}`);
   await fs.mkdir(dir, { recursive: true });
   const lock = path.join(dir, `${id}.lock`);
   for (let i = 0; ; i++) {
@@ -97,7 +97,7 @@ export async function withLock(p, id, fn) {
       if (e.code !== 'EEXIST') throw e;
       const st = await fs.stat(lock).catch(() => null);
       if (st && Date.now() - st.mtimeMs > 10_000) { await fs.rm(lock, { recursive: true, force: true }); continue; }
-      if (i > 100) throw new ConflictError(`Ticket ${id} is locked by another pman process`, { id });
+      if (i > 100) throw new ConflictError(`Ticket ${id} is locked by another heist process`, { id });
       await new Promise(r => setTimeout(r, 50));
     }
   }

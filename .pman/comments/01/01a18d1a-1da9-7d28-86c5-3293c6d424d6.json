@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d1a-1da9-7d28-86c5-3293c6d424d6",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "FORTGESETZTER UI-REVIEW 2026-10-30: src/server.js erneut gegen UI-Konzept, Wireframe und bestehende Fachtickets abgeglichen. Die sichtbaren Lücken (Navigation/Übersicht, Ticketdetail, Dokumentnavigation, Formulare, Fehler-/Leerzustände, Suche, Labels, Accessibility und Icons) sind bereits den zuständigen bestehenden Tickets zugeordnet; keine zusätzliche Dublette und keine Parent-/Blocks-Verschiebung nötig. Statische SVG-Palette mit vorläufiger Kontrollkontur #768294 und getrenntem Trennlinientoken #D8DEE7 in docs/ui-review.md/ui-wireframe.md festgehalten; Design-/Visual-QA-Tickets kommentiert. pman validate bleibt maßgeblich. Live-UI war in dieser Runde nicht erreichbar, deshalb keine neue Browserabnahme behauptet. Nächster unabhängiger Schritt bei erreichbarer Oberfläche: gegenwärtige Ticketdetails/Beziehungsnavigation und Projektstart erneut visuell und per Tastatur prüfen.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:57:41.417Z"
-}

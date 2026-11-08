@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d0c-fb8b-70ac-a77f-98fd5e33add3",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Fortgesetzter UI-Review 2026-10-30: Die Planung hatte mobile Root-/Unterticketformulare, aber keinen Desktopzustand für den geöffneten Dialog. docs/ui-ticket-create-desktop.svg ergänzt die zwei vorhandenen Flows; die fachlichen Tickets erhielten Prüfnotizen. Root-Anlage wurde zusätzlich mit den bestehenden Rückmeldungs- und Accessibility-Aufgaben per relates_to verbunden; keine neuen Tickets und keine Parent-/Blocks-Verschiebung. Die ONNX-/all-MiniLM-L6-v2-/Node.js-/SQLite-Suche bleibt im bestehenden technischen Suchplan. pman validate ist gültig; Loopback verhindert weiterhin Live-Abnahme.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:43:20.715Z"
-}

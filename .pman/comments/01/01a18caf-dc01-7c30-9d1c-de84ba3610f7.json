@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18caf-dc01-7c30-9d1c-de84ba3610f7",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Datenabgleich 2026-10-30: docs/ui-prototype-overview.svg gegen aktuellen pman-Baum geprüft. 9 direkte UI-Programmpakete: 1 bereit (UI-Konzept), 1 in Arbeit (laufendes Review), 7 blockiert; Dokumentbestand 2 Ziele, 2 Pläne, 0 Entscheidungen. Vorschauzahlen stimmen mit pman überein; keine Live-/Renderabnahme. Bestehende relates_to-Verknüpfung zur Projektübersicht 01a189b1-a4e4-7227-aca6-1283ecc6d8bd besteht.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:01:37.793Z"
-}

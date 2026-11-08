@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b598-1fed-7062-b790-008c092a593e",
-  "ticketId": "01a1b579-31c7-7cfb-aa3c-8850b2e69e0b",
-  "body": "diffSchemas classifies input/output changes; contract/type set report impact and affected consumers; --dry-run; history kept. Tests in test/design.test.js.",
-  "author": "claude",
-  "createdAt": "2026-11-07T10:40:08.173Z"
-}

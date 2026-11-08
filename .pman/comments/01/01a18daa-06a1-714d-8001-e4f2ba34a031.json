@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18daa-06a1-714d-8001-e4f2ba34a031",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "Review des Projektübersichts-Mocks: docs/ui-prototype-overview.svg zeigte sichtbar 10 direkte Arbeitspakete, während das SVG-desc für Screenreader noch neun nannte. Text auf zehn korrigiert und mit aktuellem pman-Baum sowie sichtbarem Zähler abgeglichen. Mobile Beschreibungen nennen bereits zehn. Keine Parent-/Blocks-/Relationsänderung.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:34:52.705Z"
-}

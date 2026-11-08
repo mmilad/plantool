@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cfd-e764-70ed-bfee-fba422cbd7fe",
-  "ticketId": "01a189bd-b44d-7e95-84fc-66d307543b12",
-  "body": "Ergänzung zur Suchvorschau 2026-10-30: docs/ui-search-preview.svg, docs/ui-search-preview-mobile.svg und docs/ui-search-preview-320.svg verwenden dieselben ersten drei realen Beispielziele (UI-Programm-Ticket, passender UI-Review-Kommentar, UI-Ziel). Der Desktop zeigt zusätzlich den realen UI-Review-Plan als vierten Treffer; mobil bleibt er hinter  Weitere Treffer laden. Mode label ist über alle Breiten als Semantik · später konsistent, Keyword bleibt aktiv. Keine Parent-, Blocks- oder relates_to-Kante geändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:26:52.516Z"
-}

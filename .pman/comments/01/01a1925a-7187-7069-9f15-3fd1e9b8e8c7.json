@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1925a-7187-7069-9f15-3fd1e9b8e8c7",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review-Checkpoint 2026-10-31: Mobile/320px-Ticketlisten gegen die zehn aktuellen direkten UI-Programmkinder abgeglichen. Sieben sichtbare Karten, drei per Scrollen; Reihenfolge sowie Status/Priorität/Readiness stimmen mit pman überein. Die drei weiteren sind laufendes Review, Sprachplanung (blockiert) und Portticket (high/bereit). Kein neuer Mock-Datenfehler, Hierarchie/Parents unverändert. Echte Laufzeitgeometrie weiterhin ungeprüft wegen Loopback-Zugriff.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:26:03.271Z"
-}

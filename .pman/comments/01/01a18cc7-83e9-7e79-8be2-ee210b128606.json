@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cc7-83e9-7e79-8be2-ee210b128606",
-  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
-  "body": "Board-Entwurf 2026-10-30: Spaltenauswahl und Kartenstatuswechsel sind ausdrücklich getrennte Aktionen. Jede Karte erhält eine sichtbare Statusauswahl; Desktop-Drag-and-drop bleibt ergänzend, mobil ist kein Ziehen nötig. Vorschauen: docs/ui-board-preview.svg und docs/ui-board-preview-mobile.svg; wireframe präzisiert den Unterschied. Die ONNX-/all-MiniLM-L6-v2-/Node.js-/SQLite-Roadmap ist bereits unter 01a189bd-b44d-7e95-84fc-66d307543b12 erfasst und optional mit Keyword-Fallback; keine Dublette oder neue Parent-/Blocks-Kante erforderlich.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:27:28.105Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18dbb-1b46-7b2a-9127-d11df06dac2e",
-  "ticketId": "01a189a9-42af-7e67-93b4-dcdb41bbad6a",
-  "body": "Detailmock-Abgleich 2026-10-30: Beispiel 01a189a9-42b1-7518-a6e0-89b4577b1270 hat weiterhin sechs direkte Unteraufgaben, todo/normal, blocked und vier bestehende Beziehungen. Vier Detail/Layout-SVGs führten beim blocks-Gegen-Ticket noch den alten Konzepttitel; auf aktuellen pman-Titel  Schlichtes UI-Konzept mit klaren Planungsabläufen festhalten aktualisiert. Parent-/Blocks-/relates_to-Kanten unverändert. Details: docs/ui-review.md.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:53:32.102Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19283-b794-7530-b251-b82a211253da",
-  "ticketId": "01a189b2-43b1-775a-89f1-388cdd0af53c",
-  "body": "Review 2026-10-31: ui-ticket-create-feedback.svg trennt Produkttextvorschläge nun ausdrücklich von grauen internen Planungsnotizen. Unklarer Erstellungsfall bietet  Zur Ticketliste und manuelle Titelsuche, keine vermeintlich vorhandene API-Prüfung und keinen zweiten Create. Bestätigter Erfolg bei Listenfehler bestätigt Anlage und wiederholt nur den Listenabruf. Technische Grenze ohne Idempotenz/Sicherheitsabfrage bleibt als interne Planungsnotiz erhalten. Parent und Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:11:08.180Z"
-}

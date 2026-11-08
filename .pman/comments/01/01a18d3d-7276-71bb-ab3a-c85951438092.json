@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d3d-7276-71bb-ab3a-c85951438092",
-  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
-  "body": "MOBILE-BOARD-320 2026-10-30: Responsive-Abnahme des Boards um 320 CSS-Pixel ergänzt. Die neue statische Vorschau prüft innerhalb der schmalen Fläche Navigation, Spaltenwahl, lange Kartentitel, 44px-Statusaktion und Prioritäts-/Bereitschaftstexte. Sie ist ein Planungsraster, keine Browserabnahme; die bestehende relates_to-Kante zum Board-Unterticket genügt, Zugehörigkeiten bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:36:16.886Z"
-}

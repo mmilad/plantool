@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18dac-2429-7052-b210-0058280f3122",
-  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
-  "body": "Suchvorschau gegen aktuellen CLI-Suchstand geprüft: Desktop, 390px und 320px zeigten für die echte UI-Programm-ID 01a189a9-429e-7fb4-9d2c-8db0221f8942 den alten Titel „Jira-inspirierte UI für Planus Manus konzipieren und umsetzen“. pman ticket show/search liefern „Schlichte Planungsoberfläche für Planus Manus gestalten und umsetzen“, Status todo. Drei SVG-Treffertexte aktualisiert und mit aktuellem Datensatz abgestimmt; Kommentar-/Zieldokument-Beispiele anhand existierender Treffer geprüft. Parent und bestehende Relations bleiben.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:37:11.337Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cd7-3c61-7771-99e9-a1aa22fc44f4",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "DETAIL-CONTROL-ABNAHME 2026-10-30: Desktop-Bereichsnavigation, Filter und verlinkte Unteraufgaben später auf mindestens 40px tatsächliche klickbare Höhe prüfen; Touch-Ziele mindestens 44px. Insbesondere feststellen, dass die Aktion zu weiteren Unteraufgaben erreichbar bleibt, wenn nicht alle Kinder in den ersten 720px erscheinen. docs/ui-prototype.svg ist nur Entwurf, kein Hitboxnachweis. Bestehende Parent-/Blocks-Zuordnungen unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:44:38.369Z"
-}

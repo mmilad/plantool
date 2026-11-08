@@ -1,9 +1,9 @@
 // Blueprints: reusable checklists that expand a ticket into everything it really needs
 // ("a header is not just a header": logo, navigation, burger menu, states, accessibility ...).
-// Built-in blueprints ship with pman; a project can add or override them in .pman/blueprints/<name>.json.
+// Built-in blueprints ship with heist; a project can add or override them in .heist/blueprints/<name>.json.
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { ValidationError, NotFoundError, PmanError } from './index.js';
+import { ValidationError, NotFoundError, HeistError } from './index.js';
 
 const NAME_RE = /^[a-z0-9][a-z0-9-]{0,47}$/;
 const ITEM_RE = /^[a-z0-9][a-z0-9-]{0,47}$/;
@@ -97,7 +97,7 @@ export const BUILTIN_BLUEPRINTS = Object.freeze([
     name: 'service', title: 'Service / module', description: 'Backend or domain logic with a public contract.',
     match: ['service', 'backend', 'repository', 'worker'],
     items: [
-      item('contract', 'Define the public contract (inputs, outputs, errors)', 'Consumers plan against it; record it with pman contract set.'),
+      item('contract', 'Define the public contract (inputs, outputs, errors)', 'Consumers plan against it; record it with heist contract set.'),
       item('data-model', 'Data model and persistence', 'What is stored where, and how it migrates.'),
       item('errors', 'Error cases and edge cases', 'Timeouts, missing records, invalid input.'),
       item('auth', 'Authentication and permissions', 'Who may call what.'),
@@ -184,7 +184,7 @@ export function attachBlueprintApi(p) {
     for (const f of names.sort()) {
       const file = path.join(dir, f);
       let bp; try { bp = JSON.parse(await fs.readFile(file, 'utf8')); } catch (e) { throw new ValidationError(`Blueprint file ${f} is not valid JSON: ${e.message}`); }
-      validateBlueprint(bp, `.pman/blueprints/${f}`);
+      validateBlueprint(bp, `.heist/blueprints/${f}`);
       if (`${bp.name}.json` !== f) throw new ValidationError(`Blueprint file ${f} must be named ${bp.name}.json`);
       out.push({ ...bp, source: 'project' });
     }
@@ -230,7 +230,7 @@ export function attachBlueprintApi(p) {
     /** Attach a blueprint and create child tickets for the chosen items (default: all required items not yet covered). */
     async apply(ticketRef, name, { only, includeOptional = false, dryRun = false } = {}) {
       const ticket = await p.tickets.get(ticketRef);
-      if (ticket.blueprint && ticket.blueprint.name !== name) throw new PmanError(`Ticket already uses blueprint ${ticket.blueprint.name}`, 'CONFLICT', { blueprint: ticket.blueprint.name });
+      if (ticket.blueprint && ticket.blueprint.name !== name) throw new HeistError(`Ticket already uses blueprint ${ticket.blueprint.name}`, 'CONFLICT', { blueprint: ticket.blueprint.name });
       const bp = resolve(await all(), name);
       if (only) for (const id of only) if (!bp.items.some(i => i.id === id)) throw new ValidationError(`Blueprint ${name} has no item ${id}`);
       const before = ticket.blueprint ? await coverage(ticket.id) : null;
@@ -261,7 +261,7 @@ export function attachBlueprintApi(p) {
       return coverage(ticket.id);
     },
     async detach(ticketRef) { const ticket = await p.tickets.get(ticketRef); const { blueprint: _b, ...rest } = ticket; await p.tickets.update(ticket.id, { blueprint: null }); return rest; },
-    /** Write a built-in (or new empty) blueprint into .pman/blueprints/ so the project can customise it. */
+    /** Write a built-in (or new empty) blueprint into .heist/blueprints/ so the project can customise it. */
     async init(name, { from } = {}) {
       if (!NAME_RE.test(name ?? '')) throw new ValidationError('Blueprint name must be lowercase letters, digits and dashes');
       const file = path.join(dir, `${name}.json`);
@@ -271,7 +271,7 @@ export function attachBlueprintApi(p) {
       delete bp.source;
       validateBlueprint(bp);
       await fs.mkdir(dir, { recursive: true });
-      try { await fs.writeFile(file, `${JSON.stringify(bp, null, 2)}\n`, { flag: 'wx' }); } catch (e) { if (e.code === 'EEXIST') throw new PmanError(`Blueprint ${name} already exists in .pman/blueprints/`, 'CONFLICT'); throw e; }
+      try { await fs.writeFile(file, `${JSON.stringify(bp, null, 2)}\n`, { flag: 'wx' }); } catch (e) { if (e.code === 'EEXIST') throw new HeistError(`Blueprint ${name} already exists in .heist/blueprints/`, 'CONFLICT'); throw e; }
       return { name, file: path.relative(p.root, file).split(path.sep).join('/') };
     },
     /** Project-wide check: tickets with missing blueprint items, and tickets that look like a blueprint but have none. */
@@ -286,7 +286,7 @@ export function attachBlueprintApi(p) {
           if (c.undecided.length) warnings.push({ code: 'BLUEPRINT_UNDECIDED', ticketId: t.id, items: c.undecided, message: `${p.ticketKey(t) ?? t.id} "${t.title}" has undecided optional items: ${c.undecided.join(', ')}` });
         } else {
           const best = [...map.values()].map(b => [b, matchScore(b, t)]).filter(([, s]) => s >= 3).sort((a, b) => b[1] - a[1])[0];
-          if (best) warnings.push({ code: 'BLUEPRINT_SUGGESTED', ticketId: t.id, blueprint: best[0].name, message: `${p.ticketKey(t) ?? t.id} "${t.title}" looks like a ${best[0].name}; run pman blueprint apply ${p.ticketKey(t) ?? t.id} ${best[0].name} --dry-run` });
+          if (best) warnings.push({ code: 'BLUEPRINT_SUGGESTED', ticketId: t.id, blueprint: best[0].name, message: `${p.ticketKey(t) ?? t.id} "${t.title}" looks like a ${best[0].name}; run heist blueprint apply ${p.ticketKey(t) ?? t.id} ${best[0].name} --dry-run` });
         }
       }
       return warnings;

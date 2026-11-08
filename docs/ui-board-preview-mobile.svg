@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-labelledby="title desc">
-  <title id="title">Planus Manus UI-Entwurf — mobiles Status-Board</title>
+  <title id="title">Heistman UI-Entwurf — mobiles Status-Board</title>
   <desc id="desc">Statischer Mobilentwurf eines Status-Boards mit einer vollen Spalte, nativer Auswahl der angezeigten Spalte und neun echten Karten in der Statusspalte Offen aus zehn direkten UI-Programmkindern. Jede Ticketkarte zeigt Priorität und getrennte Bereitschaft als Text und hat eine eigene Statusänderung.</desc>
   <defs>
     <style>
@@ -25,8 +25,8 @@
   <path d="M0 57.5H390" stroke="#D8DEE7"/>
   <rect x="16" y="14" width="30" height="30" rx="8" fill="#2457A7"/>
   <path d="M24.75 23.375h12.5M24.75 28.375h12.5M24.75 33.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
-  <text x="56" y="28" font-size="14" font-weight="650">Planus Manus</text>
-  <text x="56" y="43" class="tiny muted">planus-manus</text>
+  <text x="56" y="28" font-size="14" font-weight="650">Heistman</text>
+  <text x="56" y="43" class="tiny muted">heistman</text>
   <rect x="242" y="7" width="132" height="44" rx="6" fill="#2457A7"/>
   <path d="M254 29h10m-5-5v10" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
   <text x="270" y="33" class="small inverse" font-weight="600">Ticket erstellen</text>

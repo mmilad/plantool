@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18ccd-a8c5-742f-949e-3a7ea975261f",
-  "ticketId": "01a189bd-b44d-7e95-84fc-66d307543b12",
-  "body": "Suchvorschau-Review 2026-10-30: Desktop-SVG-Hintergrund war 820px hoch bei 920px Canvas; Suchleeren-Aktion war 26px, Typfilter 28px. docs/ui-search-preview.svg korrigiert: volle Hintergrundfläche und 40px-Bedienziele. docs/ui-search-preview-mobile.svg ergänzt einen 390×844-Zielzustand mit 44px-Zielen, Typauswahl, typgerechter Navigation und sichtbarem Laden weiterer Treffer. Beispiele bleiben illustrativ; semantische Suche bleibt optional mit Keyword-Fallback. UI-Search-Ticket ist zur Abstimmung mit Responsivität per relates_to verknüpft; Parent und Blocks-Kette unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:34:10.757Z"
-}

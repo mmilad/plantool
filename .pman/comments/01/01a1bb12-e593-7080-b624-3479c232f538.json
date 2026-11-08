@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb12-e593-7080-b624-3479c232f538",
-  "ticketId": "01a1b8de-2362-7ea3-b832-4abc6f000cae",
-  "body": "List rows with type icon, key, summary, status lozenge, priority icon and avatar; issue view with key line, quick status select, description first, plan/readiness, relationships, children, comments, context packet, and a Details side panel (status, readiness, assignee, priority, type, labels, parent, created/updated). Create dialog has type, priority and labels.",
-  "author": "claude",
-  "createdAt": "2026-11-08T12:12:20.243Z"
-}

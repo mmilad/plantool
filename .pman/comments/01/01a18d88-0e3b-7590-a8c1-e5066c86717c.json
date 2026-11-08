@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d88-0e3b-7590-a8c1-e5066c86717c",
-  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
-  "body": "ICON-NAMENSABGLEICH 2026-10-30: Die Vorschau zeigt eine einzelne runde Sprechblase; sie ist jetzt als message-circle statt messages-square benannt. Lucide unterscheidet Einzel-Sprechblase und mehrere Sprechblasen. Das bleibt ein visueller Kandidat und keine festgelegte oder importierte Bibliotheksdatei.",
-  "author": "local",
-  "createdAt": "2026-10-30T15:57:46.427Z"
-}

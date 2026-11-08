@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { initProject, openProject, normalizeSchema } from '../src/index.js';
 
-async function project(t) { const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'pman design ')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd, name: 'Shop' }); return openProject({ cwd }); }
+async function project(t) { const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist design ')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd, name: 'Shop' }); return openProject({ cwd }); }
 const codes = r => r.errors.map(e => e.code);
 
 async function shop(p) {

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18dc4-4cb9-7b39-b320-3a280596cc52",
-  "ticketId": "01a189af-50ab-71b9-9f11-92e13989409f",
-  "body": "Dokumentvorschau-Abgleich 2026-10-30: Der kanonische Review-Plan hat 11 Linkeinträge/10 eindeutige Ziele, nicht 10/9; docs/ui-documents-links-mobile.svg aktualisiert. Die Mobilvorschauen zeigten als verlinkte Programmwurzel noch den veralteten Jira-inspirierten Titel; sichtbare Ticket-Kurzform auf den aktuellen Programmtitel umgestellt. Kanonische Goal-/Plantitel bleiben bis zur app-gestützten Bearbeitung unverändert. Keine Dokumentlinks, Eltern oder Relations geändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T17:03:34.585Z"
-}

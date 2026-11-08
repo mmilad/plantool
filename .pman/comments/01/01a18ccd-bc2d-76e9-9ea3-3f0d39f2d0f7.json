@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18ccd-bc2d-76e9-9ea3-3f0d39f2d0f7",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "UI-Review 2026-10-30 fortgesetzt: App-Tab weiterhin mit ERR_CONNECTION_TIMED_OUT; keine Liveansicht behauptet. Die globalen Suchentwürfe gegen Zielgrößen geprüft: Desktop-Suchleeren-Aktion/Typfilter waren zu klein und Hintergrundfläche deckte das 920px-Canvas nicht vollständig. docs/ui-search-preview.svg korrigiert; neue docs/ui-search-preview-mobile.svg für 390×844 ergänzt. Bestehendes Such-Roadmapticket bleibt unter Ticketnavigation, direkt per relates_to mit Responsive abgestimmt, bestehende Blocks/Parents erhalten. Major-Suche-/Navigationsverträge waren schon durch vorhandene Untertickets abgedeckt; keine Dublette angelegt.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:34:15.725Z"
-}

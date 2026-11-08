@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d3d-71da-75e1-aedb-887bbb62f2ff",
-  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
-  "body": "MOBILE-BOARD-320 2026-10-30: Die bisherige mobile Boardvorschau deckte nur 390×844 ab. docs/ui-board-preview-320.svg ergänzt einen schmalen Entwurf der Offen-Spalte mit vier echten Karten, 44px Statusaktion, Textpriorität und separat benannter Bereitschaft; weitere vier Karten bleiben per Scrollen erreichbar. Die Drahtübersicht verlinkt beide Breiten. Keine Produktänderung, Parent-/Blocks-Ketten unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:36:16.730Z"
-}

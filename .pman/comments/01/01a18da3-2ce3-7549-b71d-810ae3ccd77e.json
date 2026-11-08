@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18da3-2ce3-7549-b71d-810ae3ccd77e",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review-Notiz 2026-10-30: Nach Ergänzung der 44px-Aktion zur vollständigen Blockerliste Textgeometrie in docs/ui-fp-layout-mobile.svg erneut mit Segoe UI geprüft; längste neue Zeile 263/358px, Beziehungslabels passen. Dies ist nur eine SVG-Messung, keine Browser-/Touchabnahme. Keine neue Ticket-/Relationsänderung.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:27:23.747Z"
-}

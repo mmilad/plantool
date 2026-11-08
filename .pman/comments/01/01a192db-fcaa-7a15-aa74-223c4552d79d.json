@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a192db-fcaa-7a15-aa74-223c4552d79d",
-  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
-  "body": "Fortschritt 2026-10-31: Nutzer hat die zentralen UI-Entscheidungen an mich delegiert. Die festgelegte Arbeitsrichtung steht in docs/ui-wireframe.md; stale Abstimmungsformulierungen und Layoutvergleich sind daran angepasst. Der technische Konzeptvertrag wird nun mit den zuständigen Fachpaketen gegengeprüft. Deshalb bleibt dieses Konzept in_progress und behält seine bestehenden Parent-/Blocks-Beziehungen.",
-  "author": "local",
-  "createdAt": "2026-10-31T16:47:33.034Z"
-}

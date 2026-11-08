@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d12-9cf4-7084-9eb7-f7de505cc911",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "UI-Review 2026-10-30: docs/ui-ticket-create-discard.svg ergänzt den Root-Flow für den Fall, dass Titel/Beschreibung/Labels oder Status/Priorität nach Verlassen geändert wurden: Bestätigung statt stiller Löschung, sichere Standardaktion  Weiter bearbeiten, Verwerfen sendet keinen POST. Unveränderte Defaults und Parent zählen nicht als Änderung. Während laufendem POST kein Verwerfen; unklarer POST folgt weiter dem Idempotenzvertrag. Bestehende Accessibility-/Feedback-Relations bleiben zuständig; Parent und Blocks unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:49:29.716Z"
-}

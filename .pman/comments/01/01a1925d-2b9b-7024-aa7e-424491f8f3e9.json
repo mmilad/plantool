@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1925d-2b9b-7024-aa7e-424491f8f3e9",
-  "ticketId": "01a189a9-42b1-7518-a6e0-89b4577b1270",
-  "body": "Entwurfsabgleich 2026-10-31: Die Übersichtsvorschau docs/ui-prototype-overview.svg zeigt 10 direkte Programmpakete mit 2 offenen/bereiten, 1 in Arbeit und 7 blockierten. Gegen den aktuellen pman-Baum geprüft; Zahlen und Beispielkarten stimmen. Dieses Ticket bleibt direkt unter der Programmwurzel, Konzept-Blocks, Visual-QA-Blocks und Responsive-relates_to unverändert. Vorschauzahlen bei späteren Ticketänderungen erneut abgleichen.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:29:01.979Z"
-}

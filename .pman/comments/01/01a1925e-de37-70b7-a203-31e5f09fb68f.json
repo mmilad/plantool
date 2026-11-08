@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1925e-de37-70b7-a203-31e5f09fb68f",
-  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
-  "body": "Suchmock-Abgleich 2026-10-31: ui-search-preview.svg mit pman-Titeln, Ticket-ID, gespeichertem Status und vorhandenem Kommentarziel geprüft. Beispiel verweist auf das echte Ticket zur stabilen Ticketauswahl und einen gespeicherten Kommentar. Dokumenttitel mit Jira-Bezug sind derzeit kanonische nutzerverfasste Inhalte; sie bleiben als Quelle sichtbar und sind keine Jira-UI-Chrome. Typgerechte Navigation bleibt Bestandteil dieses bestehenden Tickets; Parents/Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:30:53.239Z"
-}

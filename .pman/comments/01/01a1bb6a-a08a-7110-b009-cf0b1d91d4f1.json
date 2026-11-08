@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb6a-a08a-7110-b009-cf0b1d91d4f1",
-  "ticketId": "01a189bd-b44d-7e95-84fc-66d307543b12",
-  "body": "Done: keyword stays available at all times; semantic/hybrid only when the local index exists; the search box shows the active mode and offers 'Enable semantic search'; fallback reason is shown; hits share one result contract (title, key, status, parent, snippet, 'similar meaning'). Blockers PM-28 and PM-21 are done.",
-  "author": "local",
-  "createdAt": "2026-11-08T13:48:09.738Z"
-}

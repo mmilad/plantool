@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18da8-5d1f-72d9-a40b-1c3bd9a54513",
-  "ticketId": "01a189b2-43b1-775a-89f1-388cdd0af53c",
-  "body": "Quellabgleich Ticketanlage: POST /api/tickets liefert das angelegte Ticket mit ID. Im Handler läuft danach await load() vor show(t.id); schlägt der Listenrefresh fehl, wird das neue Ticket nicht geöffnet. Den bestätigten Erstellungszustand deshalb mit dem zurückgegebenen Ticketziel/ID erhalten und „Ticket öffnen“ neben „Liste aktualisieren“ anbieten. Beide Aktionen müssen den POST auslassen. Unklaren POST-Ausgang weiterhin nicht blind wiederholen; Idempotenz/Statusprüfung bleibt Voraussetzung. Zugehörigkeiten unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:33:03.776Z"
-}

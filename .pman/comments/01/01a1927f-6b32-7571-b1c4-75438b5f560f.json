@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1927f-6b32-7571-b1c4-75438b5f560f",
-  "ticketId": "01a18d87-251e-7ff7-9678-7a437fd0ef76",
-  "body": "Live-Recheck 2026-10-31: echter Browseraufruf http://127.0.0.1:4000/ weiterhin net::ERR_CONNECTION_REFUSED. Keine weitere Instanz gestartet, kein Ausweichport versucht. Dieses Ticket bleibt Voraussetzung der visuellen Browserabnahme; nach regulärem Start auf 4000 Screenshot/Viewportzustand im Review erfassen. Parent/Blocks unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:06:26.482Z"
-}

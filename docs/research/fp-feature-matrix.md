@@ -4,11 +4,11 @@
 
 Documentation-based review of FP (fp.dev) as of 29 October 2026. “Verified” means described by the official pages below; no CLI install or live invocation was performed. Issue #1's command list was treated as a lead, not verified product behavior.
 
-FP describes itself as an agent-native issue tracker for Claude Code, Codex, Pi, and others. Its quickstart shows terminal-based planning and nested issue output. Current docs clarify that default local issue data is outside the checkout in a per-machine SQLite directory; remote/cloud use connects to a shared HTTPS project and needs identity/token configuration. This differs from pman's desired source of truth: durable goals, tickets, decisions, relationships, comments, and config live inside the project and are Git-tracked by default. A clean clone must contain the plan and allow local edits without remote registration or hosted access; only generated caches and ephemeral execution state are excluded. Sources: [FP docs](https://fp.dev/docs/), [installation](https://fp.dev/docs/getting-started/installation/), [CLI overview](https://fp.dev/docs/cli/overview/), [issue tracking and storage](https://fp.dev/docs/cli/issue-tracking/), [configuration](https://fp.dev/docs/cli/configuration/), [cloud agents](https://fp.dev/docs/guides/cloud-agents/), and [extension docs](https://fp.dev/docs/extensions/overview/).
+FP describes itself as an agent-native issue tracker for Claude Code, Codex, Pi, and others. Its quickstart shows terminal-based planning and nested issue output. Current docs clarify that default local issue data is outside the checkout in a per-machine SQLite directory; remote/cloud use connects to a shared HTTPS project and needs identity/token configuration. This differs from heist's desired source of truth: durable goals, tickets, decisions, relationships, comments, and config live inside the project and are Git-tracked by default. A clean clone must contain the plan and allow local edits without remote registration or hosted access; only generated caches and ephemeral execution state are excluded. Sources: [FP docs](https://fp.dev/docs/), [installation](https://fp.dev/docs/getting-started/installation/), [CLI overview](https://fp.dev/docs/cli/overview/), [issue tracking and storage](https://fp.dev/docs/cli/issue-tracking/), [configuration](https://fp.dev/docs/cli/configuration/), [cloud agents](https://fp.dev/docs/guides/cloud-agents/), and [extension docs](https://fp.dev/docs/extensions/overview/).
 
 ## Capability comparison
 
-| FP surface from issue | Evidence in reviewed official docs | pman proposal | Priority / caveat |
+| FP surface from issue | Evidence in reviewed official docs | heist proposal | Priority / caveat |
 |---|---|---|---|
 | init | Verified: registers project, scaffolds extension directory, ignore rules, optional agent files. | Initialize only repo-local config/files; never overwrite user text. | P0; avoid machine registry. |
 | issue create/list/update | Verified create/list/show/update; create child with parent ID; custom properties. | Ticket CRUD, stable IDs, explicit links, JSON, optimistic revision. | P0. |
@@ -17,7 +17,7 @@ FP describes itself as an agent-native issue tracker for Claude Code, Codex, Pi,
 | log / logs | activity.jsonl is documented; exact log/logs CLI commands not confirmed in inspected reference. | Git history baseline, optional per-entity events later. | P2; avoid append hotspot. |
 | search | Verified in cloud-agent guide; issue docs describe full-text index behavior. | Offline deterministic text search over canonical data. | P1; no required index. |
 | context | Verified context ID emits issue, comments, related context optimized for agents. | Bounded packet with provenance, source paths, deterministic order and omitted counts. | P0. |
-| run | Not confirmed in reviewed CLI reference. | Exclude from core; pman does not launch agents. | Out of scope. |
+| run | Not confirmed in reviewed CLI reference. | Exclude from core; heist does not launch agents. | Out of scope. |
 | session | Not confirmed in reviewed docs. | Execution/session state is ephemeral, outside canonical plan. | Optional future adapter. |
 | agent | Verified agent setup manages agent instruction files; cloud guide has agent tokens. | Opt-in, additive, previewed, neutral setup helper after core. | P1/P2. |
 | guide | Verified guide prints planning, implementation, brainstorm, extension primers. | Neutral docs/schema/API guide; keep workflow accessible in repo. | P1. |
@@ -37,15 +37,15 @@ FP describes itself as an agent-native issue tracker for Claude Code, Codex, Pi,
 | hot-file/context | Context verified; reviewed docs did not verify hot-file ranking. | Explicit file refs and deterministic local search with provenance. | P1. |
 | extensions/hooks | Pre-hooks can reject transitions; post-hooks trigger side effects; extensions execute in CLI and desktop. | Defer arbitrary code and make future execution explicit opt-in. | P3. |
 | MCP | Pages cover other agents; MCP server not established by inspected sources. | Optional adapter after stable API/CLI. | P2. |
-| desktop / project UI | FP docs list a Mac companion; reviewed installer requirements say macOS/Linux x86_64, not Windows. The reviewed pages do not establish every multi-project UI detail from the user report. | Provide `pman serve`: a browser UI scoped to the one project resolved from the current checkout, loopback-only and no auth. No global project picker or dashboard. | P1 in first usable release, after core CLI/API. Local service gets Host/Origin/CSRF protections despite no login. |
+| desktop / project UI | FP docs list a Mac companion; reviewed installer requirements say macOS/Linux x86_64, not Windows. The reviewed pages do not establish every multi-project UI detail from the user report. | Provide `heist serve`: a browser UI scoped to the one project resolved from the current checkout, loopback-only and no auth. No global project picker or dashboard. | P1 in first usable release, after core CLI/API. Local service gets Host/Origin/CSRF protections despite no login. |
 
 ## Security and product fit
 
 Useful patterns: issue context packets, neutral workflow primers, custom statuses/properties, versioned planning documents, optional remote connectivity for cloud agents, careful additive agent-file integration.
 
-Poor fit for minimal pman: workspace/auth/invites, hosted shared database, desktop-only work, extension ecosystem, keychain secret API, self-updater, and asset upload. These introduce operational or trust boundaries not needed for checkout-only planning.
+Poor fit for minimal heist: workspace/auth/invites, hosted shared database, desktop-only work, extension ecosystem, keychain secret API, self-updater, and asset upload. These introduce operational or trust boundaries not needed for checkout-only planning.
 
-Preserve these concerns: repo extensions execute code; hooks may block transitions; tokens must not be committed; auto-editing instructions can change agent behavior. Core pman must parse data without executing it, treat ticket text as untrusted, and keep integrations/plugins opt-in.
+Preserve these concerns: repo extensions execute code; hooks may block transitions; tokens must not be committed; auto-editing instructions can change agent behavior. Core heist must parse data without executing it, treat ticket text as untrusted, and keep integrations/plugins opt-in.
 
 ## Sources
 

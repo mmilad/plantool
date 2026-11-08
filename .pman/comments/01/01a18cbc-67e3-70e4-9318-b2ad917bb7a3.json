@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cbc-67e3-70e4-9318-b2ad917bb7a3",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "BLOCKER-REVIEW 2026-10-30: Im direkten Programmbaum sind sieben Kinder blockiert. Relationsabgleich: sechs davon werden direkt durch das UI-Konzept geblockt; das siebte ist die visuelle Abnahme und wartet auf die Fachpakete. docs/ui-prototype-overview.svg trennt diese Ursache jetzt von der Gesamtzahl. Dieses Ticket bleibt unter Planungsdokumente und Projektübersicht; vorhandene Parent-, Blocks- und relates_to-Zuordnungen unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:15:20.035Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19297-eeac-7702-a2f4-50fe684a8053",
-  "ticketId": "01a189a9-42af-7e67-93b4-dcdb41bbad6a",
-  "body": "Richtungsentscheidung 2026-10-31: Ticketdetail startet lesend, Bearbeitung wird bewusst begonnen. Elternpfad, Untertickets, echte Beziehungen und Kommentare bleiben navigierbare Abschnitte; Status, Priorität, abgeleiteter Arbeitsstand und Bereitschaft bleiben getrennt. Mobile nutzt fokussierten Detailzustand mit sichtbarem Rückweg. Details in docs/ui-wireframe.md; bestehende Zugehörigkeit bleibt.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:33:13.004Z"
-}

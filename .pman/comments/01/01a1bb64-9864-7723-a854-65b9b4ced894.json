@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb64-9864-7723-a854-65b9b4ced894",
-  "ticketId": "01a18c8f-1f44-7856-827e-624aeb1e0e07",
-  "body": "Implemented: '+ Link ticket' in the detail opens a form with the relationship in both directions (e.g. 'is blocked by'), a ticket picker (search by key/title, keyboard navigable, self excluded) and a plain-language summary before linking. Each relationship has a remove button with inline confirmation and removes exactly that relationship ID. Core rejects duplicate edges (409 DUPLICATE_RELATION, under a lock) and blocking cycles (409 CYCLE); the UI explains both. DELETE /api/relations/:id returns 404 for an already removed edge.",
-  "author": "local",
-  "createdAt": "2026-11-08T13:41:34.436Z"
-}

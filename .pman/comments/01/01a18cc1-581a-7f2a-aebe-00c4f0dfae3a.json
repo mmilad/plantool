@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cc1-581a-7f2a-aebe-00c4f0dfae3a",
-  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
-  "body": "APP-MARK-KONSISTENZ 2026-10-30: Die Kopfzeichen in Desktop-, Übersichts-, Such- und Mobilvorschau verwendeten bisher ein Plus, während docs/ui-icon-preview.svg den unverbindlichen Planblatt-Kandidaten zeigt. Alle vier Vorschauen verwenden nun dieselben drei Blattlinien; das Plus bleibt der Erstellen-Aktion vorbehalten. Kandidat bleibt unfreigegeben. Icon-Inventar bleibt Kind des Icon-Systems; bestehende Accessibility-/Review-relates_to-Kanten unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:20:43.674Z"
-}

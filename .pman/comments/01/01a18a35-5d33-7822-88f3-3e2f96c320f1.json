@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18a35-5d33-7822-88f3-3e2f96c320f1",
-  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
-  "body": "Live-Recheck 2026-10-30: In frisch geladener App exakten Goal-Titel  Die Planus-Manus-Oberfläche fortlaufend prüfen und verbessern gesucht. Die Trefferliste liefert genau den Typ goals. Nach Klick bleibt das Detail bei Select a ticket to inspect it.; weder Dokumentlesemodus noch verständliche Fehlermeldung/Rückweg erscheinen, und die statischen Vorschauen ändern sich nicht. Reproduziert die vorhandene Typfehlleitung mit einem Goal statt dem früheren Plan-/Goal-Beispiel. docs/ui-review.md ergänzt. Bestehender Parent unter Ticketnavigation und Blocks-Beziehungen zu UI-Konzept/Dokumentleser/stabiler Ticketadresse unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T00:28:35.507Z"
-}

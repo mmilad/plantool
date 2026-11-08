@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18db5-9d98-72e2-98ff-aaad33190b6b",
-  "ticketId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
-  "body": "Prioritäts-/Blocks-Recheck 2026-10-30: UI-Richtung und Port 4000 sind beide high, todo und bereit. Konzept bleibt zuerst, da es mehrere Gestaltungspakete blockiert. Das Portticket blockiert ausschließlich die spätere Visual-QA und ist keine Voraussetzung für Konzept- oder UI-Planung; nach Umsetzungsfreigabe kann es parallel zum Gestaltungsstrang laufen, muss aber vor Live-QA fertig sein. Navigation und Ticketdetail sind nächste High-Priority-Fachpakete nach Konzept; Detail hat zusätzlich die stabile-URL-Abhängigkeit. Visual-QA folgt nach seinen neun Blocks-Voraussetzungen. Keine Parent-/Blocks-Kanten oder Feldprioritäten geändert. Reihenfolge/Begründung: docs/ui-review.md.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:47:32.249Z"
-}

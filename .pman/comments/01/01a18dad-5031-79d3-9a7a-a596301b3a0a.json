@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18dad-5031-79d3-9a7a-a596301b3a0a",
-  "ticketId": "01a189b0-0f28-7715-8ac6-c689065acab1",
-  "body": "Abgleich mobile Suchbedienung: 320px-Kommentarpreview hatte nur ca. 4.5px Textreserve und das Suchkreuz keine gezeichnete 44×44px-Zielfläche. Snippet an natürlicher Wortgrenze umbrochen; Löschziel jetzt in den 320px- und 390px-Vorschauen 44×44px. Responsive-Zuordnung und bestehende Relations bleiben.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:38:28.145Z"
-}

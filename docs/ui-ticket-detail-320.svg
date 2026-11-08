@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="960" viewBox="0 0 320 960" role="img" aria-labelledby="title desc">
-  <title id="title">Planus Manus UI-Entwurf — Ticketdetail bei 320 Pixeln</title>
-  <desc id="desc">Statische schmale Mobilvorschau für das echte Ticket Planungsdokumente und Projektübersicht gestalten. Sie zeigt Rückweg, den navigierbaren Elternkontext „Schlichte Planungsoberfläche für Planus Manus gestalten und umsetzen“, gespeicherten Status und Priorität, getrennte Blockerbereitschaft, sechs Unteraufgaben sowie alle vier navigierbaren aktuellen Beziehungen mit Richtung und Gegen-Ticket.</desc>
+  <title id="title">Heistman UI-Entwurf — Ticketdetail bei 320 Pixeln</title>
+  <desc id="desc">Statische schmale Mobilvorschau für das echte Ticket Planungsdokumente und Projektübersicht gestalten. Sie zeigt Rückweg, den navigierbaren Elternkontext „Schlichte Planungsoberfläche für Heistman gestalten und umsetzen“, gespeicherten Status und Priorität, getrennte Blockerbereitschaft, sechs Unteraufgaben sowie alle vier navigierbaren aktuellen Beziehungen mit Richtung und Gegen-Ticket.</desc>
   <defs>
     <style>
       text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
@@ -27,8 +27,8 @@
   <path d="M0 51.5H320" stroke="#D8DEE7"/>
   <rect x="12" y="11" width="30" height="30" rx="8" fill="#2457A7"/>
   <path d="M20.75 20.375h12.5M20.75 25.375h12.5M20.75 30.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
-  <text x="52" y="25" font-size="14" font-weight="650">Planus Manus</text>
-  <text x="52" y="40" class="tiny muted">planus-manus</text>
+  <text x="52" y="25" font-size="14" font-weight="650">Heistman</text>
+  <text x="52" y="40" class="tiny muted">heistman</text>
 
   <rect x="12" y="57" width="296" height="44" rx="6" fill="#2457A7"/>
   <path d="M110 79h10m-5-5v10" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
@@ -53,7 +53,7 @@
   <path d="M25 230h14m-6-6-6 6 6 6" fill="none" stroke="#2457A7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
   <text x="47" y="234" class="small blue" font-weight="600">Zurück zur Ticketliste</text>
 
-  <text x="16" y="272" class="tiny blue" font-weight="600" text-decoration="underline">Schlichte Planungsoberfläche für Planus Manus …<title>Schlichte Planungsoberfläche für Planus Manus gestalten und umsetzen</title></text>
+  <text x="16" y="272" class="tiny blue" font-weight="600" text-decoration="underline">Schlichte Planungsoberfläche für Heistman …<title>Schlichte Planungsoberfläche für Heistman gestalten und umsetzen</title></text>
   <text x="16" y="305" class="title-text">Planungsdokumente</text>
   <text x="16" y="331" class="title-text">und Projektübersicht</text>
   <text x="16" y="357" class="title-text">gestalten</text>

@@ -11,7 +11,7 @@ test('raw HTML, scripts and event handlers are escaped, never interpreted', () =
 });
 
 test('only http(s) and resolvable internal links become clickable', () => {
-  const html = renderMarkdown(`[a](javascript:alert(1)) [b](data:text/html,x) [c](file:///etc/passwd) [d](https://example.com/x) [e](${ID}) [f](pman:${MISSING})`, { resolve });
+  const html = renderMarkdown(`[a](javascript:alert(1)) [b](data:text/html,x) [c](file:///etc/passwd) [d](https://example.com/x) [e](${ID}) [f](heist:${MISSING})`, { resolve });
   assert.equal((html.match(/<a /g) || []).length, 2);
   assert.match(html, /href="https:\/\/example\.com\/x" target="_blank" rel="noopener noreferrer nofollow"/);
   assert.match(html, new RegExp(`href="/\\?document=${ID}"`)); assert.match(html, /md-missing/);

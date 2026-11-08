@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d97-a8cd-7cfb-9ca8-0ce576a809fb",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Planreview 2026-10-30: Abgleich fand in beiden mobilen Ticketlisten veraltete neun-Paket-/Normalprioritätsdaten. docs/ui-ticket-list-mobile.svg und ui-ticket-list-320.svg zeigen jetzt zehn direkte Pakete und die tatsächlichen Prioritäten; Scrollhinweis nennt drei weitere. ui-wireframe.md setzt Variante A als vorläufige FP.dev-Richtung statt eine bereits getroffene Wahl weiter als offen zu führen. Zugehörigkeiten bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:14:49.038Z"
-}

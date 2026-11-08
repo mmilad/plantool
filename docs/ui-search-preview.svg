@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="920" viewBox="0 0 1280 920" role="img" aria-labelledby="title desc">
-  <title id="title">Planus Manus UI-Entwurf — globale Suche</title>
+  <title id="title">Heistman UI-Entwurf — globale Suche</title>
   <desc id="desc">Statische Desktopvorschau für globale Projektsuche. Keyword-Suche ist der heutige Standard. Eine spätere lokale semantische Suche mit ONNX und SQLite bleibt optional und zeigt transparent Modell-, Index- und Fallbackzustände.</desc>
   <defs>
     <style>
@@ -25,8 +25,8 @@
   <path d="M0 63.5H1280" stroke="#D8DEE7"/>
   <rect x="24" y="17" width="30" height="30" rx="8" fill="#2457A7"/>
   <path d="M32.75 26.375h12.5M32.75 31.375h12.5M32.75 36.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
-  <text x="64" y="30" font-size="15" font-weight="650">Planus Manus</text>
-  <text x="64" y="46" class="tiny muted">planus-manus</text>
+  <text x="64" y="30" font-size="15" font-weight="650">Heistman</text>
+  <text x="64" y="46" class="tiny muted">heistman</text>
   <rect x="324" y="12" width="600" height="40" rx="6" fill="#FFFFFF" stroke="#768294"/>
   <circle cx="345" cy="32" r="6" fill="none" stroke="#5A687A" stroke-width="1.5"/>
   <path d="m349.5 36.5 4 4" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round"/>
@@ -76,7 +76,7 @@
   <rect x="40" y="394" width="824" height="112" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
   <rect x="60" y="414" width="72" height="22" rx="11" fill="#F0F3F7"/>
   <text x="75" y="429" class="tiny" font-weight="600">TICKET</text>
-  <text x="148" y="431" class="section">Schlichte Planungsoberfläche für Planus Manus gestalten und umsetzen</text>
+  <text x="148" y="431" class="section">Schlichte Planungsoberfläche für Heistman gestalten und umsetzen</text>
   <text x="60" y="461" class="small muted">Ticket-ID · 01a189a9…8942</text>
   <text x="60" y="483" class="body">Eigenständiges UI-Programm</text>
   <rect x="766" y="414" width="74" height="24" rx="12" fill="#F0F3F7"/>

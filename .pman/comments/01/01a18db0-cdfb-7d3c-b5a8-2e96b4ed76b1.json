@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18db0-cdfb-7d3c-b5a8-2e96b4ed76b1",
-  "ticketId": "01a189a9-42b1-7518-a6e0-89b4577b1270",
-  "body": "Projektübersicht-Abgleich 2026-10-30: Visual-QA hat laut aktuellem Readiness-Graph sechs gemeinsame Konzept-Blocker plus drei zusätzliche Voraussetzungen. Desktop-/Mobile-Mocks waren bei zwei zusätzlichen; auf drei korrigiert. Übersichtsticket bleibt unter Dokumente/Projektübersicht, Visual-QA bleibt seinem bisherigen Parent zugeordnet; keine Relationsänderung. Details in docs/ui-review.md.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:42:16.955Z"
-}

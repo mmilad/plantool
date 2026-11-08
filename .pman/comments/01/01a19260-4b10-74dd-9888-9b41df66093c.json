@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19260-4b10-74dd-9888-9b41df66093c",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review 2026-10-31: Projektübersichtsmock gegen Quell/API-Vertrag geprüft. Core kann Readiness berechnen, Browser /api/tree liefert sie aktuell nicht; fachliches Projektstartticket enthält bereits die korrekte Gate-Bedingung. Befund in docs/ui-review.md und am bestehenden Ticket dokumentiert, keine Dublette oder Zuordnungsänderung.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:32:26.640Z"
-}

@@ -2,7 +2,7 @@ import test from 'node:test';
 import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-process.env.PMAN_HOME ??= mkdtempSync(join(tmpdir(), 'pman-home-'));
+process.env.HEIST_HOME ??= mkdtempSync(join(tmpdir(), 'heist-home-'));
 
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -15,8 +15,8 @@ import { initProject, openProject } from '../src/index.js';
 import { onboardText } from '../src/onboard.js';
 
 const run = promisify(execFile);
-const bin = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin', 'pman.js');
-async function project(t) { const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'pman wf ')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd, name: 'WF' }); return openProject({ cwd }); }
+const bin = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin', 'heist.js');
+async function project(t) { const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist wf ')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd, name: 'WF' }); return openProject({ cwd }); }
 
 test('ticket kind defaults to task and rejects unknown kinds', async t => {
   const p = await project(t);
@@ -83,12 +83,12 @@ test('concurrent claims by different agents leave exactly one owner', async t =>
 test('agent onboard prints the briefing and writes nothing', async t => {
   const p = await project(t); const before = await fs.readdir(p.root);
   const text = onboardText();
-  for (const word of ['pman guide', 'implements', 'blocks', 'todo', 'in_progress', 'MCP']) assert.ok(text.includes(word), `briefing mentions ${word}`);
+  for (const word of ['heist guide', 'implements', 'blocks', 'todo', 'in_progress', 'MCP']) assert.ok(text.includes(word), `briefing mentions ${word}`);
   assert.deepEqual(await fs.readdir(p.root), before);
 });
 
 test('CLI exposes next, claim, done and relation remove', async t => {
-  const p = await project(t); const cwd = p.root; const cli = (...a) => run(process.execPath, [bin, ...a], { cwd, env: { ...process.env, PMAN_AGENT: 'cli-agent' } });
+  const p = await project(t); const cwd = p.root; const cli = (...a) => run(process.execPath, [bin, ...a], { cwd, env: { ...process.env, HEIST_AGENT: 'cli-agent' } });
   const a = JSON.parse((await cli('ticket', 'create', '--title', 'A', '--kind', 'feature', '--priority', 'high', '--labels', 'x,y', '--format', 'json')).stdout);
   assert.equal(a.kind, 'feature'); assert.deepEqual(a.labels, ['x', 'y']);
   const b = JSON.parse((await cli('ticket', 'create', '--title', 'B', '--format', 'json')).stdout);

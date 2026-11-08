@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19273-a993-7387-9ac8-08048ddd57e4",
-  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
-  "body": "Konzeptkonsistenz-Review 2026-10-31: Die historische FP-REFERENZ-Notiz sagt  Kopf mit Projektauswahl. Der aktuelle Wireframe legt wegen genau eines gebundenen Projekts pro Serverinstanz ausdrücklich keinen Projektumschalter fest; ui-fp-layout.svg zeigt entsprechend nur den Projektnamen. Bitte die Notiz bei der Konzeptpflege als Projektname als Kontext, kein Umschalter präzisieren, damit kein nicht vorhandener Projektwechsel geplant wird. Befund in docs/ui-review.md; Parent/Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:53:36.019Z"
-}

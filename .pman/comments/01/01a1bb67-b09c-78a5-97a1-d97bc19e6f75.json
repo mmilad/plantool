@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb67-b09c-78a5-97a1-d97bc19e6f75",
-  "ticketId": "01a189b2-a6a6-74d9-b7c4-d9e344090079",
-  "body": "Implemented: landmarks (header, nav, aside, main) are named; all form fields have labels; ticket tree uses a roving tabindex (one tab stop) with arrow keys (↑/↓, → expand / first child, ← collapse / parent, Home/End, Enter opens) and a screen-reader hint; opening a ticket from search/links moves focus to the ticket heading, opening from the tree keeps focus in the tree; a polite live region announces the opened ticket; relationship/search controls are keyboard operable with aria-expanded/listbox semantics. Verified with Playwright keyboard tests.",
-  "author": "local",
-  "createdAt": "2026-11-08T13:44:57.244Z"
-}

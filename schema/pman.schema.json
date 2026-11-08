@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/mmilad/planus-manus/main/schema/pman.schema.json",
-  "title": "Planus Manus project store",
+  "$id": "https://raw.githubusercontent.com/mmilad/heistman/main/schema/heist.schema.json",
+  "title": "Heistman project store",
   "type": "object",
   "required": ["schemaVersion", "projectId", "name", "statuses", "createdAt"],
   "properties": {

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cd7-3d11-7700-bceb-01e5a5fd1c5c",
-  "ticketId": "01a189a9-42af-7e67-93b4-dcdb41bbad6a",
-  "body": "DESKTOP-BEDIENZIELE 2026-10-30: docs/ui-prototype.svg hatte 36px Listenfilter, 30px Filteraktion und 28px Bereichs-/Unteraufgabenlinks. Der Entwurf setzt diese Elemente jetzt auf 40px; im ersten Viewport erscheinen vier der sechs Unteraufgaben plus eine 40px-Aktion zu den weiteren zwei. Gemeinsamer Detailvertrag in docs/ui-wireframe.md ergänzt. Parent und bestehende Blocks-Kanten unverändert; tatsächliche Hitbox bleibt spätere Browserabnahme.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:44:38.545Z"
-}

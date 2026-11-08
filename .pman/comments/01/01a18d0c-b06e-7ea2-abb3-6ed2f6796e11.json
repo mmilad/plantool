@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d0c-b06e-7ea2-abb3-6ed2f6796e11",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "UI-Review 2026-10-30: docs/ui-ticket-create-desktop.svg schließt die Desktop-Lücke und zeigt Root-Erstellung aus der Projektübersicht als eigenen Dialog. Eltern bleibt leer; Feldbeschriftungen, Projektstatus-/Prioritätsdefaults, Abbruch und Ticket-Erstellen sind klar. Fokus-Rückgabe und Fehlererhalt mit den bestehenden Accessibility- und Rückmeldungstickets abgestimmt. Zusätzliche relates_to-Kanten zu diesen beiden Querschnittsaufgaben; Parent und Blocks unverändert, kein neues Ticket.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:43:01.486Z"
-}

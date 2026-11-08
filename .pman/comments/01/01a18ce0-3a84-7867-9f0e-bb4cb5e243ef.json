@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18ce0-3a84-7867-9f0e-bb4cb5e243ef",
-  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
-  "body": "ANLAGE-ERFOLG VOR ANSICHTS-REFRESH 2026-10-30: POST /api/tickets antwortet synchron mit dem angelegten Ticket; der UI-Handler setzt danach das Formular zurück und wartet auf load() und show(). Scheitert der Folgeabruf, ist der Schreibvorgang bereits erfolgt, aber Erfolg/ID bleiben unsichtbar. Ablauf so planen, dass bestätigter POST-Erfolg genau einmal gemeldet wird; Baum-/Detailrefresh getrennt mit Wiederholen-Aktion behandeln, die nur neu lädt und keinen zweiten POST ausführt. Mit Querschnittsticket Lade-/Fehler-/Erfolgsmeldungen 01a189b2-43b1-775a-89f1-388cdd0af53c abgestimmt; Parent Ticketdetail, Konzept-Blocks-Kante und übrige Zuständigkeiten bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:54:27.716Z"
-}

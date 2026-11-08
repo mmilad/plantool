@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19284-3a52-7472-89b7-76b5d703efeb",
-  "ticketId": "01a189b6-43ac-78a2-a06b-345c6fa56083",
-  "body": "Review 2026-10-31: Produkttext in docs/ui-prototype-overview-mobile.svg und ui-board-preview.svg sagt jetzt  Bereitschaft statt Readiness; wireframe ASCII nennt abgeleiteten Arbeitsstand statt Rollup. Semantik bleibt abgeleitet, keine neue gespeicherte Statusoption; Parent/Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:11:41.650Z"
-}

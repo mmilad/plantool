@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb71-bac1-7a9a-81d7-5bee0eba0f89",
-  "ticketId": "01a1bb2e-a7fa-7da2-ba9c-935d4ce9be86",
-  "body": "Implemented: built-in blueprints (ui-component, header, footer, form, page, service, api-endpoint, login) plus project blueprints in .pman/blueprints/ with extends/override; pman blueprint list/show/suggest/apply/status/skip/unskip/check/init; child tickets carry origin {blueprint,item}; coverage (planned/done/not needed/missing/undecided) in pman check warnings, pman context and the new Checklist section in the ticket view (preview with checkboxes, create, 'Not needed' with reason, undo). Tests in test/blueprints.test.js; docs in README and implementation-decisions.",
-  "author": "local",
-  "createdAt": "2026-11-08T13:55:55.201Z"
-}

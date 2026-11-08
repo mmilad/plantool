@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b58d-e227-76f9-ba3b-884e5eca393a",
-  "ticketId": "01a1b579-3166-71ea-9e77-800e401fec8c",
-  "body": "Implemented in src/design.js with tests in test/design.test.js; npm run check passes.",
-  "author": "claude",
-  "createdAt": "2026-11-07T10:28:56.999Z"
-}

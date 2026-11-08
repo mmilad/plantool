@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d97-a813-7b3e-867f-97bf025bcaf2",
-  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
-  "body": "UI-PLANABGLEICH 2026-10-30: docs/ui-ticket-list-mobile.svg und docs/ui-ticket-list-320.svg zählen jetzt zehn direkte Programmkinder mit drei weiteren scrollbaren Einträgen. Sichtbare Prioritäten folgen dem aktuellen pman-Bestand: UI-Richtung, Navigation und Detail hoch; andere sichtbare Beispiele normal. Variante A ist als vorläufiger fp.dev-inspirierter Start dokumentiert; nicht finale Layoutalternativen bleiben im Vergleich. Keine Parent-/Blocks-/relates_to-Kanten geändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:14:48.851Z"
-}

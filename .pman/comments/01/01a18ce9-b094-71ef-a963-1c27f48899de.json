@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18ce9-b094-71ef-a963-1c27f48899de",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Planungsabgleich 2026-10-30: Korrektur des Zwischenbefunds — die sechs direkten Untertickets im Mobilentwurf gehören zu  Planungsdokumente und Projektübersicht gestalten und stimmen mit pman überein; die zehn Kinder gehören zum separaten Ticketdetail-Paket. Der tatsächliche Mobil-Review-Befund ist die verkürzte Beziehungsdarstellung: ergänzt wurde docs/ui-ticket-relations-mobile.svg mit eingeklappten und geöffneten Zuständen für alle vier realen Kanten. Die spätere Node.js-/ONNX-/all-MiniLM-L6-v2-/SQLite-Vektorsuche ist bereits im bestehenden Such-Roadmapticket samt Embedding-, Index-/Rebuild- und Hybrid-API-Kindern abgedeckt; Keyword bleibt MVP und Fallback. Keine Duplikate oder Beziehungsänderungen.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:04:47.764Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cca-5885-7193-b2be-183b0b2c0a07",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Fortgesetzter Review 2026-10-30: Der aktuelle In-App-Browser zeigt für 127.0.0.1:59456 einen Timeout; Live-/Screenshotprüfung bleibt daher offen. Im Quell-/Planabgleich decken die bekannten Ticketfluss-, Feld-, Status-, Such-, Dokument-, Fehler-, Fokus- und Responsive-Befunde bestehende Fachtickets ab; keine neue unzugeordnete Produktlücke behauptet. Die statischen Boardvorschauen wurden gegen die Zielgrößen korrigiert: 40px Desktop, 44px Touch einschließlich Liste/Board-Wechsel. Architektur Node.js/ONNX/all-MiniLM-L6-v2/SQLite bleibt wie geplant optional mit Keyword-Fallback. Board-Parent, Blocks und die relates_to-Verbindung dieses Reviewtickets wurden beibehalten; nur Planung/Dokumente aktualisiert.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:30:33.605Z"
-}

@@ -4,7 +4,7 @@ This roadmap records the broader product direction and is maintained passively w
 
 ## MVP boundary
 
-A fresh checkout with supported Node LTS can initialize, read, create, update, reparent, search and validate arbitrarily nested tickets and linked planning docs entirely offline. Canonical data is ordinary Git-tracked content. MVP includes CLI and public TypeScript API plus an optional `pman serve` browser UI for the single current project. The UI binds to loopback, defaults to fixed port 4000, fails clearly if occupied (with only an explicit `--port` override), has no auth, and does not enumerate other projects. It runs on Windows/macOS/Linux and requires no hosted service, database, or MCP.
+A fresh checkout with supported Node LTS can initialize, read, create, update, reparent, search and validate arbitrarily nested tickets and linked planning docs entirely offline. Canonical data is ordinary Git-tracked content. MVP includes CLI and public TypeScript API plus an optional `heist serve` browser UI for the single current project. The UI binds to loopback, defaults to fixed port 4000, fails clearly if occupied (with only an explicit `--port` override), has no auth, and does not enumerate other projects. It runs on Windows/macOS/Linux and requires no hosted service, database, or MCP.
 
 Out of MVP: hosted sharing, credentials/auth/invites, live locks, agent execution/session management, arbitrary extensions/hooks, desktop app, MCP adapter, semantic search, binary asset hosting, dashboards, time tracking, auto-update.
 
@@ -18,7 +18,7 @@ Acceptance:
 
 - Schema/examples represent goals/plans/decisions/comments/relationships and tickets at arbitrary depth.
 - Root, child, grandchild, and 10,000-deep chains need no special type or nested child array.
-- Package/executable availability and pman bin collision behavior are verified; if unavailable or conflicting, owner chooses a fallback before package setup.
+- Package/executable availability and heist bin collision behavior are verified; if unavailable or conflicting, owner chooses a fallback before package setup.
 - The selected MIT license is documented; a LICENSE file is added before the first public release.
 - No product runtime code in this milestone.
 
@@ -26,13 +26,13 @@ Acceptance:
 
 **Depends on:** Milestone 0.
 
-Tasks: initialize .pman; canonical serialization; loaders/writers; IDs; schema validation/migration foundation; graph validators; typed errors; storage adapter.
+Tasks: initialize .heist; canonical serialization; loaders/writers; IDs; schema validation/migration foundation; graph validators; typed errors; storage adapter.
 
 Acceptance:
 
 - openProject resolves repo root and reads without external service.
 - A fresh Git clone contains all canonical goals, plans, tickets, metadata, and relationships; local commands can inspect and edit that data offline.
-- pman init does not add canonical .pman files to .gitignore; only rebuildable caches and ephemeral execution state may be ignored.
+- heist init does not add canonical .heist files to .gitignore; only rebuildable caches and ephemeral execution state may be ignored.
 - Separate records have stable IDs; title change does not change path.
 - Child creation adds one child record, not a parent list.
 - Duplicate IDs, missing parent, self-parent, cycle, dangling edge, unsupported schema and path traversal return path/ID diagnostics.
@@ -58,11 +58,11 @@ Acceptance:
 
 **Depends on:** Milestones 1–2.
 
-Tasks: pman commands; JSON/human output; exit codes; noninteractive and stdin/file modes; package exports, declarations and bin mapping.
+Tasks: heist commands; JSON/human output; exit codes; noninteractive and stdin/file modes; package exports, declarations and bin mapping.
 
 Acceptance:
 
-- npm devDependency install followed by npx pman --help and npm exec -- pman work with chosen Node.
+- npm devDependency install followed by npx heist --help and npm exec -- heist work with chosen Node.
 - Public TypeScript API imports from documented exports with no CLI side effects.
 - Windows/macOS/Linux shims and paths work without WSL, global install, native dependency or separate executable.
 - Outputs deterministic; errors have documented exit codes and optional machine-readable diagnostics.
@@ -87,11 +87,11 @@ Acceptance:
 
 **Depends on:** Milestones 1–4.
 
-Tasks: build a lightweight browser UI on the public TypeScript core; support project tree navigation, ticket detail and supported edits, planning documents, search/context; implement `pman serve` as a foreground server.
+Tasks: build a lightweight browser UI on the public TypeScript core; support project tree navigation, ticket detail and supported edits, planning documents, search/context; implement `heist serve` as a foreground server.
 
 Acceptance:
 
-- `pman serve` resolves exactly one initialized project from the current working directory/nearest ancestor and refuses if none exists.
+- `heist serve` resolves exactly one initialized project from the current working directory/nearest ancestor and refuses if none exists.
 - UI reads and writes through the same core validators and filesystem adapter as the CLI; all canonical state remains in Git-tracked project files.
 - UI shows only that project; there is no project discovery, picker, multi-project index, or account system.
 - Server binds to 127.0.0.1 only by default, prints its URL, and stops with Ctrl-C; browser launch is opt-in with `--open`.

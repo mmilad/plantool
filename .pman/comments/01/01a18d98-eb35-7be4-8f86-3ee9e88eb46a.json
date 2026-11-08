@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d98-eb35-7be4-8f86-3ee9e88eb46a",
-  "ticketId": "01a189bd-b44d-7e95-84fc-66d307543b12",
-  "body": "Review 2026-10-30: Der spätere lokale Node.js-/ONNX-/all-MiniLM-L6-v2-/SQLite-Vektorindex samt Keyword-Fallback ist in Architektur-/Roadmap-Texten unterschiedlich eingeordnet. docs/roadmap.md und docs/implementation-decisions.md nennen nun konsistent Post-MVP und den rebuildbaren lokalen Index; Keyword bleibt verfügbar. Keine neue Aufgabe/Beziehung; vorhandener Parent, Blocks-Ast und relates_to-Kanten bleiben bestehen.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:16:11.573Z"
-}

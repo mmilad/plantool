@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19286-ba32-7b91-83fe-8597717313ff",
-  "ticketId": "01a189f8-f7bf-7921-b4cf-b3269ac6239d",
-  "body": "Zusätzlicher Befund 2026-10-31: ui-wireframe.md enthält eine gekürzte, wörtliche Beispieltitelzeile aus dem aktuellen Jira-benannten pman-Zieldokument. Sie ist Datenmomentaufnahme, keine bestätigte Stilrichtung. Bitte bei der revisionssicheren Pflege aller vier betroffenen Ziel-/Plandokumente auch abhängige Vorschauen erfassen; anschließend bestehende Konsolidierung 01a189ad-9320-7ba9-a8ad-4656341eb4e5 nutzen. Keine direkte .pman-Änderung und keine Kantenänderung.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:14:25.458Z"
-}

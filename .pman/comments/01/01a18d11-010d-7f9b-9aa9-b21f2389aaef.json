@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d11-010d-7f9b-9aa9-b21f2389aaef",
-  "ticketId": "01a189b2-a6a6-74d9-b7c4-d9e344090079",
-  "body": "UI-Review 2026-10-30: Der Desktop-Ticketanlageentwurf nutzt ein Overlay; die allgemeine Fokusplanung spezifizierte bisher keinen Dialogvertrag. Ergänzung in docs/ui-wireframe.md: Desktop mit benanntem role=dialog und aria-modal=true, Fokus in das Titelfeld, Tab/Shift+Tab im Dialog halten, Hintergrund inert, Schließen-Control zugänglich benennen, Escape/Abbrechen und Fokus zum auslösenden Einstieg zurück. Mobil ist die Anlage eine fokussierte Vollbildansicht mit main/h1 und Zurück, kein verschachteltes Modal in der langen Navigation; Kontext, Fokus und Listenposition wiederherstellen. Fehlerfeld programmgesteuert mit Meldung verbinden und invaliden Titel kenntlich machen. Beide Anlage-Tickets sind bereits per relates_to verbunden; bestehende Beziehungen und Parent-Zuordnung bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:47:44.270Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d00-e2ab-71da-940f-8942062f9a64",
-  "ticketId": "01a189bd-b44d-7e95-84fc-66d307543b12",
-  "body": "Quellabgleich 2026-10-30: src/server.js rendert Suchergebnisse derzeit als button aus esc(t.title) plus esc(t.type). Dadurch erscheint ein Kommentar als Comment on <Ticket-UUID> mit technischem Typ; Snippet, lesbarer Ticketkontext und Status fehlen in der Trefferzeile. Zielbild docs/ui-search-preview.svg und die Mobilvarianten ordnen Typwerte nutzerverständlich zu und zeigen Kommentartext plus Zielticket; vorhandene Suchrouting-/Kommentar-Fokus-Aufgabe bleibt zuständig. Status/Elternpfad nur bei Ticketresultaten und nur aus realen Daten. Parent- und bestehende Blocks-/relates_to-Kanten unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:30:07.915Z"
-}

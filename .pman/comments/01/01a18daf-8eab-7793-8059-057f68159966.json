@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18daf-8eab-7793-8059-057f68159966",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "Plan-Konsistenzreview 2026-10-30: aktueller UI-Programmbaum zählt zehn direkte Kinder; Übersichtskonzept und Wireframes stimmen damit überein. Die Konzept-Unterticketbeschreibung 01a189ad-5c7c-7e68-b165-79fb9f674539 enthält noch eine alte Momentaufnahme mit neun Kindern und sollte bei nächster Pflege datiert auf zehn aktualisiert werden. Diese Aufgabe bleibt unter ihrem bestehenden Parent Planungsdokumente/Projektübersicht; keine Relation ändern. Details in docs/ui-review.md.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:40:55.211Z"
-}

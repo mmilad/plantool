@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1925d-a0d5-764d-92b0-48701699fd80",
-  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
-  "body": "Plan-/Mockabgleich 2026-10-31: Der angehängte Abschnitt zur Vorschau nannte den gespeicherten Wert todo/normal, während Ticketdatensatz und ui-fp-layout.svg todo/high zeigen. Beschreibungswert per pman auf todo/high korrigiert; Parent und bestehende Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:29:31.989Z"
-}

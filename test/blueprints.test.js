@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { initProject, openProject } from '../src/index.js';
 
-async function project(t) { const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'pman-bp-')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd }); return openProject({ cwd }); }
+async function project(t) { const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-bp-')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd }); return openProject({ cwd }); }
 
 test('blueprints resolve inheritance, suggest by title and expand a ticket into child tickets', async t => {
   const p = await project(t);
@@ -35,7 +35,7 @@ test('blueprints resolve inheritance, suggest by title and expand a ticket into 
   assert.ok(check.warnings.some(w => w.code === 'BLUEPRINT_UNDECIDED'));
 });
 
-test('project blueprints in .pman/blueprints override built-ins and are validated', async t => {
+test('project blueprints in .heist/blueprints override built-ins and are validated', async t => {
   const p = await project(t);
   const r = await p.blueprints.init('header');
   const file = path.join(p.root, r.file); const bp = JSON.parse(await fs.readFile(file, 'utf8'));

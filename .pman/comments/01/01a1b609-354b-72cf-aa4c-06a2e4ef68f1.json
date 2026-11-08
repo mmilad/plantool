@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b609-354b-72cf-aa4c-06a2e4ef68f1",
-  "ticketId": "01a18a32-9278-79ae-ae7b-35d4a91b4b7c",
-  "body": "Core documents.getVersioned/update (revision-checked, atomic, unchanged saves write nothing, new links must exist, new duplicates rejected, existing duplicates/dangling links kept until removed explicitly). HTTP: POST /api/documents/:kind, PATCH /api/documents/:kind/:id with expectedRevision (409 CONFLICT, 400 validation), GET returns revision. UI: shared editor for create/edit with Write/Preview, link picker from existing tickets/documents, duplicate badges with per-item removal, conflict message keeps the draft with explicit reload, two-step discard and beforeunload guard; new documents open in the reader. Verified end-to-end in Chromium.",
-  "author": "claude",
-  "createdAt": "2026-11-07T12:43:39.211Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19297-a65c-740d-be04-cfe1cc2ad038",
-  "ticketId": "01a189a9-42a4-7e89-8ab8-2f6a204818ed",
-  "body": "UI-Richtungsentscheidung 2026-10-31 (Nutzer hat autonome Entscheidung delegiert): Arbeitsbasis ist in docs/ui-wireframe.md unter  Festgelegte UI-Entscheidungen festgehalten. Übersicht als Start; Desktop kompakte horizontale Navigation plus schmale unabhängige Ticketliste und Detail; mobil untere Navigation und fokussierter Listen-/Detailwechsel; Lesemodus vor Bearbeiten; Status, Priorität, abgeleiteter Arbeitsstand und Bereitschaft getrennt; helles Layout mit lokalen Inline-SVGs und sichtbaren Labels. MVP ohne Board und ohne aktive Semantik vor bereitem ONNX-/SQLite-Index. Keine Kantenänderung.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:32:54.492Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1927e-576e-7096-b732-8238d80da5b1",
-  "ticketId": "01a189f8-f7bf-7921-b4cf-b3269ac6239d",
-  "body": "Review ergänzt: falsche visuelle Jira-Bezüge aus den Beschreibungen von docs/ui-prototype.svg und docs/ui-layout-options.svg entfernt. Such-/Dokumentvorschauen behalten die echten gespeicherten kanonischen Titel bis zur revisionssicheren Bearbeitung unverändert. Bitte diese Dokumenttitel im bestehenden Updateumfang bereinigen; keine neuen Parent-/Relation-Kanten.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:05:15.886Z"
-}

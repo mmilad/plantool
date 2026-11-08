@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d27-0774-77a9-94ce-05fbbf49ec62",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review 2026-10-30: Quellstandabgleich: erfolgreicher Ticket-PATCH ruft load() auf und ersetzt aktive Suchtreffer durch den Vollbaum, obwohl der Querytext im Suchfeld bleibt. Befund steht in docs/ui-review.md unter  Aktive Suche nach Ticketänderungen erhalten. Den vorhandenen Such-/Aktualisierungsvertrag bei lokalem Speichern anwenden; bestehende Zugehörigkeiten bleiben unverändert. Live-App war in dieser Runde nicht erreichbar, daher Quellbefund, keine Browserreproduktion.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:11:47.700Z"
-}

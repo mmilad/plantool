@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18da3-e173-7435-8892-b7eef14c3338",
-  "ticketId": "01a189a9-42a6-7a27-adb9-e30a8df78d54",
-  "body": "Datenabgleich mobile FP-Liste 2026-10-30: Bei 10 direkten UI-Programmkindern fehlte das Icon-System im sichtbaren Baum, obwohl die Sortierung im pman-Baum direkt nach UI-Richtung kommt. docs/ui-fp-layout-mobile.svg ergänzt es an korrekter Position mit echtem \todo/\normal und blockierter Readiness; nach den 8 sichtbaren direkten Tasks verbleiben genau 2 direkte Pakete beim Scrollen. Parent und bestehende Konzept-Blocks bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:28:09.971Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d9b-e2d6-751a-be71-b33fb9a41ebf",
-  "ticketId": "01a189af-d766-703b-a961-52a10b86081f",
-  "body": "Quellrecheck 2026-10-30: src/server.js führt das Status-Select weiterhin fest als todo/in_progress/done/cancelled auf. Diese Werte entsprechen der aktuellen .pman/config.json; im bestehenden Projekt ist daher kein aktueller Wertefehler nachgewiesen. pman erlaubt aber konfigurierte Statuskataloge. Abnahme konkretisieren: Editoptionen aus config.statuses beziehen; bei einem gespeicherten Status außerhalb/zwischen geänderten Katalogen keine erste Option still absenden; bisherigen Wert sichtbar erhalten oder Konflikt explizit lösen. No-op-Speichern einer isolierten Fixture mit Custom-Status muss den Wert bewahren. Vorhandene Parent-, Blocks- und relates_to-Kanten unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:19:26.039Z"
-}

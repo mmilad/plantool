@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d9e-28a8-7dc8-ade4-58f9b0e40fb9",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Plan-/Beziehungsreview 2026-10-30: Die direkten \blocks-Voraussetzungen und Parents sind konsistent. Dabei wurde eine textliche Richtungsabweichung im UI-Root gefunden: Root beschrieb Jira als Stil, obwohl fp.dev die visuelle Referenz und Jira nur Workflow-Inspiration ist. Root-Tickettext über pman präzisiert; kanonische Ziel-/Plantitel für spätere revision-sichere Bearbeitung im bestehenden Ticket ",
-  "author": "local",
-  "createdAt": "2026-10-30T16:21:54.984Z"
-}

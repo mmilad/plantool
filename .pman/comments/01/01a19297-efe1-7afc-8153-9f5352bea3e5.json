@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19297-efe1-7afc-8153-9f5352bea3e5",
-  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
-  "body": "Richtungsentscheidung 2026-10-31: Mobil erhält untere Hauptnavigation und fokussierten Wechsel zwischen Liste und Detail; mindestens 44px Bedienziele und erhaltener Rückweg/Fokus/Listenposition. Desktop bleibt horizontale Navigation plus schmale Liste und Detail. Abnahme bei 390px und 320px gemäß docs/ui-wireframe.md; bestehende Zugehörigkeit bleibt.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:33:13.313Z"
-}

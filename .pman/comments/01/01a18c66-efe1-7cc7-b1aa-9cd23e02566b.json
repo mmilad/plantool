@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18c66-efe1-7cc7-b1aa-9cd23e02566b",
-  "ticketId": "01a189ad-9320-7ba9-a8ad-4656341eb4e5",
-  "body": "LINK-ABGLEICH 2026-10-30: Aktuelle pman-Daten via read-only documents.list/tickets.list und validate geprüft: 42 Tickets, 4 Dokumente, alle Linkziele gültig. UI-Ziel: 0 Links; Review-Ziel: 10 Einträge/9 eindeutige Ticketziele, 1 Duplikat; UI-Plan: 8 eindeutige Ticketziele; Review-Plan: 11 Einträge/10 eindeutige Ziele (9 Tickets + Review-Zieldokument), 1 Duplikat. Aktuelle Zahl nicht verlinkter Tickets: 42, 33, 34, 33; Relevanz bleibt vor späterer Bearbeitung einzeln zu prüfen. Die Beschreibung dieses Tickets enthielt noch den alten Bestand von 41 Tickets; diesen aktuellen Snapshot ergänzen, vorhandene Dokumente aber nicht außerhalb der App ändern. Relationsaudit: Beschreibung behauptet eine gepflegte Beziehung zum Dokumentlesemodus, Relationsliste enthielt keine Kante; relates_to zu 01a189af-50ab-71b9-9f11-92e13989409f jetzt ergänzt. Parent bleibt Review-Ticket; blocks vom revision-sicheren Bearbeitungsticket bleibt bestehen.",
-  "author": "local",
-  "createdAt": "2026-10-30T10:41:58.753Z"
-}

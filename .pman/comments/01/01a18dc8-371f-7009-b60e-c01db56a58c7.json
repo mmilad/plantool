@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18dc8-371f-7009-b60e-c01db56a58c7",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review-Checkpoint 2026-10-30: Projektübersicht gegen aktuellen pman-Baum geprüft (10 direkte Pakete: 2 bereit, 1 in Arbeit, 7 blockiert; Dokumente 2 Ziele/2 Pläne/0 Entscheidungen). Alle 27 UI-SVGs sind XML-gültig und referenziert, alle lokalen Markdown-Verweise existieren. Liveversuch auf 127.0.0.1:4000: pman meldete Start, Desktopbrowser timeoutete und Loopback aus Arbeitsumgebung wurde durch Socketzugriffsrechte abgewiesen; Prozess beendet, kein sichtbarer Listener. Das ist keine App-Fehlerdiagnose, Live-Rendering bleibt ungeprüft. Keine Parent-/Blocks-/relates_to-Kante geändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T17:07:51.200Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a192db-4d64-7c72-bc41-e977d75f2878",
-  "ticketId": "01a18d87-251e-7ff7-9678-7a437fd0ef76",
-  "body": "Umsetzung gestartet 2026-10-31: CLI und serve()-Standard sind jetzt 127.0.0.1:4000; ungültige Ports werden abgewiesen; EADDRINUSE liefert PORT_IN_USE mit URL und Hinweis, dass keine zusätzliche Instanz gestartet wurde. --open läuft weiterhin erst nach erfolgreichem Bind. Laufzeit-/Browserabnahme und Testlauf stehen noch aus; Task bleibt in_progress.",
-  "author": "local",
-  "createdAt": "2026-10-31T16:46:48.164Z"
-}

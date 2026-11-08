@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cd0-3177-7b74-a879-f5564a613d04",
-  "ticketId": "01a189a9-42b1-7518-a6e0-89b4577b1270",
-  "body": "MOBILE ÜBERSICHT 2026-10-30: docs/ui-prototype-overview-mobile.svg ergänzt eine 390×844-Startfläche mit 44px-Einstiegen, den neun direkten UI-Arbeitspaketen, getrennten Status-/Readiness-Angaben und den vorhandenen Planungsdokumenten. Die Vorschau ist datiert und statisch. Mit dem Responsive-/Accessibility-Ticket 01a189a9-42b2-70df-956e-b163f531de32 per relates_to verbunden; Parent und Blocks-Zuordnungen bleiben erhalten.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:36:56.823Z"
-}

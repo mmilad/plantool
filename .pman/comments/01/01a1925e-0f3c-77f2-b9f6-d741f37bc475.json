@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1925e-0f3c-77f2-b9f6-d741f37bc475",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review 2026-10-31: 390px- und 320px-Ticketdetail gegen pman geprüft. Beispielwerte, Parent, sechs direkte Untertickets, vier Beziehungskanten und deren Richtungen stimmen. Nachweis im docs/ui-review.md und Kommentar am zuständigen Übersichtsticket; keine Parent-/Relationsänderung. Live-App weiterhin nicht per Browser verfügbar.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:30:00.252Z"
-}

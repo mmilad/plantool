@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1928e-bb7a-746c-81ed-04b8659501af",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "Vorschauabgleich 2026-10-31: Das beschriebene Modul  zuletzt geänderte Tickets fehlte noch in allen drei Projektübersichts-SVGs. Es ist nun mit drei eindeutigen pman-Tickets, Status und Elternkontext ergänzt: laufendes UI-Review, UI-Konzept, Status-/Bereitschaftspaket (absteigend nach updatedAt, Datenstand 31.10.2026). Deutlich als Änderungsdatum und nicht als Kommentar-/Aktivitätsfeed gekennzeichnet. Die Snapshotzahlen wurden gegen alle zehn direkten Kinder und p.tickets.readiness() geprüft: 2 offene bereit, 1 in Arbeit, 7 blockiert. Parent des Startseitenpakets unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:23:10.074Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cec-2a08-7273-952c-3702a80aab57",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Live-Recheck 2026-10-30: Der vom Nutzer genannte Port 59456 timed out erneut im In-App-Browser; pman meldete beim Start auf diesem Port EADDRINUSE. Ein separater Prüflauf erhielt Port 57544 und meldete sich als bereit, aber auch dessen Browseraufruf lief in einen Timeout. Den selbst gestarteten Server habe ich beendet. Daher heute kein neuer Screenshot-/DOM-Befund. In docs/ui-review.md ist die Einschränkung samt neuem Versuch datiert. Der pman-Planbaum und die vorhandenen Fachzugehörigkeiten bleiben unverändert; keine neue UI-Anforderung nur aus Quelltext abgeleitet.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:07:29.928Z"
-}

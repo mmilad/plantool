@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb6a-9849-77db-b4a6-19ee3bea534d",
-  "ticketId": "01a189b2-43b1-775a-89f1-388cdd0af53c",
-  "body": "Implemented a consistent feedback standard: every load (projects, tree, ticket, documents, design, summary, search, relations, similar) shows a loading state and, on failure, a plain-language error with a retry where it makes sense (projects 'Try again', tree 'Retry loading tickets'); no raw JSON. Empty states say what to do next (no tickets / no matches with the query / no relationships / no similar tickets). Search announces 'Searching …' (aria-busy) and the result count; zero results name the query. Create and link buttons are disabled while sending and keep form input on errors; success is only shown after the API confirmed. Fixed: a failed project or tree load was shown as 'No projects yet' / 'no tickets yet'. Checked by injecting 500 errors for each endpoint in Playwright.",
-  "author": "local",
-  "createdAt": "2026-11-08T13:48:07.625Z"
-}

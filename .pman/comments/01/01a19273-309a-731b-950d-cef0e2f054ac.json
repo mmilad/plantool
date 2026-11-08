@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19273-309a-731b-950d-cef0e2f054ac",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Quell-/Planabgleich 2026-10-31: Zwei geprüfte Lücken sind bereits abgedeckt; keine Duplikate angelegt. Direktlinks/Browserverlauf bleiben im Navigation-Unterticket 01a189c1-79a0-74ae-b519-20b51b0aefa8; sichtbare Lade-/Fehler-/Leer-/Erfolgsmeldungen bleiben im bestehenden Rückmeldungsticket 01a189b2-43b1-775a-89f1-388cdd0af53c. Befunde und statische Quellenlage stehen in docs/ui-review.md. Parents und Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:53:05.050Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1925e-de7c-75ed-9cca-f48683215af9",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review 2026-10-31: Suchvorschau und pman-Beispiele abgeglichen. Ticket-/Kommentar-/Dokumentziele und Dokumenttypfilter stimmen mit aktuellem Datenbestand und vorhandenen Fachaufgaben überein; keine neue Aufgabe oder Beziehungsänderung nötig. Port 4000 hat keinen sichtbaren Listener; lokaler HTTP-Aufruf ist in dieser Umgebung socketseitig gesperrt, daher keine Liveabnahme. Befund in docs/ui-review.md.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:30:53.308Z"
-}

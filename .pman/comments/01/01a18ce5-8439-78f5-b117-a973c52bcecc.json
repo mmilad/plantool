@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18ce5-8439-78f5-b117-a973c52bcecc",
-  "ticketId": "01a189ad-9320-7ba9-a8ad-4656341eb4e5",
-  "body": "MOBILER LINK-READER 2026-10-30: docs/ui-documents-links-mobile.svg zeigt den bestehenden Review-Plan-Duplikatfall gruppiert als 2× und daneben das tatsächlich verknüpfte UI-Zieldokument. Das ist nur eine transparente Lesedarstellung; kein Link in .pman wurde verändert oder beim Öffnen dedupliziert. Die bestehende Bereinigung bleibt im vorgesehenen revision-sicheren Bearbeitungsweg blockiert, entfernt überzählige Vorkommen einzeln und lässt ein gültiges Ziel bestehen. Zugehörigkeit zum UI-Review und vorhandene Blocks-/relates_to-Ketten bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:00:14.265Z"
-}

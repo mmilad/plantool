@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19297-ef0b-74db-af8d-82639dba904a",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "Richtungsentscheidung 2026-10-31: Übersicht ist Startfläche. Statuscounts zählen jede Ticket-ID genau einmal; Rollup/Readiness nicht als zusätzliche gespeicherte Tickets zählen. Zeige bereite nächste Arbeit, Blocker mit Ursache und zuletzt geänderte Tickets; bei Nullbestand nur die Aktion  Erstes Ticket erstellen. Details in docs/ui-wireframe.md; keine neue Aufgabe oder Relation.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:33:13.099Z"
-}

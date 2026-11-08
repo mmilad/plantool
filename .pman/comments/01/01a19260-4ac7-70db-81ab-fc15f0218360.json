@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19260-4ac7-70db-81ab-fc15f0218360",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "Quellabgleich 2026-10-31: Das Desktop-Übersichtsmock zeigt „Offen · bereit“ als Zielzustand. src/index.js stellt project.readiness(id) bereit, aber die aktuelle Browserroute /api/tree liefert nur Baumitems/total/offset/limit; eine Relations-/Readinessroute fehlt. Bitte den bereits geplanten Gate beibehalten: Readiness-Kennzahl erst ausgeben, wenn Semantik und Browser-Datenschnittstelle verfügbar und geklärt sind. Mock ist kein Beleg heutiger UI-Verfügbarkeit. Parent und bestehende Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:32:26.567Z"
-}

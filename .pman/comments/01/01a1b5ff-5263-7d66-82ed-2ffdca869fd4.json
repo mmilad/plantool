@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b5ff-5263-7d66-82ed-2ffdca869fd4",
-  "ticketId": "01a189b1-06d3-7ade-b3c1-8e674e2e85f0",
-  "body": "Tree rows are a lightweight projection (id, parentId, depth, title, kind, status, priority, labels, assignee, childCount, rollup); /api/tree validates limit<=5000 and reads tickets once. UI loads pages of 2000 in the background, renders only expanded branches (max 200 children per branch with 'Show more'), filters render max 200 matches with ancestor path, indentation capped at 48px with level badge beyond depth 5, selection expands the ancestor path, detail shows the full (collapsed) path. Browser check with 6,063 synthetic tickets: 52 initial rows, ~1.9 s to load all pages, no console errors. Remaining limitation: every /api/tree page still scans all ticket files server-side; a cache/index is not part of this ticket.",
-  "author": "claude",
-  "createdAt": "2026-11-07T12:32:51.299Z"
-}

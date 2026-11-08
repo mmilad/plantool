@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d14-88ad-7675-a457-587714b6a4a5",
-  "ticketId": "01a189af-d766-703b-a961-52a10b86081f",
-  "body": "UI-Review 2026-10-30: docs/ui-ticket-labels.svg konkretisiert das optionale labels[]-Stringfeld als Freitext-Tags ohne erfundenen Projektkatalog. Read-only Bestand: 45 Tickets, alle labels=[]; .pman/config.json hat keine Labeldefinition. Vorschlag zum Abstimmen: Enter/Hinzufügen fügt einen Wert hinzu, leere Eingabe ablehnen, äußere Leerzeichen trimmen, Groß-/Kleinschreibung erhalten, exakte Duplikate verhindern und Chips einzeln entfernen. Feldsemantik bleibt Stringliste; spätere Erhaltungs-/Bearbeitungsprüfung mit isolierter Fixture, keine Kanon-Daten anreichern. Bestehende Parent-/Blocks-/relates_to-Zuordnungen bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:51:35.597Z"
-}

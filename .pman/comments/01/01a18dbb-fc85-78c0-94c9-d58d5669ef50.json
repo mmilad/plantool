@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18dbb-fc85-78c0-94c9-d58d5669ef50",
-  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
-  "body": "UI-Abgleich 2026-10-30: docs/ui-prototype.svg zeigte im Ticketbereich noch 45, der aktuelle pman-Bestand liegt bei 46. Den Mock-Zähler und docs/ui-review.md korrigiert. Beim nächsten UI-Konzeptabgleich prüfen, ob statische Beispielwerte kenntlich sein oder aus einer Fixture stammen sollten, damit Mock und Planbestand nicht auseinanderlaufen. Keine Implementierung und keine Änderung an Parent-/Blocks-/relates_to-Beziehungen.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:54:29.765Z"
-}

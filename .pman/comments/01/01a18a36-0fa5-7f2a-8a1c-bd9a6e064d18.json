@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18a36-0fa5-7f2a-8a1c-bd9a6e064d18",
-  "ticketId": "01a189c1-79a0-74ae-b519-20b51b0aefa8",
-  "body": "Live-Recheck 2026-10-30: In einem frisch geladenen App-Tab das Review-Ticket ausgewählt. Detailkopf wechselt zum Ticket, location.href bleibt http://127.0.0.1:59456/ ohne ID, Query oder Fragment. Belegt erneut die fehlende teilbare Ticketadresse. Zurück/Vorwärts und Reload wurden bei diesem Recheck nicht ausgelöst. docs/ui-review.md ergänzt; Parent unter Ticketnavigation und vorhandene Blocks-/Kommentar-Fokus-Beziehungen unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T00:29:21.189Z"
-}

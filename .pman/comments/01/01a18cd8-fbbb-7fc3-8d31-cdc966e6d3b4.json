@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cd8-fbbb-7fc3-8d31-cdc966e6d3b4",
-  "ticketId": "01a189af-50ab-71b9-9f11-92e13989409f",
-  "body": "MOBILE-DOKUMENTVORSCHAU 2026-10-30: docs/ui-documents-mobile.svg ergänzt zwei 390×844-Zustände für auswählbare Liste und Dokumentleser. Verwendet die vier kanonischen Dokumenttitel/Arten/Status und zeigt beim UI-Plan acht echte Ticketlinks (3 sichtbar, 5 über benannte Aktion). 44px-Rückweg; keine Bearbeitung suggeriert. Parent und Blocks unverändert; direkt mit Responsive/Accessibility per relates_to abgestimmt.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:46:32.891Z"
-}

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="1170" viewBox="0 0 320 1170" role="img" aria-labelledby="title desc">
-  <title id="title">Planus Manus UI-Entwurf — Projektübersicht bei 320 Pixeln</title>
+  <title id="title">Heistman UI-Entwurf — Projektübersicht bei 320 Pixeln</title>
   <desc id="desc">Schmaler, statischer Entwurf einer mobilen Projektübersicht. Die primäre Aktion steht in einer eigenen Zeile, Inhalte umbrechen kontrolliert, der Arbeitsstand bleibt von Ticketstatus getrennt und drei zuletzt geänderte Tickets erscheinen nach updatedAt. Die Änderungsliste ist keine Kommentarchronik; datierte Zahlen sind keine Live-Anzeige.</desc>
   <defs>
     <style>
@@ -24,8 +24,8 @@
   <path d="M0 51.5H320" stroke="#D8DEE7"/>
   <rect x="12" y="11" width="30" height="30" rx="8" fill="#2457A7"/>
   <path d="M20.75 20.375h12.5M20.75 25.375h12.5M20.75 30.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
-  <text x="52" y="25" font-size="14" font-weight="650">Planus Manus</text>
-  <text x="52" y="40" class="tiny muted">planus-manus</text>
+  <text x="52" y="25" font-size="14" font-weight="650">Heistman</text>
+  <text x="52" y="40" class="tiny muted">heistman</text>
   <rect x="12" y="57" width="296" height="44" rx="6" fill="#2457A7"/>
   <path d="M110 79h10m-5-5v10" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
   <text x="126" y="83" class="small inverse" font-weight="600">Ticket erstellen</text>
@@ -75,7 +75,7 @@
   <path d="M27 581h6" stroke="#2457A7" stroke-width="1.4" stroke-linecap="round"/>
   <text x="46" y="584" class="tiny blue" font-weight="650">IN ARBEIT</text>
   <text x="46" y="608" class="small" font-weight="650">UI regelmäßig prüfen und</text>
-  <text x="46" y="625" class="small" font-weight="650">den pman-Plan nachschärfen</text>
+  <text x="46" y="625" class="small" font-weight="650">den heist-Plan nachschärfen</text>
   <path d="m286 594 5 5-5 5" fill="none" stroke="#5A687A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
 
   <rect x="12" y="649" width="296" height="104" rx="7" fill="#FDECEC" stroke="#F1C6C6"/>
@@ -91,7 +91,7 @@
   <text x="26" y="787" class="section">Zuletzt geändert</text>
   <text x="26" y="805" class="tiny muted">3 Tickets · nach Änderungsdatum</text>
   <rect x="24" y="811" width="272" height="50" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
-  <text x="34" y="830" class="small" font-weight="600">UI-Review nachschärfen<title>UI regelmäßig prüfen und den pman-Plan nachschärfen</title></text>
+  <text x="34" y="830" class="small" font-weight="600">UI-Review nachschärfen<title>UI regelmäßig prüfen und den heist-Plan nachschärfen</title></text>
   <text x="34" y="846" class="tiny muted">In Arbeit · UI-Programm · 31.10.2026</text>
   <rect x="24" y="863" width="272" height="50" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
   <text x="34" y="882" class="small" font-weight="600">Schlichtes UI-Konzept festhalten<title>Schlichtes UI-Konzept mit klaren Planungsabläufen festhalten</title></text>

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d2b-41d4-74c4-89d4-580b55661d91",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "Neue offene Navigationsoption in docs/ui-layout-options.svg: breiter Sidebarzustand B und nutzerkontrollierter 64px-Iconmodus C. Visuelle Prüfung vor späterer Umsetzung soll beide Zustände bei gleicher 1280px-Breite vergleichen sowie Fokusreihenfolge, benannte Auf-/Zuklappaktion und sichtbare Bereichsnamen bei Hover/Tastaturfokus prüfen. Keine Freigabe; bestehende Blocks-/Parent-Kanten bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:16:24.788Z"
-}

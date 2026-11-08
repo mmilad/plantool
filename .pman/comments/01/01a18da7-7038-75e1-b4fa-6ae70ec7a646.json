@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18da7-7038-75e1-b4fa-6ae70ec7a646",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Quell-/API-Abgleich 2026-10-30: Board- und Relationsrouten fehlen im aktuellen UI-Server; Dokument-API bietet create/list/get, aber keine Bearbeitung. Die bestehenden Fachpakete planen diese Grenzen und der Wireframe schließt das Board aus dem MVP-Raster aus. Kein weiterer Befund, kein neues Ticket und keine zusätzliche Relation nötig.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:32:03.128Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d2c-2b46-72e6-a3f6-85551434518b",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "Datenkorrektur 2026-10-30: pman bestätigt das Beispiel  UI visuell prüfen und verfeinern als direktes Kind von 01a189a9-429e-7fb4-9d2c-8db0221f8942 (Jira-inspirierte UI für Planus Manus konzipieren und umsetzen). docs/ui-layout-options.svg zeigte fälschlich ein UI-Konzept-Zwischenkind; beide Breadcrumbs sind auf den tatsächlichen direkten Elternpfad korrigiert. ParentId blieb unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:17:24.550Z"
-}

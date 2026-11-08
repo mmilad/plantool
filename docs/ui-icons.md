@@ -15,4 +15,4 @@ All icons are inline SVG in `src/ui.js`; nothing is loaded from outside. Each me
 | Goal / plan / decision document | page (`uiIcon('document')`) | 16 px | search hits | row label "Goal: …" etc. |
 | Assignee | initials avatar | 24 px | list, board | agent name in the title |
 
-Rules: 16 px for inline actions and rows, 20 px for navigation; one stroke style (1.5 px, round caps) for line icons; decorative icons are `aria-hidden`; icon-only buttons always have a persistent accessible name and a visible focus ring. No emoji as icons. There are no icons for epics, stories, sprints or story points, because pman has no such fields.
+Rules: 16 px for inline actions and rows, 20 px for navigation; one stroke style (1.5 px, round caps) for line icons; decorative icons are `aria-hidden`; icon-only buttons always have a persistent accessible name and a visible focus ring. No emoji as icons. There are no icons for epics, stories, sprints or story points, because heist has no such fields.

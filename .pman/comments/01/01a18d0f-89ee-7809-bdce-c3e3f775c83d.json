@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d0f-89ee-7809-bdce-c3e3f775c83d",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "UI-Review 2026-10-30: Root-Dialog hat jetzt abgestimmte Validierungs-/Fehler-/Erfolgszustände in docs/ui-ticket-create-feedback.svg. Beim Timeout des Create-POST ist das Ergebnis derzeit unklar: IDs entstehen serverseitig und es gibt keinen Idempotenzschlüssel. Den Root-Submit nach unklarer Antwort nicht blind freigeben; eine sichere Prüfung/Wiederholung setzt einen API-Korrelationsvertrag voraus. Bestätigter Create-Erfolg mit fehlgeschlagenem Baum-Refresh bietet nur Refresh, keinen zweiten POST. Bereits vorhandene relates_to-Kante zum Rückmeldungs-Ticket bleibt die Zuständigkeit; Parent und Blocks unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:46:08.238Z"
-}

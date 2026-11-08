@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b61a-7f14-7af3-844b-c04ebd676ea9",
-  "ticketId": "01a189af-d764-72c3-a674-f5601919f131",
-  "body": "GET /api/tickets/:id/relations returns incoming and outgoing edges with counterpart ticket (404 for unknown ticket). Detail shows 'Relationships (n)' grouped from the open ticket's perspective with directional labels (Blocks/Blocked by, Implements/Implemented by, Validates/Validated by, Supersedes/Superseded by, Duplicates/Duplicated by, Related to), counterpart status and stable ticket links; parent path stays separate in the breadcrumbs. Display/navigation only.",
-  "author": "claude",
-  "createdAt": "2026-11-07T13:02:32.212Z"
-}

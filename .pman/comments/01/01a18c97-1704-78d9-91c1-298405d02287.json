@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18c97-1704-78d9-91c1-298405d02287",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Mockup-Datenabgleich 2026-10-30: Die mobile Vorschau zeigte fünf direkte Unteraufgaben für „Planungsdokumente und Projektübersicht gestalten“, pman hat inzwischen sechs. Die Entscheidungs-Bearbeitungsaufgabe 01a18c80-146f-7e0b-a373-040e6f17cda9 ist das sechste Kind. docs/ui-prototype-mobile.svg und die entsprechende Aussage im UI-Konzept sind auf sechs korrigiert; bestehende Parent-/Blocks-Kanten unverändert. XML und pman validate werden nach dem Update geprüft. Live-Browser weiterhin nicht erreichbar.",
-  "author": "local",
-  "createdAt": "2026-10-30T11:34:34.501Z"
-}

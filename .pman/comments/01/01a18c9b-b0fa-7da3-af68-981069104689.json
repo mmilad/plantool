@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18c9b-b0fa-7da3-af68-981069104689",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Suchvorschau-Elternpfade 2026-10-30: Die drei im docs/ui-search-preview.svg gezeigten Breadcrumbs wurden gegen parentId geprüft. Sie nennen jetzt jeweils das tatsächliche direkte Eltern-Ticket. Keine Zugehörigkeit oder Beziehung wurde geändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T11:39:36.058Z"
-}

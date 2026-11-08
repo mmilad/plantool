@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18dbc-f926-7907-87b3-8c574d713efb",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review 2026-10-30: Querabgleich weiterer aktueller UI-Artefakte gegen pman (46 Tickets) und die bestätigte fp.dev-Richtung. Drei Zähler in docs/ui-layout-options.svg waren noch 45; in docs/ui-prototype-mobile.svg stand noch der alte Konzept-Blockertitel; die Wireframe-Kopfzeile nannte die Oberfläche noch Jira-inspiriert. Aktuelle Mock-Beschriftungen korrigiert und docs/ui-review.md ergänzt. Historische Bestandszahlen bleiben Momentaufnahmen. Keine Tickets verschoben und keine Parent-/Blocks-/relates_to-Beziehung geändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:55:34.439Z"
-}

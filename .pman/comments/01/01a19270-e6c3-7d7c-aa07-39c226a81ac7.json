@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19270-e6c3-7d7c-aa07-39c226a81ac7",
-  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
-  "body": "STILRICHTUNG-BESTÄTIGT 2026-10-31: Der Nutzer hat fp.dev als schlichte, helle und später änderbare visuelle Referenz bestätigt; Jira bleibt Orientierung für Planungsabläufe. Das ist die bestätigte Leitplanke, keine offene Stilentscheidung. Konkretes Desktop-Raster, Startfläche, Mobilwechsel und Detailinteraktionen im docs/ui-wireframe.md bleiben Empfehlungen zur Abstimmung, solange sie nicht einzeln freigegeben wurden. UI-Plantext daher zwischen bestätigter visueller Richtung und offenen Ablaufentscheidungen unterscheiden. Dieses Konzept bleibt Kind der UI-Richtung und behält alle 36 bestehenden Beziehungen.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:50:35.076Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b8e4-8529-71d2-9034-ccb54a167fa7",
-  "ticketId": "01a1b8de-2336-7bd6-9525-538d1b091b4f",
-  "body": "serve() finds the project of the start directory (if any) as default and serves every registry entry: GET/POST /api/projects (counts: tickets, open, in progress, last update), DELETE /api/projects/:id (registry only), all project routes under /api/projects/:id/..., ticket routes accept KEY-n, unscoped /api/... map to the default project (404 outside a repository). Projects open lazily with the record cache; error messages strip every project root. CLI serve registers the start project and works from any directory.",
-  "author": "claude",
-  "createdAt": "2026-11-08T02:02:26.473Z"
-}

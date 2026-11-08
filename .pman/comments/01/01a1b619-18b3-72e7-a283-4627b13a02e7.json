@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b619-18b3-72e7-a283-4627b13a02e7",
-  "ticketId": "01a189c1-79a0-74ae-b519-20b51b0aefa8",
-  "body": "Query form ?ticket=<id> plus optional #comment=<id> (works with pman serve's single route). Verified in Chromium: click pushes one history entry per explicit ticket change, back/forward restore the ticket and the tab's list filter, reload and direct links open the ticket without implicit filters, comment links focus the comment; unknown ticket shows 'Ticket not found', missing comment shows a notice. Server error messages no longer expose absolute local paths.",
-  "author": "claude",
-  "createdAt": "2026-11-07T13:01:00.467Z"
-}

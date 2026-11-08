@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18db1-044e-7d37-8eaf-427ef27536dc",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "Nachprüfung aller drei Übersichtsmocks 2026-10-30: neben Desktop und 390px-Mobilansicht enthielt auch die 320px-Variante den veralteten Wert zwei zusätzliche Voraussetzungen. Alle drei jetzt auf sechs Konzeptblocker plus drei weitere Visual-QA-Blocker abgestimmt. Kanten unverändert; Details und Korrekturhinweis docs/ui-review.md.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:42:30.862Z"
-}

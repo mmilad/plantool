@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19286-b9d7-7ce7-8d42-7788a6b8e3a9",
-  "ticketId": "01a189b6-43ac-78a2-a06b-345c6fa56083",
-  "body": "Quellabgleich 2026-10-31: Der Browserbaum rendert aktuell Titel + rollup. /api/tree stellt status, priority und rollup bereit, aber keine Blockerbereitschaft oder Ziele offener Blocker. Die geplante Liste braucht gespeicherten Status, Priorität und separat benannte Bereitschaft; bitte den gebündelten Datenvertrag und stabile Blocker-IDs/Titel hier konkretisieren und mit Navigation/Filter 01a189a9-42ad-7d98-bb63-7d9d4d25351d abstimmen. Zugehörigkeiten bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:14:25.367Z"
-}

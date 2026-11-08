@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb72-69bc-746b-a3dd-357c6e953999",
-  "ticketId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
-  "body": "Summary in English of the earlier (German) comments on this ticket: the first visual direction followed an fp.dev screenshot (light two-pane layout, list left, detail right) with Jira as process inspiration; the fixed default port 4000 without random fallback was added and accepted; planning was frozen in favour of small implemented slices. The direction later changed to a Jira-like workspace (see description).",
-  "author": "local",
-  "createdAt": "2026-11-08T13:56:39.996Z"
-}

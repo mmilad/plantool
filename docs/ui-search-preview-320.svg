@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="940" viewBox="0 0 320 940" role="img" aria-labelledby="title desc">
-  <title id="title">Planus Manus UI-Entwurf — Suche bei 320 Pixeln</title>
-  <desc id="desc">Statische schmale Suchvorschau mit verfügbarer Keyword-Suche, ausdrücklich späterer semantischer Suche über ONNX und SQLite-Vektorindex, Typfilter sowie echten Ticket-, Kommentar- und Zielbeispielen aus dem lokalen pman-Bestand.</desc>
+  <title id="title">Heistman UI-Entwurf — Suche bei 320 Pixeln</title>
+  <desc id="desc">Statische schmale Suchvorschau mit verfügbarer Keyword-Suche, ausdrücklich späterer semantischer Suche über ONNX und SQLite-Vektorindex, Typfilter sowie echten Ticket-, Kommentar- und Zielbeispielen aus dem lokalen heist-Bestand.</desc>
   <defs>
     <style>
       text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
@@ -24,8 +24,8 @@
   <path d="M0 51.5H320" stroke="#D8DEE7"/>
   <rect x="12" y="11" width="30" height="30" rx="8" fill="#2457A7"/>
   <path d="M20.75 20.375h12.5M20.75 25.375h12.5M20.75 30.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
-  <text x="52" y="25" font-size="14" font-weight="650">Planus Manus</text>
-  <text x="52" y="40" class="tiny muted">planus-manus</text>
+  <text x="52" y="25" font-size="14" font-weight="650">Heistman</text>
+  <text x="52" y="40" class="tiny muted">heistman</text>
 
   <rect x="12" y="57" width="296" height="44" rx="6" fill="#2457A7"/>
   <path d="M110 79h10m-5-5v10" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
@@ -68,7 +68,7 @@
   <rect x="12" y="449" width="296" height="118" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
   <text x="24" y="466" class="tiny muted" font-weight="650">TICKET · OFFEN</text>
   <text x="24" y="487" class="resulttitle">Schlichte Planungsoberfläche</text>
-  <text x="24" y="503" class="resulttitle">für Planus Manus gestalten</text>
+  <text x="24" y="503" class="resulttitle">für Heistman gestalten</text>
   <text x="24" y="519" class="resulttitle">und umsetzen</text>
   <text x="24" y="538" class="tiny muted">Ticket-ID · 01a189a9…8942</text>
   <text x="24" y="555" class="tiny">Eigenständiges UI-Programm</text>

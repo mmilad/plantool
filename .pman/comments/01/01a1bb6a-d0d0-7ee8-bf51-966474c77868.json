@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb6a-d0d0-7ee8-bf51-966474c77868",
-  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
-  "body": "'+ Child ticket' in the ticket detail opens the create dialog with the parent preset; the new child opens after creation and the tree expands to it.",
-  "author": "local",
-  "createdAt": "2026-11-08T13:48:22.096Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b580-e898-7624-8041-90825bcd23af",
-  "ticketId": "01a1b579-3104-748c-96f6-03f08633927c",
-  "body": "Implemented with tests in test/workflow.test.js; npm run check passes.",
-  "author": "claude",
-  "createdAt": "2026-11-07T10:14:46.680Z"
-}

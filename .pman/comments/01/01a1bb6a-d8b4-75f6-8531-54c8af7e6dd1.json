@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb6a-d8b4-75f6-8531-54c8af7e6dd1",
-  "ticketId": "01a189a9-42af-7e67-93b4-dcdb41bbad6a",
-  "body": "Ticket detail: key line with type icon, quick status select, inline edit with revision conflict handling, Details aside, plan & readiness, relationships (add/remove, PM-45), similar tickets, children with '+ Child ticket' (PM-20), comments with paging, agent context packet.",
-  "author": "local",
-  "createdAt": "2026-11-08T13:48:24.116Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d9e-27f9-7cf2-a4b8-249edb443ada",
-  "ticketId": "01a189f8-f7bf-7921-b4cf-b3269ac6239d",
-  "body": "Review 2026-10-30: Die visuelle Richtung ist nach Nutzerhinweis fp.dev (schlicht, vorläufig änderbar); Jira bleibt Prozess-/Ablauforientierung. Der Root-Tickettext wurde entsprechend präzisiert. Kanonische Ziel-/Plantitel nennen noch Jira-inspirierte Oberfläche und sollten im Rahmen dieser bestehenden revision-sicheren Ziele-/Planbearbeitung fachlich getrennt werden, ohne Dokumente zu duplizieren oder Links/Parents anzutasten. Aktuelle Dokumentbearbeitung in der App fehlt noch; Änderung daher noch nicht an den Zieldokumenten vorgenommen.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:21:54.809Z"
-}

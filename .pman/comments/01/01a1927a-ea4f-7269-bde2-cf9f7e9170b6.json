@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1927a-ea4f-7269-bde2-cf9f7e9170b6",
-  "ticketId": "01a18d87-251e-7ff7-9678-7a437fd0ef76",
-  "body": "Aktueller Laufzeitbefund 2026-10-31: Direkter Browseraufruf von http://127.0.0.1:4000/ endet mit ERR_CONNECTION_REFUSED. Der feste Zielport ist aktuell nicht erreichbar; keine zusätzliche Serverinstanz gestartet. Frühere Shell-Socket-Berechtigungsfehler werden nicht als Beweis für einen geschlossenen Port gewertet. Befund in docs/ui-review.md; dieses bestehende hoch priorisierte Ticket bleibt Parent unter UI-Programm und bestehende blocks-Beziehung zur visuellen Abnahme unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:01:31.343Z"
-}

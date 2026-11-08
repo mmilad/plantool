@@ -16,14 +16,14 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f
 const kinds = ['goals', 'plans', 'decisions'];
 const designFolders = ['components', 'types', 'contracts'];
 
-export class PmanError extends Error { constructor(message, code = 'PMAN_ERROR', details = {}) { super(message); this.name = this.constructor.name; this.code = code; this.details = details; } }
-export class NotFoundError extends PmanError { constructor(message, details) { super(message, 'NOT_FOUND', details); } }
-export class ValidationError extends PmanError { constructor(message, details) { super(message, 'VALIDATION', details); } }
-export class CycleError extends PmanError { constructor(message, details) { super(message, 'CYCLE', details); } }
-export class ConflictError extends PmanError { constructor(message, details) { super(message, 'CONFLICT', details); } }
-export class UnsupportedSchemaVersionError extends PmanError { constructor(message, details) { super(message, 'UNSUPPORTED_SCHEMA_VERSION', details); } }
-export class StorageError extends PmanError { constructor(message, details) { super(message, 'STORAGE', details); } }
-export class OpenWorkError extends PmanError { constructor(message, details) { super(message, 'OPEN_WORK', details); } }
+export class HeistError extends Error { constructor(message, code = 'HEIST_ERROR', details = {}) { super(message); this.name = this.constructor.name; this.code = code; this.details = details; } }
+export class NotFoundError extends HeistError { constructor(message, details) { super(message, 'NOT_FOUND', details); } }
+export class ValidationError extends HeistError { constructor(message, details) { super(message, 'VALIDATION', details); } }
+export class CycleError extends HeistError { constructor(message, details) { super(message, 'CYCLE', details); } }
+export class ConflictError extends HeistError { constructor(message, details) { super(message, 'CONFLICT', details); } }
+export class UnsupportedSchemaVersionError extends HeistError { constructor(message, details) { super(message, 'UNSUPPORTED_SCHEMA_VERSION', details); } }
+export class StorageError extends HeistError { constructor(message, details) { super(message, 'STORAGE', details); } }
+export class OpenWorkError extends HeistError { constructor(message, details) { super(message, 'OPEN_WORK', details); } }
 
 export function uuidv7(now = Date.now()) {
   const b = randomBytes(16); let ms = BigInt(now);
@@ -54,7 +54,7 @@ async function ticketRef(p, ref) {
   if (m[1].toUpperCase() !== p.key) throw new NotFoundError(`Ticket ${ref} is not in project ${p.key}`, { ref });
   const n = Number(m[2]); const hits = (await listJson(p, 'tickets')).filter(t => t.number === n);
   if (!hits.length) throw new NotFoundError(`Ticket not found: ${ref}`, { ref });
-  if (hits.length > 1) throw new ConflictError(`Ticket key ${ref} is used by ${hits.length} tickets; run pman keys renumber`, { ref, ids: hits.map(t => t.id) });
+  if (hits.length > 1) throw new ConflictError(`Ticket key ${ref} is used by ${hits.length} tickets; run heist keys renumber`, { ref, ids: hits.map(t => t.id) });
   return hits[0].id;
 }
 async function writeConfig(p, config) {
@@ -64,7 +64,7 @@ async function writeConfig(p, config) {
 async function exists(p) { try { await fs.access(p); return true; } catch { return false; } }
 async function assertSafePath(root, target) {
   const rel=path.relative(root,target);
-  if(rel.startsWith('..')||path.isAbsolute(rel))throw new ValidationError('Resolved storage path escapes .pman',{path:target});
+  if(rel.startsWith('..')||path.isAbsolute(rel))throw new ValidationError('Resolved storage path escapes .heist',{path:target});
   let cur=root;
   for(const part of rel.split(path.sep)){cur=path.join(cur,part);try{const st=await fs.lstat(cur);if(st.isSymbolicLink())throw new ValidationError(`Symbolic links are not allowed in canonical storage: ${cur}`);}catch(e){if(e.code==='ENOENT')break;throw e;}}
 }
@@ -72,16 +72,16 @@ async function assertSafePath(root, target) {
 export async function findProject(cwd = process.cwd()) {
   let dir = path.resolve(cwd);
   for (;;) {
-    const marker = path.join(dir, '.pman', 'config.json');
+    const marker = path.join(dir, '.heist', 'config.json');
     if (await exists(marker)) return dir;
     const parent = path.dirname(dir); if (parent === dir) return null; dir = parent;
   }
 }
 
 export async function initProject({ cwd = process.cwd(), name = path.basename(path.resolve(cwd)), key } = {}) {
-  const root = path.resolve(cwd), dir = path.join(root, '.pman'), configPath = path.join(dir, 'config.json');
-  if (await exists(configPath)) throw new ConflictError(`pman is already initialized at ${root}`);
-  if(await exists(dir)){const st=await fs.lstat(dir);if(st.isSymbolicLink()||!st.isDirectory())throw new ValidationError('.pman must not be a symlink or non-directory');if((await fs.readdir(dir)).length)throw new ConflictError(`Refusing to initialize over existing data in ${dir}`);}
+  const root = path.resolve(cwd), dir = path.join(root, '.heist'), configPath = path.join(dir, 'config.json');
+  if (await exists(configPath)) throw new ConflictError(`heist is already initialized at ${root}`);
+  if(await exists(dir)){const st=await fs.lstat(dir);if(st.isSymbolicLink()||!st.isDirectory())throw new ValidationError('.heist must not be a symlink or non-directory');if((await fs.readdir(dir)).length)throw new ConflictError(`Refusing to initialize over existing data in ${dir}`);}
   await fs.mkdir(dir, { recursive: true });
   const projectKey = key === undefined ? deriveKey(name) : String(key).toUpperCase(); if (!KEY_RE.test(projectKey)) throw new ValidationError(`Project key must be 2-10 letters or digits starting with a letter: ${key}`);
   const config = { schemaVersion: 1, projectId: uuidv7(), name: String(name || 'Project'), key: projectKey, statuses: [...DEFAULT_STATUSES], properties: {}, createdAt: nowIso() };
@@ -90,18 +90,18 @@ export async function initProject({ cwd = process.cwd(), name = path.basename(pa
   return config;
 }
 
-/** cache: keep parsed records in memory, revalidated on every read by file size+mtime (for long-lived processes such as pman serve). */
+/** cache: keep parsed records in memory, revalidated on every read by file size+mtime (for long-lived processes such as heist serve). */
 export async function openProject({ cwd = process.cwd(), cache = false } = {}) {
-  const root = await findProject(cwd); if (!root) throw new NotFoundError(`No .pman project found from ${path.resolve(cwd)}`);
-  const dir = path.join(root, '.pman');
-  const st = await fs.lstat(dir); if (!st.isDirectory() || st.isSymbolicLink()) throw new ValidationError('.pman must be a real directory');
+  const root = await findProject(cwd); if (!root) throw new NotFoundError(`No .heist project found from ${path.resolve(cwd)}`);
+  const dir = path.join(root, '.heist');
+  const st = await fs.lstat(dir); if (!st.isDirectory() || st.isSymbolicLink()) throw new ValidationError('.heist must be a real directory');
   let config;
   try { await assertSafePath(dir,path.join(dir,'config.json')); config = JSON.parse(await fs.readFile(path.join(dir, 'config.json'), 'utf8')); }
-  catch (e) { throw new ValidationError(`Cannot read .pman/config.json: ${e.message}`, { path: '.pman/config.json' }); }
+  catch (e) { throw new ValidationError(`Cannot read .heist/config.json: ${e.message}`, { path: '.heist/config.json' }); }
   if (config.schemaVersion !== 1) throw new UnsupportedSchemaVersionError(`Unsupported project schema version: ${config.schemaVersion}`);
-  try{checkId(config.projectId);}catch(e){throw new ValidationError(`Invalid projectId in .pman/config.json: ${e.message}`);}
+  try{checkId(config.projectId);}catch(e){throw new ValidationError(`Invalid projectId in .heist/config.json: ${e.message}`);}
   if (!Array.isArray(config.statuses) || !config.statuses.length || config.statuses.some(x=>typeof x!=='string'||!x.trim()) || new Set(config.statuses).size !== config.statuses.length) throw new ValidationError('Project statuses must be a non-empty list of unique strings');
-  if (config.key !== undefined && !KEY_RE.test(config.key)) throw new ValidationError(`Invalid project key in .pman/config.json: ${config.key}`);
+  if (config.key !== undefined && !KEY_RE.test(config.key)) throw new ValidationError(`Invalid project key in .heist/config.json: ${config.key}`);
   const p = { root, dir, config, key: config.key ?? deriveKey(config.name), cache: cache ? new Map() : null };
   p.ticketKey = t => ticketKey(p, t);
   p.resolveTicket = ref => ticketRef(p, ref);
@@ -126,7 +126,7 @@ async function readJson(file) {
     const text = await fs.readFile(file, 'utf8'); const value = JSON.parse(text);
     if (value.schemaVersion !== 1) throw new UnsupportedSchemaVersionError(`Unsupported record schema version in ${path.relative(process.cwd(), file)}`);
     return { value, revision: hash(text) };
-  } catch (e) { if (e instanceof PmanError) throw e; if(e.code==='ENOENT')throw new NotFoundError(`Record not found: ${path.basename(file,'.json')}`,{id:path.basename(file,'.json')}); throw new ValidationError(`Invalid JSON at ${file}: ${e.message}`, { path: file }); }
+  } catch (e) { if (e instanceof HeistError) throw e; if(e.code==='ENOENT')throw new NotFoundError(`Record not found: ${path.basename(file,'.json')}`,{id:path.basename(file,'.json')}); throw new ValidationError(`Invalid JSON at ${file}: ${e.message}`, { path: file }); }
 }
 async function writeJson(p, folder, record, { expectedRevision, create = false } = {}) {
   const file = idPath(path.join(p.dir, folder), record.id); await assertSafePath(p.dir,path.dirname(file)); await fs.mkdir(path.dirname(file), { recursive: true }); await assertSafePath(p.dir,file);
@@ -358,7 +358,7 @@ function commentApi(p) { return {
   async list(ticketId) { const a=await listJson(p,'comments'); return a.filter(x=>!ticketId||x.ticketId===ticketId).sort(sortRecords); }
 }; }
 function relationApi(p) { return {
-  async add(sourceId,targetId,type) { sourceId=await ticketRef(p,sourceId);targetId=await ticketRef(p,targetId);if(sourceId===targetId)throw new ValidationError('Relationship endpoints must differ');if(!RELATION_TYPES.includes(type))throw new ValidationError(`Unknown relationship type: ${type}`);const tickets=await listJson(p,'tickets');if(!tickets.some(x=>x.id===sourceId)||!tickets.some(x=>x.id===targetId))throw new NotFoundError('Relationship endpoint not found');return withLock(p,'relationships',async()=>{const records=await listJson(p,'relationships');const same=records.find(x=>x.sourceId===sourceId&&x.targetId===targetId&&x.type===type);if(same)throw new PmanError('This relationship already exists','DUPLICATE_RELATION',{relationshipId:same.id});if(type==='blocks'&&wouldBlockCycle(records,sourceId,targetId))throw new CycleError('Blocking relationship would create a dependency cycle');const r={schemaVersion:1,id:uuidv7(),sourceId,targetId,type,createdAt:nowIso()};return writeJson(p,'relationships',r,{create:true});}); },
+  async add(sourceId,targetId,type) { sourceId=await ticketRef(p,sourceId);targetId=await ticketRef(p,targetId);if(sourceId===targetId)throw new ValidationError('Relationship endpoints must differ');if(!RELATION_TYPES.includes(type))throw new ValidationError(`Unknown relationship type: ${type}`);const tickets=await listJson(p,'tickets');if(!tickets.some(x=>x.id===sourceId)||!tickets.some(x=>x.id===targetId))throw new NotFoundError('Relationship endpoint not found');return withLock(p,'relationships',async()=>{const records=await listJson(p,'relationships');const same=records.find(x=>x.sourceId===sourceId&&x.targetId===targetId&&x.type===type);if(same)throw new HeistError('This relationship already exists','DUPLICATE_RELATION',{relationshipId:same.id});if(type==='blocks'&&wouldBlockCycle(records,sourceId,targetId))throw new CycleError('Blocking relationship would create a dependency cycle');const r={schemaVersion:1,id:uuidv7(),sourceId,targetId,type,createdAt:nowIso()};return writeJson(p,'relationships',r,{create:true});}); },
   async list(id) { if(id&&!UUID_RE.test(id))id=await ticketRef(p,id); const a=await listJson(p,'relationships'); return a.filter(x=>!id||x.sourceId===id||x.targetId===id).sort(sortRecords); },
   async remove(id) { checkId(id);const f=idPath(path.join(p.dir,'relationships'),id);await assertSafePath(p.dir,f);try{await fs.rm(f);}catch(e){if(e.code==='ENOENT')throw new NotFoundError(`Relationship not found: ${id}`);throw e;} }
 }; }
@@ -393,9 +393,9 @@ export async function validateProject(p) {
   for(const r of rs){if(!ids.has(r.sourceId)||!ids.has(r.targetId))errors.push(`Dangling relationship ${r.id}`);if(!RELATION_TYPES.includes(r.type))errors.push(`Invalid relationship type ${r.id}`);}
   const cycles=blockingCycleNodes(rs);if(cycles.size)errors.push(`Blocking dependency cycle involves ${[...cycles].sort().join(', ')}`);
   const warnings=[],byNumber=new Map();for(const t of tickets)if(Number.isInteger(t.number)){if(!byNumber.has(t.number))byNumber.set(t.number,[]);byNumber.get(t.number).push(t.id);}
-  for(const [n,list] of byNumber)if(list.length>1)warnings.push(`Ticket key ${p.key}-${n} is used by ${list.length} tickets (${list.join(', ')}); run pman keys renumber`);
+  for(const [n,list] of byNumber)if(list.length>1)warnings.push(`Ticket key ${p.key}-${n} is used by ${list.length} tickets (${list.join(', ')}); run heist keys renumber`);
   for(const t of tickets){try{const extra=fieldWarnings(t,p.config);if(extra.length)warnings.push(`Ticket ${ticketKey(p,t)??t.id} (${t.kind??'task'}) has fields that do not belong to its kind: ${extra.join(', ')}`);}catch(e){errors.push(e.message);}}
-  const unnumbered=tickets.filter(t=>!Number.isInteger(t.number)).length;if(unnumbered)warnings.push(`${unnumbered} ticket(s) have no number yet; run pman keys init`);
+  const unnumbered=tickets.filter(t=>!Number.isInteger(t.number)).length;if(unnumbered)warnings.push(`${unnumbered} ticket(s) have no number yet; run heist keys init`);
   return { valid:errors.length===0, errors, warnings, counts:{tickets:tickets.length,documents:docIds.size,relationships:rs.length,comments:comments.length,components:components.length,types:types.length,contracts:contracts.length} };
 }
 const DOC_TYPE = { goals: 'goal', plans: 'plan', decisions: 'decision' };
@@ -426,7 +426,7 @@ export async function searchPage(p, query, { offset = 0, limit = 20, types, snap
   if(!Number.isInteger(limit)||limit<1||limit>100)throw new ValidationError('limit must be an integer between 1 and 100');
   const all=await searchProject(p,query,{types});
   const current=hash(all.map(x=>`${x.type}:${x.id}:${x.updatedAt}`).join('\n')).slice(0,16);
-  if(snapshot&&snapshot!==current)throw new PmanError('Search results changed since the first page; restart from the first page',`STALE_SEARCH`,{snapshot:current});
+  if(snapshot&&snapshot!==current)throw new HeistError('Search results changed since the first page; restart from the first page',`STALE_SEARCH`,{snapshot:current});
   const items=all.slice(offset,offset+limit);
   return {query:String(query).trim(),items,total:all.length,offset,limit,nextOffset:offset+items.length<all.length?offset+items.length:null,snapshot:current};
 }

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d0f-8955-745e-8437-24a36f1dff8a",
-  "ticketId": "01a189b2-43b1-775a-89f1-388cdd0af53c",
-  "body": "UI-Review 2026-10-30: neue Vorschau docs/ui-ticket-create-feedback.svg unterscheidet lokale Validierung, bestätigte Nichtanlage, unklare POST-Antwort und bestätigte Erstellung mit fehlgeschlagenem Refresh. Quellabgleich: POST /api/tickets ruft tickets.create() auf; uuidv7 wird serverseitig in create() erzeugt, die Route antwortet danach mit 201, bietet aber keinen Idempotenzschlüssel. Bei Timeout/Verbindungsabbruch kann der Client daher nicht wissen, ob die Datei bereits geschrieben wurde. Rückmeldungsvertrag präzisieren: bestätigte Nichtanlage darf nach Korrektur erneut gesendet werden; unklarer Ausgang darf keine blinde Wiederholung erlauben. Vor sicherem Retry/Statusabgleich idempotenten Schlüssel oder gleichwertigen Korrelationsvertrag planen; ansonsten Zustand als unklar zeigen und neue Anlage sperren. 201-Erfolg plus Refreshfehler weiterhin nur mit eigenständigem GET aktualisieren.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:46:08.085Z"
-}

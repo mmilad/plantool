@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d24-4441-7b01-9b7f-da446e17791d",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "UI-Review 2026-10-30: Neue Navigationsvarianten an den Auswahlvertrag angeglichen: aktive Bereichsleiste und Ticketzeile in docs/ui-layout-options.svg erhalten #2457A7-Kontur auf #EAF1FD plus aktiven Marker. Spätere Browserabnahme prüft Kontrast und Fokus getrennt. Bestehende Konzept-/Visual-QA-Relation und Parent-/Blocks-Ketten unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:08:46.657Z"
-}

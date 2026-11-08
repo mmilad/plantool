@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d20-6821-7c07-a84e-04f42b10a1ae",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "UI-Review 2026-10-30: Quervergleich Icon-Inventar ↔ Bildschirmvorschauen fand kleinere/dünnere Hauptnav-Zeichen (15px/1,4px mobil, 16px/1,5px Desktop statt der vorgesehenen 20px/1,8px). SVG-Zielbilder vereinheitlicht und aktive Ticketmarkierung auf Icon+Textbreite erweitert. Icon-Inventar jetzt zusätzlich per relates_to direkt mit Visual-QA abgestimmt; bestehende Blocks-/Parent-Ketten bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:04:33.698Z"
-}

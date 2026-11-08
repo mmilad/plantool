@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d9b-0f43-7561-bf59-f040523c99d8",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review 2026-10-30: Suchrouting-Fehler diesmal mit einem reproduzierbaren API-Aufruf bestätigt: Kommentar-Suchhit-ID schlägt als Ticket-ID mit NOT_FOUND fehl. Vorhandenes Suchrouting-Unterticket ergänzt. Lokaler Browser: alter Server-Tab timeout, fester Standardport 4000 derzeit connection refused; Quellcode bindet noch zufällig, daher ist 4000 aktuell nicht implementiert. Keine Produktdateien geändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:18:31.875Z"
-}

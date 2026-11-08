@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb6c-937a-727f-8c18-d6a4a6139605",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "Visual review done in the browser (desktop sizes and iPhone 13), findings and fixes recorded in docs/ui-review.md (2026-11-08): narrow detail layout, view URL aliases, 7-day activity count, child ticket rows, document list alignment, error states, search hit rows, icons. Contrast checked.",
-  "author": "local",
-  "createdAt": "2026-11-08T13:50:17.466Z"
-}

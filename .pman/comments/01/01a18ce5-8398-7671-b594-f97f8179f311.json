@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18ce5-8398-7671-b594-f97f8179f311",
-  "ticketId": "01a189af-50ab-71b9-9f11-92e13989409f",
-  "body": "MOBILER LINK-READER 2026-10-30: Neuer Entwurf docs/ui-documents-links-mobile.svg prüft einen im ersten mobilen Dokumentbeispiel fehlenden Fall anhand echter Daten: Der Review-Plan verknüpft 10 Ticket-Einträge zu 9 eindeutigen Ticketzielen plus ein UI-Zieldokument. Das doppelt verknüpfte Review-Ticket ist im Entwurf gruppiert und mit 2× gekennzeichnet; die Dokumentverknüpfung öffnet ausdrücklich ein Ziel-Dokument statt einer Ticketroute. Entwurf bleibt read-only und ändert die Quelle nicht. Die vorhandene relates_to-Abstimmung mit Linkkonsolidierung und revision-sicherer Dokumentbearbeitung bleibt bestehen.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:00:14.104Z"
-}

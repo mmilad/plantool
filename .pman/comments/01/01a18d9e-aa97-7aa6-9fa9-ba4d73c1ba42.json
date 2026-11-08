@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d9e-aa97-7aa6-9fa9-ba4d73c1ba42",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review 2026-10-30: Suchfeld-Quellcheck fand eine veraltete Ticketannahme: aktuelle oninput-Suche ist weder entprellt noch gegen verspätete Antworten abgesichert. Alte Query kann neuere Treffer oder nach Suchleerung den Baum überschreiben. Bestehendes Such-Paging-Ticket korrigiert und Query-Token/Abort-Verhalten als Abnahmekriterium vermerkt; keine neue Aufgabe/Beziehung.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:22:28.247Z"
-}

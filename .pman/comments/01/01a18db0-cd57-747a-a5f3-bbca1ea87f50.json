@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18db0-cd57-747a-a5f3-bbca1ea87f50",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "Abhängigkeitsabgleich 2026-10-30: aktueller Readiness-Graph hat neun eingehende blocks: sechs gemeinsame Konzeptvoraussetzungen (Icon, Navigation, Detail, Dokumente/Übersicht, Responsive, deutsche UI-Texte) plus drei zusätzliche (revision-sichere Entscheidungsbearbeitung, Ticketbeziehungsaktionen, Port 4000). Desktop- und Mobil-Projektübersicht nannten zuvor nur zwei zusätzliche; docs/ui-prototype-overview.svg und docs/ui-prototype-overview-mobile.svg sind auf drei korrigiert. Keine Kante geändert. Details: docs/ui-review.md.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:42:16.791Z"
-}

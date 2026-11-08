@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18da7-6eaa-77b4-8bac-a40b9d017e0d",
-  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
-  "body": "Quell-/Scope-Abgleich 2026-10-30: der aktuelle MVP-Server hat keine Boardroute; docs/ui-wireframe.md legt das Board bereits außerhalb des MVP-Rasters. Dieses Ticket bleibt Planung einer später optionalen Ansicht, keine Voraussetzung für MVP-Visual-QA oder MVP-Umsetzung. Bestehende Parent-/Blocks-Beziehungen bleiben.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:32:02.730Z"
-}

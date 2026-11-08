@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19288-3c1e-704f-b714-5b70e74e3704",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "Viewport-Prüfpunkt für die bestehende Visual-QA: Das maßgebliche Wireframe benennt 1280×720, ui-fp-layout.svg hat aber viewBox 1280×800; Kartenbereich endet y=768, letzte Listenmetazeile y=729. Das SVG ist damit ein erweitertes Arbeitsraster, kein 720px-Abnahmebild. Bei späterer Browserabnahme genau 1280×720 Scroll-/Falzverhalten und Sichtbarkeit der letzten Zeilen prüfen; optional separates 720px-Mockup ergänzen. Owner/Parent unverändert, keine neue Relation.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:16:04.254Z"
-}

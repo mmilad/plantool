@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d14-89db-7613-b678-ef912db66d6b",
-  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
-  "body": "UI-Review 2026-10-30: docs/ui-ticket-labels.svg zeigt denselben optionalen Freitext-Token-Vertrag im Unterticketformular: Enter/Hinzufügen, Chips einzeln entfernen, keine Autocomplete-Liste ohne reale pman-Projektlabels. Die Beispielchips sind als illustrativ markiert; fixturebasierte Erhaltungsprüfung bleibt außerhalb des kanonischen Bestands. Vorhandene relates_to-Kante zum Feldeticket sowie Parent-/Blocks-Zuordnung bleiben erhalten.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:51:35.899Z"
-}

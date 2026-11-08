@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb12-def2-7ae9-bf83-c75b81f01925",
-  "ticketId": "01a1b8de-2354-7cbc-8301-eabd32e7ee0d",
-  "body": "Columns per configured status, cards with parent tag, labels, blocker flag, type icon, key, priority icon and assignee avatar; filters (search, type, parent, only work items). Drag and drop or Alt+←/→ moves cards with a revision-checked PATCH; OPEN_WORK and conflicts are explained in a flag. Verified in Chromium.",
-  "author": "claude",
-  "createdAt": "2026-11-08T12:12:18.546Z"
-}

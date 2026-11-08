@@ -5,9 +5,9 @@ import os from 'node:os';
 import path from 'node:path';
 import { request } from 'node:http';
 
-process.env.PMAN_EMBEDDER = 'hash';
-const home = await fs.mkdtemp(path.join(os.tmpdir(), 'pman-home-sem-'));
-process.env.PMAN_HOME = home;
+process.env.HEIST_EMBEDDER = 'hash';
+const home = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-home-sem-'));
+process.env.HEIST_HOME = home;
 const { initProject, openProject } = await import('../src/index.js');
 const { serve } = await import('../src/server.js');
 const { closeCaches } = await import('../src/semantic.js');
@@ -15,7 +15,7 @@ const { closeCaches } = await import('../src/semantic.js');
 function send(url, method, headers = {}, body = '') { return new Promise((resolve, reject) => { const u = new URL(url); const req = request({ hostname: u.hostname, port: u.port, path: u.pathname + u.search, method, headers }, res => { let b = ''; res.on('data', c => b += c); res.on('end', () => resolve({ status: res.statusCode, body: b })); }); req.on('error', reject); req.end(body); }); }
 
 test('semantic search API: status, opt-in indexing, hybrid search, similar tickets and relations', async t => {
-  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'pman-ui-sem-'));
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-ui-sem-'));
   t.after(async () => { closeCaches(); await fs.rm(cwd, { recursive: true, force: true }); await fs.rm(home, { recursive: true, force: true }); });
   await initProject({ cwd }); const p = await openProject({ cwd });
   const nav = await p.tickets.create({ title: 'Header navigation menu' });
@@ -24,7 +24,7 @@ test('semantic search API: status, opt-in indexing, hybrid search, similar ticke
   const app = await serve({ cwd, port: 0 }); t.after(() => new Promise(r => app.server.close(r)));
   const host = { host: new URL(app.url).host };
   const page = await send(app.url, 'GET', host); const csrf = /"csrf":"([a-f0-9]+)"/.exec(page.body)[1];
-  const write = { ...host, origin: app.url, 'content-type': 'application/json', 'x-pman-csrf': csrf };
+  const write = { ...host, origin: app.url, 'content-type': 'application/json', 'x-heist-csrf': csrf };
 
   const before = JSON.parse((await send(`${app.url}/api/search/status`, 'GET', host)).body);
   assert.equal(before.available, false); assert.equal(before.mode, 'keyword');
@@ -51,13 +51,13 @@ test('semantic search API: status, opt-in indexing, hybrid search, similar ticke
 });
 
 test('relationship API rejects duplicate edges and cycles with 409 and removes exactly one edge', async t => {
-  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'pman-ui-rel-'));
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-ui-rel-'));
   t.after(async () => { await fs.rm(cwd, { recursive: true, force: true }); });
   await initProject({ cwd }); const p = await openProject({ cwd });
   const a = await p.tickets.create({ title: 'A' }), b = await p.tickets.create({ title: 'B' }), c = await p.tickets.create({ title: 'C' });
   const app = await serve({ cwd, port: 0 }); t.after(() => new Promise(r => app.server.close(r)));
   const host = { host: new URL(app.url).host }; const csrf = /"csrf":"([a-f0-9]+)"/.exec((await send(app.url, 'GET', host)).body)[1];
-  const write = { ...host, origin: app.url, 'content-type': 'application/json', 'x-pman-csrf': csrf };
+  const write = { ...host, origin: app.url, 'content-type': 'application/json', 'x-heist-csrf': csrf };
   const add = (s, tg, type) => send(`${app.url}/api/relations`, 'POST', write, JSON.stringify({ sourceId: s, targetId: tg, type }));
   const ab = JSON.parse((await add(a.id, b.id, 'blocks')).body);
   const dup = await add(a.id, b.id, 'blocks'); assert.equal(dup.status, 409); assert.equal(JSON.parse(dup.body).code, 'DUPLICATE_RELATION');

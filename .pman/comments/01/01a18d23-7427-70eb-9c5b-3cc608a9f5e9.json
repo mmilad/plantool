@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d23-7427-70eb-9c5b-3cc608a9f5e9",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "UI-ENTWURF 2026-10-30: Neues docs/ui-layout-options.svg ermöglicht späteren visuellen Vergleich der horizontalen Navigation und der Jira-inspirierten permanenten Seitenleiste. Abnahme soll bei 1280px Breite Detailfläche, Scanbarkeit und Auswahlzustand vergleichen; mobile Listen-/Detailprüfung bleibt separat. Varianten sind unfreigegeben und keine Produktänderung.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:07:53.383Z"
-}

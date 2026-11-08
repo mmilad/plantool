@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d2e-7c64-7bf9-ac5a-02eb2fe905bf",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "Layoutvergleich 2026-10-30 an aktuellen pman-Daten ausgerichtet: Visual-QA-Ticket ist status todo/Offen, priority normal und rollup blocked. docs/ui-layout-options.svg zeigte fälschlich  In Arbeit und vermischte Readiness. Alle Varianten zeigen jetzt Offen/Normal und getrennt Bereitschaft: blockiert; Beispieltitel und Zähler 45 sind ebenfalls pman-getreu. Keine Daten-/Beziehungskante geändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:19:56.388Z"
-}

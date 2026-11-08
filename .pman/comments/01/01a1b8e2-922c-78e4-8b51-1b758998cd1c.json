@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b8e2-922c-78e4-8b51-1b758998cd1c",
-  "ticketId": "01a1b8de-2325-7fb5-904a-9da82c2eb619",
-  "body": "src/registry.js: ~/.pman/projects.json (PMAN_HOME override), entries keyed by root path (worktrees of one repo stay separate), locked atomic writes, live availability check. CLI init and every project command register automatically (PMAN_NO_REGISTER=1 disables); pman projects list/add/remove/prune work from any directory and never touch project files. Tests use a temporary PMAN_HOME.",
-  "author": "claude",
-  "createdAt": "2026-11-08T02:00:18.732Z"
-}

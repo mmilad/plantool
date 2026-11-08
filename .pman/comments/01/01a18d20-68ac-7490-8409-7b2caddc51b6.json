@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d20-68ac-7490-8409-7b2caddc51b6",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "FORTGESETZTER UI-REVIEW 2026-10-30: Weitere Vorschau-Inkonsistenz gefunden: Hauptnav-Icons waren trotz Icon-Inventar-Vorgabe 15px mobil und 16px Desktop statt durchgehend 20px/1,8px. docs/ui-*.svg vereinheitlicht; bei 320px Dokumentlabel samt Mindestabständen und aktiver Unterstreichung angepasst. Bestehende Icon-Aufgabe per relates_to mit Responsive- und Visual-QA verbunden, ohne Parent-/Blocks-Verschiebung. Pman-Validierung und SVG-Referenzen nach Änderung prüfen.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:04:33.837Z"
-}

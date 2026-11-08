@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18dae-13d6-7f03-8140-781999753071",
-  "ticketId": "01a189d4-0a9c-718d-9aed-be4cb53e46d4",
-  "body": "Statischer Mobilmaß-Recheck 2026-10-30: in docs/ui-search-preview-320.svg und -mobile.svg sind Typauswahl sowie Nachladeaktion 44px hoch; Such-Löschaktion ist 44×44px. Der längste 320px-Kommentarzeilentext misst 226.4px bei 272px Inhaltsbreite. Sichtbare Treffertypen bleiben getrennte Karten. Kein weiterer Layoutfehler aus dem Mockmaßcheck; echte Browser-/Touch-Abnahme bleibt offen. Paging-Parent und Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:39:18.230Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18da3-2c28-7da9-99d8-ee26ce4aea1c",
-  "ticketId": "01a189af-d764-72c3-a674-f5601919f131",
-  "body": "Statische Textgeometrie der korrigierten mobilen FP-Ansicht 2026-10-30 geprüft: längste neue Detailzeile (‚später änderbar, Liste links, Detail rechts.‘) misst mit Segoe UI 14px 263px bei 358px nutzbarer Breite; Beziehungskartenbeschriftungen bleiben unter 191px bei 306px. Keine horizontale Überschreitung im geprüften Mock. Browserfont-Rasterung, echte Touch-Hitbox und Scrollverhalten bleiben Live-Abnahme; Parent/Blocks unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:27:23.560Z"
-}

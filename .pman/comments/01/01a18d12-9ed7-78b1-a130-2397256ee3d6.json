@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d12-9ed7-78b1-a130-2397256ee3d6",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Fortgesetzter UI-Review 2026-10-30: Im Ticketanlagefluss fehlte ein Schutz vor versehentlichem Verlust eines ausgefüllten, noch nicht angelegten Formulars: Escape/X/Zurück schlossen laut Entwurf direkt. docs/ui-ticket-create-discard.svg und docs/ui-wireframe.md planen Bestätigung nur bei geänderten Nutzerfeldern, sichere Fortsetzen-Standardaktion, kein POST beim Verwerfen und Kontext-/Fokus-Rückgabe. Die bestehenden Root-/Unterticket-/Accessibility-Aufgaben erhielten passende Notizen; ihre fachlichen Eltern, Blocks und bereits vorhandenen Relations blieben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:49:30.199Z"
-}

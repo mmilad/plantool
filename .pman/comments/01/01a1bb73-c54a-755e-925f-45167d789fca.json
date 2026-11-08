@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1bb73-c54a-755e-925f-45167d789fca",
-  "ticketId": "01a1bb20-db90-7564-8ae3-4ac876bc99fb",
-  "body": "Implemented: claims are mirrored in <repo>/.git/pman/claims.json (common Git dir, shared by all worktrees, never committed). claim fails with CONFLICT if another worktree holds an active lease, next skips those tickets, release/done clear the entry; PMAN_SHARED_CLAIMS=0 disables it. Test with real git worktrees in test/claims.test.js.",
-  "author": "local",
-  "createdAt": "2026-11-08T13:58:08.970Z"
-}

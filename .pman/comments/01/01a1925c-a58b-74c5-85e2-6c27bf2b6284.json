@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1925c-a58b-74c5-85e2-6c27bf2b6284",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review 2026-10-31: Aktuelle Quellbefunde und Ticketzugehörigkeiten erneut geprüft. Navigation/Detail/Feld-/Suchrouting-Tickets existieren in den erwarteten Eltern; ihre offenen Status wurden nicht als erledigt ausgegeben. Keine neue Aufgabe nötig, da Befunde bereits abgedeckt sind. Live-UI bleibt mangels aktuellem Browserzugriff ungeprüft. Parent- und Blocks-Beziehungen unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:28:27.659Z"
-}

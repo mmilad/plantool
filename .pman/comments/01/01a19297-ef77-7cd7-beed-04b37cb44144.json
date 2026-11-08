@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19297-ef77-7cd7-beed-04b37cb44144",
-  "ticketId": "01a189a9-42a6-7a27-adb9-e30a8df78d54",
-  "body": "Richtungsentscheidung 2026-10-31: Icons werden lokal und einheitlich als Inline-SVG geplant, mit sichtbaren Textlabels. Keine Tickettyp-Symbole ohne entsprechendes Datenfeld; Farbe/Icon allein trägt keine Status- oder Beziehungsaussage. Auswahl folgt dem beschlossenen schlichten Layoutkonzept; Parent und Blockerbeziehung bleiben bestehen.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:33:13.207Z"
-}

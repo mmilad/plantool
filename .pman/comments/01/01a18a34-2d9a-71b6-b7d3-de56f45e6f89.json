@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18a34-2d9a-71b6-b7d3-de56f45e6f89",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Live-Review 2026-10-30: App frisch unter http://127.0.0.1:59456/ geladen und ONNX-Suchticket geöffnet. Baumzeile zeigt blocked, Detailkopf aber Status: todo · Priority: normal; Elternpfad und Beziehungen fehlen im Artikel. docs/ui-review.md hält den Befund fest. Bestehende Statusdarstellung (01a189b6-43ac-78a2-a06b-345c6fa56083), Ticketbeziehungen (01a189af-d764-72c3-a674-f5601919f131) und Ticketdetail (01a189a9-42af-7e67-93b4-dcdb41bbad6a) sind zugehörig; Parent-/blocks-Kanten unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T00:27:17.786Z"
-}

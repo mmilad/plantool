@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d30-92f3-76ac-bb78-fb7ab658ad94",
-  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
-  "body": "Review des Layoutbeispiels: Die im Visual-QA-Detail gezeigten Pakete sind eingehende blocks-Beziehungen, keine Untertickets. Kanonisch bestehen acht Blocker und ein direktes Kind (Feedback/Rückmeldungszustände). SVG benennt Richtung, zeigt 3+5 Blocker und das echte Kind separat. Parent- und Relationskanten unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:22:13.235Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18c95-d04b-7bae-90c3-d91a4d163063",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review checkpoint 2026-10-30: Live-UI-Recheck nicht möglich: Browser meldet ERR_CONNECTION_TIMED_OUT auf 127.0.0.1:59456; EADDRINUSE beim lokalen Startversuch belegt keinen erfolgreichen Browserzugriff. Quellstand erneut gegen vorhandene UI-/Accessibility-Aufgaben geprüft; keine unzugeordnete Abweichung ergänzt. Der vorhandene ONNX-/all-MiniLM-L6-v2-/Node.js-/SQLite-Plan und seine Parent-/Blocks-Kette sind konsistent. docs/ui-wireframe.md präzisiert jetzt optionalen Semantikmodus, Modell-/Indexstatus und verlustfreien Keyword-Fallback. Keine Produktdatei geändert; Live-Ansicht beim nächsten erreichbaren Lauf erneut prüfen.",
-  "author": "local",
-  "createdAt": "2026-10-30T11:33:10.859Z"
-}

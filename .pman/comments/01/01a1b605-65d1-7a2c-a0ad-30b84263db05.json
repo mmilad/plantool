@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b605-65d1-7a2c-a0ad-30b84263db05",
-  "ticketId": "01a189d4-0a9c-718d-9aed-be4cb53e46d4",
-  "body": "searchPage(): ranked (exact/prefix/contains title, then body; stable tie-breaks), validated limit<=100, offset/nextOffset/total and a snapshot token; stale snapshots fail with STALE_SEARCH (HTTP 409) and the UI restarts from page 1 with a notice. Type filter (ticket, comment, goal, plan, decision; singular document types). Comment hits include ticketId and the ticket title. UI: 20 hits per page, 'Show more results (N remaining)', aria-live status incl. zero results, dedupe, focus moves to the first new hit, stale requests ignored. Fixed: debounced input read event.currentTarget after dispatch (null), so typing never searched. Verified in Chromium with 6,063 tickets. Limitation: each query scans all files (~1 s at 6k tickets with 2 KB descriptions).",
-  "author": "claude",
-  "createdAt": "2026-11-07T12:39:29.489Z"
-}

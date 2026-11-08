@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1926e-0cb0-7edd-b646-8434cbb934b6",
-  "ticketId": "01a189bd-b44d-7e95-84fc-66d307543b12",
-  "body": "SEMANTIK-TECHNIKABGLEICH 2026-10-31: Die UI-Richtung ist konsistent mit dem Nutzerwunsch: Node.js + ONNX für all-MiniLM-L6-v2, abgeleiteter rebuildbarer SQLite-Vektorindex; der Keyword-Modus bleibt verfügbar und Semantik wird erst nach Runtime-/Index-Bereitschaft angeboten. Die drei bestehenden Kindtickets decken Embedding/Tokenizer-Fingerprint und Sprachqualität, SQLite-Erweiterung/Rebuild-Lebenszyklus sowie hybriden API-/Fallbackvertrag ab. all-MiniLM-L6-v2 wird wegen des dokumentierten englischen Sprachprofils nicht ungeprüft als passend festgelegt; Qualitätsvergleich mit mehrsprachigen Suchfällen bleibt vor Aktivierung vorgesehen. Embedding und Index blockieren bereits die hybride API; alle drei Kinder bleiben unter diesem Suchpaket. Keine neue Aufgabe oder Paketentscheidung nötig; alle acht bestehenden Beziehungen unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:47:28.176Z"
-}

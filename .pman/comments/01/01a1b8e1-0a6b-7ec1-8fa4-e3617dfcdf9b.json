@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b8e1-0a6b-7ec1-8fa4-e3617dfcdf9b",
-  "ticketId": "01a1b8de-2317-7156-ab5d-23a1e7a3f5f1",
-  "body": "config.key (derived from the name if unset: planus-manus → PM), ticket.number allocated as max+1 under a lock (parallel creates unique), KEY-n accepted by tickets.get/update/move/readiness, comments, relations, context, CLI and search (exact key ranks first). pman keys init numbers existing tickets by creation time; pman keys renumber fixes duplicates; validate warns about duplicates and unnumbered tickets. This project now uses PM-1…PM-80.",
-  "author": "claude",
-  "createdAt": "2026-11-08T01:58:38.443Z"
-}

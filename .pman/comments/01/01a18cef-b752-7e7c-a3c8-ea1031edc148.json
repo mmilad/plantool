@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cef-b752-7e7c-a3c8-ea1031edc148",
-  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
-  "body": "NAVIGATIONS-INVENTAR 2026-10-30: Beim Abgleich mit Desktop-/Mobilprototypen fehlte ein sichtbarer Kandidat für den gemeinsamen Bereich Planungsdokumente. docs/ui-icon-preview.svg enthält nun ein neutrales \files-Symbol zusätzlich zu house für Übersicht und \ticket für Tickets; Ziel/Plan/Entscheidung bleiben \target/clipboard/scale. Beide UI-Prototypen zeigen die Navigation mit Icon plus dauerhaftem Text. Vorschlag, keine Freigabe oder Umsetzung. Parent unter Icon-System sowie bestehende Blocks-/relates_to-Kanten unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:11:22.707Z"
-}

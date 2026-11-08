@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18caa-a221-7d10-b5be-ff0b67c6e662",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Planabgleich 2026-10-30: 320px-Randfall mit möglichem Formularüberstand im bestehenden Responsive-Ticket und im UI-Konzept ergänzt; in docs/ui-review.md und docs/ui-wireframe.md dokumentiert, noch nicht live bestätigt. Icon-Inventar geprüft und den doppelten, abgebrochenen Vorschauabsatz im bestehenden Icon-Ticket bereinigt. Dieses laufende Review nun zusätzlich per relates_to mit dem Responsive-Ticket verbunden. Parent-/Blocks-Ketten unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T11:55:55.297Z"
-}

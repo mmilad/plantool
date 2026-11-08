@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d14-8949-7ab5-b8ca-5eef6af5768f",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "UI-Review 2026-10-30: Die Root-Formvorschau docs/ui-ticket-labels.svg zeigt Labels als optionale freie String-Tags, nicht als nicht vorhandenen Katalog. Aktueller Projektbestand hat 0 Labels; keine Vorschlagswerte erfinden. Der bestehende blocks-Abhängigkeitsbezug zum Feldeticket bleibt zuständig; Parent und alle übrigen Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:51:35.753Z"
-}

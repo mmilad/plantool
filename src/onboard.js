@@ -1,4 +1,4 @@
-// `pman agent onboard`: a briefing for agents. It only prints; what an agent keeps (instruction files, skills, its own tools) is its own decision.
+// `heist agent onboard`: a briefing for agents. It only prints; what an agent keeps (instruction files, skills, its own tools) is its own decision.
 import { DEFAULT_STATUSES, RELATION_TYPES, SEARCH_TYPES } from './index.js';
 import { TICKET_KINDS } from './workflow.js';
 import { fieldsFor } from './fields.js';
@@ -17,19 +17,19 @@ function kindLines() {
 }
 
 export function onboardText() {
-  return `# Onboarding: pman
+  return `# Onboarding: heist
 
-You are working in a project that plans its work with pman. pman keeps the plan in Git-tracked files under \`.pman/\`. It is the shared plan of people and agents: people make the decisions that are theirs, agents bring domain knowledge, carry out work and record what changed.
+You are working in a project that plans its work with heist. heist keeps the plan in Git-tracked files under \`.heist/\`. It is the shared plan of people and agents: people make the decisions that are theirs, agents bring domain knowledge, carry out work and record what changed.
 
-## How you reach pman
+## How you reach heist
 
-- CLI: \`pman\` (or \`pnpm exec pman\` when it is a project dependency). \`pman --help\` lists everything. Commands that list data accept \`--format json\`.
+- CLI: \`heist\` (or \`pnpm exec heist\` when it is a project dependency). \`heist --help\` lists everything. Commands that list data accept \`--format json\`.
 - Programmatic API: the same operations as functions (see the package exports; the types are in \`src/index.d.ts\`). Use it when you want to script or build your own helpers.
 - MCP server: planned, not available yet.
 - Local web view: a human-facing view of the same plan. Editing there changes the same data.
-- Planning method: \`pman guide\` (topics: ${list(Object.keys(GUIDE).filter(k => k !== 'overview'))}).
+- Planning method: \`heist guide\` (topics: ${list(Object.keys(GUIDE).filter(k => k !== 'overview'))}).
 
-Never edit \`.pman/\` by hand. Use the CLI or the API.
+Never edit \`.heist/\` by hand. Use the CLI or the API.
 
 ## Node types
 
@@ -43,7 +43,7 @@ Sizes for effort: ${list(TICKET_SIZES)}.
 ## States
 
 Ticket status: ${list(DEFAULT_STATUSES)}. A parent is rolled up from its children; a parent cannot be done while children or blockers are open.
-\`pman next\` lists only work that is ready: todo, not blocked, decisions made, and the providers of the contracts it consumes finished.
+\`heist next\` lists only work that is ready: todo, not blocked, decisions made, and the providers of the contracts it consumes finished.
 Claims are leases (default 60 minutes), shared between git worktrees. Decisions have a status of their own (open, decided, cancelled) and an owner (human or agent).
 
 ## Relationships
@@ -67,6 +67,6 @@ Search covers ${list(SEARCH_TYPES)} by text, and semantically when the index is 
 
 ## Your own tools and knowledge
 
-pman does not tell you how to work with it beyond this briefing. You can build your own helpers on the CLI or the API, write notes, add instruction files or skills for your tool, and decide for yourself what is worth keeping. If something repeats often enough to be a procedure, you may capture it. Keep whatever you create outside \`.pman/\`, and tell the person what you created.
+heist does not tell you how to work with it beyond this briefing. You can build your own helpers on the CLI or the API, write notes, add instruction files or skills for your tool, and decide for yourself what is worth keeping. If something repeats often enough to be a procedure, you may capture it. Keep whatever you create outside \`.heist/\`, and tell the person what you created.
 `;
 }

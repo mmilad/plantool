@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19306-1523-7960-995b-c09365464837",
-  "ticketId": "01a189c1-79a0-74ae-b519-20b51b0aefa8",
-  "body": "Umsetzung begonnen 2026-10-31: Tickets öffnen jetzt über /?ticket=<id>; Ticketwechsel nutzt History-Einträge, Popstate stellt die Auswahl wieder her, Listenfilter/-position werden im Tabzustand bewahrt. Kommentarziel ergänzt #comment=<id>. Statische Syntaxprüfung erfolgreich; Browser-Back/Forward und Reload noch nicht live abgenommen. Parent/Blocks bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T17:33:31.811Z"
-}

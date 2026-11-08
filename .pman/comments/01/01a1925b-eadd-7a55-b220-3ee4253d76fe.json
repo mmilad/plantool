@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1925b-eadd-7a55-b220-3ee4253d76fe",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Review 2026-10-31: Wiederkehrenden Prüfzyklus konkretisiert. Livebeobachtung und Quell-/Planabgleich sind getrennte Evidenz; bei nicht erreichbarer App keine Live-Aussage ableiten. Der Zyklus deckt Startfläche, Navigation/Baum, typgerechte Suche, Ticketdetail samt Beziehungen/Kommentaren, Dokumente, 390/320px sowie Tastatur/Fokus ab, aktualisiert zuerst die bestehenden Fachaufgaben und verlangt nach Planänderungen einen Parent-/Relations- und pman-Validierungscheck. docs/ui-review.md enthält den datierten Prüfstand und nächste sinnvolle Live-Prüfung. Parent/Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:27:39.869Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cd0-314b-7c80-982b-d9d09ccc87a4",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "REVIEW 2026-10-30: Der lokale Browserzugriff auf die gemeldete App unter 127.0.0.1:59456 ist weiterhin ERR_CONNECTION_TIMED_OUT; daher heute keine Live-Abnahme. Die statische Projektübersicht ist nun zusätzlich mobil dokumentiert und ihr Datenstand gegen die neun direkten Programmkinder abgeglichen. Sucharchitektur bleibt im bestehenden Ticket 01a189bd-b44d-7e95-84fc-66d307543b12 mit separaten technischen Kindern für Node.js/ONNX-Embeddings mit all-MiniLM-L6-v2, rebuildbaren SQLite-Vektorindex und hybride API/Fallback; keine MVP-Umsetzung behaupten.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:36:56.779Z"
-}

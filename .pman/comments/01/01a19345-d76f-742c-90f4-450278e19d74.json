@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19345-d76f-742c-90f4-450278e19d74",
-  "ticketId": "01a189af-d766-703b-a961-52a10b86081f",
-  "body": "Live-Abnahme 2026-10-31 nach Serverneustart: Bearbeiten-Formular zeigt korrekt beschriftete Felder für Titel, konfigurierten Status, Priorität und Beschreibung. Browser-Speichern von Beschreibung sowie Status/Priorität aktualisiert Detail und Liste. Ein absichtlich veraltetes Formular erhielt HTTP 409; der Entwurf blieb erhalten,  Aktuelle Version laden zeigte den externen Stand. Alle temporären Werte anschließend im UI zurückgesetzt. Ticket ist für diesen ersten Ausschnitt erledigt; Labels, Beziehungen, Kommentare und Unterticketanlage bleiben eigene spätere Schritte.",
-  "author": "local",
-  "createdAt": "2026-10-31T18:43:10.319Z"
-}

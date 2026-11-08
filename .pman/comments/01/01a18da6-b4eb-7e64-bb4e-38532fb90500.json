@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18da6-b4eb-7e64-bb4e-38532fb90500",
-  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
-  "body": "Planungspräzisierung: docs/ui-wireframe.md enthält jetzt eine kurze, noch nicht freigegebene Entscheidungsliste mit Empfehlung und zuständigem bestehenden Paket (Startfläche, Desktop-Grundraster, Baum vs optionales Board, Mobilwechsel, Icons). Das Board ist ausdrücklich außerhalb des MVP-Rasters. Eltern und Blocks-Kanten bleiben unverändert; vor Umsetzungsbeginn mit dem Nutzer abstimmen.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:31:15.179Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1927e-98b7-71fa-b96a-a72729d780b8",
-  "ticketId": "01a189a9-42a6-7a27-adb9-e30a8df78d54",
-  "body": "Review 2026-10-31: ui-icon-preview.svg deckt Navigation, Dokumentbereiche, Suche, Kommentare, Status/Priorität/Blocker und Aktionen ab, aber nicht den vorhandenen Ticketbereich Beziehungen. Bitte als optionalen Kettenlink-Kandidaten für Abschnitt/Gruppe ergänzen, mit sichtbarem Label/accessible name; Symbol darf weder blocks/relates_to noch deren Richtung codieren. Mit Ticketdetail und Relations-Fachpaket unter bestehenden Parents abstimmen. Kein neues Ticket/Feld und keine Umhängung; Auswahl erst nach Konzeptabgleich.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:05:32.600Z"
-}

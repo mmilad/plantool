@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d3e-c80a-7540-8213-1e56ae5538ca",
-  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
-  "body": "MOBILE-BOARD-320-VIEWPORT-CORRECTION 2026-10-30: Prüfung der ersten 320px-Vorschau ergab, dass der Scrollhinweis unterhalb des 844px-Erstsichtbereichs lag und die vierte Karte abgeschnitten wurde. docs/ui-board-preview-320.svg korrigiert: drei vollständige echte Offen-Karten, 44px-Aktionen und sichtbarer Hinweis Weitere 5 Offen-Karten innerhalb des ersten Viewports. Eltern-/Blocks-Zuordnung bleibt erhalten.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:37:44.330Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19260-b036-7a62-9035-24a752d0c410",
-  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
-  "body": "Mockupabgleich 2026-10-31: ui-board-preview.svg zeigte zehn direkte UI-Programmkinder (9 Offen, 1 In Arbeit), der SVG-desc behauptete nur neun Kinder. Screenreader-Beschreibung korrigiert; Mobilbeschreibungen 390/320px gegen dieselbe Aufteilung geprüft. Parent unter Ticketnavigation und bestehende Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:32:52.534Z"
-}

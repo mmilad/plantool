@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18c6a-6ab7-7673-848c-f7ba5fa3d2a4",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Quellstand-Review 2026-10-30: Kommentar-Textarea nimmt Mehrzeiligkeit an, Anzeige escapt den Body aber in einen normalen Absatz ohne Zeilenumbruchbehandlung; HTML fasst Zeilenumbrüche zusammen. Neuer Detail-Unterauftrag 01a18c6a-02dd-7a37-986f-f8cdd3931325 unter Ticketdetail; UI-Konzept blockiert ihn, relates_to mit Kommentarpaging, Feedback, Accessibility und diesem Review. docs/ui-review.md enthält den Befund. Live-Browser war nicht erreichbar; keine Testdaten oder Produktänderung.",
-  "author": "local",
-  "createdAt": "2026-10-30T10:45:46.807Z"
-}

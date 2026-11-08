@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d98-ea8e-758e-87e0-06acd37b20b2",
-  "ticketId": "01a18d87-251e-7ff7-9678-7a437fd0ef76",
-  "body": "Review 2026-10-30: Der aktuelle Einstieg widerspricht dem Ticketziel noch: src/server.js hat weiterhin port = 0, die CLI ruft serve() ohne Port auf und die pman-Prozessausgabe zeigt zufällige Ports. docs/architecture-proposal.md und docs/roadmap.md sind jetzt auf Standard 127.0.0.1:4000, klaren EADDRINUSE-Abbruch, keinen Zufallsfallback und ausschließlich expliziten --port-Override abgestimmt. --open nur nach erfolgreichem Bind. Kein Code umgesetzt; Parent und bestehende blocks/relates_to-Beziehungen unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:16:11.407Z"
-}

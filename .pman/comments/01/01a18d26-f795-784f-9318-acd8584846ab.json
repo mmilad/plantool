@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d26-f795-784f-9318-acd8584846ab",
-  "ticketId": "01a18a1b-10d2-78c8-a6e7-db86e706a490",
-  "body": "Ergänzung zum Refresh-Vertrag 2026-10-30: Nach Ticket-PATCH lädt der aktuelle Handler unabhängig vom Modus die Vollbaumliste neu und verliert damit aktive Filterergebnisse, obwohl das Suchfeld weiter den Querytext zeigt. Die Erhaltungsregel für externe Änderungen gilt auch nach lokalen Speichervorgängen: Suchmodus, Query, Typfilter, Pagingposition und Auswahl konsistent erhalten bzw. gezielt aktualisieren; keine Query-/Ergebnisabweichung. In docs/ui-review.md als Quellstandbefund dokumentiert; Parent und Relationskanten bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:11:43.637Z"
-}

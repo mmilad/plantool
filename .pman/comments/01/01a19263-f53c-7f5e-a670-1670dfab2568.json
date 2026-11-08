@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19263-f53c-7f5e-a670-1670dfab2568",
-  "ticketId": "01a189b6-43ac-78a2-a06b-345c6fa56083",
-  "body": "Datenvertrag für Listen-/Board-/Übersichtsmocks nachschärfen: Die aktuellen Entwürfe zeigen Bereitschaft pro Ticket. Core project.readiness(id) ist nur einzeln verfügbar und lädt Tickets/Relations erneut; der Browser-GET /api/tree liefert aktuell status/priority/rollup, keine Readiness oder Blockerziele. Für die UI daher gebündelte Readiness der sichtbaren Ticket-IDs (oder denselben Vertrag im Baum) mit Blocker-IDs/Titeln planen und an den Navigation-/Board-Abnahmetests prüfen. Rollup und Bereitschaft müssen dieselbe Regel für erledigte Blocker verwenden. Bestehende Parent- und Relations unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:36:26.812Z"
-}

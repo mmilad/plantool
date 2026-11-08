@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d0f-8b2a-7220-b81b-9a4a9e4ed29b",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Fortgesetzter UI-Review 2026-10-30: Quellabgleich der Ticketerstellung fand eine noch offene Fehlerklasse: POST schreibt mit serverseitig erzeugter uuidv7, ohne Idempotenzschlüssel; bei verlorener Antwort ist der Schreibausgang unklar und blindes erneutes Senden kann duplizieren. docs/ui-ticket-create-feedback.svg trennt das von bestätigter Validierungsablehnung und von bestätigtem 201-Erfolg mit gescheitertem Listen-GET. Das bestehende Feedback- und beide Anlage-Tickets erhielten konkrete Planhinweise; bestehende Zuordnungen respektiert, keine neue Aufgabe angelegt.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:46:08.554Z"
-}

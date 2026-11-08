@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d9c-998a-7db9-9041-4f6e030c0166",
-  "ticketId": "01a189d5-d409-79de-b8b2-d59fb0516979",
-  "body": "Quellrecheck 2026-10-30: bestätigt, dass der HTTP-Server nur GET /api/documents?kind anbietet; es gibt keinen Einzelabruf per kind/id. Der Start lädt gleichzeitig für goals/plans/decisions alle vollständigen Dokument-Bodies und zeigt nur body.slice(0,180). Core documents.get ist vorhanden, wird aber nicht durch eine UI-Route erreichbar gemacht. Bestehender Ticketumfang (Metadatenliste, gezielter Einzelabruf, selektionssicherer Reader) passt; Parent/Blocks/relates_to unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:20:12.810Z"
-}

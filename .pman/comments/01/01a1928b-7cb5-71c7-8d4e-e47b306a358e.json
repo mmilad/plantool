@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1928b-7cb5-71c7-8d4e-e47b306a358e",
-  "ticketId": "01a189d6-6aa6-713b-9d56-2ad00bb3fe36",
-  "body": "Listen-/Detailabgleich 2026-10-31 bestätigt die bestehende Kontextlücke: GET /api/tickets/:id liefert parentId, aber keinen Elternpfad; contextFor() berechnet omitted, gibt jedoch nur packet zurück. Direkte Elternnamen dürfen deshalb nicht aus einem budgetbegrenzten Kontext als vollständig vorausgesetzt werden. Bestehenden Owner um Vertrag für direkten Parent und sichtbare Ancestor-Kürzung ergänzen; Relations bleiben beim separaten Beziehungsanzeige-Ticket. Keine neue Aufgabe oder Zuordnungsänderung.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:19:37.398Z"
-}

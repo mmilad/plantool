@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d1c-8007-7015-a0e2-981b42468a52",
-  "ticketId": "01a189a9-42b5-71b8-a846-9dc1985e3102",
-  "body": "UI-Review 2026-10-30: Quervergleich Konzept ↔ docs/ui-ticket-create-discard.svg fand einen Fokusfarb-Ausreißer (#1A1A1A statt des vorgeschlagenen Aktionsblaus #2457A7). SVG-Zielbild angeglichen; 2px Kontur und 3px Abstand. Browser-/Tastaturabnahme bleibt später offen. Accessibility-Abstimmung und bestehende Parent-/Blocks-/relates_to-Ketten bleiben unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:00:17.671Z"
-}

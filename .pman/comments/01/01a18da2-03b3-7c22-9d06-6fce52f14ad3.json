@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18da2-03b3-7c22-9d06-6fce52f14ad3",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "Mobile FP-Review 2026-10-30: 34 ausgehende Konzept-Blocker waren als Textzusammenfassung nicht vollständig erreichbar dargestellt. Bestehendes Beziehungsticket beschreibt anklickbare Gegen-Tickets; Wireframe und mobile SVG konkretisieren 44px-Ziele und sichtbaren Weg zur vollständigen Liste im Scrollbereich. Vorhandene Zugehörigkeiten/Graphkanten bleiben.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:26:07.667Z"
-}

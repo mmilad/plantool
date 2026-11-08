@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1b60e-2b3d-7d69-9184-bae5b402b846",
-  "ticketId": "01a1b579-31d5-717a-8778-4607699e9478",
-  "body": "Ticket detail: 'Plan & readiness' section with readiness reasons (provider waits, blockers), resolved code plan (implements/consumes/changes, requires/provides, contract input → output, provider tickets) and the design-check diagnostics for that ticket. New Design view: check summary, all diagnostics, component tree with contracts and the tickets implementing/consuming/changing them, shared types. Endpoints GET /api/tickets/:id/plan and GET /api/design. IDs in messages are shown as ticket titles. Verified in Chromium with the UserService/Cart example.",
-  "author": "claude",
-  "createdAt": "2026-11-07T12:49:04.317Z"
-}

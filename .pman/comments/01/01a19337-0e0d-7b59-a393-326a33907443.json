@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19337-0e0d-7b59-a393-326a33907443",
-  "ticketId": "01a18d87-251e-7ff7-9678-7a437fd0ef76",
-  "body": "Korrektur Live-Abnahme 2026-10-31: Der CLI-Start in der Ausführungsumgebung meldet 127.0.0.1:4000; ein zweiter Start dort wird mit PORT_IN_USE abgewiesen. Die in-app Tabs für 127.0.0.1:4000 und localhost:4000 zeigen jedoch beide  Diese Website ist nicht erreichbar; Shell fetch erhält EACCES, netstat/Windows Listenerinventar sieht den CLI-Prozess nicht. Ursache ist wahrscheinlich getrennte Netzwerk-/Prozessumgebung. Den unsichtbaren Hintergrundprozess beendet; Ticket bleibt in_progress bis der Start im Browser erreichbaren Host/Port verifiziert ist. Keine automatische Prozessbeendigung fremder Prozesse.",
-  "author": "local",
-  "createdAt": "2026-10-31T18:27:01.261Z"
-}

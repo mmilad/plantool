@@ -10,17 +10,17 @@ import { serve } from '../src/server.js';
 function send(url,method,headers={},body='') { return new Promise((resolve,reject)=>{const u=new URL(url);const req=request({hostname:u.hostname,port:u.port,path:u.pathname+u.search,method,headers},res=>{let d='';res.setEncoding('utf8');res.on('data',x=>d+=x);res.on('end',()=>resolve({status:res.statusCode,body:d,headers:res.headers}));});req.on('error',reject);req.end(body);}); }
 
 test('serve is loopback-only and protects writes with Host, Origin and CSRF checks',async t=>{
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));
   const page=await send(app.url,'GET',{host:new URL(app.url).host});assert.equal(page.status,200);
   const token=/"csrf":"([a-f0-9]+)"/.exec(page.body)?.[1];assert.ok(token);
   const blocked=await send(app.url,'POST',{host:new URL(app.url).host,'content-type':'application/json'},'{}');assert.equal(blocked.status,403);
   const badHost=await send(app.url,'GET',{host:'evil.example'});assert.equal(badHost.status,403);
-  const good=await send(app.url+'/api/tickets','POST',{host:new URL(app.url).host,origin:app.url,'content-type':'application/json','x-pman-csrf':token},JSON.stringify({title:'From browser'}));assert.equal(good.status,201,good.body);
+  const good=await send(app.url+'/api/tickets','POST',{host:new URL(app.url).host,origin:app.url,'content-type':'application/json','x-heist-csrf':token},JSON.stringify({title:'From browser'}));assert.equal(good.status,201,good.body);
 });
 
 test('document API lists metadata only and fetches one document by kind and id',async t=>{
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-docs-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-docs-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const {openProject}=await import('../src/index.js');const p=await openProject({cwd});
   const docs=[];for(let i=0;i<3;i++)docs.push(await p.documents.create('goals',{title:`Goal ${i}`,body:'x'.repeat(10000)}));
   const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};
@@ -34,16 +34,16 @@ test('document API lists metadata only and fetches one document by kind and id',
 });
 
 test('finishing a parent with open children over HTTP is a 409 conflict',async t=>{
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-open-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-open-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const parent=await p.tickets.create({title:'Header'});await p.tickets.create({title:'Subnav',parentId:parent.id});
   const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host=new URL(app.url).host;
   const page=await send(app.url,'GET',{host});const token=/"csrf":"([a-f0-9]+)"/.exec(page.body)[1];
-  const r=await send(`${app.url}/api/tickets/${parent.id}`,'PATCH',{host,origin:app.url,'x-pman-csrf':token,'content-type':'application/json'},JSON.stringify({status:'done'}));
+  const r=await send(`${app.url}/api/tickets/${parent.id}`,'PATCH',{host,origin:app.url,'x-heist-csrf':token,'content-type':'application/json'},JSON.stringify({status:'done'}));
   assert.equal(r.status,409);assert.equal(JSON.parse(r.body).code,'OPEN_WORK');
 });
 
 test('tree API returns lightweight paginated rows with child counts',async t=>{
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-tree-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-tree-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const {openProject}=await import('../src/index.js');const p=await openProject({cwd});
   const root=await p.tickets.create({title:'Root',description:'y'.repeat(5000),properties:{big:'z'.repeat(5000)}});for(let i=0;i<3;i++)await p.tickets.create({title:`Child ${i}`,parentId:root.id});
   const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};
@@ -54,7 +54,7 @@ test('tree API returns lightweight paginated rows with child counts',async t=>{
 });
 
 test('search API pages results and rejects stale snapshots with 409',async t=>{
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-search-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-search-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const {openProject}=await import('../src/index.js');const p=await openProject({cwd});for(let i=0;i<25;i++)await p.tickets.create({title:`Task ${String(i).padStart(2,'0')}`});
   const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};
   const a=JSON.parse((await send(`${app.url}/api/search?q=task`,'GET',host)).body);assert.equal(a.items.length,20);assert.equal(a.total,25);assert.equal(a.nextOffset,20);
@@ -65,10 +65,10 @@ test('search API pages results and rejects stale snapshots with 409',async t=>{
 });
 
 test('documents can be created and updated over HTTP with revision checks',async t=>{
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-docedit-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-docedit-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const tk=await p.tickets.create({title:'T'});
   const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host=new URL(app.url).host;
-  const token=/"csrf":"([a-f0-9]+)"/.exec((await send(app.url,'GET',{host})).body)[1];const w={host,origin:app.url,'x-pman-csrf':token,'content-type':'application/json'};
+  const token=/"csrf":"([a-f0-9]+)"/.exec((await send(app.url,'GET',{host})).body)[1];const w={host,origin:app.url,'x-heist-csrf':token,'content-type':'application/json'};
   const created=await send(`${app.url}/api/documents/decisions`,'POST',w,JSON.stringify({title:'Use JSON',body:'Because',links:[tk.id]}));assert.equal(created.status,201);const d=JSON.parse(created.body);assert.ok(d.revision);
   assert.equal((await send(`${app.url}/api/documents/decisions`,'POST',w,JSON.stringify({title:''}))).status,400);
   assert.equal((await send(`${app.url}/api/documents/decisions`,'POST',{host,'content-type':'application/json'},JSON.stringify({title:'x'}))).status,403);
@@ -79,7 +79,7 @@ test('documents can be created and updated over HTTP with revision checks',async
 });
 
 test('version endpoint changes per area when files change on disk',async t=>{
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-version-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-version-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const tk=await p.tickets.create({title:'A'});
   const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};
   const get=async()=>JSON.parse((await send(`${app.url}/api/version`,'GET',host)).body);
@@ -89,7 +89,7 @@ test('version endpoint changes per area when files change on disk',async t=>{
 });
 
 test('plan and design endpoints expose readiness, code plans and check results',async t=>{
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-design-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-design-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const {openProject}=await import('../src/index.js');const p=await openProject({cwd});
   await p.types.set('User',{email:'string'});await p.components.create({kind:'service',name:'UserService'});await p.components.create({kind:'method',name:'getUser',parentId:'UserService'});await p.contracts.set('getUser',{input:{userId:'string'},output:'User'});
   const prov=await p.tickets.create({title:'Build users'}),cons=await p.tickets.create({title:'Cart'});await p.codePlan.add(prov.id,'implements','UserService');await p.codePlan.add(cons.id,'consumes','getUser',{requires:['userId']});
@@ -101,7 +101,7 @@ test('plan and design endpoints expose readiness, code plans and check results',
 });
 
 test('relations endpoint returns both directions with counterpart tickets',async t=>{
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-rel-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-rel-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const a=await p.tickets.create({title:'A'}),b=await p.tickets.create({title:'B'}),c=await p.tickets.create({title:'C'});
   await p.relations.add(a.id,b.id,'blocks');await p.relations.add(b.id,c.id,'implements');
   const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};
@@ -111,7 +111,7 @@ test('relations endpoint returns both directions with counterpart tickets',async
 });
 
 test('comments API pages from the newest window and can centre on one comment',async t=>{
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'pman-ui-comments-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-comments-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const tk=await p.tickets.create({title:'T'});const ids=[];for(let i=0;i<45;i++)ids.push((await p.comments.add(tk.id,{body:`c${i}`})).id);
   const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};const get=async q=>JSON.parse((await send(`${app.url}/api/tickets/${tk.id}/comments${q}`,'GET',host)).body);
   const newest=await get('');assert.equal(newest.total,45);assert.equal(newest.offset,25);assert.deepEqual(newest.items.map(c=>c.body).slice(-1),['c44']);
@@ -122,14 +122,14 @@ test('comments API pages from the newest window and can centre on one comment',a
 });
 
 test('serve from any directory lists registered projects and scopes the API per project',async t=>{
-  const home=await fs.mkdtemp(path.join(os.tmpdir(),'pman-home-'));const prev=process.env.PMAN_HOME;process.env.PMAN_HOME=home;t.after(async()=>{process.env.PMAN_HOME=prev;await fs.rm(home,{recursive:true,force:true});});
+  const home=await fs.mkdtemp(path.join(os.tmpdir(),'heist-home-'));const prev=process.env.HEIST_HOME;process.env.HEIST_HOME=home;t.after(async()=>{process.env.HEIST_HOME=prev;await fs.rm(home,{recursive:true,force:true});});
   const {openProject}=await import('../src/index.js');const {registerProject}=await import('../src/registry.js');
-  const mk=async name=>{const cwd=await fs.mkdtemp(path.join(os.tmpdir(),`pman-multi-${name}-`));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd,name});return openProject({cwd});};
+  const mk=async name=>{const cwd=await fs.mkdtemp(path.join(os.tmpdir(),`heist-multi-${name}-`));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd,name});return openProject({cwd});};
   const shop=await mk('Shop'),game=await mk('Game');await shop.tickets.create({title:'Cart'});await shop.tickets.create({title:'Checkout',status:'in_progress'});await game.tickets.create({title:'Level 1'});
   await registerProject(shop);
-  const outside=await fs.mkdtemp(path.join(os.tmpdir(),'pman-outside-'));t.after(()=>fs.rm(outside,{recursive:true,force:true}));
+  const outside=await fs.mkdtemp(path.join(os.tmpdir(),'heist-outside-'));t.after(()=>fs.rm(outside,{recursive:true,force:true}));
   const app=await serve({cwd:outside,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host=new URL(app.url).host;
-  const token=/"csrf":"([a-f0-9]+)"/.exec((await send(app.url,'GET',{host})).body)[1];const w={host,origin:app.url,'x-pman-csrf':token,'content-type':'application/json'};
+  const token=/"csrf":"([a-f0-9]+)"/.exec((await send(app.url,'GET',{host})).body)[1];const w={host,origin:app.url,'x-heist-csrf':token,'content-type':'application/json'};
   let list=JSON.parse((await send(`${app.url}/api/projects`,'GET',{host})).body);assert.equal(list.defaultProjectId,null);assert.deepEqual(list.projects.map(p=>[p.key,p.tickets,p.open,p.inProgress]),[['SHOP',2,2,1]]);
   const added=await send(`${app.url}/api/projects`,'POST',w,JSON.stringify({path:game.root}));assert.equal(added.status,201);
   list=JSON.parse((await send(`${app.url}/api/projects`,'GET',{host})).body);assert.deepEqual(list.projects.map(p=>p.key),['GAME','SHOP']);
@@ -138,6 +138,6 @@ test('serve from any directory lists registered projects and scopes the API per 
   assert.equal((await send(`${app.url}/api/tree`,'GET',{host})).status,404,'no default project outside a repository');
   assert.equal((await send(`${app.url}/api/projects/000000000000/tree`,'GET',{host})).status,404);
   assert.equal((await send(`${app.url}/api/projects`,'POST',w,JSON.stringify({path:outside}))).status,404);
-  assert.equal((await send(`${app.url}/api/projects/${gameId}`,'DELETE',w)).status,200);assert.ok(await fs.access(path.join(game.root,'.pman','config.json')).then(()=>true),'files untouched');
+  assert.equal((await send(`${app.url}/api/projects/${gameId}`,'DELETE',w)).status,200);assert.ok(await fs.access(path.join(game.root,'.heist','config.json')).then(()=>true),'files untouched');
   assert.deepEqual(JSON.parse((await send(`${app.url}/api/projects`,'GET',{host})).body).projects.map(p=>p.key),['SHOP']);
 });

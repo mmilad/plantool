@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19274-238e-7436-89db-08d6e241e6d3",
-  "ticketId": "01a189ad-5c7c-7e68-b165-79fb9f674539",
-  "body": "Mockup-Abgleich 2026-10-31: ui-fp-layout.svg zeigte  Alle Tickets · 46, obwohl die sichtbare Hierarchie nur den UI-Programmbereich enthält. Aktueller pman tree: 46 Tickets insgesamt, zehn direkte UI-Kinder und elf sichtbare Einträge einschließlich des geöffneten Konzept-Untertickets. Die Mockup-Beschriftung wurde in docs/ui-fp-layout.svg auf UI-Programm · 10 direkt · 11 sichtbar korrigiert; Details stehen in docs/ui-review.md. Keine pman-Parent-/Relations-Änderung.",
-  "author": "local",
-  "createdAt": "2026-10-31T14:54:07.246Z"
-}

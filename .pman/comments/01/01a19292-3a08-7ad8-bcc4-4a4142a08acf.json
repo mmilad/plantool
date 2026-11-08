@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19292-3a08-7ad8-bcc4-4a4142a08acf",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "Planungsreview 2026-10-31: Leeren Projekteinstieg als Desktop-, 390px- und 320px-Vorschau in docs/ui-prototype-overview-empty*.svg ergänzt und in ui-wireframe/ui-review dokumentiert. Eine primäre Aktion zum bestehenden Ticket-Erstellen-Ablauf; keine irreführenden Kennzahlen. Bestehende Zuständigkeit beibehalten; keine neuen Tickets oder Kanten.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:26:59.080Z"
-}

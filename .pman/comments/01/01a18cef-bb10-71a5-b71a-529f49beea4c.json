@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cef-bb10-71a5-b71a-529f49beea4c",
-  "ticketId": "01a189ac-28f7-7250-b817-2026a531a7b5",
-  "body": "UI-REVIEW 2026-10-30: Die statischen Desktop-/Mobilnavigationen waren noch nicht mit dem vorhandenen Icon-Inventar abgestimmt. Ergänzt wurden house, \ticket und ein generischer \files-Kandidat für Planungsdokumente; Einzelzeichen für Ziel, Plan und Entscheidung bleiben den Unterarten vorbehalten. Befund und Vorschlag stehen in docs/ui-review.md, ui-wireframe.md und den Icon-/Desktop-/Mobilvorschauen. Zugehörigkeit über das bestehende Icon-Inventar-Ticket; keine neue Aufgabe oder Beziehungskante.",
-  "author": "local",
-  "createdAt": "2026-10-30T13:11:23.664Z"
-}

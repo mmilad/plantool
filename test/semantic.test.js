@@ -6,11 +6,11 @@ import path from 'node:path';
 import { initProject, openProject } from '../src/index.js';
 import { splitText, cacheDir, openCache, closeCaches } from '../src/semantic.js';
 
-process.env.PMAN_EMBEDDER = 'hash';
+process.env.HEIST_EMBEDDER = 'hash';
 async function setup(t) {
-  const home = await fs.mkdtemp(path.join(os.tmpdir(), 'pman-sem-home-')); const prev = process.env.PMAN_HOME; process.env.PMAN_HOME = home;
-  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'pman-sem-'));
-  t.after(async () => { closeCaches(); process.env.PMAN_HOME = prev; await fs.rm(home, { recursive: true, force: true }); await fs.rm(cwd, { recursive: true, force: true }); });
+  const home = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-sem-home-')); const prev = process.env.HEIST_HOME; process.env.HEIST_HOME = home;
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-sem-'));
+  t.after(async () => { closeCaches(); process.env.HEIST_HOME = prev; await fs.rm(home, { recursive: true, force: true }); await fs.rm(cwd, { recursive: true, force: true }); });
   await initProject({ cwd, name: 'Shop' }); return openProject({ cwd });
 }
 

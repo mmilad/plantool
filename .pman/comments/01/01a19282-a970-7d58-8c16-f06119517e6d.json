@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a19282-a970-7d58-8c16-f06119517e6d",
-  "ticketId": "01a189b1-f688-7fd0-9d9d-33b3016a1acc",
-  "body": "Reviewabgleich 2026-10-31 über Desktop/390/320: Root-Form bleibt ohne Parent; Child-Form übernimmt exakt den sichtbaren festen Elternticketkontext; keine Statuskaskade. Bestehender Core-Vertrag: erster Projektstatus, priority normal, Labels optional, keine Properties-Felder ohne Schema. Feedbackzustände (Validierung, bestätigte Ablehnung, unklarer POST, 201 + Refreshfehler) sind in docs/ui-ticket-create-feedback.svg getrennt. Abnahme Root/Child-Fixtures inkl. Parent unverändert und Refreshfehler ohne zweiten POST. Parent dieses Tickets unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:09:59.024Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1927f-0548-7f3b-b483-ba026a833c02",
-  "ticketId": "01a189af-d764-72c3-a674-f5601919f131",
-  "body": "UI-Review-Quellabgleich 2026-10-31 bestätigt: Core kann Relations listen, Browser-Server hat keine /api/relations-Leseroute. Bestehende Zuständigkeit bleibt lesbare Anzeige/Navigieren; Schreibpflege bleibt im separaten 01a18c8f-1f44-7856-827e-624aeb1e0e07 und folgt der Anzeige. Elternpfad getrennt halten. Kein neues Ticket/Umhängen.",
-  "author": "local",
-  "createdAt": "2026-10-31T15:06:00.393Z"
-}

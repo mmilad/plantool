@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18cbb-6eb8-74ab-b6b3-a1240b4ac78e",
-  "ticketId": "01a189b1-a4e4-7227-aca6-1283ecc6d8bd",
-  "body": "ÜBERSICHTS-REVIEW 2026-10-30: Beide Plantitel in docs/ui-prototype-overview.svg mit pman-Suche abgeglichen und korrigiert: 01a189a9-42b7-7724-92e3-8da8d2a2dcfe sowie 01a189ac-2905-7324-b64b-59d828960a48. Vollständige Titel passen bei 12 CSS-Pixeln in die 360px Karteninnenbreite. Bestehende Parent-/Blocks-/relates_to-Zuordnungen unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T12:14:16.248Z"
-}

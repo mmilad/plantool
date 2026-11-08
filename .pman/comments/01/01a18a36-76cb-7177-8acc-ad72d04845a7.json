@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18a36-76cb-7177-8acc-ad72d04845a7",
-  "ticketId": "01a189c1-79a0-74ae-b519-20b51b0aefa8",
-  "body": "UI-Review 2026-10-30: Live-Auswahl des fortlaufenden Review-Tickets in einem frisch geladenen Tab geprüft: der Artikel wechselt zum richtigen Ticket, die Browseradresse bleibt jedoch auf http://127.0.0.1:59456/ ohne ID, Query oder Fragment. Dieser Durchlauf prüft nur das URL-Verhalten beim Klick; Zurück/Vorwärts und Reload sind nicht erneut geprüft. Passende Beobachtung in docs/ui-review.md; Parent-/Blocks-Zugehörigkeiten bleiben bestehen.",
-  "author": "local",
-  "createdAt": "2026-10-30T00:29:47.595Z"
-}

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18da2-0268-7e1d-beef-8d3265d80bc3",
-  "ticketId": "01a189a9-42b2-70df-956e-b163f531de32",
-  "body": "Responsive-Abgleich 2026-10-30: Die mobile FP-Detailvorschau hatte 34 Blocker, aber ohne klare Aktion zur vollständigen Liste und ohne tappbare Einzelziele. Jetzt zwei 44px-Ticketnavigationen plus 44px- Alle 34 ansehen-Aktion; Detailscroll erlaubt weitere Beziehungen/Kommentare. Wireframe nachgezogen; Parent/Blocks-/relates_to-Struktur unverändert.",
-  "author": "local",
-  "createdAt": "2026-10-30T16:26:07.336Z"
-}

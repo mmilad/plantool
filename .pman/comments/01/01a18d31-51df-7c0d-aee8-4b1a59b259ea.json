@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a18d31-51df-7c0d-aee8-4b1a59b259ea",
-  "ticketId": "01a189a9-42ad-7d98-bb63-7d9d4d25351d",
-  "body": "Layoutoption C korrigiert 2026-10-30: Das Ticketdetail ist geöffnet, daher muss der Auswahlhintergrund der kompakten Iconleiste hinter dem Ticketicon liegen. In docs/ui-layout-options.svg war er noch hinter Übersicht. Jetzt stimmen Iconfarbe und Auswahlfläche mit dem aktiven Bereich Tickets überein. Kein Parent-/Relation-Change.",
-  "author": "local",
-  "createdAt": "2026-10-30T14:23:02.112Z"
-}
