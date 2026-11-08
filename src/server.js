@@ -57,6 +57,21 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
       if (req.method==='GET'&&pathname==='/api/tree'){const offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',5000,1,5000);const {items,total}=await project.tree(null,{limit,offset,fields:'row',withTotal:true});return send(res,200,{items,total,offset,limit});}
       if (req.method==='GET'&&pathname==='/api/search/status')return send(res,200,{...await project.semantic.status(),indexing:ctx.indexing||undefined});
       if (req.method==='POST'&&pathname==='/api/index/update'){ctx.semanticEnabled=true;startIndex(ctx);return send(res,202,{started:true});}
+      // Decisions. Requests from the web view act for the person, so `by` defaults to human.
+      if (pathname==='/api/decisions'&&req.method==='GET') return send(res,200,await project.decisions.list({all:url.searchParams.get('all')==='1'}));
+      if (pathname==='/api/decisions'&&req.method==='POST'){const i=await body(req);return send(res,201,await project.decisions.ask(String(i.question??''),{parentId:i.parentId,options:i.options??[],criteria:i.criteria??[],owner:i.owner,reversible:i.reversible,why:i.why,blocks:i.blocks??[],createdBy:'web'}));}
+      const dm=/^\/api\/decisions\/([^/]+)(\/[a-z]+)?$/.exec(pathname);
+      if (dm) {
+        const ref=decodeURIComponent(dm[1]), action=dm[2]??'';
+        if (req.method==='GET'&&action==='') return send(res,200,await project.decisions.evaluate(ref));
+        if (req.method==='POST'&&action==='/options'){const i=await body(req);return send(res,201,await project.decisions.addOption(ref,i));}
+        if (req.method==='POST'&&action==='/criteria'){const i=await body(req);return send(res,200,await project.decisions.setCriteria(ref,i.criteria??''));}
+        if (req.method==='POST'&&action==='/recommend'){const i=await body(req);return send(res,200,await project.decisions.recommend(ref,i.option,{why:i.why,by:i.by??'human'}));}
+        if (req.method==='POST'&&action==='/decide'){const i=await body(req);return send(res,200,await project.decisions.decide(ref,i.option,{why:i.why,by:i.by??'human'}));}
+        if (req.method==='POST'&&action==='/reopen'){const i=await body(req);return send(res,200,await project.decisions.reopen(ref,{by:i.by??'human'}));}
+      }
+      const sm=/^\/api\/options\/([^/]+)\/score$/.exec(pathname);
+      if (sm&&req.method==='POST'){const i=await body(req);return send(res,200,await project.decisions.score(decodeURIComponent(sm[1]),i.scores??{}));}
       if (req.method==='GET'&&pathname==='/api/search'&&['hybrid','semantic'].includes(url.searchParams.get('mode'))){const types=(url.searchParams.get('types')||'').split(',').map(x=>x.trim()).filter(Boolean);const q=String(url.searchParams.get('q')??'').trim();if(!q)throw new ValidationError('Search query is required');const mode=url.searchParams.get('mode');const r=mode==='semantic'?await project.semantic.search(q,{types,limit:200}).then(x=>({mode:'semantic',...x})).catch(e=>({mode:'keyword',fallbackReason:e.message,hits:null})):await project.semantic.hybrid(q,{types});const hits=r.hits??(await project.search(q,{types}));const snapshot=createHash('sha256').update(`${r.mode}|${r.generation}|${hits.map(h=>h.type+':'+h.id).join(',')}`).digest('hex').slice(0,16);const want=url.searchParams.get('snapshot');if(want&&want!==snapshot)return send(res,409,{error:'Search results changed since the first page; restart from the first page',code:'STALE_SEARCH'});const offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',20,1,100);const items=await enrichHits(project,hits.slice(offset,offset+limit).map(h=>({...h,score:undefined})));return send(res,200,{query:q,mode:r.mode,fallbackReason:r.fallbackReason,items,total:hits.length,offset,limit,nextOffset:offset+items.length<hits.length?offset+items.length:null,snapshot});}
       if (req.method==='GET'&&pathname==='/api/search'){const types=(url.searchParams.get('types')||'').split(',').map(x=>x.trim()).filter(Boolean);const page=await project.searchPage(url.searchParams.get('q'),{offset:intParam(url,'offset',0,0),limit:intParam(url,'limit',20,1,100),types,snapshot:url.searchParams.get('snapshot')||undefined});return send(res,200,{...page,mode:'keyword',items:await enrichHits(project,page.items)});}
       let m=/^\/api\/tickets\/([A-Za-z0-9-]+)$/.exec(pathname);

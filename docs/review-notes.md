@@ -11,6 +11,9 @@ Getestet wurden die Abnahme mit dem Pokémon-Beispiel über die CLI (Agent-Sicht
 - `ticket create` warnt, wenn schon ein Ticket mit gleichem Titel existiert, und zeigt den Befehl zum Verlinken.
 - Eine Ticket-Übernahme (`done`) bei aktiver Beanspruchung braucht den Beanspruchenden (`--agent`) oder `--force`.
 - Konsumenten mit `needs full` und nur geplantem Mock erhalten eine Warnung in `check`.
+- `done` ohne `--note` gibt einen Hinweis aus, blockiert aber nicht.
+- JSON-Ausgaben von Tickets enthalten jetzt den `key`.
+- Server-Routen für Entscheidungen (anlegen, lesen, bewerten, empfehlen, entscheiden, wieder öffnen) sind vorhanden und getestet. Über HTTP gilt `by` standardmäßig als Mensch, weil die Web-Ansicht im Namen der Person handelt.
 
 ## Offen (nach Priorität)
 
@@ -19,4 +22,5 @@ Getestet wurden die Abnahme mit dem Pokémon-Beispiel über die CLI (Agent-Sicht
 3. Die Dubletten-Warnung vergleicht nur identische Titel. Die semantische Ähnlichkeit (`similarTickets`) wird beim Anlegen noch nicht genutzt.
 4. Für Features wie „Trade offer flow“ gibt es kein Blueprint. Ein generisches Feature-Blueprint würde die Planung erleichtern.
 5. `decide --by human` ist eine Angabe, die jeder setzen kann. Das schützt vor Versehen, nicht vor einem Agenten, der die Antwort erfindet. Das muss im Briefing ehrlich stehen.
-6. Noch nicht geprüft: eine Entscheidung, die ein Feature blockiert, über die Web-UI, Server-Routen und die Option mit eigenem Plan bei gewählter Option.
+6. Die Web-Ansicht zeigt Entscheidungen noch nicht an.
+7. Die HTTP-Routen haben keine eigene Berechtigung. Sie sind nur lokal erreichbar und mit CSRF-Token geschützt, ein Agent mit Zugriff auf den Server könnte also als Mensch entscheiden.

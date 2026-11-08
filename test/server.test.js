@@ -141,3 +141,18 @@ test('serve from any directory lists registered projects and scopes the API per 
   assert.equal((await send(`${app.url}/api/projects/${gameId}`,'DELETE',w)).status,200);assert.ok(await fs.access(path.join(game.root,'.heist','config.json')).then(()=>true),'files untouched');
   assert.deepEqual(JSON.parse((await send(`${app.url}/api/projects`,'GET',{host})).body).projects.map(p=>p.key),['SHOP']);
 });
+
+test('decision routes create, read, score and decide through the local server', async t => {
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-ui-decisions-')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd });
+  const app = await serve({ cwd, port: 0 }); t.after(() => new Promise(r => app.server.close(r)));
+  const host = new URL(app.url).host;
+  const page = await send(app.url, 'GET', { host }); const token = /"csrf":"([a-f0-9]+)"/.exec(page.body)?.[1]; assert.ok(token);
+  const write = (path, method, payload) => send(app.url + path, method, { host, origin: app.url, 'content-type': 'application/json', 'x-heist-csrf': token }, JSON.stringify(payload));
+  const created = JSON.parse((await write('/api/decisions', 'POST', { question: 'Which framework?', criteria: 'Speed:3', options: ['A', 'B'] })).body);
+  const id = created.decision.id; assert.equal(created.options.length, 2);
+  const listed = JSON.parse((await send(app.url + '/api/decisions', 'GET', { host })).body); assert.ok(listed.some(d => d.id === id));
+  const scored = await write(`/api/options/${created.options[0].id}/score`, 'POST', { scores: { [created.decision.decision.criteria[0].id]: 5 } }); assert.equal(scored.status, 200);
+  const evaluated = JSON.parse((await send(app.url + `/api/decisions/${id}`, 'GET', { host })).body); assert.equal(evaluated.suggested.option, created.options[0].id);
+  const decided = await write(`/api/decisions/${id}/decide`, 'POST', { option: created.options[0].id, why: 'fastest in our tests' }); assert.equal(decided.status, 200);
+  assert.equal(JSON.parse(decided.body).chosen, created.options[0].id);
+});
