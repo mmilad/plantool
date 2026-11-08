@@ -47,7 +47,22 @@ Run `pman --help` for the current command reference. The first release supports 
 
 ## Search
 
-`pman search QUERY` is an offline keyword search over tickets, comments, goals, plans and decisions. Results are ranked (exact title, title prefix, title contains, body) with stable tie-breaks and paged: `--limit` (max 100), `--offset`, `--type ticket,comment,goal,plan,decision`. JSON output includes `total`, `nextOffset` and a `snapshot`; passing a stale snapshot to a follow-up page fails with `STALE_SEARCH` instead of mixing old and new results. Comment hits carry their `ticketId`. Search reads the canonical files on every query; there is no index yet.
+`pman search QUERY` is an offline keyword search over tickets, comments, goals, plans and decisions. Results are ranked (exact title, title prefix, title contains, body) with stable tie-breaks and paged: `--limit` (max 100), `--offset`, `--type ticket,comment,goal,plan,decision`. JSON output includes `total`, `nextOffset` and a `snapshot`; passing a stale snapshot to a follow-up page fails with `STALE_SEARCH` instead of mixing old and new results. Comment hits carry their `ticketId`. Keyword search reads the canonical files on every query and always works.
+
+### Semantic search (optional)
+
+Semantic search finds tickets by meaning, e.g. "navigation" also finds "menu". It is opt-in per checkout and runs fully locally:
+
+```sh
+pnpm exec pman index update                  # build or refresh the index (first run downloads the model, ~120 MB)
+pnpm exec pman search "burger menu" --mode hybrid
+pnpm exec pman similar PM-12                 # tickets that look like PM-12, with "likely overlap" flags
+pnpm exec pman index status
+```
+
+Embeddings use the optional dependency `@huggingface/transformers` (ONNX) with `Xenova/multilingual-e5-small`. Plans are expected to be written in English. The index lives outside the repo in `~/.pman/cache/<projectId>/db.sqlite` (SQLite in WAL mode) and is derived data: delete it any time, `pman index rebuild` recreates it. `hybrid` combines semantic and keyword results; when no index exists or the model cannot load, it falls back to keyword search and says why.
+
+In the web UI the search box shows which mode is active and offers **Enable semantic search**. Once enabled, `pman serve` keeps the index up to date in the background, and each ticket shows **Similar tickets** with buttons to mark a duplicate or link related work.
 
 ## Agent workflow
 
@@ -109,7 +124,7 @@ See [`src/index.d.ts`](src/index.d.ts) for the exported API and [`schema/pman.sc
 
 Parent rollups are derived views and never cascade status edits to children. Git remains the collaboration and history layer; simultaneous edits to the same record are not distributed transactions. The local server has no login and binds only to loopback; it checks Host and Origin and requires a per-server CSRF token for writes. It does not load extensions or remote assets.
 
-Agent launching, hosted accounts/sharing, remote sync, MCP, arbitrary extensions/hooks, semantic search, binary asset ingestion, global install, and npm publication are outside this first release. The merged contract and research are in [`docs/product-vision.md`](docs/product-vision.md), [`docs/architecture-proposal.md`](docs/architecture-proposal.md), [`docs/roadmap.md`](docs/roadmap.md), and [`docs/research/fp-feature-matrix.md`](docs/research/fp-feature-matrix.md). Implementation choices are in [`docs/implementation-decisions.md`](docs/implementation-decisions.md).
+Agent launching, hosted accounts/sharing, remote sync, MCP, arbitrary extensions/hooks, binary asset ingestion, global install, and npm publication are outside this first release. The merged contract and research are in [`docs/product-vision.md`](docs/product-vision.md), [`docs/architecture-proposal.md`](docs/architecture-proposal.md), [`docs/roadmap.md`](docs/roadmap.md), and [`docs/research/fp-feature-matrix.md`](docs/research/fp-feature-matrix.md). Implementation choices are in [`docs/implementation-decisions.md`](docs/implementation-decisions.md).
 
 ## Development
 

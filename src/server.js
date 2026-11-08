@@ -55,6 +55,9 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
 
       if (req.method==='GET'&&pathname==='/api/version')return send(res,200,await ctx.version());
       if (req.method==='GET'&&pathname==='/api/tree'){const offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',5000,1,5000);const {items,total}=await project.tree(null,{limit,offset,fields:'row',withTotal:true});return send(res,200,{items,total,offset,limit});}
+      if (req.method==='GET'&&pathname==='/api/search/status')return send(res,200,{...await project.semantic.status(),indexing:ctx.indexing||undefined});
+      if (req.method==='POST'&&pathname==='/api/index/update'){ctx.semanticEnabled=true;startIndex(ctx);return send(res,202,{started:true});}
+      if (req.method==='GET'&&pathname==='/api/search'&&['hybrid','semantic'].includes(url.searchParams.get('mode'))){const types=(url.searchParams.get('types')||'').split(',').map(x=>x.trim()).filter(Boolean);const q=String(url.searchParams.get('q')??'').trim();if(!q)throw new ValidationError('Search query is required');const mode=url.searchParams.get('mode');const r=mode==='semantic'?await project.semantic.search(q,{types,limit:200}).then(x=>({mode:'semantic',...x})).catch(e=>({mode:'keyword',fallbackReason:e.message,hits:null})):await project.semantic.hybrid(q,{types});const hits=r.hits??(await project.search(q,{types}));const snapshot=createHash('sha256').update(`${r.mode}|${r.generation}|${hits.map(h=>h.type+':'+h.id).join(',')}`).digest('hex').slice(0,16);const want=url.searchParams.get('snapshot');if(want&&want!==snapshot)return send(res,409,{error:'Search results changed since the first page; restart from the first page',code:'STALE_SEARCH'});const offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',20,1,100);const tickets=new Map((await project.tickets.list({limit:Infinity})).map(t=>[t.id,t]));const items=hits.slice(offset,offset+limit).map(h=>({...h,key:h.type==='ticket'?project.ticketKey(tickets.get(h.id)):undefined,score:undefined}));return send(res,200,{query:q,mode:r.mode,fallbackReason:r.fallbackReason,items,total:hits.length,offset,limit,nextOffset:offset+items.length<hits.length?offset+items.length:null,snapshot});}
       if (req.method==='GET'&&pathname==='/api/search'){const types=(url.searchParams.get('types')||'').split(',').map(x=>x.trim()).filter(Boolean);return send(res,200,await project.searchPage(url.searchParams.get('q'),{offset:intParam(url,'offset',0,0),limit:intParam(url,'limit',20,1,100),types,snapshot:url.searchParams.get('snapshot')||undefined}));}
       let m=/^\/api\/tickets\/([A-Za-z0-9-]+)$/.exec(pathname);
       if(m&&req.method==='GET')return send(res,200,await project.tickets.get(m[1]));
@@ -74,6 +77,9 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
       if(m&&req.method==='POST'){const input=await body(req);const d=await project.documents.create(m[1],{title:input.title,body:input.body,status:input.status,links:input.links});const r=await project.documents.getVersioned(m[1],d.id);return send(res,201,{...r.document,kind:m[1],revision:r.revision});}
       m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/relations$/.exec(pathname);
       if(m&&req.method==='GET'){await project.tickets.get(m[1]);const rels=await project.relations.list(m[1]);const tickets=new Map((await project.tickets.list({limit:Infinity})).map(x=>[x.id,x]));return send(res,200,rels.map(r=>{const outgoing=r.sourceId===m[1],other=tickets.get(outgoing?r.targetId:r.sourceId);return {id:r.id,type:r.type,direction:outgoing?'outgoing':'incoming',ticket:other?{id:other.id,title:other.title,status:other.status}:{id:outgoing?r.targetId:r.sourceId,missing:true}};}));}
+      m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/similar$/.exec(pathname);
+      if(m&&req.method==='GET'){try{return send(res,200,{available:true,items:await project.semantic.similar(m[1],{limit:intParam(url,'limit',5,1,20)})});}catch(e){if(['SEMANTIC_UNAVAILABLE','NOT_INDEXED'].includes(e.code)||/not been built|not indexed/i.test(e.message))return send(res,200,{available:false,reason:e.message,items:[]});throw e;}}
+      if(pathname==='/api/relations'&&req.method==='POST'){const input=await body(req);return send(res,201,await project.relations.add(input.sourceId,input.targetId,input.type));}
       m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/plan$/.exec(pathname);
       if(m&&req.method==='GET'){const ctx=await project.context(m[1],{budget:1e9});const check=await project.check();const mine=x=>x.ticketId===m[1]||(x.tickets??[]).includes(m[1])||(x.consumers??[]).includes(m[1]);return send(res,200,{readiness:ctx.readiness,codePlan:ctx.codePlan,errors:check.errors.filter(mine),warnings:check.warnings.filter(mine)});}
       if(pathname==='/api/design'&&req.method==='GET'){const [components,types,contracts,check]=await Promise.all([project.components.list(),project.types.list(),project.contracts.list(),project.check()]);const {qualifiedNames}=await import('./design.js');const names=qualifiedNames(components);const tickets=await project.tickets.list({limit:Infinity});const usage=new Map();for(const t of tickets)for(const [key,list] of Object.entries(t.codePlan??{}))for(const e of list??[]){if(!usage.has(e.component))usage.set(e.component,[]);usage.get(e.component).push({ticketId:t.id,title:t.title,status:t.status,relation:key,requires:e.requires});}
@@ -97,17 +103,23 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
     });
     server.listen({host:'127.0.0.1',port},resolve);
   });
+  server.on('close',()=>{for(const c of contexts.values())clearInterval(c.timer);});
   const address=server.address(), actualPort=address.port, url=`http://127.0.0.1:${actualPort}`; boundPort=actualPort;
   if(open) openBrowser(url);
   return { server, url, project: defaultId ? contexts.get(defaultId).project : null, defaultProjectId: defaultId };
 }
 /** Per-project state: the opened project and its cheap change fingerprint (size+mtime, cached 2 s). */
-function makeContext(project){let cached=null;return {project,async version(){
+/** Keeps the semantic index fresh for projects where it was enabled (an index already exists or the UI asked for it). */
+function startIndex(ctx){if(ctx.indexing)return;ctx.indexing=true;ctx.project.semantic.update().catch(e=>{ctx.lastIndexError=e.message;}).finally(()=>{ctx.indexing=false;});}
+function makeContext(project){let cached=null;const ctx={project,semanticEnabled:false,indexing:false,lastIndexVersion:null,async version(){
   if(cached&&Date.now()-cached.at<2000)return cached.value;
   const groups={tree:['tickets','relationships','components','types','contracts'],documents:['goals','plans','decisions'],comments:['comments']},parts={};
   for(const [name,folders] of Object.entries(groups)){const h=createHash('sha256');for(const folder of folders)await fingerprint(path.join(project.dir,folder),h);parts[name]=h.digest('hex').slice(0,16);}
   const config=await fs.stat(path.join(project.dir,'config.json')).catch(()=>null);parts.config=config?`${config.size}:${config.mtimeMs}`:'missing';
-  const value={version:createHash('sha256').update(JSON.stringify(parts)).digest('hex').slice(0,16),parts};cached={at:Date.now(),value};return value;}};}
+  const value={version:createHash('sha256').update(JSON.stringify(parts)).digest('hex').slice(0,16),parts};cached={at:Date.now(),value};return value;}};
+  // index changes in the background, but only if semantic search is enabled for this checkout
+  ctx.timer=setInterval(async()=>{try{if(!ctx.semanticEnabled){const st=await project.semantic.status();ctx.semanticEnabled=!!st.generation;}if(!ctx.semanticEnabled||ctx.indexing)return;const v=await ctx.version();const key=v.parts.tree+v.parts.documents+v.parts.comments;if(key!==ctx.lastIndexVersion){ctx.lastIndexVersion=key;startIndex(ctx);}}catch{}},10000);ctx.timer.unref?.();
+  return ctx;}
 function intParam(url,name,fallback,min,max=Number.MAX_SAFE_INTEGER){const raw=url.searchParams.get(name);if(raw===null)return fallback;const n=Number(raw);if(!Number.isInteger(n)||n<min||n>max)throw new ValidationError(`${name} must be an integer between ${min} and ${max}`);return n;}
 async function fingerprint(dir,h){let entries;try{entries=await fs.readdir(dir,{withFileTypes:true});}catch{h.update(`${dir}:missing\n`);return;}entries.sort((a,b)=>a.name.localeCompare(b.name));for(const e of entries){const full=path.join(dir,e.name);if(e.isDirectory()){await fingerprint(full,h);continue;}if(e.name.endsWith('.tmp'))continue;const st=await fs.stat(full).catch(()=>null);if(st)h.update(`${e.name}:${st.size}:${st.mtimeMs}\n`);}}
 function safeToken(a,b){if(typeof a!=='string'||a.length!==b.length)return false;return timingSafeEqual(Buffer.from(a),Buffer.from(b));}

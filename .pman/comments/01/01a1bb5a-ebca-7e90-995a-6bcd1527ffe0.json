@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb5a-ebca-7e90-995a-6bcd1527ffe0",
+  "ticketId": "01a189bd-b44d-7e95-84fc-66d307543b12",
+  "body": "Semantic search is now implemented end to end (PM-31/32/33 done): search shows the active mode, offers 'Enable semantic search', falls back to keyword with a reason, and tickets show Similar tickets with Duplicate/Relate. Stays open until its blockers PM-28 (hit navigation by type) and PM-21 (systematic state messages) are done.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:31:00.426Z"
+}

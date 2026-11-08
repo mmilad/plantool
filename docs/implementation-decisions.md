@@ -99,6 +99,8 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - e5 needs `query:` for queries and `passage:` for indexed text. Each ticket additionally stores its title as a `query:`-embedded identity vector, used only for similarity between tickets (symmetric task); search uses the passage vectors only.
 - e5 compresses cosine scores into a narrow band, so "likely overlap" is relative: a candidate must stand at least 3.5 standard deviations above the mean similarity of all other tickets (planted duplicate z 3.7, related siblings up to 3.0) and must not already be linked. Ancestors and descendants are excluded. Calibrate again with more real duplicates.
 - Keyword search remains available at all times; besides phrase matches it now also matches when all query words occur.
+- Server: `GET /api/search?mode=hybrid|semantic` (paged, snapshot bound to the index generation, keyword fallback with `fallbackReason`), `GET /api/search/status`, `POST /api/index/update` (202, runs in the background), `GET /api/tickets/:id/similar` (returns `available:false` instead of an error when there is no index), `POST /api/relations`.
+- Indexing is opt-in: `pman serve` never downloads a model on its own. It re-indexes in the background (every 10 s at most, single-flight, only when tickets, documents or comments changed) only for checkouts that already have an index or where the UI's **Enable semantic search** was used.
 
 ## Verification and remaining release work
 

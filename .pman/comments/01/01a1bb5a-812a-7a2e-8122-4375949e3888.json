@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb5a-812a-7a2e-8122-4375949e3888",
+  "ticketId": "01a189d0-4004-7639-a6b5-705446c81ae4",
+  "body": "Implemented: local ONNX embeddings (multilingual-e5-small via optional @huggingface/transformers, chosen by bench/search-eval.mjs), SQLite index in ~/.pman/cache/<projectId>/db.sqlite (WAL), CLI index/search --mode/similar, server API (/api/search?mode=hybrid, /api/search/status, /api/index/update, /api/tickets/:id/similar, POST /api/relations) and UI (search mode label, Enable semantic search, Similar tickets with Duplicate/Relate). See docs/implementation-decisions.md.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:30:33.130Z"
+}
