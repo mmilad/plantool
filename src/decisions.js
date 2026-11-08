@@ -129,19 +129,22 @@ export function attachDecisionApi(p) {
       if (o.parentId !== d.id || o.kind !== 'option') throw new ValidationError('The option does not belong to this decision');
       if (o.status === 'cancelled') throw new ValidationError('This option was cancelled');
       if (!why?.trim()) throw new ValidationError('Say why with --why; the reason is kept with the decision');
+      const decider = by ?? 'unknown', owner = d.decision?.owner ?? 'human';
+      if (owner === 'human' && decider !== 'human') throw new ConflictError('A person decides this. Ask them, then record their answer with --by human', { owner, by: decider });
       const cancelled = [];
       for (const other of tickets.filter(t => t.parentId === d.id && t.kind === 'option' && t.id !== o.id)) {
         for (const t of [other, ...subtree(tickets, other.id)]) if (isOpen(t)) { await p.tickets.update(t.id, { status: 'cancelled' }, { force: true }); cancelled.push(t.id); }
       }
       const plan = subtree(tickets, o.id).filter(isOpen);
       if (!plan.length) await p.tickets.update(o.id, { status: 'done' }, { force: true });
-      await p.tickets.update(d.id, { status: 'done', decision: { ...(d.decision ?? {}), chosen: o.id, rationale: why.trim(), decidedBy: by ?? 'human', decidedAt: new Date().toISOString(), cancelled } }, { force: true });
+      await p.tickets.update(d.id, { status: 'done', decision: { ...(d.decision ?? {}), chosen: o.id, rationale: why.trim(), decidedBy: decider, decidedAt: new Date().toISOString(), cancelled } }, { force: true });
       return { ...(await evaluate(d.id)), cancelled, activated: plan.map(t => ({ id: t.id, key: p.ticketKey(t), title: t.title })) };
     },
     /** Undo a decision: restores what choosing it cancelled. */
-    async reopen(decisionRef) {
+    async reopen(decisionRef, { by } = {}) {
       const d = await getDecision(decisionRef);
       if (!d.decision?.chosen) return evaluate(d.id);
+      if ((d.decision?.owner ?? 'human') === 'human' && by !== 'human') throw new ConflictError('A person decides this. Ask them before reopening it, then pass --by human', { owner: 'human', by: by ?? 'unknown' });
       for (const id of d.decision.cancelled ?? []) { const t = await p.tickets.get(id).catch(() => null); if (t?.status === 'cancelled') await p.tickets.update(id, { status: 'todo' }, { force: true }); }
       const chosen = await p.tickets.get(d.decision.chosen).catch(() => null);
       if (chosen?.status === 'done') await p.tickets.update(chosen.id, { status: 'todo' }, { force: true });

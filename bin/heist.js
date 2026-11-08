@@ -184,8 +184,8 @@ async function main(argv) {
   if(command==='criteria') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const d=await project.decisions.setCriteria(positional[0],positional.slice(1).join(' '));out(opts.format==='json'?d:`Criteria: ${d.decision.criteria.map(c=>c.name+' ×'+c.weight).join(', ')}`,opts.format);return;}
   if(command==='recommend'||command==='decide') {const {opts,positional}=parse([sub,...rest].filter(Boolean));let e;
     if(command==='recommend'&&positional[1])e=await project.decisions.recommend(positional[0],positional[1],{why:one(opts.why),by:process.env.HEIST_AGENT||opts.by});
-    else if(command==='decide'&&opts.reopen)e=await project.decisions.reopen(positional[0]);
-    else if(command==='decide'&&positional[1]){e=await project.decisions.decide(positional[0],positional[1],{why:one(opts.why),by:one(opts.by)??process.env.HEIST_AGENT??'human'});}
+    else if(command==='decide'&&opts.reopen)e=await project.decisions.reopen(positional[0],{by:one(opts.by)??process.env.HEIST_AGENT});
+    else if(command==='decide'&&positional[1]){e=await project.decisions.decide(positional[0],positional[1],{why:one(opts.why),by:one(opts.by)??process.env.HEIST_AGENT});}
     else e=await project.decisions.evaluate(positional[0]);
     if(opts.format==='json'){out(e,'json');return;}
     console.log(`${e.key??e.id}  ${e.question}\n  ${e.status}; ${e.owner==='human'?'a person decides':'an agent may decide'}${e.reversible===true?', reversible':e.reversible===false?', hard to reverse':''}${e.decideBy?', decide by '+e.decideBy:''}`);if(e.why)console.log(`  why: ${e.why}`);
