@@ -28,5 +28,8 @@
     "check": "node --check src/index.js && node --check src/server.js && node --check bin/pman.js && node --check bench/scale.mjs && node --test",
     "benchmark:scale": "node bench/scale.mjs"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "optionalDependencies": {
+    "@huggingface/transformers": "^4.3.2"
+  }
 }
