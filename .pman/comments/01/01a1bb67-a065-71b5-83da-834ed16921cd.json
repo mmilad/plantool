@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb67-a065-71b5-83da-834ed16921cd",
+  "ticketId": "01a189ad-de0c-75e1-80f2-b5f8e42d750c",
+  "body": "Implemented: List (tree with filters, branch scope) and Board. Board columns come only from the configured statuses in their order; each ticket appears once in its stored status column; blocked/readiness and roll-ups are hints, never columns. Board can be scoped to a parent and to work items only (leaves); cards open the same stable ticket URL. Status changes by drag and drop or keyboard (Alt+←/→) through the normal update path. Also fixed: ?view=list / ?view=summary URLs showed an empty page; unknown views now fall back to Summary.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:44:53.093Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb67-a8ae-7da7-9a95-6b608e0ed489",
+  "ticketId": "01a189b0-9e75-77bd-ab31-a73a0dd328b5",
+  "body": "Icon inventory documented in docs/ui-icons.md: one meaning → one inline SVG, 16 px inline / 20 px navigation, decorative icons aria-hidden, icon-only buttons named. Replaced the remaining text glyphs and emoji (tree chevrons, remove crosses, search hit icons) with the shared uiIcon() set.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:44:55.214Z"
+}
