@@ -4,12 +4,13 @@
   "title": "pman serve from any directory for all registered projects",
   "kind": "task",
   "description": "Project-scoped API routes, project list/add/remove endpoints, lazy project opening with record cache, unchanged loopback/CSRF protections.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [],
   "properties": {},
   "parentId": "01a1b8de-22ff-764b-b757-4c9e83d8c00b",
   "createdAt": "2026-11-08T01:55:28.182Z",
-  "updatedAt": "2026-11-08T01:55:28.182Z",
-  "number": 77
+  "updatedAt": "2026-11-08T02:02:25.928Z",
+  "number": 77,
+  "assignee": null
 }

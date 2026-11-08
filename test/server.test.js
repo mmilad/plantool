@@ -120,3 +120,24 @@ test('comments API pages from the newest window and can centre on one comment',a
   assert.equal((await get('?around=01a189ac-28ff-73c2-8a77-000000000000')).found,false);
   assert.equal((await send(`${app.url}/api/tickets/01a189ac-28ff-73c2-8a77-000000000000/comments`,'GET',host)).status,404);
 });
+
+test('serve from any directory lists registered projects and scopes the API per project',async t=>{
+  const home=await fs.mkdtemp(path.join(os.tmpdir(),'pman-home-'));const prev=process.env.PMAN_HOME;process.env.PMAN_HOME=home;t.after(async()=>{process.env.PMAN_HOME=prev;await fs.rm(home,{recursive:true,force:true});});
+  const {openProject}=await import('../src/index.js');const {registerProject}=await import('../src/registry.js');
+  const mk=async name=>{const cwd=await fs.mkdtemp(path.join(os.tmpdir(),`pman-multi-${name}-`));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd,name});return openProject({cwd});};
+  const shop=await mk('Shop'),game=await mk('Game');await shop.tickets.create({title:'Cart'});await shop.tickets.create({title:'Checkout',status:'in_progress'});await game.tickets.create({title:'Level 1'});
+  await registerProject(shop);
+  const outside=await fs.mkdtemp(path.join(os.tmpdir(),'pman-outside-'));t.after(()=>fs.rm(outside,{recursive:true,force:true}));
+  const app=await serve({cwd:outside,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host=new URL(app.url).host;
+  const token=/"csrf":"([a-f0-9]+)"/.exec((await send(app.url,'GET',{host})).body)[1];const w={host,origin:app.url,'x-pman-csrf':token,'content-type':'application/json'};
+  let list=JSON.parse((await send(`${app.url}/api/projects`,'GET',{host})).body);assert.equal(list.defaultProjectId,null);assert.deepEqual(list.projects.map(p=>[p.key,p.tickets,p.open,p.inProgress]),[['SHOP',2,2,1]]);
+  const added=await send(`${app.url}/api/projects`,'POST',w,JSON.stringify({path:game.root}));assert.equal(added.status,201);
+  list=JSON.parse((await send(`${app.url}/api/projects`,'GET',{host})).body);assert.deepEqual(list.projects.map(p=>p.key),['GAME','SHOP']);
+  const gameId=list.projects[0].id;const tree=JSON.parse((await send(`${app.url}/api/projects/${gameId}/tree`,'GET',{host})).body);assert.deepEqual(tree.items.map(x=>[x.title,x.key]),[['Level 1','GAME-1']]);
+  const byKey=JSON.parse((await send(`${app.url}/api/projects/${list.projects[1].id}/tickets/SHOP-2`,'GET',{host})).body);assert.equal(byKey.title,'Checkout');
+  assert.equal((await send(`${app.url}/api/tree`,'GET',{host})).status,404,'no default project outside a repository');
+  assert.equal((await send(`${app.url}/api/projects/000000000000/tree`,'GET',{host})).status,404);
+  assert.equal((await send(`${app.url}/api/projects`,'POST',w,JSON.stringify({path:outside}))).status,404);
+  assert.equal((await send(`${app.url}/api/projects/${gameId}`,'DELETE',w)).status,200);assert.ok(await fs.access(path.join(game.root,'.pman','config.json')).then(()=>true),'files untouched');
+  assert.deepEqual(JSON.parse((await send(`${app.url}/api/projects`,'GET',{host})).body).projects.map(p=>p.key),['SHOP']);
+});

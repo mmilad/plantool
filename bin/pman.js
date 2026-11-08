@@ -62,7 +62,7 @@ Schemas: full JSON Schema subset or shorthand, e.g. '{"userId":"string","nick":"
   pman search QUERY [--type ticket,comment,goal,plan,decision] [--limit N] [--offset N] [--format json]
   pman context ID [--budget BYTES] [--format json]
   pman validate [--format json]
-  pman serve [--port N] [--open] (default: 127.0.0.1:4000)
+  pman serve [--port N] [--open]   all registered projects, from any directory (default: 127.0.0.1:4000)
 
 All commands operate on the nearest project-local .pman/ directory. Ticket IDs can be given as UUIDs or keys such as PM-42.`;
 
@@ -86,7 +86,7 @@ async function main(argv) {
   if(argv.includes('--help')||argv[0]==='help'||!argv.length){console.log(usage);return;}
   const [command,sub,...rest]=argv;
   if(command==='init'){const {opts}=parse([sub,...rest].filter(Boolean));const c=await initProject({name:opts.name,key:opts.key});await autoRegister(await openProject());out(`Initialized ${c.name} (${c.key}) at .pman/`);return;}
-  if(command==='serve'){const {opts}=parse([sub,...rest].filter(Boolean));const s=await serve({port:opts.port===undefined?4000:Number(opts.port),open:!!opts.open});console.log(`pman is serving ${s.project.config.name} at ${s.url}`);console.log('Press Ctrl-C to stop.');await new Promise(resolve=>s.server.once('close',resolve));return;}
+  if(command==='serve'){const {opts}=parse([sub,...rest].filter(Boolean));const s=await serve({port:opts.port===undefined?4000:Number(opts.port),open:!!opts.open,register:process.env.PMAN_NO_REGISTER!=='1'});const n=(await listProjects()).length;console.log(`pman is serving ${n} registered project${n===1?'':'s'}${s.project?` (opened in ${s.project.config.name})`:''} at ${s.url}`);console.log('Press Ctrl-C to stop.');await new Promise(resolve=>s.server.once('close',resolve));return;}
   if(command==='projects'){const parsed=parse([sub,...rest].filter(x=>x!==undefined));const opts=parsed.opts;const action=parsed.positional[0]??'list';const positional=parsed.positional.slice(1);
     if(action==='list'){const all=await listProjects();if(opts.format==='json'){out(all,'json');return;}if(!all.length){console.log(`No projects registered yet (${registryHome()}). Run pman init or any pman command inside a project, or pman projects add PATH.`);return;}for(const x of all)console.log(`${(x.key??'').padEnd(8)}  ${x.name.padEnd(28)}  ${x.available?'':'[missing] '}${x.root}`);return;}
     if(action==='add'){const e=await addProjectPath(positional[0]??'.');out(`Registered ${e.name} (${e.key}) at ${e.root}`);return;}
