@@ -119,6 +119,10 @@ pnpm exec heist component add --kind method --name getUser --parent UserService
 pnpm exec heist contract set UserService.getUser --input '{"userId":"string"}' --output User
 pnpm exec heist codeplan add <user-ticket> implements UserService
 pnpm exec heist codeplan add <cart-ticket> consumes UserService.getUser --requires userId,email:string --provides userId
+# A stand-in (mock) is an implements entry with --stage mock. A consumer that can work against it says --needs mock;
+# without these flags a consumer waits for the full implementation.
+pnpm exec heist codeplan add <mock-ticket> implements UserService --stage mock
+pnpm exec heist codeplan add <trade-ticket> consumes UserService.getUser --needs mock
 pnpm exec heist check
 # ✗ REQUIRED_FIELD_MISSING  Ticket … needs UserService.getUser → output.userId, but the contract returns: email, firstName, lastName
 ```
