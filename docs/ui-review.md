@@ -343,6 +343,6 @@ Checked in Chromium at 1366×820, 1300×850, 1920×1000 and iPhone 13, with a sm
 | Search hits showed only title + type | icon, key, status, parent, highlighted snippet, "similar meaning" |
 | Tree chevrons, crosses and search icons were text glyphs/emoji | shared inline SVG set (docs/ui-icons.md) |
 
-Contrast: body text 14.6:1; input borders `#8590a2` on white ≈ 3.2:1 (meets the 3:1 non-text minimum); primary button white on `#0c66e4` ≈ 5.6:1. Subtle grey buttons keep a visible text label and focus ring, as in Jira.
+Contrast: body text 14.6:1; input borders `#8590a2` on white ≈ 3.2:1 (meets the 3:1 non-text minimum); primary button white on `#0c66e4` ≈ 5.2:1. Subtle grey buttons keep a visible text label and focus ring, as in Jira.
 
 Open points (not blocking): board scoping is "all parents / one parent" plus "only work items" rather than strictly direct children; the projects page is reached via "Projects" because `/` opens the project `pman serve` was started in.
