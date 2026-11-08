@@ -12,7 +12,9 @@ import { serve } from '../src/server.js';
 const usage = `pman — Git-native planning and issue tracking
 
 Usage:
-  pman init [--name NAME]
+  pman init [--name NAME] [--key KEY]
+  pman keys init [--key KEY]        set the project key and number existing tickets
+  pman keys renumber                fix duplicate KEY-n numbers (e.g. after merging branches)
   pman ticket create --title TITLE [--parent ID] [--description TEXT] [--status STATUS]
                      [--kind task|feature|bug] [--priority low|normal|high|urgent] [--labels A,B]
   pman ticket list [--status STATUS] [--parent ID] [--format json]
@@ -59,7 +61,7 @@ Schemas: full JSON Schema subset or shorthand, e.g. '{"userId":"string","nick":"
   pman validate [--format json]
   pman serve [--port N] [--open] (default: 127.0.0.1:4000)
 
-All commands operate on the nearest project-local .pman/ directory.`;
+All commands operate on the nearest project-local .pman/ directory. Ticket IDs can be given as UUIDs or keys such as PM-42.`;
 
 function parse(args) {
   const opts={}, positional=[];
@@ -70,19 +72,19 @@ const out=(value,format='text',kind)=>{
   if(format==='json'){console.log(JSON.stringify(value,null,2));return;}
   if(typeof value==='string'){console.log(value);return;}
   if(Array.isArray(value)&&value.every(x=>x&&typeof x==='object'&&'id'in x&&'title'in x)){
-    for(const x of value)console.log(`${x.id}  ${x.status??x.rollup??''}  ${'depth'in x?'  '.repeat(x.depth):''}${x.title}`);
+    for(const x of value)console.log(`${(x.key??(Number.isInteger(x.number)&&globalThis.__pmanKey?`${globalThis.__pmanKey}-${x.number}`:x.id.slice(0,8))).padEnd(10)}  ${String(x.status??x.rollup??'').padEnd(11)}  ${'depth'in x?'  '.repeat(x.depth):''}${x.title}`);
     if(!value.length)console.log('No matching items.');return;
   }
-  if(value&&typeof value==='object'&&'id'in value)console.log(`${kind??value.type??value.kind??'record'} ${value.id}  ${value.title??''}`.trim());
-  else if(value&&typeof value==='object'&&'valid'in value)console.log(value.valid?'Project is valid.':`Project has ${value.errors.length} validation error(s).`);
+  if(value&&typeof value==='object'&&'id'in value)console.log(`${kind??value.type??value.kind??'record'} ${Number.isInteger(value.number)&&globalThis.__pmanKey?`${globalThis.__pmanKey}-${value.number} `:''}${value.id}  ${value.title??''}`.trim());
+  else if(value&&typeof value==='object'&&'valid'in value){for(const e of value.errors??[])console.log(`✗ ${e}`);for(const w of value.warnings??[])console.log(`! ${w}`);console.log(value.valid?'Project is valid.':`Project has ${value.errors.length} validation error(s).`);}
   else console.log(JSON.stringify(value,null,2));
 };
 async function main(argv) {
   if(argv.includes('--help')||argv[0]==='help'||!argv.length){console.log(usage);return;}
   const [command,sub,...rest]=argv;
-  if(command==='init'){const {opts}=parse([sub,...rest].filter(Boolean));const c=await initProject({name:opts.name});out(`Initialized ${c.name} at .pman/`);return;}
+  if(command==='init'){const {opts}=parse([sub,...rest].filter(Boolean));const c=await initProject({name:opts.name,key:opts.key});out(`Initialized ${c.name} (${c.key}) at .pman/`);return;}
   if(command==='serve'){const {opts}=parse([sub,...rest].filter(Boolean));const s=await serve({port:opts.port===undefined?4000:Number(opts.port),open:!!opts.open});console.log(`pman is serving ${s.project.config.name} at ${s.url}`);console.log('Press Ctrl-C to stop.');await new Promise(resolve=>s.server.once('close',resolve));return;}
-  const project=await openProject();
+  const project=await openProject();globalThis.__pmanKey=project.key;
   if(command==='ticket'&&sub==='create') {const {opts}=parse(rest);const t=await project.tickets.create({title:opts.title,description:opts.description,status:opts.status,kind:opts.kind,priority:opts.priority,labels:labels(opts.labels),parentId:opts.parent??null});out(t,opts.format,'ticket');return;}
   if(command==='ticket'&&sub==='list') {const {opts}=parse(rest);out(await project.tickets.list({status:opts.status,parentId:opts.parent,limit:Number(opts.limit??5000)}),opts.format);return;}
   if(command==='ticket'&&sub==='show') {const {opts,positional}=parse(rest);out(await project.tickets.get(positional[0]),opts.format,'ticket');return;}
@@ -98,7 +100,7 @@ async function main(argv) {
   if(command==='relation'&&sub==='add') {const {positional}=parse(rest);out(await project.relations.add(...positional));return;}
   if(command==='relation'&&sub==='list') {const {positional,opts}=parse(rest);out(await project.relations.list(positional[0]),opts.format);return;}
   if(command==='relation'&&sub==='remove') {const {positional}=parse(rest);let id=positional[0];if(positional.length===3){const match=(await project.relations.list(positional[0])).find(r=>r.sourceId===positional[0]&&r.targetId===positional[1]&&r.type===positional[2]);if(!match)throw new NotFoundError('No matching relationship');id=match.id;}await project.relations.remove(id);out(`Removed relationship ${id}`);return;}
-  if(command==='next') {const {opts}=parse([sub,...rest].filter(Boolean));const rows=await project.next({limit:Number(opts.limit??5),parentId:opts.parent});if(opts.format==='json'){out(rows,'json');return;}if(!rows.length){console.log('No ready tickets.');return;}rows.forEach((r,i)=>console.log(`${i+1}. [${r.effectivePriority}] ${r.title}\n   ${r.id}  ${r.kind}${r.path.length?'  in: '+r.path.join(' > '):''}\n   ${r.reasons.join('; ')}`));return;}
+  if(command==='next') {const {opts}=parse([sub,...rest].filter(Boolean));const rows=await project.next({limit:Number(opts.limit??5),parentId:opts.parent});if(opts.format==='json'){out(rows,'json');return;}if(!rows.length){console.log('No ready tickets.');return;}rows.forEach((r,i)=>console.log(`${i+1}. [${r.effectivePriority}] ${r.key?r.key+' ':''}${r.title}\n   ${r.id}  ${r.kind}${r.path.length?'  in: '+r.path.join(' > '):''}\n   ${r.reasons.join('; ')}`));return;}
   if(command==='claim') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const t=await project.claim(positional[0],{agent:opts.agent??process.env.PMAN_AGENT,leaseMinutes:opts.lease===undefined?undefined:Number(opts.lease),force:!!opts.force});out(opts.format==='json'?t:`Claimed ${t.id} for ${t.assignee.agent} until ${t.assignee.expiresAt}`,opts.format);return;}
   if(command==='release') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const t=await project.release(positional[0],{agent:opts.agent??process.env.PMAN_AGENT,force:!!opts.force});out(opts.format==='json'?t:`Released ${t.id}`,opts.format);return;}
   if(command==='done') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const r=await project.finish(positional[0],{note:opts.note,agent:opts.agent??process.env.PMAN_AGENT,force:!!opts.force});if(opts.format==='json'){out(r,'json');return;}console.log(`Done ${r.ticket.id}  ${r.ticket.title}`);if(r.unblocked.length){console.log('Now ready:');for(const x of r.unblocked)console.log(`  ${x.id}  ${x.title}`);}return;}
@@ -115,7 +117,8 @@ async function main(argv) {
   if(command==='codeplan'&&sub==='remove') {const {positional}=parse(rest);await project.codePlan.remove(positional[0],positional[1],positional[2]);out(`Removed ${positional[1]} ${positional[2]} from ${positional[0]}`);return;}
   if(command==='codeplan'&&sub==='show') {const {positional}=parse(rest);out((await project.context(positional[0],{budget:1e9})).codePlan??{},'json');return;}
   if(command==='check') {const {opts}=parse([sub,...rest].filter(Boolean));const r=await project.check();if(opts.format==='json')out(r,'json');else{for(const e of r.errors)console.log(`✗ ${e.code}  ${e.message}`);for(const w of r.warnings)console.log(`! ${w.code}  ${w.message}`);console.log(r.valid?`Design is consistent (${r.warnings.length} warning(s)).`:`Design has ${r.errors.length} error(s) and ${r.warnings.length} warning(s).`);}if(!r.valid)process.exitCode=1;return;}
-  if(command==='search') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const page=await project.searchPage(positional.join(' '),{offset:Number(opts.offset??0),limit:Number(opts.limit??20),types:labels(opts.type)});if(opts.format==='json'){out(page,'json');return;}if(!page.items.length){console.log('No results.');return;}for(const h of page.items)console.log(`${h.id}  ${h.type.padEnd(8)}  ${h.title}`);console.log(`${page.offset+1}-${page.offset+page.items.length} of ${page.total}${page.nextOffset!==null?`; next: --offset ${page.nextOffset}`:''}`);return;}
+  if(command==='keys'&&['init','renumber'].includes(sub)) {const {opts}=parse(rest);const r=sub==='init'?await project.keys.init({key:opts.key}):await project.keys.renumber();if(opts.format==='json'){out(r,'json');return;}if(sub==='init')console.log(`Project key ${r.key}; numbered ${r.assigned} of ${r.total} tickets.`);else{for(const c of r.changed)console.log(`${c.from} -> ${c.to}  ${c.id}`);console.log(r.changed.length?`Renumbered ${r.changed.length} ticket(s).`:'No duplicate keys.');}return;}
+  if(command==='search') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const page=await project.searchPage(positional.join(' '),{offset:Number(opts.offset??0),limit:Number(opts.limit??20),types:labels(opts.type)});if(opts.format==='json'){out(page,'json');return;}if(!page.items.length){console.log('No results.');return;}for(const h of page.items)console.log(`${(h.key??h.id).padEnd(10)}  ${h.type.padEnd(8)}  ${h.title}`);console.log(`${page.offset+1}-${page.offset+page.items.length} of ${page.total}${page.nextOffset!==null?`; next: --offset ${page.nextOffset}`:''}`);return;}
   if(command==='context') {const {opts,positional}=parse([sub,...rest].filter(Boolean));out(await project.context(positional[0],{budget:Number(opts.budget??8000)}),opts.format);return;}
   if(command==='validate') {const {opts}=parse([sub,...rest].filter(Boolean));const result=await project.validate();out(result,opts.format);if(!result.valid)process.exitCode=1;return;}
   throw new Error(`Unknown command: ${command}\n\n${usage}`);

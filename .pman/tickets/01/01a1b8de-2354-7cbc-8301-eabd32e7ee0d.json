@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1b8de-2354-7cbc-8301-eabd32e7ee0d",
+  "title": "Board view with status columns and drag and drop",
+  "kind": "task",
+  "description": "Columns per configured status, cards with type icon, key, priority and assignee; moving a card updates the status with revision checks and explains OPEN_WORK refusals.",
+  "status": "todo",
+  "priority": "high",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1b8de-22ff-764b-b757-4c9e83d8c00b",
+  "createdAt": "2026-11-08T01:55:28.212Z",
+  "updatedAt": "2026-11-08T01:55:28.212Z",
+  "number": 79
+}

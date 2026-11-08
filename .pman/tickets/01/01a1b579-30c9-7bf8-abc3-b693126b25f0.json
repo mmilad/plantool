@@ -10,5 +10,6 @@
   "parentId": "01a1b579-308a-79d2-96d2-cc8e23911d62",
   "createdAt": "2026-11-07T10:06:20.873Z",
   "updatedAt": "2026-11-07T10:13:39.496Z",
-  "kind": "bug"
+  "kind": "bug",
+  "number": 52
 }

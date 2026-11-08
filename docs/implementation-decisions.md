@@ -71,6 +71,15 @@ This file records material choices made while implementing the first usable rele
 - Measured with 6,063 synthetic tickets (2 KB descriptions): tree page 0.45 s → 0.13 s, search ~1 s → 0.11 s, ticket plan 1.3 s → 0.33 s.
 - `GET /api/version` exposes per-area fingerprints (size and mtime, cached for 2 s) that the UI polls every 5 s while visible to refresh changed areas.
 
+## Multi-project workspace, Jira look and ticket keys (owner decision 2026-11-08)
+
+This supersedes the earlier single-project server boundary and the "no machine-global registry" constraint.
+
+- Registry: a machine-local file `~/.pman/projects.json` (override with `PMAN_HOME`) lists known projects by project ID, name, key and root path. `pman init` and every CLI command run inside a project register it automatically; `pman projects` lists, adds and removes entries; entries whose `.pman/config.json` is gone are shown as missing and can be pruned. The registry is a convenience index only: canonical data stays in each repository's Git-tracked `.pman/`.
+- `pman serve` works from any directory and serves every registered project on one loopback server. API routes are scoped as `/api/projects/:projectId/...`; the UI can add a project by path and remove it from the registry (never deleting files). Host/Origin/CSRF protections and loopback-only binding stay.
+- Visual direction: close to Jira (owner decision, replacing "fp.dev look, Jira workflows only"): project directory, left project sidebar, board with status columns, list/backlog, issue detail with a details panel, issue-type icons, status lozenges, Jira-like colours and typography. No Jira logos, trademarks or proprietary assets.
+- Ticket keys: each project has a key (2–10 uppercase letters, `config.key`, derived from the name if unset) and tickets get a sequential `number`; the display key is `KEY-number`. The UUID stays the identity; CLI commands and URLs accept either. Numbers are allocated under a short lock (max + 1); duplicates from parallel branches are reported by `pman validate` and fixed with `pman keys renumber`. `pman keys init` sets the key and numbers existing tickets by creation time.
+
 ## Verification and remaining release work
 
 - Local checks were run on Node 24.22.1/Linux: package syntax checks, 11 tests (including a 10,000-deep parent chain and HTTP security checks), JSON Schema parsing, `npm pack --dry-run`, local tarball install, `npm exec -- pman --help`, and a public API import smoke check.

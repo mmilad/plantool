@@ -76,14 +76,14 @@ export async function nextTickets(p, { limit = 5, parentId, now = Date.now() } =
     if (unblocks) reasons.push(`unblocks ${unblocks} ticket(s)`);
     if (focus) reasons.push('continues active work in the same parent');
     if (t.status === 'in_progress') reasons.push(`lease of ${t.assignee.agent} expired`);
-    rows.push({ id: t.id, title: t.title, kind: t.kind ?? 'task', status: t.status, priority: t.priority, effectivePriority, unblocks, focus, path: ancestors.map(a => a.title).reverse(), createdAt: t.createdAt, reasons });
+    rows.push({ id: t.id, key: p.ticketKey ? p.ticketKey(t) : null, title: t.title, kind: t.kind ?? 'task', status: t.status, priority: t.priority, effectivePriority, unblocks, focus, path: ancestors.map(a => a.title).reverse(), createdAt: t.createdAt, reasons });
   }
   rows.sort((a, b) => PRIORITY_RANK[b.effectivePriority] - PRIORITY_RANK[a.effectivePriority] || b.unblocks - a.unblocks || Number(b.focus) - Number(a.focus) || a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id));
   return rows.slice(0, Math.max(0, limit));
 }
 
 /** Short cross-process lock outside the repository; protects claim against concurrent agents in one checkout. */
-async function withLock(p, id, fn) {
+export async function withLock(p, id, fn) {
   const dir = path.join(os.tmpdir(), `pman-locks-${createHash('sha256').update(p.root).digest('hex').slice(0, 16)}`);
   await fs.mkdir(dir, { recursive: true });
   const lock = path.join(dir, `${id}.lock`);

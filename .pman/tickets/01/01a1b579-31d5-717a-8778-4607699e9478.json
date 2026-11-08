@@ -11,5 +11,6 @@
   "createdAt": "2026-11-07T10:06:21.141Z",
   "updatedAt": "2026-11-07T12:49:03.814Z",
   "kind": "task",
-  "assignee": null
+  "assignee": null,
+  "number": 71
 }

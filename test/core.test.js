@@ -64,3 +64,15 @@ test('context packets report omitted entries and stay within budget',async t=>{c
   const full=await p.context(a.id,{budget:1e9});assert.equal(full.truncated,true,'descendants beyond 20 are always omitted');assert.equal(full.omitted.descendants,5);assert.equal(full.omitted.comments,0);
   const small=await p.context(a.id,{budget:2048});assert.equal(small.truncated,true);assert.ok(small.omitted.comments>0);assert.ok(Buffer.byteLength(JSON.stringify(small,null,2))<=2048);
   const leaf=await p.tickets.create({title:'Leaf'});const c=await p.context(leaf.id);assert.equal(c.truncated,false);assert.equal(c.budget,8000);});
+test('ticket keys: sequential numbers, KEY-n references, duplicates and migration',async t=>{const p=await project(t);assert.equal(p.key,'TEST');
+  const a=await p.tickets.create({title:'A'}),b=await p.tickets.create({title:'B',parentId:'TEST-1'});assert.deepEqual([a.number,b.number],[1,2]);assert.equal(b.parentId,a.id);assert.equal(p.ticketKey(b),'TEST-2');
+  assert.equal((await p.tickets.get('test-2')).id,b.id);await p.tickets.update('TEST-2',{title:'B2'});await p.comments.add('TEST-1',{body:'x'});await p.relations.add('TEST-1','TEST-2','blocks');
+  assert.equal((await p.context('TEST-2')).ticket.id,b.id);await assert.rejects(()=>p.tickets.get('XX-1'),{code:'NOT_FOUND'});await assert.rejects(()=>p.tickets.get('TEST-99'),{code:'NOT_FOUND'});
+  const many=await Promise.all(Array.from({length:8},(_,i)=>p.tickets.create({title:`P${i}`})));assert.equal(new Set(many.map(x=>x.number)).size,8,'parallel creates get unique numbers');
+  assert.equal((await p.search('test-1'))[0].id,a.id);
+  const file=path.join(p.dir,'tickets',b.id.slice(0,2),b.id+'.json');await fs.writeFile(file,(await fs.readFile(file,'utf8')).replace('"number": 2','"number": 1'));
+  assert.ok((await p.validate()).warnings.some(w=>w.includes('TEST-1')));await assert.rejects(()=>p.tickets.get('TEST-1'),{code:'CONFLICT'});
+  const r=await p.keys.renumber();assert.equal(r.changed.length,1);assert.equal(r.changed[0].id,b.id);assert.equal((await p.validate()).warnings.length,0);
+  const legacy=path.join(p.dir,'tickets',a.id.slice(0,2),a.id+'.json');const rec=JSON.parse(await fs.readFile(legacy,'utf8'));delete rec.number;await fs.writeFile(legacy,JSON.stringify(rec,null,2)+'\n');
+  const init=await p.keys.init({key:'shop'});assert.equal(init.key,'SHOP');assert.equal(init.assigned,1);assert.equal(p.key,'SHOP');assert.ok((await p.tickets.get(a.id)).number>10);
+  await assert.rejects(()=>p.keys.init({key:'1x'}),{code:'VALIDATION'});});

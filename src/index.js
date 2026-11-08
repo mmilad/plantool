@@ -1,7 +1,7 @@
 import { randomBytes, createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { TICKET_KINDS, workGraph, readinessOf, nextTickets, claimTicket, releaseTicket, finishTicket } from './workflow.js';
+import { TICKET_KINDS, workGraph, readinessOf, nextTickets, claimTicket, releaseTicket, finishTicket, withLock } from './workflow.js';
 export { TICKET_KINDS } from './workflow.js';
 import { attachDesignApi, validateCodePlanShape, resolvedCodePlan } from './design.js';
 export { DEFAULT_COMPONENT_KINDS, normalizeSchema } from './design.js';
@@ -32,6 +32,31 @@ const idPath = (base, id, ext = '.json') => path.join(base, id.slice(0, 2), `${i
 const canonical = value => `${JSON.stringify(value, null, 2)}\n`;
 const hash = text => createHash('sha256').update(text).digest('hex');
 const checkId = id => { if (!UUID_RE.test(id ?? '')) throw new ValidationError(`Invalid UUIDv7 id: ${id}`, { id }); };
+const KEY_RE = /^[A-Z][A-Z0-9]{1,9}$/;
+/** Derives a Jira-like project key: initials of several words, otherwise the first letters of one word. */
+export function deriveKey(name) {
+  const words = String(name ?? '').normalize('NFKD').replace(/[^A-Za-z0-9]+/g, ' ').trim().split(/\s+/).filter(Boolean);
+  let key = words.length > 1 ? words.map(w => w[0]).join('') : (words[0] ?? '').slice(0, 4);
+  key = key.toUpperCase().replace(/^[0-9]+/, '');
+  if (key.length < 2) key = (key + 'PM').slice(0, 2);
+  return key.slice(0, 10);
+}
+export const ticketKey = (p, t) => (t && Number.isInteger(t.number) ? `${p.key}-${t.number}` : null);
+/** Accepts a UUID or a KEY-number reference and returns the ticket UUID. */
+async function ticketRef(p, ref) {
+  if (UUID_RE.test(ref ?? '')) return ref;
+  const m = /^([A-Za-z][A-Za-z0-9]{1,9})-(\d+)$/.exec(String(ref ?? '').trim());
+  if (!m) throw new ValidationError(`Invalid ticket reference: ${ref}`, { ref });
+  if (m[1].toUpperCase() !== p.key) throw new NotFoundError(`Ticket ${ref} is not in project ${p.key}`, { ref });
+  const n = Number(m[2]); const hits = (await listJson(p, 'tickets')).filter(t => t.number === n);
+  if (!hits.length) throw new NotFoundError(`Ticket not found: ${ref}`, { ref });
+  if (hits.length > 1) throw new ConflictError(`Ticket key ${ref} is used by ${hits.length} tickets; run pman keys renumber`, { ref, ids: hits.map(t => t.id) });
+  return hits[0].id;
+}
+async function writeConfig(p, config) {
+  const file = path.join(p.dir, 'config.json'), temp = `${file}.${process.pid}.${randomBytes(5).toString('hex')}.tmp`;
+  await fs.writeFile(temp, canonical(config), { flag: 'wx' }); await fs.rename(temp, file); p.config = config; p.key = config.key ?? deriveKey(config.name);
+}
 async function exists(p) { try { await fs.access(p); return true; } catch { return false; } }
 async function assertSafePath(root, target) {
   const rel=path.relative(root,target);
@@ -49,12 +74,13 @@ export async function findProject(cwd = process.cwd()) {
   }
 }
 
-export async function initProject({ cwd = process.cwd(), name = path.basename(path.resolve(cwd)) } = {}) {
+export async function initProject({ cwd = process.cwd(), name = path.basename(path.resolve(cwd)), key } = {}) {
   const root = path.resolve(cwd), dir = path.join(root, '.pman'), configPath = path.join(dir, 'config.json');
   if (await exists(configPath)) throw new ConflictError(`pman is already initialized at ${root}`);
   if(await exists(dir)){const st=await fs.lstat(dir);if(st.isSymbolicLink()||!st.isDirectory())throw new ValidationError('.pman must not be a symlink or non-directory');if((await fs.readdir(dir)).length)throw new ConflictError(`Refusing to initialize over existing data in ${dir}`);}
   await fs.mkdir(dir, { recursive: true });
-  const config = { schemaVersion: 1, projectId: uuidv7(), name: String(name || 'Project'), statuses: [...DEFAULT_STATUSES], properties: {}, createdAt: nowIso() };
+  const projectKey = key === undefined ? deriveKey(name) : String(key).toUpperCase(); if (!KEY_RE.test(projectKey)) throw new ValidationError(`Project key must be 2-10 letters or digits starting with a letter: ${key}`);
+  const config = { schemaVersion: 1, projectId: uuidv7(), name: String(name || 'Project'), key: projectKey, statuses: [...DEFAULT_STATUSES], properties: {}, createdAt: nowIso() };
   await fs.writeFile(configPath, canonical(config), { flag: 'wx' });
   for (const d of ['tickets', 'comments', 'relationships', ...kinds, ...designFolders]) await fs.mkdir(path.join(dir, d), { recursive: true });
   return config;
@@ -71,7 +97,11 @@ export async function openProject({ cwd = process.cwd(), cache = false } = {}) {
   if (config.schemaVersion !== 1) throw new UnsupportedSchemaVersionError(`Unsupported project schema version: ${config.schemaVersion}`);
   try{checkId(config.projectId);}catch(e){throw new ValidationError(`Invalid projectId in .pman/config.json: ${e.message}`);}
   if (!Array.isArray(config.statuses) || !config.statuses.length || config.statuses.some(x=>typeof x!=='string'||!x.trim()) || new Set(config.statuses).size !== config.statuses.length) throw new ValidationError('Project statuses must be a non-empty list of unique strings');
-  const p = { root, dir, config, cache: cache ? new Map() : null };
+  if (config.key !== undefined && !KEY_RE.test(config.key)) throw new ValidationError(`Invalid project key in .pman/config.json: ${config.key}`);
+  const p = { root, dir, config, key: config.key ?? deriveKey(config.name), cache: cache ? new Map() : null };
+  p.ticketKey = t => ticketKey(p, t);
+  p.resolveTicket = ref => ticketRef(p, ref);
+  p.keys = keysApi(p);
   p.tickets = ticketApi(p); p.documents = documentApi(p); p.comments = commentApi(p); p.relations = relationApi(p);
   p.validate = () => validateProject(p);
   p.search = (query, options) => searchProject(p, query, options);
@@ -162,18 +192,22 @@ function ticketApi(p) {
   const statuses = p.config.statuses;
   return {
     async create(input) {
+      if (input?.parentId && !UUID_RE.test(input.parentId)) input = { ...input, parentId: await ticketRef(p, input.parentId) };
       validateTicketInput(input, statuses);
       if (input.parentId) await readJson(idPath(path.join(p.dir, 'tickets'), input.parentId));
-      const date = nowIso(); const rec = { schemaVersion: 1, id: uuidv7(), title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status: input.status ?? statuses[0], priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.codePlan ? { codePlan: input.codePlan } : {}), createdAt: date, updatedAt: date };
+      return withLock(p, 'ticket-number', async () => {
+      const number = (await listJson(p, 'tickets')).reduce((m, x) => Math.max(m, Number.isInteger(x.number) ? x.number : 0), 0) + 1;
+      const date = nowIso(); const rec = { schemaVersion: 1, id: uuidv7(), number, title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status: input.status ?? statuses[0], priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.codePlan ? { codePlan: input.codePlan } : {}), createdAt: date, updatedAt: date };
       return writeJson(p, 'tickets', rec, { create: true });
+      });
     },
     async get(id) { return (await this.getVersioned(id)).ticket; },
-    async getVersioned(id) { checkId(id); const file=idPath(path.join(p.dir,'tickets'),id);await assertSafePath(p.dir,file);const r = await readJson(file); return {ticket:r.value,revision:r.revision}; },
+    async getVersioned(id) { id = await ticketRef(p, id); const file=idPath(path.join(p.dir,'tickets'),id);await assertSafePath(p.dir,file);const r = await readJson(file); return {ticket:r.value,revision:r.revision}; },
     async list({ status, parentId, limit = 5000 } = {}) { const a = await listJson(p, 'tickets'); return a.filter(x => (!status || x.status === status) && (parentId === undefined || x.parentId === parentId)).sort(sortRecords).slice(0, limit); },
     async update(id, patch, {expectedRevision, force = false} = {}) {
-      checkId(id); const file = idPath(path.join(p.dir, 'tickets'), id); await assertSafePath(p.dir,file); const current = await readJson(file), rec = current.value;
+      id = await ticketRef(p, id); if (patch.parentId && !UUID_RE.test(patch.parentId)) patch = { ...patch, parentId: await ticketRef(p, patch.parentId) }; const file = idPath(path.join(p.dir, 'tickets'), id); await assertSafePath(p.dir,file); const current = await readJson(file), rec = current.value;
       if(expectedRevision&&expectedRevision!==current.revision)throw new ConflictError(`Record changed since it was read: ${id}`,{id});
-      const next = { ...rec, ...patch, id, schemaVersion: 1, createdAt: rec.createdAt, updatedAt: nowIso() };
+      const next = { ...rec, ...patch, id, number: rec.number, schemaVersion: 1, createdAt: rec.createdAt, updatedAt: nowIso() };
       validateTicketInput(next, statuses); if (next.parentId === id) throw new CycleError('A ticket cannot be its own parent');
       if (next.parentId) await ensureCanParent(p, id, next.parentId);
       if (next.status === 'done' && rec.status !== 'done' && !force) {
@@ -184,7 +218,7 @@ function ticketApi(p) {
     },
     async move(id, parentId) { return this.update(id, { parentId: parentId ?? null }); },
     async rollup(id) { const rows = await buildTree(p,id); return rows[0].rollup; },
-    async readiness(id) { checkId(id);const all=await listJson(p,'tickets'),byId=new Map(all.map(t=>[t.id,t])),rels=await listJson(p,'relationships');const incoming=rels.filter(r=>r.type==='blocks'&&r.targetId===id);return {ready:incoming.every(r=>isFinished(byId.get(r.sourceId))),blockers:incoming.map(r=>({relationshipId:r.id,ticket:byId.get(r.sourceId)??null}))}; }
+    async readiness(id) { id = await ticketRef(p, id);const all=await listJson(p,'tickets'),byId=new Map(all.map(t=>[t.id,t])),rels=await listJson(p,'relationships');const incoming=rels.filter(r=>r.type==='blocks'&&r.targetId===id);return {ready:incoming.every(r=>isFinished(byId.get(r.sourceId))),blockers:incoming.map(r=>({relationshipId:r.id,ticket:byId.get(r.sourceId)??null}))}; }
   };
 }
 const isFinished = t => t?.status==='done' || t?.status==='cancelled';
@@ -195,6 +229,28 @@ export const _store = {
   create: (p, folder, rec) => writeJson(p, folder, rec, { create: true }),
   write: (p, folder, rec) => writeJson(p, folder, rec),
 };
+function keysApi(p) {
+  return {
+    /** Sets the project key (optional) and numbers tickets without a number in creation order. */
+    async init({ key } = {}) {
+      return withLock(p, 'ticket-number', async () => {
+        if (key !== undefined) { const k = String(key).toUpperCase(); if (!KEY_RE.test(k)) throw new ValidationError(`Project key must be 2-10 letters or digits starting with a letter: ${key}`); await writeConfig(p, { ...p.config, key: k }); }
+        else if (!p.config.key) await writeConfig(p, { ...p.config, key: p.key });
+        const all = (await listJson(p, 'tickets')).slice().sort(sortRecords); let max = all.reduce((m, x) => Math.max(m, Number.isInteger(x.number) ? x.number : 0), 0); let assigned = 0;
+        for (const t of all) if (!Number.isInteger(t.number)) { await writeJson(p, 'tickets', { ...t, number: ++max }); assigned++; }
+        return { key: p.key, assigned, total: all.length };
+      });
+    },
+    /** Gives every ticket that shares a number with an older ticket a new number. */
+    async renumber() {
+      return withLock(p, 'ticket-number', async () => {
+        const all = (await listJson(p, 'tickets')).slice().sort(sortRecords); let max = all.reduce((m, x) => Math.max(m, Number.isInteger(x.number) ? x.number : 0), 0); const seen = new Set(), changed = [];
+        for (const t of all) { if (!Number.isInteger(t.number)) continue; if (seen.has(t.number)) { const n = ++max; await writeJson(p, 'tickets', { ...t, number: n }); changed.push({ id: t.id, from: `${p.key}-${t.number}`, to: `${p.key}-${n}` }); } else seen.add(t.number); }
+        return { changed };
+      });
+    },
+  };
+}
 function sortRecords(a,b) { return String(a.createdAt).localeCompare(String(b.createdAt)) || a.id.localeCompare(b.id); }
 function descendants(all, id) { const map = childIndex(all), out = [], stack = [...(map.get(id) ?? [])].reverse(); while(stack.length) { const cur=stack.pop(); out.push(cur); const c=map.get(cur.id)??[]; for(let i=c.length-1;i>=0;i--) stack.push(c[i]); } return out; }
 function childIndex(all) { const m=new Map(); for(const t of all) { if(!m.has(t.parentId)) m.set(t.parentId,[]); m.get(t.parentId).push(t); } for(const v of m.values()) v.sort(sortRecords); return m; }
@@ -222,7 +278,7 @@ export async function buildTree(p, id = null, { maxDepth = Infinity, limit = 500
   }
   const visible=ordered.filter(x=>x.depth<=maxDepth),page=visible.slice(Math.max(0,offset),Math.max(0,offset)+Math.max(0,limit));
   const rows=fields==='row'
-    ? page.map(({ticket,depth})=>({id:ticket.id,parentId:ticket.parentId,depth,title:ticket.title,kind:ticket.kind??'task',status:ticket.status,priority:ticket.priority,labels:ticket.labels??[],assignee:ticket.assignee?.agent??null,childCount:(idx.get(ticket.id)??[]).length,rollup:rollups.get(ticket.id)}))
+    ? page.map(({ticket,depth})=>({id:ticket.id,parentId:ticket.parentId,depth,title:ticket.title,number:ticket.number??null,key:ticketKey(p,ticket),kind:ticket.kind??'task',status:ticket.status,priority:ticket.priority,labels:ticket.labels??[],assignee:ticket.assignee?.agent??null,childCount:(idx.get(ticket.id)??[]).length,rollup:rollups.get(ticket.id)}))
     : page.map(({ticket,depth})=>({...ticket,depth,rollup:rollups.get(ticket.id)}));
   if(withTotal)return {items:rows,total:visible.length};
   return rows;
@@ -290,12 +346,12 @@ function documentApi(p) {
   return api;
 }
 function commentApi(p) { return {
-  async add(ticketId,input) { checkId(ticketId); await p.tickets.get(ticketId); if(!input.body?.trim()) throw new ValidationError('Comment body is required'); const rec={schemaVersion:1,id:uuidv7(),ticketId,body:input.body,author:input.author??'local',createdAt:nowIso()}; return writeJson(p,'comments',rec,{create:true}); },
+  async add(ticketId,input) { ticketId=await ticketRef(p,ticketId); await p.tickets.get(ticketId); if(!input.body?.trim()) throw new ValidationError('Comment body is required'); const rec={schemaVersion:1,id:uuidv7(),ticketId,body:input.body,author:input.author??'local',createdAt:nowIso()}; return writeJson(p,'comments',rec,{create:true}); },
   async list(ticketId) { const a=await listJson(p,'comments'); return a.filter(x=>!ticketId||x.ticketId===ticketId).sort(sortRecords); }
 }; }
 function relationApi(p) { return {
-  async add(sourceId,targetId,type) { checkId(sourceId);checkId(targetId);if(sourceId===targetId)throw new ValidationError('Relationship endpoints must differ');if(!RELATION_TYPES.includes(type))throw new ValidationError(`Unknown relationship type: ${type}`);const tickets=await listJson(p,'tickets');if(!tickets.some(x=>x.id===sourceId)||!tickets.some(x=>x.id===targetId))throw new NotFoundError('Relationship endpoint not found');const records=await listJson(p,'relationships');if(type==='blocks'&&wouldBlockCycle(records,sourceId,targetId))throw new CycleError('Blocking relationship would create a dependency cycle');const r={schemaVersion:1,id:uuidv7(),sourceId,targetId,type,createdAt:nowIso()};return writeJson(p,'relationships',r,{create:true}); },
-  async list(id) { const a=await listJson(p,'relationships'); return a.filter(x=>!id||x.sourceId===id||x.targetId===id).sort(sortRecords); },
+  async add(sourceId,targetId,type) { sourceId=await ticketRef(p,sourceId);targetId=await ticketRef(p,targetId);if(sourceId===targetId)throw new ValidationError('Relationship endpoints must differ');if(!RELATION_TYPES.includes(type))throw new ValidationError(`Unknown relationship type: ${type}`);const tickets=await listJson(p,'tickets');if(!tickets.some(x=>x.id===sourceId)||!tickets.some(x=>x.id===targetId))throw new NotFoundError('Relationship endpoint not found');const records=await listJson(p,'relationships');if(type==='blocks'&&wouldBlockCycle(records,sourceId,targetId))throw new CycleError('Blocking relationship would create a dependency cycle');const r={schemaVersion:1,id:uuidv7(),sourceId,targetId,type,createdAt:nowIso()};return writeJson(p,'relationships',r,{create:true}); },
+  async list(id) { if(id&&!UUID_RE.test(id))id=await ticketRef(p,id); const a=await listJson(p,'relationships'); return a.filter(x=>!id||x.sourceId===id||x.targetId===id).sort(sortRecords); },
   async remove(id) { checkId(id);const f=idPath(path.join(p.dir,'relationships'),id);await assertSafePath(p.dir,f);try{await fs.rm(f);}catch(e){if(e.code==='ENOENT')throw new NotFoundError(`Relationship not found: ${id}`);throw e;} }
 }; }
 function wouldBlockCycle(rs,source,target){const adj=new Map();for(const r of rs.filter(x=>x.type==='blocks')){if(!adj.has(r.sourceId))adj.set(r.sourceId,[]);adj.get(r.sourceId).push(r.targetId);}const stack=[target],seen=new Set();while(stack.length){const n=stack.pop();if(n===source)return true;if(seen.has(n))continue;seen.add(n);stack.push(...(adj.get(n)??[]));}return false;}
@@ -328,7 +384,10 @@ export async function validateProject(p) {
   for(const d of documents)for(const target of d.links??[])if(!ids.has(target)&&!docIds.has(target))errors.push(`Document ${d.id} links to missing entity ${target}`);
   for(const r of rs){if(!ids.has(r.sourceId)||!ids.has(r.targetId))errors.push(`Dangling relationship ${r.id}`);if(!RELATION_TYPES.includes(r.type))errors.push(`Invalid relationship type ${r.id}`);}
   const cycles=blockingCycleNodes(rs);if(cycles.size)errors.push(`Blocking dependency cycle involves ${[...cycles].sort().join(', ')}`);
-  return { valid:errors.length===0, errors, counts:{tickets:tickets.length,documents:docIds.size,relationships:rs.length,comments:comments.length,components:components.length,types:types.length,contracts:contracts.length} };
+  const warnings=[],byNumber=new Map();for(const t of tickets)if(Number.isInteger(t.number)){if(!byNumber.has(t.number))byNumber.set(t.number,[]);byNumber.get(t.number).push(t.id);}
+  for(const [n,list] of byNumber)if(list.length>1)warnings.push(`Ticket key ${p.key}-${n} is used by ${list.length} tickets (${list.join(', ')}); run pman keys renumber`);
+  const unnumbered=tickets.filter(t=>!Number.isInteger(t.number)).length;if(unnumbered)warnings.push(`${unnumbered} ticket(s) have no number yet; run pman keys init`);
+  return { valid:errors.length===0, errors, warnings, counts:{tickets:tickets.length,documents:docIds.size,relationships:rs.length,comments:comments.length,components:components.length,types:types.length,contracts:contracts.length} };
 }
 const DOC_TYPE = { goals: 'goal', plans: 'plan', decisions: 'decision' };
 export const SEARCH_TYPES = Object.freeze(['ticket', 'comment', 'goal', 'plan', 'decision']);
@@ -343,7 +402,8 @@ export async function searchProject(p, query, { types } = {}) {
   const rank=(title,body)=>{const t=String(title??'').toLocaleLowerCase();if(t===q)return 0;if(t.startsWith(q))return 1;if(t.includes(q))return 2;return String(body??'').toLocaleLowerCase().includes(q)?3:-1;};
   const snippet=(text)=>{const s=String(text??''),at=s.toLocaleLowerCase().indexOf(q);return at<0?s.slice(0,160):s.slice(Math.max(0,at-70),at+q.length+90);};
   const tickets=await listJson(p,'tickets'),titles=new Map(tickets.map(x=>[x.id,x.title]));
-  if(!wanted||wanted.has('ticket'))for(const t of tickets){const r=rank(t.title,t.description);if(r>=0)hits.push({id:t.id,type:'ticket',title:t.title,rank:r,updatedAt:t.updatedAt,path:rel('tickets',t.id),snippet:r<3?String(t.description??'').slice(0,160):snippet(t.description)});}
+  const keyQuery=/^[a-z][a-z0-9]{1,9}-\d+$/.test(q)?q:null;
+  if(!wanted||wanted.has('ticket'))for(const t of tickets){const k=ticketKey(p,t);const r=keyQuery&&k&&k.toLocaleLowerCase()===keyQuery?-0.5:rank(t.title,t.description);if(r!==-1)hits.push({id:t.id,type:'ticket',key:ticketKey(p,t),title:t.title,rank:r,updatedAt:t.updatedAt,path:rel('tickets',t.id),snippet:r<3?String(t.description??'').slice(0,160):snippet(t.description)});}
   if(!wanted||wanted.has('comment'))for(const c of await listJson(p,'comments')){const r=rank('',c.body);if(r>=0)hits.push({id:c.id,type:'comment',ticketId:c.ticketId,title:`Comment on ${titles.get(c.ticketId)??c.ticketId}`,rank:r,updatedAt:c.createdAt,path:rel('comments',c.id),snippet:snippet(c.body)});}
   for(const kind of kinds){const type=DOC_TYPE[kind];if(wanted&&!wanted.has(type))continue;for(const d of await p.documents.list(kind)){const r=rank(d.title,d.body);if(r>=0)hits.push({id:d.id,type,kind,title:d.title,rank:r,updatedAt:d.updatedAt,path:rel(kind,d.id,'.md'),snippet:r<3?String(d.body??'').slice(0,160):snippet(d.body)});}}
   const norm=x=>String(x.title).toLocaleLowerCase();
@@ -360,7 +420,7 @@ export async function searchPage(p, query, { offset = 0, limit = 20, types, snap
   return {query:String(query).trim(),items,total:all.length,offset,limit,nextOffset:offset+items.length<all.length?offset+items.length:null,snapshot:current};
 }
 export async function contextFor(p,id,{budget=8000}={}) {
-  checkId(id);if(!Number.isFinite(Number(budget))||Number(budget)<512)throw new ValidationError('Context budget must be at least 512 bytes');const max=Number(budget);const ticket=await p.tickets.get(id),all=await listJson(p,'tickets'),map=new Map(all.map(x=>[x.id,x])),ancestors=[];let cur=ticket.parentId;
+  id=await ticketRef(p,id);if(!Number.isFinite(Number(budget))||Number(budget)<512)throw new ValidationError('Context budget must be at least 512 bytes');const max=Number(budget);const ticket=await p.tickets.get(id),all=await listJson(p,'tickets'),map=new Map(all.map(x=>[x.id,x])),ancestors=[];let cur=ticket.parentId;
   while(cur){const a=map.get(cur);if(!a)break;ancestors.unshift(a);cur=a.parentId;}
   const descendantsList=descendants(all,id),selectedDesc=descendantsList.slice(0,20);
   const rel=(await p.relations.list(id)).map(x=>({...x,path:path.relative(p.root,idPath(path.join(p.dir,'relationships'),x.id)).split(path.sep).join('/')}));

@@ -10,5 +10,6 @@
   "parentId": "01a189bd-b44d-7e95-84fc-66d307543b12",
   "createdAt": "2026-10-29T22:38:08.994Z",
   "updatedAt": "2026-11-07T10:22:49.706Z",
-  "kind": "task"
+  "kind": "task",
+  "number": 32
 }
