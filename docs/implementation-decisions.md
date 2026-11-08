@@ -50,7 +50,7 @@ This file records material choices made while implementing the first usable rele
 - `pman next` ranking: effective priority (explicit priority wins; `normal` inherits from the nearest ancestor with an explicit priority), transitive unblock count (including edges of ancestors), focus on parents with work in progress, then creation time and ID for determinism. Every row carries human-readable reasons.
 - Claims are stored on the ticket as `assignee { agent, claimedAt, expiresAt }` so they are visible in Git and across worktrees; default lease 60 minutes. Expired leases are offered again by `next` and can be claimed by another agent. A short lock directory in the OS temp folder (keyed by project root) serialises concurrent claims in one checkout; nothing is written to the repository for locking.
 - `pman done` refuses to finish a ticket with open descendants or blockers unless forced, clears the claim, records an optional note as a comment authored by the agent, and returns tickets that became ready.
-- `pman agent init` previews by default and with `--write` adds or refreshes a section between `<!-- pman:start -->` and `<!-- pman:end -->` in `AGENTS.md`; text outside the markers is never changed.
+- `pman agent onboard` only prints a briefing for agents (tools, node types, states, relationships, workflows). It writes nothing; agents decide for themselves what they keep.
 - Line endings: `.gitattributes` enforces LF for text files; planning-document parsing also tolerates CRLF.
 
 ## Code plans and contracts (implemented 2026-11-07)

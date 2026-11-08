@@ -12,7 +12,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { initProject, openProject } from '../src/index.js';
-import { agentInit } from '../src/agent.js';
+import { onboardText } from '../src/onboard.js';
 
 const run = promisify(execFile);
 const bin = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'bin', 'pman.js');
@@ -80,13 +80,11 @@ test('concurrent claims by different agents leave exactly one owner', async t =>
   assert.equal(results.filter(r => r.status === 'fulfilled').length, 1);
 });
 
-test('agent init previews, writes once and keeps user text', async t => {
-  const p = await project(t); const file = path.join(p.root, 'AGENTS.md');
-  await fs.writeFile(file, '# My rules\n\nKeep this.\n');
-  const preview = await agentInit(p); assert.equal(preview.write, false); assert.equal(await fs.readFile(file, 'utf8'), '# My rules\n\nKeep this.\n');
-  await agentInit(p, { write: true }); const once = await fs.readFile(file, 'utf8');
-  assert.ok(once.startsWith('# My rules\n\nKeep this.\n')); assert.ok(once.includes('pman next'));
-  await agentInit(p, { write: true }); assert.equal(await fs.readFile(file, 'utf8'), once);
+test('agent onboard prints the briefing and writes nothing', async t => {
+  const p = await project(t); const before = await fs.readdir(p.root);
+  const text = onboardText();
+  for (const word of ['pman guide', 'implements', 'blocks', 'todo', 'in_progress', 'MCP']) assert.ok(text.includes(word), `briefing mentions ${word}`);
+  assert.deepEqual(await fs.readdir(p.root), before);
 });
 
 test('CLI exposes next, claim, done and relation remove', async t => {

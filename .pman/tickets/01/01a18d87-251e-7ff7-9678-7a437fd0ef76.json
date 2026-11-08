@@ -4,12 +4,12 @@
   "title": "Start the local UI server on a fixed port and prevent duplicate starts",
   "description": "Der lokale UI-Server startet standardmäßig unter http://127.0.0.1:4000. Der Port ist fest und in CLI-Ausgabe/Anleitung benannt. Bei belegtem Port wird mit PORT_IN_USE klar abgebrochen; es gibt keinen stillen Zufallsport und keinen Doppelstart. Ein ausdrücklich angegebener --port-Override bleibt möglich und zeigt die tatsächliche URL. Der Server läuft im Vordergrund und endet mit Ctrl+C. Loopback-, Host-, Origin-, CSRF- und CORS-Schutz bleiben aktiv. Live-Abnahme 2026-10-31: Nutzer bestätigt, dass die App erreichbar ist und der aktuelle UI-Ausschnitt ",
   "status": "done",
-  "priority": "high",
+  "priority": "urgent",
   "labels": [],
   "properties": {},
   "parentId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
   "createdAt": "2026-10-30T15:56:46.749Z",
-  "updatedAt": "2026-11-07T10:22:51.565Z",
+  "updatedAt": "2026-11-08T14:10:22.089Z",
   "kind": "task",
   "number": 46
 }

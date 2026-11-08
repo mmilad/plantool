@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { initProject, openProject, PmanError, NotFoundError } from '../src/index.js';
-import { agentInit } from '../src/agent.js';
+import { onboardText } from '../src/onboard.js';
 import { registerProject, addProjectPath, removeProject, listProjects, pruneProjects, registryHome } from '../src/registry.js';
 const autoRegister=async p=>{if(process.env.PMAN_NO_REGISTER==='1')return;try{await registerProject(p);}catch{}};
 import { qualifiedNames } from '../src/design.js';
@@ -52,7 +52,7 @@ Agent workflow (agent name defaults to $PMAN_AGENT):
   pman claim ID [--agent NAME] [--lease MINUTES] [--force]
   pman release ID [--agent NAME] [--force]
   pman done ID [--note TEXT] [--agent NAME] [--force]
-  pman agent init [--file AGENTS.md] [--write]
+  pman agent onboard                              a briefing on pman for agents (prints only)
 
 Code plans (components, types and contracts are maintained centrally):
   pman component add --kind KIND --name NAME [--parent COMPONENT] [--description TEXT]
@@ -162,7 +162,7 @@ async function main(argv) {
   if(command==='claim') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const t=await project.claim(positional[0],{agent:opts.agent??process.env.PMAN_AGENT,leaseMinutes:opts.lease===undefined?undefined:Number(opts.lease),force:!!opts.force});out(opts.format==='json'?t:`Claimed ${t.id} for ${t.assignee.agent} until ${t.assignee.expiresAt}`,opts.format);return;}
   if(command==='release') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const t=await project.release(positional[0],{agent:opts.agent??process.env.PMAN_AGENT,force:!!opts.force});out(opts.format==='json'?t:`Released ${t.id}`,opts.format);return;}
   if(command==='done') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const changed=opts.changed!==undefined?labels(opts.changed):opts.files||opts.commit?gitFiles(project.root,one(opts.commit)):undefined;const outcome=(opts.note||opts.verified||changed||opts.commit)?{...(opts.note?{summary:one(opts.note)}:{}),...(opts.verified?{verifiedBy:one(opts.verified)}:{}),...(changed?.length?{changedFiles:changed}:{}),...(opts.commit?{commits:labels(opts.commit)}:{})}:undefined;const r=await project.finish(positional[0],{note:one(opts.note),agent:opts.agent??process.env.PMAN_AGENT,force:!!opts.force,outcome});if(opts.format==='json'){out(r,'json');return;}console.log(`Done ${r.ticket.id}  ${r.ticket.title}`);if(r.unblocked.length){console.log('Now ready:');for(const x of r.unblocked)console.log(`  ${x.id}  ${x.title}`);}return;}
-  if(command==='agent'&&sub==='init') {const {opts}=parse(rest);const r=await agentInit(project,{file:opts.file??'AGENTS.md',write:!!opts.write});console.log(r.write?`Updated ${r.file}`:`Preview for ${r.file} (run again with --write to apply):\n\n${r.section}`);return;}
+  if(command==='agent'&&sub==='onboard'){console.log(onboardText());return;}
   if(command==='component'&&sub==='add') {const {opts}=parse(rest);const c=await project.components.create({kind:opts.kind,name:opts.name,parentId:opts.parent,description:opts.description});out(opts.format==='json'?c:`component ${c.id}  ${c.kind} ${await qname(project,c.id)}`,opts.format);return;}
   if(command==='component'&&sub==='list') {const {opts}=parse(rest);const all=await project.components.list(),q=qualifiedNames(all),ks=new Map((await project.contracts.list()).map(k=>[k.componentId,k]));const rows=all.map(c=>({...c,qualifiedName:q.get(c.id),contractVersion:ks.get(c.id)?.version??null})).sort((a,b)=>a.qualifiedName.localeCompare(b.qualifiedName));if(opts.format==='json'){out(rows,'json');return;}if(!rows.length)console.log('No components.');for(const r of rows)console.log(`${r.id}  ${r.kind.padEnd(12)}  ${r.qualifiedName}${r.contractVersion?`  (contract v${r.contractVersion})`:''}`);return;}
   if(command==='component'&&sub==='show') {const {opts,positional}=parse(rest);const c=await project.components.resolve(positional[0]);const k=(await project.contracts.list()).find(x=>x.componentId===c.id)??null;out({...c,qualifiedName:await qname(project,c.id),contract:k},'json');return;}

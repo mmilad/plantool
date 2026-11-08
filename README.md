@@ -73,7 +73,7 @@ pnpm exec pman next                          # ready tickets, ranked, with reaso
 pnpm exec pman claim <id> --agent my-agent   # in_progress + assignee with a 60-minute lease
 pnpm exec pman context <id> --format json    # bounded context packet incl. readiness
 pnpm exec pman done <id> --note "tested"     # done + comment, prints newly ready tickets
-pnpm exec pman agent init --write            # add the workflow to AGENTS.md between markers
+pnpm exec pman agent onboard                    # briefing for agents (prints only)
 ```
 
 A ticket is ready when it is `todo`, has no open children, and neither it nor any ancestor has an open `blocks` dependency. `next` ranks by priority (an explicit priority wins; `normal` inherits from the nearest ancestor with an explicit one), then by how many tickets finishing it transitively unblocks, then by proximity to work already in progress, then by age. A parent cannot be set to `done` while descendants or blockers are open unless `--force` is passed. Expired leases are offered again by `next`. Claims are also shared between Git worktrees of the same repository (in `.git/pman/claims.json`, never committed), so two agents in different worktrees cannot claim the same ticket; set `PMAN_SHARED_CLAIMS=0` to turn this off. `PMAN_AGENT` sets the default agent name.
