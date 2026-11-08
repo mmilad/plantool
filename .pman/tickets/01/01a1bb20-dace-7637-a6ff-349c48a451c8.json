@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb20-dace-7637-a6ff-349c48a451c8",
+  "number": 81,
+  "title": "Choose the final product name and publish the package to npm",
+  "kind": "task",
+  "description": "Owner decision 2026-11-08: after a usable version, pick a proper name and publish to the npm registry (currently @mmilad/pm, unpublished). Includes renaming package/bin if needed, README, LICENSE check and a release checklist.",
+  "status": "todo",
+  "priority": "low",
+  "labels": [
+    "release"
+  ],
+  "properties": {},
+  "parentId": null,
+  "createdAt": "2026-11-08T12:27:34.990Z",
+  "updatedAt": "2026-11-08T12:27:34.990Z"
+}
