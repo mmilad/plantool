@@ -102,6 +102,14 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Server: `GET /api/search?mode=hybrid|semantic` (paged, snapshot bound to the index generation, keyword fallback with `fallbackReason`), `GET /api/search/status`, `POST /api/index/update` (202, runs in the background), `GET /api/tickets/:id/similar` (returns `available:false` instead of an error when there is no index), `POST /api/relations`.
 - Indexing is opt-in: `pman serve` never downloads a model on its own. It re-indexes in the background (every 10 s at most, single-flight, only when tickets, documents or comments changed) only for checkouts that already have an index or where the UI's **Enable semantic search** was used.
 
+## Blueprints (PM-83, 2026-11-08)
+
+- A blueprint is a named checklist (`items` with id, title, why, optional flag) that may `extend` another; resolution puts own items first, then inherited ones, and an own item overrides an inherited one with the same id.
+- Built-ins live in `src/blueprints.js`; projects add or override them as readable JSON in `.pman/blueprints/<name>.json` (validated on load).
+- Applying stores `blueprint: {name, skipped}` on the ticket and creates child tickets with `origin: {blueprint, item}`. Coverage is derived from those children and the skip reasons, so nothing is duplicated and re-applying only fills gaps. One blueprint per ticket; nest tickets for more.
+- Optional items are never created by default; they count as "undecided" until created or skipped with a reason. Missing and undecided items are warnings in `pman check`, not blockers for `done`.
+- Suggestions are keyword based (title and labels, or a `blueprint:<name>` label) and only shown, never applied automatically.
+
 ## Verification and remaining release work
 
 - Local checks were run on Node 24.22.1/Linux: package syntax checks, 11 tests (including a 10,000-deep parent chain and HTTP security checks), JSON Schema parsing, `npm pack --dry-run`, local tarball install, `npm exec -- pman --help`, and a public API import smoke check.

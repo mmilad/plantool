@@ -80,6 +80,23 @@ A ticket is ready when it is `todo`, has no open children, and neither it nor an
 
 Tickets have a `kind` of `task`, `feature` or `bug`.
 
+## Blueprints: plan the whole heist
+
+A "header" is never just a header: it needs a logo, navigation, a burger menu on mobile, a skip link, states, tests. Blueprints are checklists that expand a ticket into everything it really needs.
+
+```sh
+pnpm exec pman blueprint list                     # built-in: ui-component, header, footer, form, page, service, api-endpoint, login
+pnpm exec pman blueprint suggest PM-12            # which blueprint fits this ticket
+pnpm exec pman blueprint apply PM-12 header --dry-run
+pnpm exec pman blueprint apply PM-12 header       # child tickets for all required items
+pnpm exec pman blueprint apply PM-12 header --only cart   # add an optional item later
+pnpm exec pman blueprint skip PM-12 sticky --reason "static header is enough"
+pnpm exec pman blueprint status PM-12             # planned / done / not needed / missing
+pnpm exec pman blueprint init header              # copy into .pman/blueprints/header.json and adapt it
+```
+
+Optional items are decisions, not defaults: they stay "undecided" until you create a ticket for them or skip them with a reason. `pman check` warns about missing and undecided items, `pman context` includes the checklist for agents, and the ticket view in `pman serve` has a **Checklist** section to preview, apply and decide items. Project blueprints in `.pman/blueprints/` override built-ins of the same name and can `extend` another blueprint.
+
 ## Code plans and contracts
 
 Agents can plan code before writing it and check the plan for consistency. Components (`module`, `service`, `class`, `method`, `function`, `ui-component`), shared types and contracts live centrally in `.pman/components/`, `.pman/types/` and `.pman/contracts/`; tickets only reference them in an optional code plan, so a contract is never copied or edited per ticket. Plain tasks such as a colour change need no code plan.

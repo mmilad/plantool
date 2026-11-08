@@ -56,6 +56,18 @@ Code plans (components, types and contracts are maintained centrally):
   pman codeplan show TICKET_ID
   pman check [--format json]
 
+Blueprints (checklists that expand a ticket into everything it really needs):
+  pman blueprint list [--format json]
+  pman blueprint show NAME [--format json]
+  pman blueprint suggest TICKET                     blueprints that fit the ticket
+  pman blueprint apply TICKET NAME [--only a,b] [--optional] [--dry-run]
+                                                    create child tickets for the blueprint items
+  pman blueprint status TICKET [--format json]      which items are planned, done, skipped or missing
+  pman blueprint skip TICKET ITEM --reason TEXT     record that an item does not apply
+  pman blueprint unskip TICKET ITEM
+  pman blueprint check [--format json]              missing items and tickets that look like a blueprint
+  pman blueprint init NAME [--from BUILTIN]         copy a blueprint into .pman/blueprints/ to customise it
+
 COMPONENT is a qualified name (UserService.getUser), a unique short name or an ID.
 Schemas: full JSON Schema subset or shorthand, e.g. '{"userId":"string","nick":"string?","tags":"string[]","owner":"User"}'.
 
@@ -70,7 +82,7 @@ All commands operate on the nearest project-local .pman/ directory. Ticket IDs c
 
 function parse(args) {
   const opts={}, positional=[];
-  for(let i=0;i<args.length;i++){const a=args[i];if(a.startsWith('--')){const k=a.slice(2);if(['open','force','write','dry-run'].includes(k)){opts[k]=true;continue;}if(i+1>=args.length)throw new Error(`Missing value for ${a}`);opts[k.replaceAll('-','_')]=args[++i];}else positional.push(a);}
+  for(let i=0;i<args.length;i++){const a=args[i];if(a.startsWith('--')){const k=a.slice(2);if(['open','force','write','dry-run','optional'].includes(k)){opts[k]=true;continue;}if(i+1>=args.length)throw new Error(`Missing value for ${a}`);opts[k.replaceAll('-','_')]=args[++i];}else positional.push(a);}
   return {opts,positional};
 }
 const out=(value,format='text',kind)=>{
@@ -127,6 +139,17 @@ async function main(argv) {
   if(command==='codeplan'&&sub==='add') {const {opts,positional}=parse(rest);const t=await project.codePlan.add(positional[0],positional[1],positional[2],{requires:labels(opts.requires),provides:labels(opts.provides)});out(opts.format==='json'?t.codePlan:`codeplan ${t.id} ${positional[1]} ${positional[2]}`,opts.format);return;}
   if(command==='codeplan'&&sub==='remove') {const {positional}=parse(rest);await project.codePlan.remove(positional[0],positional[1],positional[2]);out(`Removed ${positional[1]} ${positional[2]} from ${positional[0]}`);return;}
   if(command==='codeplan'&&sub==='show') {const {positional}=parse(rest);out((await project.context(positional[0],{budget:1e9})).codePlan??{},'json');return;}
+  if(command==='blueprint') {const {opts,positional}=parse(rest);const fmt=opts.format;const icon={done:'✓',planned:'•',skipped:'–',cancelled:'×',open:'○'};
+    const statusText=c=>{if(!c.blueprint)return 'No blueprint on this ticket. Try: pman blueprint suggest '+positional[0];const lines=[`Blueprint ${c.blueprint.name}${c.blueprint.title?' ('+c.blueprint.title+')':''}`];for(const i of c.items)lines.push(`  ${icon[i.state]} ${i.id.padEnd(18)} ${i.title}${i.optional?' (optional)':''}${i.ticket?'  → '+(i.ticket.key??i.ticket.id):''}${i.reason?'  — skipped: '+i.reason:''}`);if(c.missing.length)lines.push(`Missing: ${c.missing.join(', ')}`);if(c.undecided.length)lines.push(`Undecided optional items: ${c.undecided.join(', ')} (apply with --only, or skip with a reason)`);return lines.join('\n');};
+    if(sub==='list'){const all=await project.blueprints.list();if(fmt==='json'){out(all,'json');return;}for(const b of all)console.log(`${b.name.padEnd(14)} ${String(b.items).padStart(2)} items  ${b.source==='project'?'[project] ':''}${b.description}${b.extends?' (extends '+b.extends+')':''}`);return;}
+    if(sub==='show'){const b=await project.blueprints.get(positional[0]);if(fmt==='json'){out(b,'json');return;}console.log(`${b.name} — ${b.title??''}\n${b.description??''}\n`);for(const i of b.items)console.log(`  ${i.id.padEnd(18)} ${i.title}${i.optional?' (optional)':''}${i.from!==b.name?'  [from '+i.from+']':''}`);return;}
+    if(sub==='suggest'){const s=await project.blueprints.suggest(positional[0]);if(fmt==='json'){out(s,'json');return;}console.log(s.length?s.map(x=>`${x.name}  (${x.title})`).join('\n'):'No blueprint matches this ticket. See pman blueprint list.');return;}
+    if(sub==='apply'){const r=await project.blueprints.apply(positional[0],positional[1],{only:opts.only?labels(opts.only):undefined,includeOptional:!!opts.optional,dryRun:!!opts['dry-run']});if(fmt==='json'){out(r,'json');return;}if(opts['dry-run']){console.log(r.create.length?`Would create ${r.create.length} child ticket(s):\n`+r.create.map(c=>`  ${c.item.padEnd(18)} ${c.title}${c.optional?' (optional)':''}`).join('\n'):'Nothing to create; all chosen items are covered.');return;}console.log(r.created.length?`Created ${r.created.length} child ticket(s):\n`+r.created.map(c=>`  ${c.key??c.id}  ${c.title}`).join('\n'):'Nothing to create; all chosen items are covered.');if(r.coverage.undecided.length)console.log(`Undecided optional items: ${r.coverage.undecided.join(', ')}`);return;}
+    if(sub==='status'){const c=await project.blueprints.coverage(positional[0]);if(fmt==='json'){out(c,'json');return;}console.log(statusText(c));return;}
+    if(sub==='skip'||sub==='unskip'){const c=await project.blueprints.skip(positional[0],positional[1],sub==='unskip'?null:opts.reason);if(fmt==='json'){out(c,'json');return;}console.log(statusText(c));return;}
+    if(sub==='check'){const w=await project.blueprints.check();if(fmt==='json'){out(w,'json');return;}console.log(w.length?w.map(x=>`! ${x.message}`).join('\n'):'All blueprint items are covered.');return;}
+    if(sub==='init'){const r=await project.blueprints.init(positional[0],{from:opts.from});out(fmt==='json'?r:`Wrote ${r.file}; edit it to fit this project.`,fmt);return;}
+    throw new Error('Usage: pman blueprint list|show|suggest|apply|status|skip|unskip|check|init');}
   if(command==='check') {const {opts}=parse([sub,...rest].filter(Boolean));const r=await project.check();if(opts.format==='json')out(r,'json');else{for(const e of r.errors)console.log(`✗ ${e.code}  ${e.message}`);for(const w of r.warnings)console.log(`! ${w.code}  ${w.message}`);console.log(r.valid?`Design is consistent (${r.warnings.length} warning(s)).`:`Design has ${r.errors.length} error(s) and ${r.warnings.length} warning(s).`);}if(!r.valid)process.exitCode=1;return;}
   if(command==='keys'&&['init','renumber'].includes(sub)) {const {opts}=parse(rest);const r=sub==='init'?await project.keys.init({key:opts.key}):await project.keys.renumber();if(opts.format==='json'){out(r,'json');return;}if(sub==='init')console.log(`Project key ${r.key}; numbered ${r.assigned} of ${r.total} tickets.`);else{for(const c of r.changed)console.log(`${c.from} -> ${c.to}  ${c.id}`);console.log(r.changed.length?`Renumbered ${r.changed.length} ticket(s).`:'No duplicate keys.');}return;}
   if(command==='index') {const {opts}=parse(rest);const action=sub&&!sub.startsWith('--')?sub:'status';if(action==='status'){const s=await project.semantic.status();if(opts.format==='json'){out(s,'json');return;}console.log(s.available?`Semantic index ready (${s.sources} sources, ${s.chunks} chunks, generation ${s.generation}${s.indexing?', updating':''}).`:`Semantic search unavailable: ${s.reason??s.error??s.status}`);return;}

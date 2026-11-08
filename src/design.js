@@ -368,6 +368,7 @@ export async function checkProject(p) {
     while (stack.length) { const top = stack.at(-1), edges = adj.get(top[0]) ?? []; if (top[1] >= edges.length) { state.set(top[0], 2); stack.pop(); continue; } const n = edges[top[1]++], s = state.get(n) ?? 0; if (s === 1) { cyclic.add(top[0]); cyclic.add(n); } else if (s === 0) { state.set(n, 1); stack.push([n, 0]); } } }
   if (cyclic.size) err('DEPENDENCY_CYCLE', `Provider/consumer and blocking dependencies form a cycle between tickets: ${[...cyclic].sort().join(', ')}`, { tickets: [...cyclic].sort() });
 
+  for (const w of await p.blueprints?.check?.() ?? []) if (w.code !== 'BLUEPRINT_SUGGESTED') warnings.push(w);
   return { valid: errors.length === 0, errors, warnings, counts: { components: m.components.length, types: m.types.length, contracts: m.contracts.length, ticketsWithCodePlan: tickets.filter(t => t.codePlan && Object.keys(t.codePlan).length).length } };
 }
 

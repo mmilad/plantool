@@ -77,6 +77,12 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
       if(m&&req.method==='POST'){const input=await body(req);const d=await project.documents.create(m[1],{title:input.title,body:input.body,status:input.status,links:input.links});const r=await project.documents.getVersioned(m[1],d.id);return send(res,201,{...r.document,kind:m[1],revision:r.revision});}
       m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/relations$/.exec(pathname);
       if(m&&req.method==='GET'){await project.tickets.get(m[1]);const tid=await project.resolveTicket(m[1]);const rels=await project.relations.list(tid);const tickets=new Map((await project.tickets.list({limit:Infinity})).map(x=>[x.id,x]));return send(res,200,rels.map(r=>{const outgoing=r.sourceId===tid,other=tickets.get(outgoing?r.targetId:r.sourceId);return {id:r.id,type:r.type,direction:outgoing?'outgoing':'incoming',ticket:other?{id:other.id,key:project.ticketKey(other),title:other.title,status:other.status}:{id:outgoing?r.targetId:r.sourceId,missing:true}};}));}
+      if(pathname==='/api/blueprints'&&req.method==='GET')return send(res,200,await project.blueprints.list());
+      m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/blueprint(\/skip)?$/.exec(pathname);
+      if(m&&!m[2]&&req.method==='GET'){const coverage=await project.blueprints.coverage(m[1]);return send(res,200,{coverage,suggestions:coverage.blueprint?[]:await project.blueprints.suggest(m[1]),blueprints:coverage.blueprint?[]:await project.blueprints.list()});}
+      if(m&&!m[2]&&req.method==='POST'){const input=await body(req);const r=await project.blueprints.apply(m[1],input.name,{only:Array.isArray(input.only)?input.only:undefined,includeOptional:!!input.includeOptional,dryRun:!!input.dryRun});return send(res,input.dryRun?200:201,r);}
+      if(m&&!m[2]&&req.method==='DELETE'){await project.blueprints.detach(m[1]);return send(res,200,{detached:true});}
+      if(m&&m[2]&&req.method==='POST'){const input=await body(req);return send(res,200,await project.blueprints.skip(m[1],input.item,input.reason===undefined?'':input.reason));}
       m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/similar$/.exec(pathname);
       if(m&&req.method==='GET'){try{return send(res,200,{available:true,items:await project.semantic.similar(m[1],{limit:intParam(url,'limit',5,1,20)})});}catch(e){if(['SEMANTIC_UNAVAILABLE','NOT_INDEXED'].includes(e.code)||/not been built|not indexed/i.test(e.message))return send(res,200,{available:false,reason:e.message,items:[]});throw e;}}
       m=/^\/api\/relations\/([0-9a-f-]{36})$/.exec(pathname);

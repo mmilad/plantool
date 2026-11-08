@@ -5,6 +5,7 @@ import { TICKET_KINDS, workGraph, readinessOf, nextTickets, claimTicket, release
 export { TICKET_KINDS } from './workflow.js';
 import { attachDesignApi, validateCodePlanShape, resolvedCodePlan } from './design.js';
 import { semanticStatus, updateIndex, semanticSearch, hybridSearch, similarTickets } from './semantic.js';
+import { attachBlueprintApi, validateTicketBlueprint, validateTicketOrigin } from './blueprints.js';
 export { DEFAULT_COMPONENT_KINDS, normalizeSchema } from './design.js';
 
 export const DEFAULT_STATUSES = Object.freeze(['todo', 'in_progress', 'done', 'cancelled']);
@@ -109,7 +110,7 @@ export async function openProject({ cwd = process.cwd(), cache = false } = {}) {
   p.searchPage = (query, options) => searchPage(p, query, options);
   p.context = (id, options) => contextFor(p, id, options);
   p.tree = (id, options) => buildTree(p, id, options);
-  attachDesignApi(p);
+  attachDesignApi(p); attachBlueprintApi(p);
   p.semantic = { status: o => semanticStatus(p, o), update: o => updateIndex(p, o), rebuild: o => updateIndex(p, { ...o, rebuild: true }), search: (q, o) => semanticSearch(p, q, o), hybrid: (q, o) => hybridSearch(p, q, o), similar: (id, o) => similarTickets(p, id, o) };
   p.next = options => nextTickets(p, options);
   p.claim = (id, options) => claimTicket(p, id, options);
@@ -186,7 +187,7 @@ function validateTicketInput(input, statuses) {
   if(input.labels!==undefined&&(!Array.isArray(input.labels)||input.labels.some(x=>typeof x!=='string')))throw new ValidationError('Ticket labels must be an array of strings');
   if(input.kind!==undefined&&!TICKET_KINDS.includes(input.kind))throw new ValidationError(`Invalid ticket kind: ${input.kind}`);
   if(input.assignee!=null&&(typeof input.assignee!=='object'||typeof input.assignee.agent!=='string'||!input.assignee.agent.trim()||Number.isNaN(Date.parse(input.assignee.expiresAt))))throw new ValidationError('Ticket assignee must have an agent name and an expiresAt timestamp');
-  validateCodePlanShape(input.codePlan);
+  validateCodePlanShape(input.codePlan); validateTicketBlueprint(input.blueprint); validateTicketOrigin(input.origin);
   if(input.properties!==undefined&&(!input.properties||typeof input.properties!=='object'||Array.isArray(input.properties)))throw new ValidationError('Ticket properties must be an object');
 }
 
@@ -199,7 +200,7 @@ function ticketApi(p) {
       if (input.parentId) await readJson(idPath(path.join(p.dir, 'tickets'), input.parentId));
       return withLock(p, 'ticket-number', async () => {
       const number = (await listJson(p, 'tickets')).reduce((m, x) => Math.max(m, Number.isInteger(x.number) ? x.number : 0), 0) + 1;
-      const date = nowIso(); const rec = { schemaVersion: 1, id: uuidv7(), number, title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status: input.status ?? statuses[0], priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.codePlan ? { codePlan: input.codePlan } : {}), createdAt: date, updatedAt: date };
+      const date = nowIso(); const rec = { schemaVersion: 1, id: uuidv7(), number, title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status: input.status ?? statuses[0], priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.codePlan ? { codePlan: input.codePlan } : {}), ...(input.blueprint ? { blueprint: input.blueprint } : {}), ...(input.origin ? { origin: input.origin } : {}), createdAt: date, updatedAt: date };
       return writeJson(p, 'tickets', rec, { create: true });
       });
     },
@@ -432,7 +433,7 @@ export async function contextFor(p,id,{budget=8000}={}) {
   const docs=[];for(const kind of kinds)for(const d of await p.documents.list(kind))if((d.links??[]).includes(id)||d.body.includes(id)||d.title.toLowerCase().includes(ticket.title.toLowerCase()))docs.push({id:d.id,type:kind,title:d.title,path:path.relative(p.root,idPath(path.join(p.dir,kind),d.id,'.md')).split(path.sep).join('/')});
   const brief=x=>({id:x.id,title:x.title,status:x.status,priority:x.priority,parentId:x.parentId,description:x.description??''});
   const ticketPath=path.relative(p.root,idPath(path.join(p.dir,'tickets'),id)).split(path.sep).join('/');
-  const g=await workGraph(p),ready=readinessOf(g,ticket);const packet={readiness:{ready:ready.ready,reasons:ready.reasons},ticket:{...brief(ticket),kind:ticket.kind??'task',assignee:ticket.assignee??null},codePlan:await resolvedCodePlan(p,ticket),ancestors:ancestors.map(brief),descendants:selectedDesc.map(brief),relationships:rel,comments,documents:docs,sources:{ticket:ticketPath,ancestors:ancestors.map(x=>path.relative(p.root,idPath(path.join(p.dir,'tickets'),x.id)).split(path.sep).join('/'))}},omitted={comments:0,relationships:0,documents:0,ancestors:0,descendants:Math.max(0,descendantsList.length-selectedDesc.length),descriptionBytes:0};
+  const g=await workGraph(p),ready=readinessOf(g,ticket);const packet={readiness:{ready:ready.ready,reasons:ready.reasons},ticket:{...brief(ticket),kind:ticket.kind??'task',assignee:ticket.assignee??null},codePlan:await resolvedCodePlan(p,ticket),blueprint:ticket.blueprint?await p.blueprints.coverage(ticket.id).then(c=>({name:c.blueprint?.name,missing:c.missing,undecided:c.undecided,items:c.items.map(i=>({id:i.id,title:i.title,state:i.state,optional:i.optional||undefined,ticket:i.ticket?.key??i.ticket?.id,reason:i.reason}))})).catch(()=>null):undefined,ancestors:ancestors.map(brief),descendants:selectedDesc.map(brief),relationships:rel,comments,documents:docs,sources:{ticket:ticketPath,ancestors:ancestors.map(x=>path.relative(p.root,idPath(path.join(p.dir,'tickets'),x.id)).split(path.sep).join('/'))}},omitted={comments:0,relationships:0,documents:0,ancestors:0,descendants:Math.max(0,descendantsList.length-selectedDesc.length),descriptionBytes:0};
   const size=()=>Buffer.byteLength(JSON.stringify({...packet,omitted,truncated:false,budget:max},null,2));
   for(const key of ['comments','relationships','documents','descendants'])while(size()>max&&packet[key].length){packet[key].pop();omitted[key]++;}
   if(size()>max&&packet.codePlan?.types&&Object.keys(packet.codePlan.types).length){omitted.codePlanTypes=Object.keys(packet.codePlan.types).length;packet.codePlan.types={};}

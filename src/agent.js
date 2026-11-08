@@ -18,6 +18,8 @@ This project plans its work in \`.pman/\` (Git-tracked). Use the \`pman\` CLI (i
 
 Before implementing code that other parts call or depend on, plan it centrally: \`pman component add\`, \`pman type set\`, \`pman contract set\`, then attach it to the ticket with \`pman codeplan add <id> implements|consumes|changes <Component>\` (use \`--requires\` for the fields you need). Run \`pman check\` and resolve errors before writing code; change a contract centrally instead of working around it.
 
+When you plan a new feature, check what it really needs: \`pman blueprint suggest <id>\` and \`pman blueprint apply <id> <name> --dry-run\` show the checklist (a header also needs a logo, a mobile menu, a skip link ...). Apply it to create child tickets, and decide optional items with \`--only\` or \`pman blueprint skip <id> <item> --reason ...\`. \`pman check\` warns about missing or undecided items.
+
 A parent ticket can only be marked done after its children and blockers are finished.
 ${END}
 `;
