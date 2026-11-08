@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb64-8ffe-72fd-85d9-984cb0d34d0c",
+  "ticketId": "01a189c7-e5a5-7fd7-b0e1-4adec7831943",
+  "body": "Implemented: hits route by type (ticket → detail URL, comment → owning ticket with the comment page loaded via ?around and focused, document → reader; missing targets show a message). Rows show type icon, key, title, status lozenge, parent ('in PM-1 Header'), an original-text snippet around the match with escaped highlighting, and 'similar meaning' for semantic-only hits. Internal file paths are no longer sent to the UI. Queries are trimmed, debounced, request-generation guarded and show a 'Searching …' state with aria-busy.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:41:32.286Z"
+}

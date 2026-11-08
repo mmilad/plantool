@@ -49,3 +49,27 @@ test('semantic search API: status, opt-in indexing, hybrid search, similar ticke
   assert.equal(rel.status, 201, rel.body);
   assert.equal((await send(`${app.url}/api/relations`, 'POST', write, JSON.stringify({ sourceId: menu.id, targetId: nav.id, type: 'bogus' }))).status, 400);
 });
+
+test('relationship API rejects duplicate edges and cycles with 409 and removes exactly one edge', async t => {
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'pman-ui-rel-'));
+  t.after(async () => { await fs.rm(cwd, { recursive: true, force: true }); });
+  await initProject({ cwd }); const p = await openProject({ cwd });
+  const a = await p.tickets.create({ title: 'A' }), b = await p.tickets.create({ title: 'B' }), c = await p.tickets.create({ title: 'C' });
+  const app = await serve({ cwd, port: 0 }); t.after(() => new Promise(r => app.server.close(r)));
+  const host = { host: new URL(app.url).host }; const csrf = /"csrf":"([a-f0-9]+)"/.exec((await send(app.url, 'GET', host)).body)[1];
+  const write = { ...host, origin: app.url, 'content-type': 'application/json', 'x-pman-csrf': csrf };
+  const add = (s, tg, type) => send(`${app.url}/api/relations`, 'POST', write, JSON.stringify({ sourceId: s, targetId: tg, type }));
+  const ab = JSON.parse((await add(a.id, b.id, 'blocks')).body);
+  const dup = await add(a.id, b.id, 'blocks'); assert.equal(dup.status, 409); assert.equal(JSON.parse(dup.body).code, 'DUPLICATE_RELATION');
+  const cyc = await add(b.id, a.id, 'blocks'); assert.equal(cyc.status, 409); assert.equal(JSON.parse(cyc.body).code, 'CYCLE');
+  assert.equal((await add(a.id, a.id, 'blocks')).status, 400);
+  await add(a.id, c.id, 'blocks');
+  assert.equal((await send(`${app.url}/api/relations/${ab.id}`, 'DELETE', write)).status, 200);
+  assert.equal((await send(`${app.url}/api/relations/${ab.id}`, 'DELETE', write)).status, 404);
+  const left = JSON.parse((await send(`${app.url}/api/tickets/A-1/relations`.replace('A-1', a.id), 'GET', host)).body);
+  assert.deepEqual(left.map(r => r.ticket.title), ['C']); assert.equal(left[0].direction, 'outgoing');
+  const p2 = await openProject({ cwd }); const key = p2.ticketKey(await p2.tickets.get(a.id));
+  if (key) { const byKey = JSON.parse((await send(`${app.url}/api/tickets/${key}/relations`, 'GET', host)).body); assert.equal(byKey[0].direction, 'outgoing'); }
+  const s = JSON.parse((await send(`${app.url}/api/search?q=A&types=ticket`, 'GET', host)).body);
+  assert.ok(s.items.every(i => !('path' in i))); assert.equal(s.mode, 'keyword');
+});
