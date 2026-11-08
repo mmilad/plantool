@@ -12,9 +12,17 @@ npx pman init
 npx pman --help
 ```
 
-Node.js 22 or newer is required. No global installation, native binary, database, hosted service, FP installation, or OS-specific project registry is used. `pman init` creates tracked `.pman/` data and does not modify `.gitignore`.
+Node.js 22 or newer is required. No native binary, database, hosted service or FP installation is used. A small machine-local project list (`~/.pman/projects.json`) lets `pman serve` show all your projects; canonical data always stays in each repository. `pman init` creates tracked `.pman/` data and does not modify `.gitignore`.
 
 The npm package is `@mmilad/pm`; the executable remains `pman`. The merged planning documents used the provisional unscoped name `planus-manus`; the owner selected the personal scope after checking the existing `pman` name. The package is not published.
+
+## Workspace: all projects in one UI
+
+Run `pman serve` from any directory. It opens a Jira-like workspace with every project pman knows: a project directory, and per project a Summary (status, priority and type breakdown plus the "ready to start" order agents get from `pman next`), a Board with status columns (drag cards or use Alt+←/→ to change status), a List with the ticket tree and issue details, Documents and Design.
+
+Projects are registered automatically in a machine-local list (`~/.pman/projects.json`, override with `PMAN_HOME`) whenever you run `pman init` or any pman command inside them; `pman projects`, `pman projects add PATH`, `pman projects remove KEY|PATH` and `pman projects prune` manage the list, and the UI can add or remove projects too. Removing a project from the list never touches its files. Set `PMAN_NO_REGISTER=1` to skip automatic registration.
+
+Tickets have Jira-style keys such as `SHOP-42` (project key plus a sequential number). Every command that takes a ticket ID also accepts the key, e.g. `pman ticket show SHOP-42` or `pman claim SHOP-42 --agent bob`. Existing projects get keys with `pman keys init [--key SHOP]`; after merging branches that created tickets in parallel, `pman keys renumber` fixes duplicate numbers (`pman validate` warns about them).
 
 ## Quick start
 

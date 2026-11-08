@@ -4,12 +4,13 @@
   "title": "List/backlog view and Jira-like issue detail with details panel",
   "kind": "task",
   "description": "",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [],
   "properties": {},
   "parentId": "01a1b8de-22ff-764b-b757-4c9e83d8c00b",
   "createdAt": "2026-11-08T01:55:28.226Z",
-  "updatedAt": "2026-11-08T01:55:28.226Z",
-  "number": 80
+  "updatedAt": "2026-11-08T12:12:19.584Z",
+  "number": 80,
+  "assignee": null
 }

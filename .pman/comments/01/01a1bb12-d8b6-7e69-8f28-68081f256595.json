@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb12-d8b6-7e69-8f28-68081f256595",
+  "ticketId": "01a1b8de-2345-7bdc-8e74-8e5ada015871",
+  "body": "Projects directory (search, open/in-progress counts, last update, folder, add by path, remove from list with confirmation, missing projects marked); top bar with Projects, project breadcrumb, search and Create; project sidebar (Summary, Board, List, Documents, Design, refresh, folder). Jira-like tokens, typography, lozenges, type and priority icons, avatars. URLs ?project=KEY&view=…&ticket=KEY-n. Summary with stat cards, status/priority/type breakdowns and 'Ready to start' from pman next (/api/next). Verified in Chromium desktop and iPhone 13.",
+  "author": "claude",
+  "createdAt": "2026-11-08T12:12:16.950Z"
+}
