@@ -86,6 +86,12 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Known trade-off: claims and status changes made in one worktree or branch are visible to agents in other worktrees only after a merge. Revisit if parallel agents in separate worktrees start colliding.
 - Until a usable version exists, Planus Manus is the only planned project. The final product name and npm publication follow later.
 
+## Local cache database (owner decision 2026-11-08)
+
+- Derived data lives in one SQLite file per project: `~/.pman/cache/<projectId>/db.sqlite` (under `PMAN_HOME`), never in the repository. It holds the search index, embeddings and file fingerprints as separate tables; it can be deleted at any time and is rebuilt from the canonical `.pman/` files.
+- Worktrees and branches of one repository share a project ID but can contain different plan files. Rows are therefore keyed by checkout root and file, and embeddings are stored content-addressed (hash of the embedded text), so switching branches or worktrees only re-embeds text that actually changed and never mixes results between checkouts.
+- Concurrency: WAL journal mode (many readers in parallel with one writer), a busy timeout of a few seconds so concurrent writers wait instead of failing, and short write transactions. Index updates are best effort: if the database stays locked or is corrupt, pman falls back to keyword search over the files and retries later; canonical writes never wait for the cache. Use Node's built-in `node:sqlite` to avoid native dependencies.
+
 ## Verification and remaining release work
 
 - Local checks were run on Node 24.22.1/Linux: package syntax checks, 11 tests (including a 10,000-deep parent chain and HTTP security checks), JSON Schema parsing, `npm pack --dry-run`, local tarball install, `npm exec -- pman --help`, and a public API import smoke check.

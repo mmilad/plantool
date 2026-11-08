@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb33-aff1-7546-873c-5fbfd0443355",
+  "ticketId": "01a189d0-4063-7c51-8f35-13c58e86e9d6",
+  "body": "Owner decision 2026-11-08: one cache database per project at ~/.pman/cache/<projectId>/db.sqlite (PMAN_HOME), outside the repository. Tables for index, embeddings (content-addressed, shared across worktrees/branches) and fingerprints; rows keyed by checkout root + file; WAL + busy_timeout, short write transactions, best-effort updates with keyword fallback; node:sqlite, no native deps. See docs/implementation-decisions.md 'Local cache database'.",
+  "author": "local",
+  "createdAt": "2026-11-08T12:48:09.201Z"
+}
