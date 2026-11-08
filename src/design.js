@@ -2,6 +2,8 @@ import { ValidationError, NotFoundError, ConflictError, uuidv7, _store } from '.
 
 export const DEFAULT_COMPONENT_KINDS = Object.freeze(['module', 'service', 'class', 'method', 'function', 'ui-component']);
 export const CODE_PLAN_KEYS = Object.freeze(['implements', 'consumes', 'changes']);
+/** implements.stage: 'mock' is a stand-in with the contract's shape; 'full' is the real implementation (default). consumes.needs says which one a consumer waits for. */
+export const CODE_STAGES = Object.freeze(['mock', 'full']);
 const PRIMITIVES = ['string', 'number', 'integer', 'boolean', 'null', 'any'];
 const SCHEMA_TYPES = [...PRIMITIVES, 'array', 'object'];
 const NAME_RE = /^[A-Za-z_][A-Za-z0-9_-]*$/;
@@ -242,10 +244,14 @@ function contractApi(p) {
 // ---------- ticket code plans ----------
 
 function normalizeEntry(key, entry) {
-  if (key !== 'consumes') return { component: entry.component };
+  const stage = entry.stage, needs = entry.needs;
+  if (stage !== undefined && (key !== 'implements' || !CODE_STAGES.includes(stage))) throw new ValidationError(`stage applies to implements only and must be one of: ${CODE_STAGES.join(', ')}`);
+  if (needs !== undefined && (key !== 'consumes' || !CODE_STAGES.includes(needs))) throw new ValidationError(`needs applies to consumes only and must be one of: ${CODE_STAGES.join(', ')}`);
+  if (key !== 'consumes') return { component: entry.component, ...(stage !== undefined ? { stage } : {}) };
   const list = (v, what) => { if (v === undefined) return undefined; if (!Array.isArray(v) || v.some(x => typeof x !== 'string' || !x.trim())) throw new ValidationError(`consumes.${what} must be a list of field paths`); return [...new Set(v.map(x => x.trim()))]; };
   const out = { component: entry.component, requires: list(entry.requires ?? [], 'requires') };
   const provides = list(entry.provides, 'provides'); if (provides) out.provides = provides;
+  if (needs !== undefined) out.needs = needs;
   return out;
 }
 
@@ -256,6 +262,7 @@ export function validateCodePlanShape(plan) {
     if (!CODE_PLAN_KEYS.includes(key)) throw new ValidationError(`Unknown codePlan key: ${key}`);
     if (!Array.isArray(plan[key])) throw new ValidationError(`codePlan.${key} must be a list`);
     for (const e of plan[key]) if (!e || typeof e.component !== 'string' || !UUID_RE.test(e.component)) throw new ValidationError(`codePlan.${key} entries need a component id`);
+    for (const e of plan[key]) { if (e.stage !== undefined && (key !== 'implements' || !CODE_STAGES.includes(e.stage))) throw new ValidationError(`codePlan.${key} stage must be mock or full (implements only)`); if (e.needs !== undefined && (key !== 'consumes' || !CODE_STAGES.includes(e.needs))) throw new ValidationError(`codePlan.${key} needs must be mock or full (consumes only)`); }
   }
 }
 
@@ -298,7 +305,14 @@ export async function designModel(p, tickets) {
   const providersOf = componentId => [...new Set(selfAndAncestors(componentId).flatMap(id => implementers.get(id) ?? []))];
   /** Implicit dependency edges provider ticket -> consumer ticket. */
   const providerEdges = [];
-  for (const t of tickets) for (const e of t.codePlan?.consumes ?? []) for (const prov of providersOf(e.component)) if (prov.id !== t.id) providerEdges.push({ sourceId: prov.id, targetId: t.id, component: e.component });
+  const stageOf = (ticket, componentId) => { const ids = selfAndAncestors(componentId); const own = (ticket.codePlan?.implements ?? []).filter(x => ids.includes(x.component)); return own.length && own.every(x => x.stage === 'mock') ? 'mock' : 'full'; };
+  for (const t of tickets) for (const e of t.codePlan?.consumes ?? []) {
+    const provs = providersOf(e.component).filter(prov => prov.id !== t.id);
+    const wanted = e.needs ?? 'full';
+    let chosen = provs.filter(prov => stageOf(prov, e.component) === wanted);
+    if (!chosen.length && wanted === 'mock') chosen = provs.filter(prov => stageOf(prov, e.component) === 'full');
+    for (const prov of chosen) providerEdges.push({ sourceId: prov.id, targetId: t.id, component: e.component, stage: stageOf(prov, e.component) });
+  }
   return { components, types, contracts, byId, typeMap, contractOf, names, providersOf, providerEdges, tickets };
 }
 

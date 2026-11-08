@@ -135,3 +135,26 @@ test('type changes report impact through every contract that uses the type', asy
   const unrelated = await p.types.set('User', { userId: 'integer', email: 'string?', firstName: 'string', lastName: 'string', avatar: 'string?' });
   assert.equal(unrelated.impact.breaking, false); assert.equal(unrelated.impact.affectedConsumers.length, 0);
 });
+
+test('a mock unblocks the consumer that needs only a mock; a full consumer still waits for the full provider', async t => {
+  const p = await project(t);
+  await p.types.set('User', { userId: 'string' });
+  await p.components.create({ kind: 'service', name: 'UserService' });
+  await p.components.create({ kind: 'method', name: 'getUser', parentId: 'UserService' });
+  await p.contracts.set('UserService.getUser', { input: { userId: 'string' }, output: 'User' });
+  const mock = await p.tickets.create({ title: 'Mock UserService' });
+  const full = await p.tickets.create({ title: 'Implement UserService' });
+  const cart = await p.tickets.create({ title: 'Cart works against the mock' });
+  const checkout = await p.tickets.create({ title: 'Checkout needs the real service' });
+  await p.codePlan.add(mock.id, 'implements', 'UserService', { stage: 'mock' });
+  await p.codePlan.add(full.id, 'implements', 'UserService');
+  await p.codePlan.add(cart.id, 'consumes', 'UserService.getUser', { needs: 'mock' });
+  await p.codePlan.add(checkout.id, 'consumes', 'UserService.getUser');
+  assert.equal((await p.context(cart.id)).readiness.ready, false);
+  await p.tickets.update(mock.id, { status: 'done' }, { force: true });
+  assert.equal((await p.context(cart.id)).readiness.ready, true);
+  assert.equal((await p.context(checkout.id)).readiness.ready, false);
+  await p.tickets.update(full.id, { status: 'done' }, { force: true });
+  assert.equal((await p.context(checkout.id)).readiness.ready, true);
+  await assert.rejects(p.codePlan.add(cart.id, 'implements', 'UserService', { needs: 'mock' }), { code: 'VALIDATION' });
+});
