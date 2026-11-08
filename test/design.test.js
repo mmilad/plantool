@@ -173,3 +173,13 @@ test('check warns when a full consumer has only a mock planned', async t => {
   await p.codePlan.add(mock.id, 'implements', 'UserService');
   assert.ok(!(await p.check()).warnings.some(w => w.code === 'ONLY_MOCK_PROVIDER'));
 });
+
+test('check suggests linking a ticket that names another ticket without a relation', async t => {
+  const p = await project(t);
+  const pay = await p.tickets.create({ title: 'Set up payment provider' });
+  const checkout = await p.tickets.create({ title: 'Checkout page', description: 'Needs the Set up payment provider work first.' });
+  const hit = r => r.warnings.some(w => w.code === 'UNLINKED_MENTION' && w.ticketId === checkout.id && w.otherId === pay.id);
+  assert.ok(hit(await p.check()));
+  await p.relations.add(pay.id, checkout.id, 'blocks');
+  assert.ok(!hit(await p.check()));
+});

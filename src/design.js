@@ -385,6 +385,18 @@ export async function checkProject(p) {
     while (stack.length) { const top = stack.at(-1), edges = adj.get(top[0]) ?? []; if (top[1] >= edges.length) { state.set(top[0], 2); stack.pop(); continue; } const n = edges[top[1]++], s = state.get(n) ?? 0; if (s === 1) { cyclic.add(top[0]); cyclic.add(n); } else if (s === 0) { state.set(n, 1); stack.push([n, 0]); } } }
   if (cyclic.size) err('DEPENDENCY_CYCLE', `Provider/consumer and blocking dependencies form a cycle between tickets: ${[...cyclic].sort().join(', ')}`, { tickets: [...cyclic].sort() });
 
+  // A ticket whose text names another ticket, without any relation between them, probably has an unlinked dependency.
+  const linkedPairs = new Set((await p.relations.list()).flatMap(r => [`${r.sourceId}|${r.targetId}`, `${r.targetId}|${r.sourceId}`]));
+  const titled = tickets.filter(x => String(x.title ?? '').trim().length >= 8);
+  for (const t of tickets) {
+    const text = `${t.description ?? ''} ${t.why ?? ''}`.toLocaleLowerCase();
+    if (!text.trim()) continue;
+    for (const o of titled) {
+      if (o.id === t.id || o.parentId === t.id || t.parentId === o.id) continue;
+      if (!text.includes(o.title.trim().toLocaleLowerCase()) || linkedPairs.has(`${t.id}|${o.id}`)) continue;
+      warn('UNLINKED_MENTION', `Ticket ${p.ticketKey(t) ?? t.id} mentions "${o.title}" (${p.ticketKey(o) ?? o.id}) without a relation; link it if it is a dependency`, { ticketId: t.id, otherId: o.id });
+    }
+  }
   for (const w of await p.blueprints?.check?.() ?? []) if (w.code !== 'BLUEPRINT_SUGGESTED') warnings.push(w);
   return { valid: errors.length === 0, errors, warnings, counts: { components: m.components.length, types: m.types.length, contracts: m.contracts.length, ticketsWithCodePlan: tickets.filter(t => t.codePlan && Object.keys(t.codePlan).length).length } };
 }
