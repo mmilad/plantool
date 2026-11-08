@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb72-7897-708d-af70-3d656837cae1",
+  "ticketId": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
+  "body": "All UI work packages are done (navigation/list/board, detail and editing, documents, design view, summary, search incl. semantic mode, relationships, blueprint checklist, icons, responsive layout, accessibility, feedback states, visual review). Further UI improvements get new tickets.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:56:43.799Z"
+}

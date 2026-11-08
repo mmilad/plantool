@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb72-6fd8-7926-ab07-dd1544d2d4c2",
+  "ticketId": "01a1b589-9d09-7fb6-89f2-178a43914470",
+  "body": "Open planning content is English now: PM-1 description rewritten and an English summary comment added; all goals, plans and decisions were already English. Decision: closed tickets and their comments (about 340 records, ~380 KB, all done) stay in German as historical record; translating them would rewrite history without benefit. New content is written in English (AGENTS.md, README).",
+  "author": "local",
+  "createdAt": "2026-11-08T13:56:41.560Z"
+}

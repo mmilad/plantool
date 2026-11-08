@@ -4,6 +4,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { ConflictError, NotFoundError, ValidationError } from './index.js';
 import { designModel } from './design.js';
+import { sharedClaim, sharedRelease, claimsElsewhere } from './claims.js';
 
 export const TICKET_KINDS = Object.freeze(['task', 'feature', 'bug']);
 export const PRIORITY_RANK = Object.freeze({ low: 0, normal: 1, high: 2, urgent: 3 });
@@ -58,7 +59,8 @@ export async function nextTickets(p, { limit = 5, parentId, now = Date.now() } =
   const g = await workGraph(p);
   let pool = g.tickets;
   if (parentId) { if (!g.byId.has(parentId)) throw new NotFoundError(`Ticket not found: ${parentId}`); pool = [g.byId.get(parentId), ...g.descendants(parentId)]; }
-  const candidates = pool.filter(t => t.status === 'todo' || (t.status === 'in_progress' && t.assignee && !leaseActive(t, now)));
+  const elsewhere = await claimsElsewhere(p, now);
+  const candidates = pool.filter(t => !elsewhere.has(t.id) && (t.status === 'todo' || (t.status === 'in_progress' && t.assignee && !leaseActive(t, now))));
   const rows = [];
   for (const t of candidates) {
     if (!readinessOf(g, t, now).ready) continue;
@@ -111,7 +113,9 @@ export async function claimTicket(p, id, { agent, leaseMinutes = DEFAULT_LEASE_M
     const r = readinessOf(g, { ...ticket, assignee: null, status: ticket.status === 'in_progress' ? 'todo' : ticket.status }, now);
     if (!r.ready && !force) throw new ConflictError(`Ticket is not ready: ${r.reasons.join('; ')}`, { id, reasons: r.reasons });
     const assignee = { agent: agent.trim(), claimedAt: new Date(now).toISOString(), expiresAt: new Date(now + Number(leaseMinutes) * 60_000).toISOString() };
-    return p.tickets.update(id, { status: 'in_progress', assignee }, { expectedRevision: revision, force: true });
+    await sharedClaim(p, ticket.id, assignee, { force, now });
+    try { return await p.tickets.update(id, { status: 'in_progress', assignee }, { expectedRevision: revision, force: true }); }
+    catch (e) { await sharedRelease(p, ticket.id).catch(() => {}); throw e; }
   });
 }
 
@@ -120,7 +124,9 @@ export async function releaseTicket(p, id, { agent, force = false } = {}) {
     const { ticket, revision } = await p.tickets.getVersioned(id);
     if (!ticket.assignee) return ticket;
     if (agent && ticket.assignee.agent !== agent && !force) throw new ConflictError(`Ticket is claimed by ${ticket.assignee.agent}, not ${agent}`, { id, assignee: ticket.assignee });
-    return p.tickets.update(id, { assignee: null, status: ticket.status === 'in_progress' ? 'todo' : ticket.status }, { expectedRevision: revision, force: true });
+    const r = await p.tickets.update(id, { assignee: null, status: ticket.status === 'in_progress' ? 'todo' : ticket.status }, { expectedRevision: revision, force: true });
+    await sharedRelease(p, ticket.id, { force });
+    return r;
   });
 }
 
@@ -130,7 +136,9 @@ export async function finishTicket(p, id, { note, agent, force = false } = {}) {
     const { ticket, revision } = await p.tickets.getVersioned(id);
     if (agent && ticket.assignee && leaseActive(ticket, Date.now()) && ticket.assignee.agent !== agent && !force)
       throw new ConflictError(`Ticket is claimed by ${ticket.assignee.agent}, not ${agent}`, { id, assignee: ticket.assignee });
-    return p.tickets.update(id, { status: 'done', assignee: null }, { expectedRevision: revision, force });
+    const r = await p.tickets.update(id, { status: 'done', assignee: null }, { expectedRevision: revision, force });
+    await sharedRelease(p, ticket.id, { force: true });
+    return r;
   });
   const comment = note?.trim() ? await p.comments.add(id, { body: note, author: agent ?? 'local' }) : null;
   const unblocked = (await nextTickets(p, { limit: Infinity })).filter(x => !before.has(x.id));

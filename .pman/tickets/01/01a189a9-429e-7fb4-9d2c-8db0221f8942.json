@@ -2,14 +2,15 @@
   "schemaVersion": 1,
   "id": "01a189a9-429e-7fb4-9d2c-8db0221f8942",
   "title": "Design and build a simple planning UI for Planus Manus",
-  "description": "UI-Programm für eine eigenständige lokale Planungsoberfläche mit schlichter, vorläufig an fp.dev angelehnter visueller Richtung; Jira dient nur als Orientierung für Planungsabläufe. Die konzeptionelle Phase ist eingefroren: keine weitere Vorabplanung. docs/ui-wireframe.md und SVGs bleiben passive Referenz und werden nur bei konkretem Umsetzungsbedarf gepflegt. Aktive Arbeit läuft in kleinen sichtbaren Ausschnitten: nach Abnahme eines Ausschnitts jeweils genau ein nächstes bestehendes UI-Arbeitspaket umsetzen. Spätere Pakete sind keine Vorbedingungen; fachliche Parents und Relations bleiben erhalten. Fester Serverstart unter 127.0.0.1:4000 ist abgeschlossen; bei belegtem Port klar abbrechen, keinen Zufallsport oder Doppelstart. Die UI darf iterativ näher an fp.dev gebracht werden, wenn ein konkreter Arbeitsschritt ansteht.",
-  "status": "in_progress",
+  "description": "Programme for the local planning workspace served by pman serve. Direction (owner decision 2026-11-07): look and feel close to Jira (projects page, project sidebar with Summary/Board/List/Documents/Design, KEY-n ticket keys, lozenges, type and priority icons), multi-project from any directory, English UI. Work happens in small visible slices that are checked in the browser; docs/ui-review.md records reviews and fixes. Earlier constraints that still hold: loopback only, CSRF/Host/Origin checks, fixed default port 4000 with a clear error when it is taken.",
+  "status": "done",
   "priority": "high",
   "labels": [],
   "properties": {},
   "parentId": null,
   "createdAt": "2026-10-29T21:55:33.662Z",
-  "updatedAt": "2026-11-07T10:22:45.679Z",
+  "updatedAt": "2026-11-08T13:56:42.931Z",
   "kind": "task",
-  "number": 1
+  "number": 1,
+  "assignee": null
 }

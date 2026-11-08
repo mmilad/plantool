@@ -110,6 +110,12 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Optional items are never created by default; they count as "undecided" until created or skipped with a reason. Missing and undecided items are warnings in `pman check`, not blockers for `done`.
 - Suggestions are keyword based (title and labels, or a `blueprint:<name>` label) and only shown, never applied automatically.
 
+## Claims across worktrees (PM-82, 2026-11-08)
+
+- Each worktree has its own `.pman/`, so a claim used to be visible elsewhere only after a merge. Claims are now mirrored in the common Git directory (`<repo>/.git/pman/claims.json`), found without spawning git (`.git` directory, or `.git` file → `gitdir` → `commondir`).
+- `claim` fails with CONFLICT when another worktree holds an active lease (unless `--force`), `next` skips tickets claimed elsewhere, `release`/`done` remove the entry. Expired leases are cleaned up on the next claim.
+- The ticket files remain the source of truth inside a worktree; the shared file is only coordination and is never committed. No Git repository or `PMAN_SHARED_CLAIMS=0` → no-op.
+
 ## Verification and remaining release work
 
 - Local checks were run on Node 24.22.1/Linux: package syntax checks, 11 tests (including a 10,000-deep parent chain and HTTP security checks), JSON Schema parsing, `npm pack --dry-run`, local tarball install, `npm exec -- pman --help`, and a public API import smoke check.
