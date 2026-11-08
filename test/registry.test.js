@@ -28,7 +28,7 @@ test('registry registers, lists, removes and prunes projects by root path', asyn
 
 test('CLI registers projects automatically and lists them from any directory', async t => {
   const dir = await home(t); const a = await proj(t, 'Shop');
-  const env = { ...process.env, PMAN_HOME: dir };
+  const env = { ...process.env, PMAN_HOME: dir }; delete env.PMAN_NO_REGISTER;
   assert.equal(spawnSync(process.execPath, [cli, 'ticket', 'list'], { cwd: a, env, encoding: 'utf8' }).status, 0);
   const listed = spawnSync(process.execPath, [cli, 'projects', '--format', 'json'], { cwd: os.tmpdir(), env, encoding: 'utf8' });
   assert.equal(listed.status, 0, listed.stderr); assert.deepEqual(JSON.parse(listed.stdout).map(x => x.key), ['SHOP']);
