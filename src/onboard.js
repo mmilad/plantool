@@ -52,6 +52,7 @@ Relation types: ${list(RELATION_TYPES)}.
 - \`blocks\` (blocker → blocked) is the one that decides readiness. Cycles are refused.
 - \`implements\`, \`validates\`, \`duplicates\`, \`supersedes\`, \`relates_to\` describe links without changing readiness.
 - Contracts link through \`codePlan\` on a ticket: \`implements\` a component, \`consumes\` a contract with the fields it needs, or \`changes\` one.
+- A stand-in for a provider is an \`implements\` with \`--stage mock\`. A consumer that can start on a stand-in says \`--needs mock\`; the default \`full\` waits for the real implementation. Whether a stand-in is worth it is your call: use one when the logic is complex enough that the consumer needs something to run against.
 
 ## Workflows
 
