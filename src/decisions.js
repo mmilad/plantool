@@ -64,7 +64,7 @@ export function attachDecisionApi(p) {
       const scores = o.option?.scores ?? {};
       const rated = criteria.filter(c => Number.isFinite(scores[c.id]));
       const total = criteria.reduce((s, c) => s + c.weight * 5, 0);
-      const score = total ? Math.round(1000 * rated.reduce((s, c) => s + c.weight * scores[c.id], 0) / total) / 1000 : null;
+      const score = total && rated.length ? Math.round(1000 * rated.reduce((s, c) => s + c.weight * scores[c.id], 0) / total) / 1000 : null;
       const plan = subtree(tickets, o.id);
       const effort = plan.filter(isOpen).reduce((s, t) => s + (SIZE_POINTS[t.size] ?? DEFAULT_POINTS), 0) + (o.size ? SIZE_POINTS[o.size] : 0);
       return { id: o.id, key: p.ticketKey(o), title: o.title, status: o.status, why: o.why ?? '', risks: o.risks ?? [], size: o.size ?? null, pros: o.option?.pros ?? [], cons: o.option?.cons ?? [], scores, rated: rated.length, score, effort, planned: plan.length, chosen: d.decision?.chosen === o.id };
