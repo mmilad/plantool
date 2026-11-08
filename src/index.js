@@ -401,7 +401,9 @@ export async function searchProject(p, query, { types } = {}) {
   const q=String(query??'').trim().toLocaleLowerCase(); if(!q) throw new ValidationError('Search query is required');
   const wanted=types?.length?new Set(types):null; if(wanted)for(const x of wanted)if(!SEARCH_TYPES.includes(x))throw new ValidationError(`Unknown search type: ${x}`);
   const hits=[], rel=(folder,id,ext)=>path.relative(p.root,idPath(path.join(p.dir,folder),id,ext)).split(path.sep).join('/');
-  const rank=(title,body)=>{const t=String(title??'').toLocaleLowerCase();if(t===q)return 0;if(t.startsWith(q))return 1;if(t.includes(q))return 2;return String(body??'').toLocaleLowerCase().includes(q)?3:-1;};
+  const words=[...new Set(q.split(/\s+/).filter(w=>w.length>=2))];
+  // phrase matches rank first; then all words in the title; then all words anywhere
+  const rank=(title,body)=>{const t=String(title??'').toLocaleLowerCase(),b=String(body??'').toLocaleLowerCase();if(t===q)return 0;if(t.startsWith(q))return 1;if(t.includes(q))return 2;if(b.includes(q))return 3;if(words.length>1){if(words.every(w=>t.includes(w)))return 4;if(words.every(w=>t.includes(w)||b.includes(w)))return 5;}return -1;};
   const snippet=(text)=>{const s=String(text??''),at=s.toLocaleLowerCase().indexOf(q);return at<0?s.slice(0,160):s.slice(Math.max(0,at-70),at+q.length+90);};
   const tickets=await listJson(p,'tickets'),titles=new Map(tickets.map(x=>[x.id,x.title]));
   const keyQuery=/^[a-z][a-z0-9]{1,9}-\d+$/.test(q)?q:null;

@@ -1,0 +1,29 @@
+{
+  "description": "Local, non-canonical reference set for the semantic search quality gate (PM-31). Queries deliberately avoid the exact title words. Relevant targets are ticket keys of this repository's own plan.",
+  "queries": [
+    { "q": "two agents should not grab the same ticket", "lang": "en", "relevant": ["PM-58", "PM-82"] },
+    { "q": "zwei Agenten sollen nicht dasselbe Ticket nehmen", "lang": "de", "relevant": ["PM-58", "PM-82"] },
+    { "q": "what should I work on next", "lang": "en", "relevant": ["PM-57", "PM-54"] },
+    { "q": "woran soll der Agent als nächstes arbeiten", "lang": "de", "relevant": ["PM-57", "PM-54"] },
+    { "q": "menü auf dem handy", "lang": "de", "relevant": ["PM-16"] },
+    { "q": "phone layout switch between list and ticket", "lang": "en", "relevant": ["PM-16"] },
+    { "q": "Kanban Spalten mit Karten verschieben", "lang": "de", "relevant": ["PM-79", "PM-12"] },
+    { "q": "drag cards between status columns", "lang": "en", "relevant": ["PM-79", "PM-12"] },
+    { "q": "show all my projects in one place", "lang": "en", "relevant": ["PM-74", "PM-76", "PM-77", "PM-78"] },
+    { "q": "alle Projekte auf einem Server anzeigen", "lang": "de", "relevant": ["PM-77", "PM-74", "PM-76"] },
+    { "q": "short readable ids like SHOP-42", "lang": "en", "relevant": ["PM-75"] },
+    { "q": "lesbare Ticketnummern statt UUID", "lang": "de", "relevant": ["PM-75"] },
+    { "q": "service returns fewer fields than the caller needs", "lang": "en", "relevant": ["PM-67", "PM-65", "PM-66"] },
+    { "q": "Schnittstelle liefert nicht alle Felder die der Aufrufer braucht", "lang": "de", "relevant": ["PM-67", "PM-65", "PM-66"] },
+    { "q": "someone else changed the ticket while I was editing", "lang": "en", "relevant": ["PM-23", "PM-40", "PM-44"] },
+    { "q": "gleichzeitige Änderung nicht still überschreiben", "lang": "de", "relevant": ["PM-23", "PM-40", "PM-44"] },
+    { "q": "windows line endings break documents", "lang": "en", "relevant": ["PM-49"] },
+    { "q": "Zeilenenden unter Windows", "lang": "de", "relevant": ["PM-49"] },
+    { "q": "breaking API change detection", "lang": "en", "relevant": ["PM-70"] },
+    { "q": "Contract Änderung bricht Consumer", "lang": "mixed", "relevant": ["PM-70", "PM-67"] },
+    { "q": "Tastatur und Screenreader Bedienung", "lang": "de", "relevant": ["PM-22", "PM-7"] },
+    { "q": "huge tree with thousands of tickets is slow", "lang": "en", "relevant": ["PM-18", "PM-73"] },
+    { "q": "Parent erst done wenn alle Kinder fertig", "lang": "mixed", "relevant": ["PM-56"] },
+    { "q": "checklist what a header needs logo burger menu", "lang": "en", "relevant": ["PM-83"] }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1bb50-caf2-75bf-bb14-b123b8216d97",
+  "ticketId": "01a189d0-4004-7639-a6b5-705446c81ae4",
+  "body": "QUALITY GATE RUN 2026-11-08 (bench/search-eval.json: 24 queries, 11 de / 11 en / 2 mixed, deliberately avoiding title words; tickets only; q8 ONNX via @huggingface/transformers 4.3.2). Recall@5 / MRR@10 overall | en | de: keyword 0.03/0.04 | 0.00/0.00 | 0.07/0.10. all-MiniLM-L6-v2 semantic 0.44/0.48 | 0.60/0.63 | 0.20/0.20. paraphrase-multilingual-MiniLM-L12-v2 semantic 0.51/0.45 | 0.44/0.38 | 0.48/0.42 (hybrid 0.52/0.42). multilingual-e5-small (query:/passage: prefixes) semantic 0.55/0.56 | 0.67/0.64 | 0.30/0.38 (hybrid 0.56/0.55). Index of this plan: 472 sources, ~1500 chunks, first build ~30 s incl. model download. Duplicate detection (title identity): paraphrase-multilingual separates duplicates best (EN dup 0.74, DE dup 0.61, unrelated ≤0.55); e5 compresses all scores into ~0.8-0.9. all-MiniLM-L6-v2 is not suitable for German content. Model choice pending owner decision.",
+  "author": "local",
+  "createdAt": "2026-11-08T13:19:56.658Z"
+}

@@ -206,7 +206,7 @@ export async function semanticSearch(p, query, { types, limit = 50, embedder } =
   const q = String(query ?? '').trim(); if (!q) throw Object.assign(new Error('Search query is required'), { code: 'VALIDATION' });
   embedder ??= await getEmbedder();
   const index = await vectors(p, embedder);
-  const [qv] = await embedder.embed([q]);
+  const [qv] = await embedder.embed([q], { query: true });
   const wanted = types?.length ? new Set(types) : null;
   return { generation: index.generation, hits: bestPerSource(index, scoreAll(index, qv), r => !wanted || wanted.has(r.source_type)).slice(0, limit) };
 }

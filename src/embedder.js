@@ -11,7 +11,7 @@ export const DEFAULT_MODEL = 'Xenova/paraphrase-multilingual-MiniLM-L12-v2';
 export const KNOWN_MODELS = Object.freeze({
   'Xenova/paraphrase-multilingual-MiniLM-L12-v2': { dtype: 'q8', pooling: 'mean', normalize: true, prefix: '', maxTokens: 128, license: 'Apache-2.0' },
   'Xenova/all-MiniLM-L6-v2': { dtype: 'q8', pooling: 'mean', normalize: true, prefix: '', maxTokens: 256, license: 'Apache-2.0' },
-  'Xenova/multilingual-e5-small': { dtype: 'q8', pooling: 'mean', normalize: true, prefix: 'passage: ', maxTokens: 512, license: 'MIT' },
+  'Xenova/multilingual-e5-small': { dtype: 'q8', pooling: 'mean', normalize: true, prefix: 'passage: ', queryPrefix: 'query: ', maxTokens: 512, license: 'MIT' },
 });
 export const modelsDir = () => path.join(registryHome(), 'cache', 'models');
 
@@ -49,10 +49,10 @@ export async function getEmbedder({ model = process.env.PMAN_EMBED_MODEL || DEFA
     const id = createHash('sha256').update(JSON.stringify({ model, version, ...cfg, dim: probe.length })).digest('hex').slice(0, 16);
     return {
       id, model, dim: probe.length, config: cfg, libraryVersion: version,
-      async embed(texts) {
-        const out = [];
+      async embed(texts, { query = false } = {}) {
+        const out = []; const prefix = query ? (cfg.queryPrefix ?? cfg.prefix) : cfg.prefix;
         for (let i = 0; i < texts.length; i += 16) {
-          const batch = texts.slice(i, i + 16).map(t => cfg.prefix + t);
+          const batch = texts.slice(i, i + 16).map(t => prefix + t);
           const rows = (await extractor(batch, { pooling: cfg.pooling, normalize: cfg.normalize })).tolist();
           for (const r of rows) out.push(Float32Array.from(r));
           await new Promise(r => setImmediate(r));
