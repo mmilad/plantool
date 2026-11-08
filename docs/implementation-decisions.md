@@ -91,6 +91,7 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Derived data lives in one SQLite file per project: `~/.pman/cache/<projectId>/db.sqlite` (under `PMAN_HOME`), never in the repository. It holds the search index, embeddings and file fingerprints as separate tables; it can be deleted at any time and is rebuilt from the canonical `.pman/` files.
 - Worktrees and branches of one repository share a project ID but can contain different plan files. Rows are therefore keyed by checkout root and file, and embeddings are stored content-addressed (hash of the embedded text), so switching branches or worktrees only re-embeds text that actually changed and never mixes results between checkouts.
 - Concurrency: WAL journal mode (many readers in parallel with one writer), a busy timeout of a few seconds so concurrent writers wait instead of failing, and short write transactions. Index updates are best effort: if the database stays locked or is corrupt, pman falls back to keyword search over the files and retries later; canonical writes never wait for the cache. Use Node's built-in `node:sqlite` to avoid native dependencies.
+- Target audience for now is the solo developer on one machine: `~/.pman` (registry and cache) stays local. A hosted API for teams may come later; the file format and the API routes should keep that option open, but no remote features are built yet.
 
 ## Verification and remaining release work
 
