@@ -41,8 +41,12 @@ A decision is a plan node (kind decision) with options as children (kind option)
   option is chosen. Mark prototypes that help to decide with --evaluation; those are ready right away.
 - Scores (0-5 per criterion) and the open effort of each option's plan (sizes xs..xl) give a suggestion:
   heist decide DECISION shows the comparison. heist recommend DECISION OPTION --why records your advice.
-- heist decide DECISION OPTION --why "…" chooses (only if you own the decision): other options and their
-  plans are cancelled, the chosen plan becomes ready, blocked work is released. heist decide D --reopen undoes it.
+- Decisions owned by a person (the default) are never decided by an agent. Ask the person, then record their answer
+  with --by human: heist decide DECISION OPTION --by human --why "what they said". Without --by an agent may decide only
+  decisions it owns (created with --owner agent --reversible). Reopening follows the same rule.
+- heist decide DECISION OPTION --why "…" chooses: other options and their plans are cancelled, the chosen plan
+  becomes ready, blocked work is released. heist decide DECISION --reopen undoes it.
+- heist decisions lists open decisions; '?' marks the ones a person has to make.
 - heist decisions lists open decisions; '?' marks the ones a person has to make.`,
 
   blueprints: `# Blueprints
@@ -64,6 +68,19 @@ size, risks. Decisions: owner, reversible, criteria, recommendation, chosen, rat
 Projects can add typed fields in .heist/config.json ("fields": [{"name": "platform", "type": "enum",
 "values": ["web", "ios"], "kinds": ["feature"]}]) and set them with --set name=value.
 heist which PATH shows which tickets planned or changed a file.`,
+
+  contracts: `# Contracts, components and stand-ins
+
+Describe the boundary between parts before the code exists: heist component add --kind service --name UserService,
+heist component add --kind method --name getUser --parent UserService, heist contract set UserService.getUser --input '{...}' --output '{...}'.
+Contracts stay central and versioned; they may change before they are implemented. After a change, heist check lists the
+consumers that are affected.
+- A ticket declares its code plan: heist codeplan add TICKET implements|consumes|changes COMPONENT. A consumer lists the
+  fields it needs with --requires; heist check verifies them against the contract.
+- A stand-in (mock) is an implements entry with --stage mock. A consumer that can work against a stand-in says --needs mock;
+  the default (--needs full) waits for the real implementation. Use a stand-in when the logic is complex enough that the
+  consumer needs something to run against; for simple logic, implement directly.
+- heist check warns when a full consumer has only a stand-in planned.`,
 
   workflow: `# Working the plan
 

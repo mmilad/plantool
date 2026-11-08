@@ -62,6 +62,8 @@ ${GUIDE.decisions}
 
 ${GUIDE.blueprints}
 
+${GUIDE.contracts}
+
 Blueprints available by default: ${list(BUILTIN_BLUEPRINTS.map(b => b.name))}. Projects can add their own.
 
 Search covers ${list(SEARCH_TYPES)} by text, and semantically when the index is available. Use search to find an existing ticket before you create a new one.

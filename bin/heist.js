@@ -88,7 +88,7 @@ Metadata (heist fields [KIND] lists what each kind supports):
 
 Start and method:
   heist new "What you want to build" [--why TEXT]   top ticket + product checklist (goal, platform, stack, ...)
-  heist guide [decisions|blueprints|metadata|workflow]   the planning method for agents
+  heist guide [decisions|blueprints|metadata|workflow|contracts]   the planning method for agents
 
 Blueprints (checklists that expand a ticket into everything it really needs):
   heist blueprint list [--format json]
