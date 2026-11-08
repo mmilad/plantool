@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { initProject, openProject, PmanError, NotFoundError } from '../src/index.js';
 import { agentInit } from '../src/agent.js';
+import { registerProject, addProjectPath, removeProject, listProjects, pruneProjects, registryHome } from '../src/registry.js';
+const autoRegister=async p=>{if(process.env.PMAN_NO_REGISTER==='1')return;try{await registerProject(p);}catch{}};
 import { qualifiedNames } from '../src/design.js';
 const qname=async(p,id)=>qualifiedNames(await p.components.list()).get(id);
 const qualifiedMap=async p=>qualifiedNames(await p.components.list());
@@ -13,6 +15,7 @@ const usage = `pman — Git-native planning and issue tracking
 
 Usage:
   pman init [--name NAME] [--key KEY]
+  pman projects [list|add PATH|remove ID|KEY|PATH|prune] [--format json]
   pman keys init [--key KEY]        set the project key and number existing tickets
   pman keys renumber                fix duplicate KEY-n numbers (e.g. after merging branches)
   pman ticket create --title TITLE [--parent ID] [--description TEXT] [--status STATUS]
@@ -82,9 +85,15 @@ const out=(value,format='text',kind)=>{
 async function main(argv) {
   if(argv.includes('--help')||argv[0]==='help'||!argv.length){console.log(usage);return;}
   const [command,sub,...rest]=argv;
-  if(command==='init'){const {opts}=parse([sub,...rest].filter(Boolean));const c=await initProject({name:opts.name,key:opts.key});out(`Initialized ${c.name} (${c.key}) at .pman/`);return;}
+  if(command==='init'){const {opts}=parse([sub,...rest].filter(Boolean));const c=await initProject({name:opts.name,key:opts.key});await autoRegister(await openProject());out(`Initialized ${c.name} (${c.key}) at .pman/`);return;}
   if(command==='serve'){const {opts}=parse([sub,...rest].filter(Boolean));const s=await serve({port:opts.port===undefined?4000:Number(opts.port),open:!!opts.open});console.log(`pman is serving ${s.project.config.name} at ${s.url}`);console.log('Press Ctrl-C to stop.');await new Promise(resolve=>s.server.once('close',resolve));return;}
-  const project=await openProject();globalThis.__pmanKey=project.key;
+  if(command==='projects'){const parsed=parse([sub,...rest].filter(x=>x!==undefined));const opts=parsed.opts;const action=parsed.positional[0]??'list';const positional=parsed.positional.slice(1);
+    if(action==='list'){const all=await listProjects();if(opts.format==='json'){out(all,'json');return;}if(!all.length){console.log(`No projects registered yet (${registryHome()}). Run pman init or any pman command inside a project, or pman projects add PATH.`);return;}for(const x of all)console.log(`${(x.key??'').padEnd(8)}  ${x.name.padEnd(28)}  ${x.available?'':'[missing] '}${x.root}`);return;}
+    if(action==='add'){const e=await addProjectPath(positional[0]??'.');out(`Registered ${e.name} (${e.key}) at ${e.root}`);return;}
+    if(action==='remove'){if(!positional[0])throw new Error('Usage: pman projects remove ID|KEY|PATH');const e=await removeProject(positional[0]);out(`Removed ${e.name} (${e.key}) from the registry; no files were changed.`);return;}
+    if(action==='prune'){const gone=await pruneProjects();out(gone.length?`Removed ${gone.length} missing project(s) from the registry.`:'Nothing to prune.');return;}
+    throw new Error(`Unknown projects command: ${action}`);}
+  const project=await openProject();globalThis.__pmanKey=project.key;await autoRegister(project);
   if(command==='ticket'&&sub==='create') {const {opts}=parse(rest);const t=await project.tickets.create({title:opts.title,description:opts.description,status:opts.status,kind:opts.kind,priority:opts.priority,labels:labels(opts.labels),parentId:opts.parent??null});out(t,opts.format,'ticket');return;}
   if(command==='ticket'&&sub==='list') {const {opts}=parse(rest);out(await project.tickets.list({status:opts.status,parentId:opts.parent,limit:Number(opts.limit??5000)}),opts.format);return;}
   if(command==='ticket'&&sub==='show') {const {opts,positional}=parse(rest);out(await project.tickets.get(positional[0]),opts.format,'ticket');return;}

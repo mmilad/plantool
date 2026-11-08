@@ -1,4 +1,9 @@
 import test from 'node:test';
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+process.env.PMAN_HOME ??= mkdtempSync(join(tmpdir(), 'pman-home-'));
+
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
