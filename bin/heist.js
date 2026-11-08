@@ -146,8 +146,18 @@ async function main(argv) {
   const project=await openProject();globalThis.__heistKey=project.key;await autoRegister(project);
   if(command==='ticket'&&sub==='create') {const {opts}=parse(rest);const kind=one(opts.kind)??'task';const props=customFlags(project,kind,opts);const t=await project.tickets.create({title:one(opts.title),description:one(opts.description),status:opts.status,kind,priority:opts.priority,labels:labels(opts.labels),parentId:opts.parent??null,createdBy:process.env.HEIST_AGENT||undefined,...fieldFlags(opts),...(props?{properties:props}:{})});
     const norm = x => String(x ?? '').toLocaleLowerCase().replace(/\s+/g, ' ').trim();
-    const twins = (await project.tickets.list({ limit: Infinity })).filter(x => x.id !== t.id && norm(x.title) === norm(t.title));
-    if (twins.length && opts.format !== 'json') console.error(`Note: ${twins.length} ticket(s) with the same title already exist: ${twins.map(x => project.ticketKey(x) ?? x.id).join(', ')}. If it is the same work, link it instead (heist relation add ${project.ticketKey(t) ?? t.id} ${project.ticketKey(twins[0]) ?? twins[0].id} duplicates).`);
+    const words = x => new Set(String(x ?? '').toLocaleLowerCase().split(/[^\p{L}\p{N}]+/u).filter(w => w.length >= 3));
+    const mine = words(t.title);
+    const others = (await project.tickets.list({ limit: Infinity })).filter(x => x.id !== t.id);
+    const related = others.map(x => { const w = words(x.title), common = [...mine].filter(v => w.has(v)).length, union = new Set([...mine, ...w]).size; return { x, score: union ? common / union : 0, same: norm(x.title) === norm(t.title) }; })
+      .filter(r => r.same || (r.score >= 0.5 && mine.size >= 2)).sort((a, b) => Number(b.same) - Number(a.same) || b.score - a.score).slice(0, 3);
+    const label = x => project.ticketKey(x) ?? x.id;
+    if (related.length && opts.format !== 'json') {
+      const twin = related.find(r => r.same);
+      console.error(twin
+        ? `Note: a ticket with the same title exists: ${label(twin.x)}. If it is the same work, link it instead: heist relation add ${label(t)} ${label(twin.x)} duplicates`
+        : `Possibly related: ${related.map(r => label(r.x)).join(', ')}. If one of them is the same work or a dependency, link it (heist relation add ... implements|blocks|relates_to).`);
+    }
     out(t,opts.format,'ticket');return;}
   if(command==='ticket'&&sub==='list') {const {opts}=parse(rest);out(await project.tickets.list({status:opts.status,parentId:opts.parent,limit:Number(opts.limit??5000)}),opts.format);return;}
   if(command==='ticket'&&sub==='show') {const {opts,positional}=parse(rest);out(await project.tickets.get(positional[0]),opts.format,'ticket');return;}
