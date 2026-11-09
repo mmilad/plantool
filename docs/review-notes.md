@@ -26,5 +26,6 @@ Getestet wurden die Abnahme mit dem Pokémon-Beispiel über die CLI (Agent-Sicht
 4. Ein generisches Feature-Blueprint ist da (`feature`). Es sollte an echten Features geprüft werden.
    Das Produkt-Blueprint hat jetzt eine Reihenfolge (`after`): Plattform wartet auf das Ziel, der Stack auf die Plattform, die UI-Struktur auf Stack, Kernfunktionen und Accounts.
 5. `decide --by human` ist eine Angabe, die jeder setzen kann. Das schützt vor Versehen, nicht vor einem Agenten, der die Antwort erfindet. Das muss im Briefing ehrlich stehen.
+   Entscheidungen gehören jetzt standardmäßig dem Agenten; ein Mensch kann sie mit `--owner human` übernehmen oder jederzeit mit `--by human` ändern.
 6. Die Web-Ansicht zeigt Entscheidungen noch nicht an.
 7. Die HTTP-Routen haben keine eigene Berechtigung. Sie sind nur lokal erreichbar und mit CSRF-Token geschützt, ein Agent mit Zugriff auf den Server könnte also als Mensch entscheiden.

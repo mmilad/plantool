@@ -21,11 +21,14 @@ test('agent plans the Pokemon trading card app end to end', async t => {
   let ready = (await p.next({ limit: 100 })).map(x => x.id);
   assert.ok(ready.includes(goal.id)); assert.ok(!ready.includes(accounts.id)); assert.ok(!ready.includes(stack.id));
 
-  // 3. The agent prepares options and a recommendation, but a person decides the platform.
+  // 3. The agent owns the platform decision by default: it decides and says why. A person can reverse it later.
   const platformOptions = (await p.decisions.evaluate(platform.id)).options;
   assert.ok(platformOptions.length >= 2);
-  await assert.rejects(p.decisions.decide(platform.id, platformOptions[0].id, { why: 'agent guess', by: 'bot' }), { code: 'CONFLICT' });
-  await assert.rejects(p.decisions.decide(platform.id, platformOptions[0].id, { why: 'no name' }), { code: 'CONFLICT' });
+  const agentChoice = await p.decisions.decide(platform.id, platformOptions[0].id, { why: 'mobile first; the team knows the stack', by: 'bot' });
+  assert.equal(agentChoice.chosen, platformOptions[0].id);
+  const reversed = await p.decisions.reopen(platform.id, { by: 'human' });
+  assert.equal(reversed.status, 'open');
+  await p.decisions.decide(platform.id, platformOptions[1].id, { why: 'the person prefers the other platform', by: 'human' });
 
   // 4. Agent-owned detail: the agent decides it itself.
   const { decision: icons } = await p.decisions.ask('Which icon set?', { owner: 'agent', reversible: true });

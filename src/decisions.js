@@ -82,7 +82,7 @@ export function attachDecisionApi(p) {
     evaluate,
     /** Creates a decision (a question) with optional options, criteria and the tickets it blocks. */
     async ask(question, { parentId, options = [], criteria = [], owner, reversible, decideBy, why, blocks = [], priority, createdBy, origin } = {}) {
-      owner ??= reversible === true ? 'agent' : 'human';
+      owner ??= 'agent';
       if (!question?.trim()) throw new ValidationError('A decision needs a question');
       const d = await p.tickets.create({ title: question.trim(), kind: 'decision', parentId: parentId ?? null, why, priority, createdBy, origin, decision: { owner, criteria: typeof criteria === 'string' ? parseCriteria(criteria) : criteria, chosen: null, ...(reversible !== undefined ? { reversible } : {}), ...(decideBy ? { decideBy } : {}) } });
       const created = [];
@@ -129,7 +129,7 @@ export function attachDecisionApi(p) {
       if (o.parentId !== d.id || o.kind !== 'option') throw new ValidationError('The option does not belong to this decision');
       if (o.status === 'cancelled') throw new ValidationError('This option was cancelled');
       if (!why?.trim()) throw new ValidationError('Say why with --why; the reason is kept with the decision');
-      const decider = by ?? 'unknown', owner = d.decision?.owner ?? 'human';
+      const decider = by ?? 'unknown', owner = d.decision?.owner ?? 'agent';
       if (owner === 'human' && decider !== 'human') throw new ConflictError('A person decides this. Ask them, then record their answer with --by human', { owner, by: decider });
       const cancelled = [];
       for (const other of tickets.filter(t => t.parentId === d.id && t.kind === 'option' && t.id !== o.id)) {
@@ -144,7 +144,7 @@ export function attachDecisionApi(p) {
     async reopen(decisionRef, { by } = {}) {
       const d = await getDecision(decisionRef);
       if (!d.decision?.chosen) return evaluate(d.id);
-      if ((d.decision?.owner ?? 'human') === 'human' && by !== 'human') throw new ConflictError('A person decides this. Ask them before reopening it, then pass --by human', { owner: 'human', by: by ?? 'unknown' });
+      if ((d.decision?.owner ?? 'agent') === 'human' && by !== 'human') throw new ConflictError('A person decides this. Ask them before reopening it, then pass --by human', { owner: 'human', by: by ?? 'unknown' });
       for (const id of d.decision.cancelled ?? []) { const t = await p.tickets.get(id).catch(() => null); if (t?.status === 'cancelled') await p.tickets.update(id, { status: 'todo' }, { force: true }); }
       const chosen = await p.tickets.get(d.decision.chosen).catch(() => null);
       if (chosen?.status === 'done') await p.tickets.update(chosen.id, { status: 'todo' }, { force: true });

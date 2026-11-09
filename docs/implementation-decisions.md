@@ -126,7 +126,7 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 
 ## Decisions and stand-ins (2026-11-08)
 
-- Decisions belong to a person by default. An agent can decide only decisions it owns (`--owner agent --reversible`). The decider defaults to unknown, not human; a person's answer is recorded with `--by human`. The same rule applies to reopening. The tool guards against mistakes, not against an agent that invents an answer.
+- Decisions are owned by agents by default; an agent may decide them. A person can take a decision with `--owner human`; then only `--by human` may decide or reopen it. Anyone can change an agent-owned decision afterwards, and the decider is recorded. The decider defaults to unknown, not human. Nothing forces a person to decide. The tool guards against mistakes, not against an agent that invents an answer.
 - Ready work means every `blocks` blocker is finished. A stand-in changes only what a consumer waits for: `implements --stage mock` and `consumes --needs mock`. The default `full` keeps the previous behaviour.
 - Blueprint items may declare `after`; that becomes `blocks` relations when the blueprint is applied. The product blueprint orders platform after goal, stack after platform, UI structure after stack, core features and accounts.
 - Finishing a ticket with an active claim needs the claimant (`--agent`) or `--force`.

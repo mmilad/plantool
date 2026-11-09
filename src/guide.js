@@ -36,14 +36,14 @@ Topics: heist guide decisions | blueprints | metadata | workflow`,
 
 A decision is a plan node (kind decision) with options as children (kind option).
 - heist ask "Which framework?" --parent APP-1 --options "React Native;Flutter" --criteria "Team knowledge:3, Performance:2" --blocks APP-7
-- Owner: human (default) or agent. --reversible lets an agent decide; --irreversible keeps it with the person.
+- Owner: agent (default) or human (--owner human). Reversible or not is information for whoever reads the decision.
 - Options can carry their own plan: create tickets under an option ("Set up Expo"). They wait until the
   option is chosen. Mark prototypes that help to decide with --evaluation; those are ready right away.
 - Scores (0-5 per criterion) and the open effort of each option's plan (sizes xs..xl) give a suggestion:
   heist decide DECISION shows the comparison. heist recommend DECISION OPTION --why records your advice.
-- Decisions owned by a person (the default) are never decided by an agent. Ask the person, then record their answer
-  with --by human: heist decide DECISION OPTION --by human --why "what they said". Without --by an agent may decide only
-  decisions it owns (created with --owner agent --reversible). Reopening follows the same rule.
+- Decisions are owned by agents by default: decide them when you have enough to go on, and say why.
+  A person can take one with --owner human; then only --by human may decide or reopen it. A person can always change
+  any decision: heist decide DECISION OPTION --by human --why "what they said" (or --reopen first).
 - heist decide DECISION OPTION --why "…" chooses: other options and their plans are cancelled, the chosen plan
   becomes ready, blocked work is released. heist decide DECISION --reopen undoes it.
 - heist decisions lists open decisions; '?' marks the ones a person has to make.
