@@ -72,7 +72,7 @@ export function attachDecisionApi(p) {
     const ranked = [...rows].sort((a, b) => (b.score ?? -1) - (a.score ?? -1) || a.effort - b.effort || a.title.localeCompare(b.title));
     const best = ranked.find(r => r.score !== null && r.status !== 'cancelled');
     return {
-      id: d.id, key: p.ticketKey(d), question: d.title, why: d.why ?? '', owner: d.decision?.owner ?? 'human', reversible: d.decision?.reversible ?? null, decideBy: d.decision?.decideBy ?? null, status: d.decision?.chosen ? 'decided' : d.status === 'cancelled' ? 'cancelled' : 'open',
+      id: d.id, key: p.ticketKey(d), question: d.title, why: d.why ?? '', owner: d.decision?.owner ?? 'agent', reversible: d.decision?.reversible ?? null, decideBy: d.decision?.decideBy ?? null, status: d.decision?.chosen ? 'decided' : d.status === 'cancelled' ? 'cancelled' : 'open',
       criteria, options: rows, ranking: ranked.map(r => r.id), suggested: best ? { option: best.id, title: best.title, reason: `highest weighted score (${Math.round(best.score * 100)}%)${ranked.filter(r => r.score === best.score).length > 1 ? ', tie broken by lower effort' : ''}` } : null,
       recommendation: d.decision?.recommendation ?? null, chosen: d.decision?.chosen ?? null, rationale: d.decision?.rationale ?? '', decidedBy: d.decision?.decidedBy ?? null, decidedAt: d.decision?.decidedAt ?? null,
     };
