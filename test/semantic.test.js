@@ -65,3 +65,15 @@ test('a corrupt cache database is moved aside and rebuilt', async t => {
   assert.ok((await fs.readdir(dir)).some(f => f.startsWith('db.sqlite.broken-')));
   assert.equal((await p.semantic.update()).sources, 1);
 });
+
+test('relatedByEmbedding ranks by similarity and returns nothing when the model is missing', async t => {
+  const { relatedByEmbedding } = await import('../src/semantic.js');
+  const fake = { async embed(texts) { return texts.map(x => { const s = x.toLocaleLowerCase(); return Float32Array.from([s.includes('trade') ? 1 : 0, s.includes('account') ? 1 : 0, 0.1]); }); } };
+  const p = { config: {} };
+  const ticket = { title: 'Trade offer flow' };
+  const others = [{ id: 'a', title: 'Trade screen' }, { id: 'b', title: 'Account settings' }, { id: 'c', title: 'Trade offer review' }];
+  const hits = await relatedByEmbedding(p, ticket, others, { embedder: fake, minScore: 0.9 });
+  assert.deepEqual(hits.map(h => h.ticket.id), ['a', 'c']);
+  const none = await relatedByEmbedding(p, ticket, others, { embedder: { embed: async () => { const e = Object.assign(new Error('x'), { code: 'SEMANTIC_UNAVAILABLE' }); throw e; } } });
+  assert.deepEqual(none, []);
+});

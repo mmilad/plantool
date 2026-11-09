@@ -270,3 +270,20 @@ export async function similarTickets(p, ticketRef, { limit = 5, minScore = 0, mi
   return [...best].map(([tid, score]) => [tid, score, (score - mean) / sd]).filter(([, s, z]) => s >= minScore && z >= minStrength).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, limit)
     .map(([tid, score, z]) => { const t = byId.get(tid); return { id: tid, key: p.ticketKey(t), title: t?.title, status: t?.status, score: Math.round(score * 1000) / 1000, strength: Math.round(z * 100) / 100, likelyOverlap: z >= OVERLAP_Z && !linked.has(tid), relation: linked.get(tid) ?? null }; });
 }
+
+/**
+ * Ranks tickets by embedding similarity without a stored index: suited to small and medium projects.
+ * Returns [] when the model is not available, so callers can always fall back to keyword hints.
+ * Scores from multilingual-e5-small are compressed (unrelated titles ~0.77-0.82, related ~0.86-0.97), so this is a hint, not a decision.
+ */
+export async function relatedByEmbedding(p, ticket, others, { limit = 3, minScore = 0.86, maxTickets = 2000, embedder } = {}) {
+  if (others.length === 0 || others.length > maxTickets) return [];
+  try { embedder ??= await getEmbedder(modelOpt(p)); } catch (e) { if (e.code === 'SEMANTIC_UNAVAILABLE') return []; throw e; }
+  const textOf = x => [x.title, x.description].filter(Boolean).join('\n').slice(0, 600);
+  let vectors;
+  try { vectors = await embedder.embed([textOf(ticket), ...others.map(textOf)], { query: true }); }
+  catch (e) { if (e.code === 'SEMANTIC_UNAVAILABLE') return []; throw e; }
+  const cos = (a, b) => { let d = 0, na = 0, nb = 0; for (let i = 0; i < a.length; i++) { d += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i]; } return na && nb ? d / Math.sqrt(na * nb) : 0; };
+  return others.map((x, i) => ({ ticket: x, score: cos(vectors[0], vectors[i + 1]) }))
+    .filter(r => r.score >= minScore).sort((a, b) => b.score - a.score).slice(0, limit);
+}

@@ -152,6 +152,11 @@ async function main(argv) {
     const related = others.map(x => { const w = words(x.title), common = [...mine].filter(v => w.has(v)).length, union = new Set([...mine, ...w]).size; return { x, score: union ? common / union : 0, same: norm(x.title) === norm(t.title) }; })
       .filter(r => r.same || (r.score >= 0.5 && mine.size >= 2)).sort((a, b) => Number(b.same) - Number(a.same) || b.score - a.score).slice(0, 3);
     const label = x => project.ticketKey(x) ?? x.id;
+    if (process.env.HEIST_SIMILAR !== 'off' && opts.format !== 'json' && !related.some(r => r.same)) {
+      const { relatedByEmbedding } = await import('../src/semantic.js');
+      const byMeaning = await relatedByEmbedding(project, t, others).catch(() => []);
+      for (const r of byMeaning) if (!related.some(x => x.x.id === r.ticket.id)) related.push({ x: r.ticket, score: r.score, same: false });
+    }
     if (related.length && opts.format !== 'json') {
       const twin = related.find(r => r.same);
       console.error(twin
