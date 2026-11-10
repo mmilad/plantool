@@ -31,6 +31,10 @@ You are working in a project that plans its work with heist. heist keeps the pla
 
 Never edit \`.heist/\` by hand. Use the CLI or the API.
 
+## Language
+
+Write everything that goes into the plan and the code in English: ticket titles and descriptions, decisions and options, rationales, blueprints, commit messages, code and code comments. Talk to the person in whatever language they use.
+
 ## Node types
 
 Ticket kinds: ${list(TICKET_KINDS)}.

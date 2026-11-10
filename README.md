@@ -60,7 +60,7 @@ pnpm exec heist similar PM-12                 # tickets that look like PM-12, wi
 pnpm exec heist index status
 ```
 
-Embeddings use the optional dependency `@huggingface/transformers` (ONNX) with `Xenova/multilingual-e5-small`. Plans are expected to be written in English. The index lives outside the repo in `~/.heist/cache/<projectId>/db.sqlite` (SQLite in WAL mode) and is derived data: delete it any time, `heist index rebuild` recreates it. `hybrid` combines semantic and keyword results; when no index exists or the model cannot load, it falls back to keyword search and says why.
+Embeddings use the optional dependency `@huggingface/transformers` (ONNX) with `Xenova/multilingual-e5-small`. Plans, code and code comments are written in English; the person can talk to agents in any language. The embedding model was chosen for English queries, not for multilingual text. The index lives outside the repo in `~/.heist/cache/<projectId>/db.sqlite` (SQLite in WAL mode) and is derived data: delete it any time, `heist index rebuild` recreates it. `hybrid` combines semantic and keyword results; when no index exists or the model cannot load, it falls back to keyword search and says why.
 
 In the web UI the search box shows which mode is active and offers **Enable semantic search**. Once enabled, `heist serve` keeps the index up to date in the background, and each ticket shows **Similar tickets** with buttons to mark a duplicate or link related work.
 
