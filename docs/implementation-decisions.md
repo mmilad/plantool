@@ -22,13 +22,13 @@ This file records material choices made while implementing the first usable rele
 
 ## Browser UI
 
-- `heist serve` binds only to `127.0.0.1:4000` by default and fails clearly if occupied; only a caller-supplied `--port` may override it. No random fallback or automatic process termination. `--open` runs only after a successful bind. No LAN option is provided. It resolves one project from cwd/ancestors and does not enumerate projects.
+- `heist serve` binds only to `127.0.0.1:4000` by default and fails clearly if occupied; only a caller-supplied `--port` may override it. No random fallback or automatic process termination. `--open` runs only after a successful bind. No LAN option is provided. The original single-project boundary was replaced on 2026-11-08; see "Multi-project workspace" below.
 - Mutating requests require the server's exact Host, same-origin Origin, and a per-server CSRF token. CORS is disabled; no external assets or project code are executed.
 
 ## Scope
 
 - MVP includes core project/config, ticket, planning document, comment, relationship, search, context, validate and browser workflows.
-- Agent execution, auth/hosted sharing, MCP, extensions/hooks, binary asset ingestion, global installation, and publication remain excluded. Semantic search remains post-MVP: planned as local Node.js + ONNX `all-MiniLM-L6-v2` embeddings and a rebuildable SQLite vector index, with keyword search always available; see `open-questions.md` and the heist search roadmap.
+- Agent execution, auth/hosted sharing, MCP, extensions/hooks, binary asset ingestion and publication remain excluded. Semantic search was first planned as post-MVP and has since been implemented as an optional local feature; see "Embedding model and duplicate detection" below. Keyword search is always available.
 - Cross-platform CI definitions will cover Windows, macOS and Linux; only platforms actually run in this task will be reported as executed.
 
 ## Agent planning, code plans and contracts (owner decision 2026-11-07)
@@ -108,7 +108,7 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Built-ins live in `src/blueprints.js`; projects add or override them as readable JSON in `.heist/blueprints/<name>.json` (validated on load).
 - Applying stores `blueprint: {name, skipped}` on the ticket and creates child tickets with `origin: {blueprint, item}`. Coverage is derived from those children and the skip reasons, so nothing is duplicated and re-applying only fills gaps. One blueprint per ticket; nest tickets for more.
 - Optional items are never created by default; they count as "undecided" until created or skipped with a reason. Missing and undecided items are warnings in `heist check`, not blockers for `done`.
-- Suggestions are keyword based (title and labels, or a `blueprint:<name>` label) and only shown, never applied automatically.
+- Suggestions are keyword based (title and labels, or a `blueprint:<name>` label) and only shown, never applied automatically. A ticket of kind `feature` is also offered the `feature` blueprint (2026-11-11).
 
 ## Claims across worktrees (PM-82, 2026-11-08)
 
@@ -131,3 +131,13 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Blueprint items may declare `after`; that becomes `blocks` relations when the blueprint is applied. The product blueprint orders platform after goal, stack after platform, UI structure after stack, core features and accounts.
 - Finishing a ticket with an active claim needs the claimant (`--agent`) or `--force`.
 - Local web view requests act for the person (`by` defaults to human); there is no separate authorisation.
+
+## Similarity hint in ticket create (2026-11-11)
+
+- `ticket create` names possibly related tickets. Without a model it compares title words. With the optional model it adds tickets that are close in meaning, unless `HEIST_SIMILAR=off`.
+- The fixed cosine threshold of 0.86 was removed. It flagged unrelated short titles (0.864 in the first calibration; 0.88 between two unrelated email tickets in the check below) and only fits one model.
+- The plain z-score of `heist similar` (3.5 standard deviations above the mean) was tried and not used for the hint: related tickets come in groups, and a group raises mean and deviation until none of its members stands out. Measured with `multilingual-e5-small` on 20 unrelated titles: one related ticket z 3.6, two 2.9 and 2.6, four 2.0 to 2.3.
+- The hint therefore uses a robust strength: distance from the median in units of 1.4826 x median absolute deviation, threshold 3.5 (`HINT_STRENGTH`). Same data: related tickets 3.8 to 5.0 with one, two or four present; unrelated ones at most 2.4. With fewer than 10 other tickets (`MIN_HINT_POPULATION`) there is no hint by meaning.
+- `likelyOverlap` in `heist similar` still uses the plain z-score. It has the same group weakness and should be checked against the robust strength once the plan has enough real tickets (HEIST-7).
+- Known cost: the hint embeds every other ticket on each `ticket create` (up to 2000) and loads the model in every CLI call. Reusing the semantic index is planned (HEIST-13).
+- `test/semantic-real.test.js` runs the real model when `HEIST_TEST_REAL_MODEL=1`; it is skipped otherwise. It passed on Linux/Node 22 on 2026-11-11; Windows is still to be checked (HEIST-3).

@@ -1,12 +1,14 @@
 # Roadmap
 
+> Status 2026-11-11: milestones 0 to 5 are implemented and merged. Three things were decided differently from the text below and are recorded in `implementation-decisions.md`: a machine-local project registry with a multi-project `heist serve` (2026-11-08), optional local semantic search with `multilingual-e5-small` (2026-11-08), and decisions, blueprints and contracts as planning tools for agents. Open work is tracked in heist itself (`heist next`), not in this file.
+
 This roadmap records the broader product direction and is maintained passively while the first usable release is implemented. It is not a prerequisite checklist for each UI increment. Work proceeds in small, visible slices; only the current slice is actively planned, and implementation findings are recorded here when they change scope or sequencing.
 
 ## MVP boundary
 
-A fresh checkout with supported Node LTS can initialize, read, create, update, reparent, search and validate arbitrarily nested tickets and linked planning docs entirely offline. Canonical data is ordinary Git-tracked content. MVP includes CLI and public TypeScript API plus an optional `heist serve` browser UI for the single current project. The UI binds to loopback, defaults to fixed port 4000, fails clearly if occupied (with only an explicit `--port` override), has no auth, and does not enumerate other projects. It runs on Windows/macOS/Linux and requires no hosted service, database, or MCP.
+A fresh checkout with supported Node LTS can initialize, read, create, update, reparent, search and validate arbitrarily nested tickets and linked planning docs entirely offline. Canonical data is ordinary Git-tracked content. MVP includes CLI and public TypeScript API plus an optional `heist serve` browser UI. The UI binds to loopback, defaults to fixed port 4000, fails clearly if occupied (with only an explicit `--port` override) and has no auth. It was planned for the single current project and now shows every project in the machine-local registry. It runs on Windows/macOS/Linux and requires no hosted service, database, or MCP.
 
-Out of MVP: hosted sharing, credentials/auth/invites, live locks, agent execution/session management, arbitrary extensions/hooks, desktop app, MCP adapter, semantic search, binary asset hosting, dashboards, time tracking, auto-update.
+Out of MVP: hosted sharing, credentials/auth/invites, live locks, agent execution/session management, arbitrary extensions/hooks, desktop app, MCP adapter, binary asset hosting, dashboards, time tracking, auto-update. Semantic search was on this list and has been added as an optional feature.
 
 ## Milestone 0 — Lock the contract
 
@@ -85,6 +87,8 @@ Acceptance:
 
 ## Milestone 5 — Project-scoped local web UI
 
+Superseded in part on 2026-11-08: `heist serve` runs from any directory and shows all registered projects. The acceptance points about a single project and "no project discovery" below no longer apply; the security points do.
+
 **Depends on:** Milestones 1–4.
 
 Tasks: build a lightweight browser UI on the public TypeScript core; support project tree navigation, ticket detail and supported edits, planning documents, search/context; implement `heist serve` as a foreground server.
@@ -121,7 +125,7 @@ Acceptance:
 4. Declarative custom property/status rules before considering executable extensions.
 5. Richer TUI/editor integrations beyond the single-project local browser UI.
 6. Explicit repo-relative assets and Git LFS.
-7. Optional local semantic search in Node.js using ONNX and `all-MiniLM-L6-v2`, with a rebuildable SQLite vector index and always-available keyword fallback. Repository files remain canonical; the index is derived local data.
+7. Done: optional local semantic search in Node.js with `multilingual-e5-small` (chosen over `all-MiniLM-L6-v2` by the quality gate), a rebuildable SQLite index outside the repository and always-available keyword fallback. Repository files remain canonical; the index is derived local data.
 
 ## Sequencing and verification plan (passive reference)
 

@@ -39,7 +39,7 @@ pnpm exec heist validate
 pnpm exec heist serve
 ```
 
-Create children at any level by passing `--parent <ticket-id>`. The server uses `http://127.0.0.1:4000` by default and stays in the foreground; stop it with Ctrl-C. If the port is occupied, it reports the conflict and starts no additional server. Choose another port explicitly with `heist serve --port N`. It serves only the project found from the current directory or its ancestors. `--open` asks the operating system to open the URL only after the server starts successfully.
+Create children at any level by passing `--parent <ticket-id>`. The server uses `http://127.0.0.1:4000` by default and stays in the foreground; stop it with Ctrl-C. If the port is occupied, it reports the conflict and starts no additional server. Choose another port explicitly with `heist serve --port N`. It serves every registered project (see above), from any directory. `--open` asks the operating system to open the URL only after the server starts successfully.
 
 ## CLI
 
