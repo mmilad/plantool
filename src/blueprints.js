@@ -235,7 +235,7 @@ export function attachBlueprintApi(p) {
     async get(name) { return resolve(await all(), name); },
     async suggest(ticketRef, { limit = 3 } = {}) {
       const ticket = await p.tickets.get(ticketRef);
-      return [...(await all()).values()].map(b => ({ name: b.name, title: b.title ?? b.name, score: matchScore(b, ticket) })).filter(x => x.score >= 3).sort((a, b) => b.score - a.score || a.name.localeCompare(b.name)).slice(0, limit);
+      return [...(await all()).values()].map(b => ({ name: b.name, title: b.title ?? b.name, score: matchScore(b, ticket) + (ticket.kind === b.name ? 3 : 0) })).filter(x => x.score >= 3).sort((a, b) => b.score - a.score || a.name.localeCompare(b.name)).slice(0, limit);
     },
     coverage,
     /** Attach a blueprint and create child tickets for the chosen items (default: all required items not yet covered). */

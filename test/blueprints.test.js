@@ -14,6 +14,7 @@ test('blueprints resolve inheritance, suggest by title and expand a ticket into 
   const h = await p.tickets.create({ title: 'Site header' });
   assert.equal((await p.blueprints.suggest(h.id))[0].name, 'header');
   assert.deepEqual(await p.blueprints.suggest((await p.tickets.create({ title: 'Database migrations' })).id), []);
+  assert.equal((await p.blueprints.suggest((await p.tickets.create({ title: 'Trade offers', kind: 'feature' })).id))[0].name, 'feature');
   const dry = await p.blueprints.apply(h.id, 'header', { dryRun: true });
   assert.ok(dry.create.every(i => !i.optional)); assert.equal((await p.tickets.get(h.id)).blueprint, undefined);
   const r = await p.blueprints.apply(h.id, 'header');

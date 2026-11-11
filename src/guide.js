@@ -46,7 +46,6 @@ A decision is a plan node (kind decision) with options as children (kind option)
   any decision: heist decide DECISION OPTION --by human --why "what they said" (or --reopen first).
 - heist decide DECISION OPTION --why "…" chooses: other options and their plans are cancelled, the chosen plan
   becomes ready, blocked work is released. heist decide DECISION --reopen undoes it.
-- heist decisions lists open decisions; '?' marks the ones a person has to make.
 - heist decisions lists open decisions; '?' marks the ones a person has to make.`,
 
   blueprints: `# Blueprints
