@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca94-b451-7883-b1a0-0b9999d869ad",
+  "number": 7,
+  "title": "Rebase the search quality set on the current plan",
+  "kind": "task",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "bench/search-eval.json points at PM tickets that were removed when the plan was reset, so the calibration cannot be repeated.",
+  "acceptance": [
+    {
+      "text": "search-eval.json refers to tickets that exist or carries its own fixture",
+      "met": false
+    },
+    {
+      "text": "OVERLAP_Z comment names how it was calibrated",
+      "met": false
+    },
+    {
+      "text": "likelyOverlap in heist similar is compared with the robust strength on real tickets",
+      "met": false
+    }
+  ],
+  "files": [
+    "bench/search-eval.json",
+    "bench/search-eval.mjs",
+    "src/semantic.js"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T12:28:25.553Z",
+  "updatedAt": "2026-11-11T18:22:11.968Z"
+}

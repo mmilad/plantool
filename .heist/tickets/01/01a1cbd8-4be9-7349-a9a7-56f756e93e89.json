@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cbd8-4be9-7349-a9a7-56f756e93e89",
+  "number": 13,
+  "title": "Create hint reuses the semantic index",
+  "kind": "task",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "The hint embeds every other ticket on each ticket create and loads the model in every CLI call; about 1 s per 300 tickets plus model start.",
+  "acceptance": [
+    {
+      "text": "With an index, ticket create embeds only the new ticket",
+      "met": false
+    },
+    {
+      "text": "Without an index the behaviour is unchanged",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/semantic.js",
+    "bin/heist.js"
+  ],
+  "size": "m",
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T18:21:52.489Z",
+  "updatedAt": "2026-11-11T18:21:52.489Z"
+}

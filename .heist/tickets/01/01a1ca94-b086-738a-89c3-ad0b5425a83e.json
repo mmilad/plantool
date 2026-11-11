@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca94-b086-738a-89c3-ad0b5425a83e",
+  "number": 3,
+  "title": "Check the real model on the owner's Windows machine",
+  "kind": "task",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Model download and cache path were never verified on Windows.",
+  "acceptance": [
+    {
+      "text": "heist index update downloads the model to ~/.heist/cache/models",
+      "met": false
+    },
+    {
+      "text": "heist similar returns plausible results",
+      "met": false
+    },
+    {
+      "text": "HEIST_TEST_REAL_MODEL=1 test passes",
+      "met": false
+    }
+  ],
+  "size": "xs",
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T12:28:24.582Z",
+  "updatedAt": "2026-11-11T12:28:24.582Z"
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca94-b60a-7942-bf19-db0634d558de",
+  "number": 9,
+  "title": "MCP server over the public API",
+  "kind": "feature",
+  "description": "",
+  "status": "todo",
+  "priority": "low",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Agents without a shell need the same operations; listed as planned in the onboarding briefing.",
+  "size": "l",
+  "createdBy": "claude",
+  "risks": [
+    "HTTP and MCP callers could decide as a person",
+    "permissions need a design first"
+  ],
+  "createdAt": "2026-11-11T12:28:25.994Z",
+  "updatedAt": "2026-11-11T12:28:25.994Z"
+}

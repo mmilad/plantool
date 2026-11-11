@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca95-23d1-7f53-bc59-c803bfc3f350",
+  "number": 11,
+  "title": "Define empty, loading, error and permission cases",
+  "kind": "task",
+  "description": "The happy path is the easy part; the other states decide whether it feels finished.\n\nFrom blueprint Feature › states (parent: Similarity hint in ticket create uses the relative rule).",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1ca94-aea3-7fe0-b679-73ba06235cf1",
+  "origin": {
+    "blueprint": "feature",
+    "item": "states"
+  },
+  "why": "The happy path is the easy part; the other states decide whether it feels finished.",
+  "createdAt": "2026-11-11T12:28:54.097Z",
+  "updatedAt": "2026-11-11T18:22:07.850Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Edge cases: fewer than 10 tickets, no model, all scores equal (MAD 0), more than 2000 tickets: no hint by meaning. Covered in test/semantic.test.js."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca94-b534-754e-8bd5-ce0c29c96f3a",
+  "number": 8,
+  "title": "Check for a heist command name collision on Windows",
+  "kind": "task",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Another program named heist on PATH would shadow the CLI.",
+  "acceptance": [
+    {
+      "text": "where heist shows only this package",
+      "met": false
+    }
+  ],
+  "size": "xs",
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T12:28:25.780Z",
+  "updatedAt": "2026-11-11T12:28:25.780Z"
+}

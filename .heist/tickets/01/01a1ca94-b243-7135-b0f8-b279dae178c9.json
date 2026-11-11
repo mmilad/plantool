@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca94-b243-7135-b0f8-b279dae178c9",
+  "number": 5,
+  "title": "Bring GOAL, roadmap and open questions in line with the code",
+  "kind": "task",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "They still exclude the project registry and the multi-project UI and describe semantic search as post-MVP with another model.",
+  "acceptance": [
+    {
+      "text": "No doc contradicts registry, multi-project serve or the e5-small semantic search",
+      "met": false
+    },
+    {
+      "text": "References to the old repository name and PR #4 are gone",
+      "met": false
+    }
+  ],
+  "files": [
+    "GOAL.md",
+    "docs/roadmap.md",
+    "docs/open-questions.md",
+    "README.md"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T12:28:25.026Z",
+  "updatedAt": "2026-11-11T18:22:10.942Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "GOAL.md rewritten as status; roadmap, open questions, implementation decisions and README corrected.",
+    "verifiedBy": "Read through; grep for single-project and MiniLM statements",
+    "changedFiles": [
+      "GOAL.md",
+      "docs/roadmap.md",
+      "docs/open-questions.md",
+      "docs/implementation-decisions.md",
+      "README.md"
+    ]
+  }
+}

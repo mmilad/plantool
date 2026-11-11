@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cbd8-96c2-745d-a6d0-c40ed030e1a6",
+  "ticketId": "01a1ca94-b32e-75aa-bda2-d3eafaabe749",
+  "body": "review-notes.md translated and extended. implementation-decisions.md had no German sections. docs/ui-*.md stay German as historical notes.",
+  "author": "claude",
+  "createdAt": "2026-11-11T18:22:11.650Z"
+}

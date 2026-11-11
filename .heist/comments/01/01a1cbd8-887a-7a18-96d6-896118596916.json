@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cbd8-887a-7a18-96d6-896118596916",
+  "ticketId": "01a1ca95-23d1-7f53-bc59-c803bfc3f350",
+  "body": "Edge cases: fewer than 10 tickets, no model, all scores equal (MAD 0), more than 2000 tickets: no hint by meaning. Covered in test/semantic.test.js.",
+  "author": "claude",
+  "createdAt": "2026-11-11T18:22:07.994Z"
+}

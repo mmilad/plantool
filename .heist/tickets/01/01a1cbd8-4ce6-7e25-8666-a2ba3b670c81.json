@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cbd8-4ce6-7e25-8666-a2ba3b670c81",
+  "number": 15,
+  "title": "Keep child tickets",
+  "kind": "option",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1cbd8-4cb4-70cd-be8c-6a1473a6509e",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {}
+  },
+  "createdAt": "2026-11-11T18:21:52.742Z",
+  "updatedAt": "2026-11-11T18:21:52.742Z"
+}

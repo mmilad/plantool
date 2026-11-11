@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cbd8-4cb4-70cd-be8c-6a1473a6509e",
+  "number": 14,
+  "title": "Should the feature blueprint fill fields on the feature instead of creating child tickets?",
+  "kind": "decision",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Applied to HEIST-1, behaviour and tests duplicated the description and acceptance fields; states is worded for UI.",
+  "decision": {
+    "owner": "human",
+    "criteria": [],
+    "chosen": null
+  },
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T18:21:52.692Z",
+  "updatedAt": "2026-11-11T18:21:52.692Z"
+}

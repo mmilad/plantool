@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca94-b15c-74e1-a1ef-73ff8faedd3b",
+  "number": 4,
+  "title": "Click through the decisions view in a browser",
+  "kind": "task",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "The decisions view was built and tested over HTTP but never used in a browser.",
+  "acceptance": [
+    {
+      "text": "List shows open decisions",
+      "met": false
+    },
+    {
+      "text": "Needs-a-person filter works",
+      "met": false
+    },
+    {
+      "text": "Choosing an option works",
+      "met": false
+    },
+    {
+      "text": "Reopen works",
+      "met": false
+    },
+    {
+      "text": "List refreshes after a change made from the CLI",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/ui.js",
+    "src/server.js"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T12:28:24.796Z",
+  "updatedAt": "2026-11-11T12:28:24.796Z"
+}

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca94-b32e-75aa-bda2-d3eafaabe749",
+  "number": 6,
+  "title": "Translate the German docs to English",
+  "kind": "task",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Project language is English; review notes and parts of the implementation decisions are German.",
+  "acceptance": [
+    {
+      "text": "docs/review-notes.md is English",
+      "met": false
+    },
+    {
+      "text": "docs/implementation-decisions.md has no German sections",
+      "met": false
+    },
+    {
+      "text": "docs/ui-*.md stay as historical notes",
+      "met": false
+    }
+  ],
+  "files": [
+    "docs/review-notes.md",
+    "docs/implementation-decisions.md"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T12:28:25.262Z",
+  "updatedAt": "2026-11-11T18:22:11.480Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "review-notes.md translated and extended. implementation-decisions.md had no German sections. docs/ui-*.md stay German as historical notes.",
+    "verifiedBy": "Read through",
+    "changedFiles": [
+      "docs/review-notes.md"
+    ]
+  }
+}
