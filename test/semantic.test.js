@@ -66,14 +66,24 @@ test('a corrupt cache database is moved aside and rebuilt', async t => {
   assert.equal((await p.semantic.update()).sources, 1);
 });
 
-test('relatedByEmbedding ranks by similarity and returns nothing when the model is missing', async t => {
-  const { relatedByEmbedding } = await import('../src/semantic.js');
-  const fake = { async embed(texts) { return texts.map(x => { const s = x.toLocaleLowerCase(); return Float32Array.from([s.includes('trade') ? 1 : 0, s.includes('account') ? 1 : 0, 0.1]); }); } };
+test('relatedByEmbedding flags tickets that stand out, also in groups, needs enough tickets and returns nothing when the model is missing', async t => {
+  const { relatedByEmbedding, robustStrengths, HINT_STRENGTH, MIN_HINT_POPULATION } = await import('../src/semantic.js');
+  // Titles about trading point the same way as the new ticket; every other title is a little off, each by a different amount.
+  const fake = { async embed(texts) { return texts.map(x => { const n = Number(/\d+/.exec(x)?.[0] ?? 0); return x.toLocaleLowerCase().includes('trade') ? Float32Array.from([1, 0.05]) : Float32Array.from([1, 1 + n / 40]); }); } };
   const p = { config: {} };
   const ticket = { title: 'Trade offer flow' };
-  const others = [{ id: 'a', title: 'Trade screen' }, { id: 'b', title: 'Account settings' }, { id: 'c', title: 'Trade offer review' }];
-  const hits = await relatedByEmbedding(p, ticket, others, { embedder: fake, minScore: 0.9 });
-  assert.deepEqual(hits.map(h => h.ticket.id), ['a', 'c']);
-  const none = await relatedByEmbedding(p, ticket, others, { embedder: { embed: async () => { const e = Object.assign(new Error('x'), { code: 'SEMANTIC_UNAVAILABLE' }); throw e; } } });
+  const filler = Array.from({ length: 20 }, (_, i) => ({ id: `f${i}`, title: `Unrelated work ${i}` }));
+  const one = await relatedByEmbedding(p, ticket, [...filler, { id: 'dup', title: 'Trade offer review' }], { embedder: fake });
+  assert.deepEqual(one.map(h => h.ticket.id), ['dup']);
+  assert.ok(one[0].strength >= HINT_STRENGTH);
+  // A group of related tickets does not hide its members.
+  const group = ['a', 'b', 'c'].map(id => ({ id, title: `Trade screen ${id}` }));
+  assert.deepEqual((await relatedByEmbedding(p, ticket, [...filler, ...group], { embedder: fake })).map(h => h.ticket.id).sort(), ['a', 'b', 'c']);
+  // Nothing stands out among the unrelated ones.
+  assert.deepEqual(await relatedByEmbedding(p, ticket, filler, { embedder: fake }), []);
+  // Too few tickets to say what is usual: no hint, even for an obvious twin.
+  assert.deepEqual(await relatedByEmbedding(p, ticket, [...filler.slice(0, MIN_HINT_POPULATION - 2), { id: 'dup', title: 'Trade offer review' }], { embedder: fake }), []);
+  assert.deepEqual(robustStrengths([0.5, 0.5, 0.5, 0.9]), [0, 0, 0, 0]);
+  const none = await relatedByEmbedding(p, ticket, [...filler, { id: 'dup', title: 'Trade offer review' }], { embedder: { embed: async () => { const e = Object.assign(new Error('x'), { code: 'SEMANTIC_UNAVAILABLE' }); throw e; } } });
   assert.deepEqual(none, []);
 });

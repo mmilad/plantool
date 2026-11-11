@@ -244,8 +244,14 @@ export async function hybridSearch(p, query, { types, embedder } = {}) {
 }
 
 /** Tickets whose text is close to the given ticket; ancestors and descendants are excluded. */
-// Calibrated on this repository's plan (a planted duplicate scored z 3.7, related siblings up to 3.0); revisit with more data.
+// Calibrated on this repository's first plan (a planted duplicate scored z 3.7, related siblings up to 3.0); revisit with more data.
 export const OVERLAP_Z = 3.5;
+/** How far each score stands above the mean of all scores, in standard deviations. */
+export function strengths(values) {
+  const n = values.length || 1; const mean = values.reduce((s, x) => s + x, 0) / n;
+  const sd = Math.sqrt(values.reduce((s, x) => s + (x - mean) ** 2, 0) / n) || 1;
+  return values.map(x => (x - mean) / sd);
+}
 export async function similarTickets(p, ticketRef, { limit = 5, minScore = 0, minStrength = 1.5, embedder } = {}) {
   const id = await p.resolveTicket(ticketRef);
   embedder ??= await getEmbedder(modelOpt(p));
@@ -265,25 +271,41 @@ export async function similarTickets(p, ticketRef, { limit = 5, minScore = 0, mi
   const linked = new Map(rels);
   // Models differ in how they spread scores, so "likely overlap" is judged relative to this ticket's
   // own distribution: how many standard deviations a candidate stands above the mean of all others.
-  const values = [...best.values()]; const mean = values.reduce((s, x) => s + x, 0) / (values.length || 1);
-  const sd = Math.sqrt(values.reduce((s, x) => s + (x - mean) ** 2, 0) / (values.length || 1)) || 1;
-  return [...best].map(([tid, score]) => [tid, score, (score - mean) / sd]).filter(([, s, z]) => s >= minScore && z >= minStrength).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, limit)
+  const z = strengths([...best.values()]);
+  return [...best].map(([tid, score], i) => [tid, score, z[i]]).filter(([, s, z]) => s >= minScore && z >= minStrength).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, limit)
     .map(([tid, score, z]) => { const t = byId.get(tid); return { id: tid, key: p.ticketKey(t), title: t?.title, status: t?.status, score: Math.round(score * 1000) / 1000, strength: Math.round(z * 100) / 100, likelyOverlap: z >= OVERLAP_Z && !linked.has(tid), relation: linked.get(tid) ?? null }; });
 }
 
+// The create hint asks a wider question than `likelyOverlap`: is anything related at all? Related tickets often come
+// in groups (the parts of a header), and a group raises the mean and the deviation until none of its members
+// stands out. Median and median absolute deviation ignore the group. Checked with multilingual-e5-small on 20 unrelated
+// titles: related tickets reached 3.8-5.0 whether one or four were present, unrelated ones stayed below 2.5
+// (plain z dropped from 3.6 to 2.3 with four related tickets; a fixed 0.86 flagged unrelated short titles).
+export const HINT_STRENGTH = 3.5;
+export const MIN_HINT_POPULATION = 10;
+/** How far each score stands above the median, in robust standard deviations (1.4826 x median absolute deviation). */
+export function robustStrengths(values) {
+  const median = a => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : 0; };
+  const mid = median(values), mad = median(values.map(x => Math.abs(x - mid))) * 1.4826;
+  return values.map(x => (mad ? (x - mid) / mad : 0));
+}
+
 /**
- * Ranks tickets by embedding similarity without a stored index: suited to small and medium projects.
- * Returns [] when the model is not available, so callers can always fall back to keyword hints.
- * Scores from multilingual-e5-small are compressed (unrelated titles ~0.77-0.82, related ~0.86-0.97), so this is a hint, not a decision.
+ * Tickets that stand out as close in meaning to a new ticket, without a stored index: suited to small and medium projects.
+ * A candidate counts when it stands HINT_STRENGTH robust deviations above the median of all candidates. Absolute scores
+ * are not comparable between models, so there is no fixed threshold.
+ * Returns [] when the model is not available or the project has fewer than MIN_HINT_POPULATION other tickets (too few
+ * to say what "usual" is), so callers can always fall back to keyword hints. This is a hint, not a decision.
  */
-export async function relatedByEmbedding(p, ticket, others, { limit = 3, minScore = 0.86, maxTickets = 2000, embedder } = {}) {
-  if (others.length === 0 || others.length > maxTickets) return [];
+export async function relatedByEmbedding(p, ticket, others, { limit = 3, minStrength = HINT_STRENGTH, minPopulation = MIN_HINT_POPULATION, maxTickets = 2000, embedder } = {}) {
+  if (others.length < minPopulation || others.length > maxTickets) return [];
   try { embedder ??= await getEmbedder(modelOpt(p)); } catch (e) { if (e.code === 'SEMANTIC_UNAVAILABLE') return []; throw e; }
   const textOf = x => [x.title, x.description].filter(Boolean).join('\n').slice(0, 600);
   let vectors;
   try { vectors = await embedder.embed([textOf(ticket), ...others.map(textOf)], { query: true }); }
   catch (e) { if (e.code === 'SEMANTIC_UNAVAILABLE') return []; throw e; }
   const cos = (a, b) => { let d = 0, na = 0, nb = 0; for (let i = 0; i < a.length; i++) { d += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i]; } return na && nb ? d / Math.sqrt(na * nb) : 0; };
-  return others.map((x, i) => ({ ticket: x, score: cos(vectors[0], vectors[i + 1]) }))
-    .filter(r => r.score >= minScore).sort((a, b) => b.score - a.score).slice(0, limit);
+  const scores = others.map((x, i) => cos(vectors[0], vectors[i + 1])); const z = robustStrengths(scores);
+  return others.map((x, i) => ({ ticket: x, score: scores[i], strength: z[i] }))
+    .filter(r => r.strength >= minStrength).sort((a, b) => b.score - a.score).slice(0, limit);
 }
