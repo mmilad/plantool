@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d0f4-9075-7e4d-8251-4a73529d721b",
+  "ticketId": "01a1cfb1-d210-71cc-b5d0-0921ee94645d",
+  "body": "The ticket page edits every field of the kind and takes comments; the create dialog names what the kind expects and starts from the template; the CLI records the comment author and lists comments.",
+  "author": "claude",
+  "createdAt": "2026-11-12T18:10:51.125Z"
+}

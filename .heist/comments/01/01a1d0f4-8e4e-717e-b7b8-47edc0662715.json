@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d0f4-8e4e-717e-b7b8-47edc0662715",
+  "ticketId": "01a1d0ef-916f-769f-b91a-01d46f7b312c",
+  "body": "Blueprint sections can be added, changed, moved, removed and reset from the CLI and on the Blueprints page. A new section creates its project field in the same step.",
+  "author": "claude",
+  "createdAt": "2026-11-12T18:10:50.574Z"
+}
