@@ -12,6 +12,7 @@ export const FIELD_DEFS = Object.freeze([
   { name: 'refs', type: 'list', kinds: ALL, label: 'References', help: 'Links, issues, pull requests, designs.' },
   { name: 'createdBy', type: 'text', kinds: ALL, label: 'Created by', help: 'Person or agent that created the node.' },
   { name: 'acceptance', type: 'checklist', kinds: WORK, label: 'Acceptance criteria', help: 'Checkable conditions for "done".' },
+  { name: 'todos', type: 'checklist', kinds: WORK, label: 'To do', help: 'The steps to take, in order; tick them off while working.' },
   { name: 'size', type: 'enum', values: ['xs', 's', 'm', 'l', 'xl'], kinds: [...WORK, 'option'], label: 'Size', help: 'Rough effort; used to compare options.' },
   { name: 'files', type: 'list', kinds: WORK, label: 'Planned files', help: 'Files or folders this work is expected to touch.' },
   { name: 'evaluation', type: 'bool', kinds: WORK, label: 'Evaluation work', help: 'A spike or prototype that helps to decide; ready before the decision is made.' },

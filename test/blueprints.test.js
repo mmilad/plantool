@@ -13,17 +13,21 @@ async function project(t) {
 test('blueprints say what a ticket of a kind should have and what is still empty', async t => {
   const p = await project(t);
   assert.deepEqual((await p.blueprints.list()).map(b => b.kind), ['task', 'feature', 'bug', 'decision']);
-  const bug = await p.tickets.create({ title: 'Cart loses items', kind: 'bug' });
+  const bug = await p.tickets.create({ title: 'Cart loses items', kind: 'bug', description: 'Items vanish from the cart on the cart page.' });
   let e = await p.blueprints.expected(bug.id);
-  assert.deepEqual(e.missing, ['repro', 'acceptance']); assert.deepEqual(e.optional, ['why', 'files']);
+  assert.deepEqual(e.missing, ['repro', 'acceptance']); assert.deepEqual(e.optional, ['todos', 'why', 'files']);
   await p.tickets.update(bug.id, { repro: { steps: ['Add an item', 'Reload'], actual: 'Cart is empty' }, acceptance: [{ text: 'Items survive a reload', met: false }] });
   e = await p.blueprints.expected(bug.id);
   assert.deepEqual(e.missing, []);
   // acceptance is expected of leaves only
-  const parent = await p.tickets.create({ title: 'Checkout', why: 'People want to pay' });
+  const parent = await p.tickets.create({ title: 'Checkout', description: 'Paying for the cart.', why: 'People want to pay' });
   assert.deepEqual((await p.blueprints.expected(parent.id)).missing, ['acceptance']);
-  await p.tickets.create({ title: 'Payment form', parentId: parent.id, why: 'Card data', acceptance: [{ text: 'A card can be entered', met: false }] });
+  await p.tickets.create({ title: 'Payment form', description: 'Card fields.', parentId: parent.id, why: 'Card data', todos: [{ text: 'Build the form', met: false }], refs: ['PR 4'], acceptance: [{ text: 'A card can be entered', met: false }] });
   assert.deepEqual((await p.blueprints.expected(parent.id)).missing, []);
+  // views get the values in blueprint order, then filled fields the blueprint does not name
+  const form = (await p.tickets.list({ limit: Infinity })).find(x => x.title === 'Payment form'); const view = await p.blueprints.expected(form.id);
+  assert.deepEqual(view.items.filter(i => i.value !== undefined).map(i => i.field), ['description', 'why', 'todos', 'acceptance']);
+  assert.equal(view.items.find(i => i.field === 'todos').type, 'checklist'); assert.deepEqual(view.others.map(o => o.field), ['refs']);
   // done tickets are left alone; check reports the rest in one warning
   const loose = await p.tickets.create({ title: 'Loose end' });
   assert.deepEqual((await p.blueprints.check()).map(r => r.ticketId), [loose.id]);

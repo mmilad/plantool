@@ -82,7 +82,7 @@ Tickets have a `kind` of `task`, `feature`, `bug`, `decision` or `option`. A dec
 
 ## Blueprints: what a ticket should say
 
-A blueprint says what is expected of a ticket of a kind, like an issue or pull request template. A task has a reason and acceptance criteria, a bug has steps to reproduce, a feature describes what the user does.
+A blueprint says what is expected of a ticket of a kind, like an issue or pull request template, so that a ticket can be understood by someone who was not there. A task has a description, a reason, acceptance criteria and, when the way is known, to-dos; a bug has steps to reproduce; a feature describes what the user does. `heist ticket show` and the ticket page in the web view present a ticket in that order, name what is missing, and let you tick to-dos and criteria.
 
 ```sh
 pnpm exec heist blueprint list                     # what each kind expects

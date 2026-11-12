@@ -50,8 +50,12 @@ A decision is a plan node (kind decision) with options as children (kind option)
 
   blueprints: `# Blueprints
 
-A blueprint says what is expected of a ticket of a kind, like an issue template: a task has a why and acceptance
-criteria, a bug has steps to reproduce, a feature describes what the user does. It is about the ticket itself.
+A blueprint says what is expected of a ticket of a kind, like an issue or pull request template. A ticket is read
+by people and by agents who were not there when it was written. A task has a description (context first, then
+what has to happen), a why, acceptance criteria and, when the way is known, to-dos (--todo "a;b": the steps in
+order, commands included). A bug has steps to reproduce, a feature describes what the user does.
+A title and a why are not enough: write the description so that the ticket can be picked up without asking.
+- heist ticket show ID prints the ticket as a document in blueprint order and names what is missing.
 - heist ticket create tells you what is still empty; heist blueprint status TICKET shows it later.
 - Fill the fields on the ticket (heist ticket update ID --why … --accept "a;b" …). No extra tickets for this.
 - heist blueprint check lists open tickets that lack something; heist check counts them.

@@ -159,3 +159,11 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - There is therefore no `heist` command that edits `AGENTS.md`. The one thing a person still has to do is tell the first agent in a project to run `heist agent onboard`; `heist --help` now starts with that line.
 - For the MCP server (HEIST-9): a short version of the briefing belongs in the server instructions, the full text behind a guide tool, so not every session pays for the whole briefing.
 
+## Readable tickets (owner feedback 2026-11-12)
+
+- The owner opened the tickets in the web view and could not tell what they were about: they had a title, a why and acceptance criteria, but no description, and the web view showed only the description. The point of a blueprint is that a ticket can be understood without asking, like a pull request written from a template: title, description, acceptance criteria, to-dos.
+- Blueprints now expect a `description` for tasks, features and bugs, and offer `todos`: a new ticket field for work kinds, a checklist like `acceptance` (`--todo "a;b"`, `--add-todo`, `heist ticket todo ID N`). It holds the steps in order, including commands.
+- A ticket is presented as a document in blueprint order, with missing expected sections named, followed by other filled fields: `heist ticket show` (text; `--format json` is unchanged) and the ticket page of the web view. In the web view to-dos and acceptance criteria can be ticked.
+- Still missing in the web view: editing these fields and starting a new ticket from the description template (HEIST-21).
+- The open tickets of this repository were rewritten to this standard.
+

@@ -33,9 +33,14 @@ test('ticket create points at possibly related tickets by title', async t => {
   const unrelated = cli('ticket', 'create', '--title', 'Accounts settings page');
   assert.doesNotMatch(unrelated.stderr, /Possibly related/);
   // the blueprint of the kind says what is still expected; a complete ticket gets no hint
-  assert.match(unrelated.stderr, /Expected for a task, still empty: why \(--why\), acceptance/);
-  const complete = cli('ticket', 'create', '--title', 'Printer queue', '--why', 'Orders need labels', '--accept', 'A label prints');
+  assert.match(unrelated.stderr, /Expected for a task, still empty: description \(--description\), why \(--why\), acceptance/);
+  const complete = cli('ticket', 'create', '--title', 'Printer queue', '--description', 'Labels wait in a queue until the printer is free.', '--todo', 'Add the queue;Show its length', '--why', 'Orders need labels', '--accept', 'A label prints');
   assert.equal(complete.stderr.trim(), '');
   assert.match(cli('blueprint', 'status', 'SHOP-3').stdout, /○ why/);
+  // a ticket reads as a document: blueprint sections in order, missing ones named
+  assert.match(cli('ticket', 'todo', 'SHOP-4', '1').stdout, /\[x\] 1\. Add the queue/);
+  const shown = cli('ticket', 'show', 'SHOP-4').stdout;
+  assert.match(shown, /SHOP-4  Printer queue\ntask · todo\n\nDescription\n  Labels wait[^]*\nWhy\n  Orders need labels\n\nTo do\n  \[x\] 1\. Add the queue\n  \[ \] 2\. Show its length\n\nAcceptance criteria\n  \[ \] 1\. A label prints/);
+  assert.match(cli('ticket', 'show', 'SHOP-3').stdout, /Why\n  \(missing\) /);
   assert.match(cli('blueprint', 'check').stdout, /SHOP-1 \(task\)/);
 });

@@ -9,11 +9,15 @@ import { fieldsFor } from './fields.js';
 
 const KINDS = ['task', 'feature', 'bug', 'decision', 'option'];
 const expect = (field, hint, extra = {}) => ({ field, hint, ...extra });
+const DESCRIPTION = 'What this is about and what has to happen, written for someone who was not there: context first, then the task.';
+const TODOS = 'The steps to take, in order, when the way is known (commands to run, things to click).';
 export const BUILTIN_BLUEPRINTS = Object.freeze([
   {
-    kind: 'task', title: 'Task', description: 'One piece of work an agent can finish and verify.',
+    kind: 'task', title: 'Task', description: 'One piece of work a person or an agent can finish and verify.',
     expects: [
+      expect('description', DESCRIPTION),
       expect('why', 'The reason this exists; what breaks or is missing without it.'),
+      expect('todos', TODOS, { optional: true }),
       expect('acceptance', 'Checkable conditions for "done".', { when: 'leaf' }),
       expect('files', 'Files or folders the work is expected to touch.', { optional: true }),
       expect('size', 'Rough effort (xs, s, m, l, xl).', { optional: true }),
@@ -22,8 +26,9 @@ export const BUILTIN_BLUEPRINTS = Object.freeze([
   {
     kind: 'feature', title: 'Feature', description: 'Something a user can do that they could not do before.',
     expects: [
-      expect('why', 'Who needs it and what it is for.'),
       expect('description', 'What the user does and what happens, step by step, including what happens outside the happy path.'),
+      expect('why', 'Who needs it and what it is for.'),
+      expect('todos', TODOS, { optional: true }),
       expect('acceptance', 'How it is proven to work.', { when: 'leaf' }),
       expect('risks', 'What could go wrong with this feature.', { optional: true }),
       expect('size', 'Rough effort (xs, s, m, l, xl).', { optional: true }),
@@ -32,9 +37,11 @@ export const BUILTIN_BLUEPRINTS = Object.freeze([
   {
     kind: 'bug', title: 'Bug', description: 'Something that behaves differently from what was meant.',
     expects: [
+      expect('description', 'What goes wrong, where it was seen and who is affected.'),
       expect('repro', 'Steps to reproduce, expected and actual behaviour.'),
+      expect('todos', TODOS, { optional: true }),
       expect('acceptance', 'How the fix is shown to work.', { when: 'leaf' }),
-      expect('why', 'Who is affected and how badly.', { optional: true }),
+      expect('why', 'How badly it hurts, if the description does not say.', { optional: true }),
       expect('files', 'Where the cause is suspected.', { optional: true }),
     ],
   },
@@ -42,11 +49,12 @@ export const BUILTIN_BLUEPRINTS = Object.freeze([
     kind: 'decision', title: 'Decision', description: 'A question with options.',
     expects: [
       expect('why', 'Why this has to be decided, and what waits for it.'),
+      expect('description', 'Background a person needs to choose: what is known, what was tried.', { optional: true }),
       expect('risks', 'What a wrong choice would cost.', { optional: true }),
     ],
   },
 ]);
-const FLAGS = { description: '--description', why: '--why', acceptance: '--accept "a;b"', files: '--files a,b', size: '--size', risks: '--risks "a;b"', assumptions: '--assume "a;b"', refs: '--refs a,b', repro: '--steps "a;b" --expected T --actual T', evaluation: '--evaluation' };
+const FLAGS = { todos: '--todo "a;b"', description: '--description', why: '--why', acceptance: '--accept "a;b"', files: '--files a,b', size: '--size', risks: '--risks "a;b"', assumptions: '--assume "a;b"', refs: '--refs a,b', repro: '--steps "a;b" --expected T --actual T', evaluation: '--evaluation' };
 
 function validateBlueprint(bp, config, source) {
   const where = source ? ` (${source})` : '';
@@ -91,14 +99,18 @@ export function attachBlueprintApi(p) {
   async function expected(ticketOrRef, { tickets, blueprints } = {}) {
     const ticket = typeof ticketOrRef === 'object' ? ticketOrRef : await p.tickets.get(ticketOrRef);
     const kind = ticket.kind ?? 'task'; const bp = (blueprints ?? await all()).get(kind);
-    if (!bp) return { ticketId: ticket.id, kind, blueprint: null, items: [], missing: [], optional: [] };
+    if (!bp) return { ticketId: ticket.id, kind, blueprint: null, items: [], others: [], missing: [], optional: [] };
     const hasChildren = (tickets ?? await p.tickets.list({ limit: Infinity })).some(t => t.parentId === ticket.id);
     const defs = new Map(fieldsFor(kind, p.config).map(f => [f.name, f]));
     const items = bp.expects.filter(e => !(e.when === 'leaf' && hasChildren)).map(e => {
       const def = defs.get(e.field); const value = e.field === 'description' ? ticket.description : def?.custom ? ticket.properties?.[e.field] : ticket[e.field];
-      return { field: e.field, label: def?.label ?? 'Description', hint: e.hint ?? def?.help ?? '', optional: !!e.optional, filled: filled(value, e.field === 'description' ? bp.template : undefined), flag: FLAGS[e.field] ?? `--set ${e.field}=VALUE` };
+      const isFilled = filled(value, e.field === 'description' ? bp.template : undefined);
+      return { field: e.field, label: def?.label ?? 'Description', type: def?.type ?? 'text', value: isFilled ? value : undefined, hint: e.hint ?? def?.help ?? '', optional: !!e.optional, filled: isFilled, flag: FLAGS[e.field] ?? `--set ${e.field}=VALUE` };
     });
-    return { ticketId: ticket.id, kind, blueprint: { kind, title: bp.title ?? kind, source: bp.source }, items, missing: items.filter(i => !i.filled && !i.optional).map(i => i.field), optional: items.filter(i => !i.filled && i.optional).map(i => i.field) };
+    // Filled fields the blueprint does not name are still part of the ticket; views show them after the expected ones.
+    const named = new Set(bp.expects.map(e => e.field));
+    const others = [...defs.values()].filter(d => !named.has(d.name) && d.name !== 'createdBy').map(d => ({ field: d.name, label: d.label, type: d.type, value: d.custom ? ticket.properties?.[d.name] : ticket[d.name] })).filter(o => filled(o.value));
+    return { ticketId: ticket.id, kind, blueprint: { kind, title: bp.title ?? kind, source: bp.source }, items, others, missing: items.filter(i => !i.filled && !i.optional).map(i => i.field), optional: items.filter(i => !i.filled && i.optional).map(i => i.field) };
   }
   p.blueprints = {
     async list() { return [...(await all()).values()].map(b => ({ kind: b.kind, title: b.title ?? b.kind, description: b.description ?? '', source: b.source, expects: b.expects.filter(e => !e.optional).map(e => e.field), optional: b.expects.filter(e => e.optional).map(e => e.field), template: !!b.template })); },
