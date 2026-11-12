@@ -102,14 +102,14 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Server: `GET /api/search?mode=hybrid|semantic` (paged, snapshot bound to the index generation, keyword fallback with `fallbackReason`), `GET /api/search/status`, `POST /api/index/update` (202, runs in the background), `GET /api/tickets/:id/similar` (returns `available:false` instead of an error when there is no index), `POST /api/relations`.
 - Indexing is opt-in: `heist serve` never downloads a model on its own. It re-indexes in the background (every 10 s at most, single-flight, only when tickets, documents or comments changed) only for checkouts that already have an index or where the UI's **Enable semantic search** was used.
 
-## Blueprints (PM-83, 2026-11-08)
+## Checklists (PM-83, 2026-11-08)
 
-- A blueprint is a named checklist (`items` with id, title, why, optional flag) that may `extend` another; resolution puts own items first, then inherited ones, and an own item overrides an inherited one with the same id.
-- Built-ins live in `src/blueprints.js`; projects add or override them as readable JSON in `.heist/blueprints/<name>.json` (validated on load).
-- Applying stores `blueprint: {name, skipped}` on the ticket and creates child tickets with `origin: {blueprint, item}`. Coverage is derived from those children and the skip reasons, so nothing is duplicated and re-applying only fills gaps. One blueprint per ticket; nest tickets for more.
+- A checklist is a named checklist (`items` with id, title, why, optional flag) that may `extend` another; resolution puts own items first, then inherited ones, and an own item overrides an inherited one with the same id.
+- Built-ins live in `src/checklists.js`; projects add or override them as readable JSON in `.heist/checklists/<name>.json` (validated on load).
+- Applying stores `checklist: {name, skipped}` on the ticket and creates child tickets with `origin: {checklist, item}`. Coverage is derived from those children and the skip reasons, so nothing is duplicated and re-applying only fills gaps. One checklist per ticket; nest tickets for more.
 - Optional items are never created by default; they count as "undecided" until created or skipped with a reason. Missing and undecided items are warnings in `heist check`, not blockers for `done`.
-- An item is covered in one of three ways, chosen by the planner per item and not by the blueprint (owner guidance 2026-11-12, HEIST-14): a child ticket when it is work of its own (`apply --only`), an answer on the ticket itself when it is information (`answer --note`, stored in `blueprint.answered`), or a skip with a reason. `blueprint attach` puts the checklist on a ticket without creating tickets. `apply` without `--only` still creates every required item.
-- Suggestions are keyword based (title and labels, or a `blueprint:<name>` label) and only shown, never applied automatically. A ticket of kind `feature` is also offered the `feature` blueprint (2026-11-11).
+- An item is covered in one of three ways, chosen by the planner per item and not by the checklist (owner guidance 2026-11-12, HEIST-14): a child ticket when it is work of its own (`apply --only`), an answer on the ticket itself when it is information (`answer --note`, stored in `checklist.answered`), or a skip with a reason. `checklist attach` puts the checklist on a ticket without creating tickets. `apply` without `--only` still creates every required item.
+- Suggestions are keyword based (title and labels, or a `checklist:<name>` label) and only shown, never applied automatically. A ticket of kind `feature` is also offered the `feature` checklist (2026-11-11).
 
 ## Claims across worktrees (PM-82, 2026-11-08)
 
@@ -129,7 +129,7 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 
 - Decisions are owned by agents by default; an agent may decide them. A person can take a decision with `--owner human`; then only `--by human` may decide or reopen it. Anyone can change an agent-owned decision afterwards, and the decider is recorded. The decider defaults to unknown, not human. Nothing forces a person to decide. The tool guards against mistakes, not against an agent that invents an answer.
 - Ready work means every `blocks` blocker is finished. A stand-in changes only what a consumer waits for: `implements --stage mock` and `consumes --needs mock`. The default `full` keeps the previous behaviour.
-- Blueprint items may declare `after`; that becomes `blocks` relations when the blueprint is applied. The product blueprint orders platform after goal, stack after platform, UI structure after stack, core features and accounts.
+- Checklist items may declare `after`; that becomes `blocks` relations when the checklist is applied. The product checklist orders platform after goal, stack after platform, UI structure after stack, core features and accounts.
 - Finishing a ticket with an active claim needs the claimant (`--agent`) or `--force`.
 - Local web view requests act for the person (`by` defaults to human); there is no separate authorisation.
 

@@ -17,7 +17,7 @@ Plan like a heist: before anything is built, every part, every open question and
    - Never decide a decision owned by a person. Hard-to-reverse choices (platform, stack, data storage,
      paid services) are always for the person. Reversible details may be owned by an agent.
 3. Break features down until every leaf is one piece of work an agent can finish and verify:
-   feature → parts → tasks. Apply blueprints to parts (heist blueprint suggest/apply): a header
+   feature → parts → tasks. Apply checklists to parts (heist checklist suggest/apply): a header
    is never just a header.
 4. Connect the plan: \`blocks\` relations for order, decisions block the work that depends on them,
    code plans and contracts for code other code calls (heist codeplan, heist check).
@@ -30,7 +30,7 @@ Plan like a heist: before anything is built, every part, every open question and
 - Prefer asking one clear question with options over guessing; prefer a small first release.
 - Keep titles short and concrete ("Burger menu on mobile", not "Mobile stuff").
 
-Topics: heist guide decisions | blueprints | metadata | workflow`,
+Topics: heist guide decisions | checklists | metadata | workflow`,
 
   decisions: `# Decisions
 
@@ -48,20 +48,20 @@ A decision is a plan node (kind decision) with options as children (kind option)
   becomes ready, blocked work is released. heist decide DECISION --reopen undoes it.
 - heist decisions lists open decisions; '?' marks the ones a person has to make.`,
 
-  blueprints: `# Blueprints
+  checklists: `# Checklists
 
 Checklists of what a kind of thing really needs (header, footer, form, page, service, api-endpoint, login,
 ui-component, product). Items can be tasks or decisions; optional items are decisions to make, not defaults.
-A blueprint lists what to think of. What becomes a ticket is your call, item by item:
-- Work of its own becomes a child ticket: heist blueprint apply TICKET NAME --only a,b (without --only: every
+A checklist lists what to think of. What becomes a ticket is your call, item by item:
+- Work of its own becomes a child ticket: heist checklist apply TICKET NAME --only a,b (without --only: every
   required item; --dry-run shows what would be created).
 - Information belongs on the ticket itself (description, --accept, --files, --why …). Write it there, then record
-  it: heist blueprint answer TICKET ITEM --note "see acceptance". Do not create tickets whose only work is writing.
-- heist blueprint skip TICKET ITEM --reason "…" when an item does not apply.
-- heist blueprint suggest TICKET finds a fitting blueprint; heist blueprint attach TICKET NAME puts the checklist
+  it: heist checklist answer TICKET ITEM --note "see acceptance". Do not create tickets whose only work is writing.
+- heist checklist skip TICKET ITEM --reason "…" when an item does not apply.
+- heist checklist suggest TICKET finds a fitting checklist; heist checklist attach TICKET NAME puts the checklist
   on the ticket without creating anything.
-- When you notice the same parts again and again, capture them: heist blueprint init NAME, edit
-  .heist/blueprints/NAME.json (items with id, title, why, optional, kind, options). That is how a project
+- When you notice the same parts again and again, capture them: heist checklist init NAME, edit
+  .heist/checklists/NAME.json (items with id, title, why, optional, kind, options). That is how a project
   teaches the next agent.`,
 
   metadata: `# Metadata
@@ -92,7 +92,7 @@ consumers that are affected.
 heist next → heist claim ID --agent NAME → heist context ID → work → heist done ID --note "…" --verified "…" --files
 - next only offers work that is ready: todo, no open children, no open blockers, decisions made.
 - Claims are leases (60 min) and are shared between git worktrees.
-- A parent is done only after its children; heist check warns about missing blueprint items and
+- A parent is done only after its children; heist check warns about missing checklist items and
   inconsistent contracts; heist validate checks the files.`,
 });
 export const guide = topic => GUIDE[topic ?? 'overview'] ?? null;

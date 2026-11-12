@@ -1,6 +1,6 @@
-// Blueprints: reusable checklists that expand a ticket into everything it really needs
+// Checklists: reusable lists of parts that expand a ticket into everything it really needs
 // ("a header is not just a header": logo, navigation, burger menu, states, accessibility ...).
-// Built-in blueprints ship with heist; a project can add or override them in .heist/blueprints/<name>.json.
+// Built-in checklists ship with heist; a project can add or override them in .heist/checklists/<name>.json.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { ValidationError, NotFoundError, HeistError } from './index.js';
@@ -11,7 +11,7 @@ const ITEM_RE = /^[a-z0-9][a-z0-9-]{0,47}$/;
 const item = (id, title, why, extra = {}) => ({ id, title, why, ...extra });
 
 /** Starter set. Items are written as tickets an agent can pick up; `optional` items are decisions, not defaults. */
-export const BUILTIN_BLUEPRINTS = Object.freeze([
+export const BUILTIN_CHECKLISTS = Object.freeze([
   {
     name: 'product', title: 'Product / app', description: 'The questions every new product has to answer before the work can be planned.',
     match: ['app', 'product', 'website', 'game', 'platform', 'saas'],
@@ -22,7 +22,7 @@ export const BUILTIN_BLUEPRINTS = Object.freeze([
       item('core-features', 'List the core features of the first release', 'Keeps the first version small and makes the rest of the plan concrete.', { after: ['goal'] }),
       item('accounts', 'Do users need accounts?', 'Accounts pull in login, privacy and a backend.', { after: ['core-features'],  kind: 'decision', options: ['No accounts', 'Email and password', 'Social login'] }),
       item('data', 'Where does the data come from and where does it live?', 'Device only, own backend or a third-party service changes the whole architecture.', { after: ['core-features'],  kind: 'decision', reversible: false, options: ['Only on the device', 'Own backend', 'Third-party API or backend service'] }),
-      item('ui-structure', 'Map the screens and the navigation (menu, tabs, sidebar …)', 'Decides which UI parts exist; apply the header, page and form blueprints to them.', { after: ['stack', 'core-features', 'accounts'] }),
+      item('ui-structure', 'Map the screens and the navigation (menu, tabs, sidebar …)', 'Decides which UI parts exist; apply the header, page and form checklists to them.', { after: ['stack', 'core-features', 'accounts'] }),
       item('visual', 'Define the visual direction (references, colours, typography)', 'Gives every UI ticket the same target.', { after: ['platform'] }),
       item('quality', 'Decide how the product is tested and released', 'Agents need to know what "verified" means.', { after: ['stack'] }),
       item('offline', 'Must it work offline?', 'Only relevant for mobile or field use.', { kind: 'decision', optional: true, options: ['Yes', 'No'] }),
@@ -144,39 +144,39 @@ export const BUILTIN_BLUEPRINTS = Object.freeze([
   },
 ]);
 
-function validateBlueprint(bp, source) {
+function validateChecklist(bp, source) {
   const where = source ? ` (${source})` : '';
-  if (!bp || typeof bp !== 'object') throw new ValidationError(`Blueprint must be an object${where}`);
-  if (!NAME_RE.test(bp.name ?? '')) throw new ValidationError(`Blueprint name must be lowercase letters, digits and dashes${where}`);
-  if (bp.extends !== undefined && !NAME_RE.test(bp.extends)) throw new ValidationError(`Blueprint ${bp.name}: invalid extends${where}`);
-  if (!Array.isArray(bp.items)) throw new ValidationError(`Blueprint ${bp.name} needs an items array${where}`);
+  if (!bp || typeof bp !== 'object') throw new ValidationError(`Checklist must be an object${where}`);
+  if (!NAME_RE.test(bp.name ?? '')) throw new ValidationError(`Checklist name must be lowercase letters, digits and dashes${where}`);
+  if (bp.extends !== undefined && !NAME_RE.test(bp.extends)) throw new ValidationError(`Checklist ${bp.name}: invalid extends${where}`);
+  if (!Array.isArray(bp.items)) throw new ValidationError(`Checklist ${bp.name} needs an items array${where}`);
   const seen = new Set();
   for (const it of bp.items) {
-    if (!ITEM_RE.test(it?.id ?? '')) throw new ValidationError(`Blueprint ${bp.name}: item ids must be lowercase letters, digits and dashes${where}`);
-    if (seen.has(it.id)) throw new ValidationError(`Blueprint ${bp.name}: duplicate item ${it.id}${where}`);
+    if (!ITEM_RE.test(it?.id ?? '')) throw new ValidationError(`Checklist ${bp.name}: item ids must be lowercase letters, digits and dashes${where}`);
+    if (seen.has(it.id)) throw new ValidationError(`Checklist ${bp.name}: duplicate item ${it.id}${where}`);
     seen.add(it.id);
-    if (typeof it.title !== 'string' || !it.title.trim()) throw new ValidationError(`Blueprint ${bp.name}: item ${it.id} needs a title${where}`);
-    if (it.options !== undefined && (!Array.isArray(it.options) || it.options.some(o => typeof o !== 'string'))) throw new ValidationError(`Blueprint ${bp.name}: item ${it.id} options must be a list of texts${where}`);
-    if (it.kind !== undefined && !['task', 'feature', 'bug', 'decision'].includes(it.kind)) throw new ValidationError(`Blueprint ${bp.name}: item ${it.id} has an invalid kind${where}`);
+    if (typeof it.title !== 'string' || !it.title.trim()) throw new ValidationError(`Checklist ${bp.name}: item ${it.id} needs a title${where}`);
+    if (it.options !== undefined && (!Array.isArray(it.options) || it.options.some(o => typeof o !== 'string'))) throw new ValidationError(`Checklist ${bp.name}: item ${it.id} options must be a list of texts${where}`);
+    if (it.kind !== undefined && !['task', 'feature', 'bug', 'decision'].includes(it.kind)) throw new ValidationError(`Checklist ${bp.name}: item ${it.id} has an invalid kind${where}`);
   }
-  if (bp.match !== undefined && (!Array.isArray(bp.match) || bp.match.some(x => typeof x !== 'string'))) throw new ValidationError(`Blueprint ${bp.name}: match must be a list of words${where}`);
+  if (bp.match !== undefined && (!Array.isArray(bp.match) || bp.match.some(x => typeof x !== 'string'))) throw new ValidationError(`Checklist ${bp.name}: match must be a list of words${where}`);
   return bp;
 }
 
-export function validateTicketBlueprint(value) {
+export function validateTicketChecklist(value) {
   if (value === undefined || value === null) return;
-  if (typeof value !== 'object' || Array.isArray(value) || !NAME_RE.test(value.name ?? '')) throw new ValidationError('Ticket blueprint must be {name, skipped}');
-  if (value.skipped !== undefined && (typeof value.skipped !== 'object' || Array.isArray(value.skipped) || Object.entries(value.skipped).some(([k, v]) => !ITEM_RE.test(k) || typeof v !== 'string'))) throw new ValidationError('Ticket blueprint.skipped must map item ids to reasons');
+  if (typeof value !== 'object' || Array.isArray(value) || !NAME_RE.test(value.name ?? '')) throw new ValidationError('Ticket checklist must be {name, skipped}');
+  if (value.skipped !== undefined && (typeof value.skipped !== 'object' || Array.isArray(value.skipped) || Object.entries(value.skipped).some(([k, v]) => !ITEM_RE.test(k) || typeof v !== 'string'))) throw new ValidationError('Ticket checklist.skipped must map item ids to reasons');
 }
 export function validateTicketOrigin(value) {
   if (value === undefined || value === null) return;
-  if (typeof value !== 'object' || !NAME_RE.test(value.blueprint ?? '') || !ITEM_RE.test(value.item ?? '')) throw new ValidationError('Ticket origin must be {blueprint, item}');
+  if (typeof value !== 'object' || !NAME_RE.test(value.checklist ?? '') || !ITEM_RE.test(value.item ?? '')) throw new ValidationError('Ticket origin must be {checklist, item}');
 }
 
 const words = s => String(s ?? '').toLocaleLowerCase();
 function matchScore(bp, ticket) {
   const title = words(ticket.title), text = `${title} ${words(ticket.description)}`, labels = (ticket.labels ?? []).map(words);
-  if (labels.includes(`blueprint:${bp.name}`)) return 100;
+  if (labels.includes(`checklist:${bp.name}`)) return 100;
   let score = 0;
   for (const m of bp.match ?? []) {
     const re = new RegExp(`(^|[^a-z0-9])${m.toLocaleLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}s?([^a-z0-9]|$)`);
@@ -186,31 +186,31 @@ function matchScore(bp, ticket) {
   return score;
 }
 
-export function attachBlueprintApi(p) {
-  const dir = path.join(p.dir, 'blueprints');
+export function attachChecklistApi(p) {
+  const dir = path.join(p.dir, 'checklists');
   async function local() {
     let names = [];
     try { names = (await fs.readdir(dir)).filter(f => f.endsWith('.json')); } catch (e) { if (e.code !== 'ENOENT') throw e; }
     const out = [];
     for (const f of names.sort()) {
       const file = path.join(dir, f);
-      let bp; try { bp = JSON.parse(await fs.readFile(file, 'utf8')); } catch (e) { throw new ValidationError(`Blueprint file ${f} is not valid JSON: ${e.message}`); }
-      validateBlueprint(bp, `.heist/blueprints/${f}`);
-      if (`${bp.name}.json` !== f) throw new ValidationError(`Blueprint file ${f} must be named ${bp.name}.json`);
+      let bp; try { bp = JSON.parse(await fs.readFile(file, 'utf8')); } catch (e) { throw new ValidationError(`Checklist file ${f} is not valid JSON: ${e.message}`); }
+      validateChecklist(bp, `.heist/checklists/${f}`);
+      if (`${bp.name}.json` !== f) throw new ValidationError(`Checklist file ${f} must be named ${bp.name}.json`);
       out.push({ ...bp, source: 'project' });
     }
     return out;
   }
   async function all() {
-    const map = new Map(BUILTIN_BLUEPRINTS.map(b => [b.name, { ...b, source: 'built-in' }]));
+    const map = new Map(BUILTIN_CHECKLISTS.map(b => [b.name, { ...b, source: 'built-in' }]));
     for (const b of await local()) map.set(b.name, b);
     return map;
   }
-  /** Items including inherited ones; a child blueprint can override an inherited item by id. */
+  /** Items including inherited ones; a child checklist can override an inherited item by id. */
   function resolve(map, name, seen = new Set()) {
     const bp = map.get(name);
-    if (!bp) throw new NotFoundError(`Unknown blueprint: ${name}`);
-    if (seen.has(name)) throw new ValidationError(`Blueprint inheritance cycle at ${name}`);
+    if (!bp) throw new NotFoundError(`Unknown checklist: ${name}`);
+    if (seen.has(name)) throw new ValidationError(`Checklist inheritance cycle at ${name}`);
     seen.add(name);
     const own = bp.items.map(i => ({ ...i, from: name }));
     const inherited = bp.extends ? resolve(map, bp.extends, seen).items.filter(i => !own.some(o => o.id === i.id)) : [];
@@ -218,19 +218,19 @@ export function attachBlueprintApi(p) {
   }
   async function coverage(ticketRef) {
     const ticket = await p.tickets.get(ticketRef);
-    if (!ticket.blueprint) return { ticketId: ticket.id, blueprint: null, items: [], missing: [], undecided: [] };
+    if (!ticket.checklist) return { ticketId: ticket.id, checklist: null, items: [], missing: [], undecided: [] };
     const map = await all();
-    let bp; try { bp = resolve(map, ticket.blueprint.name); } catch (e) { return { ticketId: ticket.id, blueprint: { name: ticket.blueprint.name, missing: true }, error: e.message, items: [], missing: [], undecided: [] }; }
+    let bp; try { bp = resolve(map, ticket.checklist.name); } catch (e) { return { ticketId: ticket.id, checklist: { name: ticket.checklist.name, missing: true }, error: e.message, items: [], missing: [], undecided: [] }; }
     const children = (await p.tickets.list({ limit: Infinity })).filter(t => t.parentId === ticket.id);
-    const skipped = ticket.blueprint.skipped ?? {}, answered = ticket.blueprint.answered ?? {};
+    const skipped = ticket.checklist.skipped ?? {}, answered = ticket.checklist.answered ?? {};
     const items = bp.items.map(i => {
-      const child = children.find(c => c.origin?.blueprint === bp.name && c.origin?.item === i.id) ?? children.find(c => c.origin?.item === i.id);
+      const child = children.find(c => c.origin?.checklist === bp.name && c.origin?.item === i.id) ?? children.find(c => c.origin?.item === i.id);
       const state = child ? (child.status === 'done' ? 'done' : child.status === 'cancelled' ? 'cancelled' : 'planned') : skipped[i.id] !== undefined ? 'skipped' : answered[i.id] !== undefined ? 'answered' : 'open';
       return { id: i.id, title: i.title, why: i.why ?? '', optional: !!i.optional, from: i.from, state, ticket: child ? { id: child.id, key: p.ticketKey(child), title: child.title, status: child.status } : null, reason: skipped[i.id], answer: answered[i.id] };
     });
-    return { ticketId: ticket.id, blueprint: { name: bp.name, title: bp.title, source: bp.source }, items, missing: items.filter(i => i.state === 'open' && !i.optional).map(i => i.id), undecided: items.filter(i => i.state === 'open' && i.optional).map(i => i.id) };
+    return { ticketId: ticket.id, checklist: { name: bp.name, title: bp.title, source: bp.source }, items, missing: items.filter(i => i.state === 'open' && !i.optional).map(i => i.id), undecided: items.filter(i => i.state === 'open' && i.optional).map(i => i.id) };
   }
-  p.blueprints = {
+  p.checklists = {
     async list() { return [...(await all()).values()].map(b => ({ name: b.name, title: b.title ?? b.name, description: b.description ?? '', extends: b.extends ?? null, source: b.source, items: b.items.length })); },
     async get(name) { return resolve(await all(), name); },
     async suggest(ticketRef, { limit = 3 } = {}) {
@@ -239,26 +239,26 @@ export function attachBlueprintApi(p) {
     },
     coverage,
     /**
-     * Attach a blueprint and create child tickets for the chosen items (default: all required items not yet covered;
+     * Attach a checklist and create child tickets for the chosen items (default: all required items not yet covered;
      * `only: []` attaches without creating anything). Whether an item becomes a ticket is the planner's call per item:
      * work becomes a ticket (apply), information is answered on the ticket itself (answer), the rest is skipped (skip).
      */
     async apply(ticketRef, name, { only, includeOptional = false, dryRun = false } = {}) {
       const ticket = await p.tickets.get(ticketRef);
-      if (ticket.blueprint && ticket.blueprint.name !== name) throw new HeistError(`Ticket already uses blueprint ${ticket.blueprint.name}`, 'CONFLICT', { blueprint: ticket.blueprint.name });
+      if (ticket.checklist && ticket.checklist.name !== name) throw new HeistError(`Ticket already uses checklist ${ticket.checklist.name}`, 'CONFLICT', { checklist: ticket.checklist.name });
       const bp = resolve(await all(), name);
-      if (only) for (const id of only) if (!bp.items.some(i => i.id === id)) throw new ValidationError(`Blueprint ${name} has no item ${id}`);
-      const before = ticket.blueprint ? await coverage(ticket.id) : null;
+      if (only) for (const id of only) if (!bp.items.some(i => i.id === id)) throw new ValidationError(`Checklist ${name} has no item ${id}`);
+      const before = ticket.checklist ? await coverage(ticket.id) : null;
       const covered = new Set(before ? before.items.filter(i => i.state !== 'open').map(i => i.id) : []);
       const chosen = bp.items.filter(i => !covered.has(i.id) && (only ? only.includes(i.id) : (includeOptional || !i.optional)));
-      if (dryRun) return { ticketId: ticket.id, blueprint: name, create: chosen.map(i => ({ item: i.id, title: i.title, optional: !!i.optional })), created: [] };
-      if (!ticket.blueprint) await p.tickets.update(ticket.id, { blueprint: { name, skipped: {} } });
+      if (dryRun) return { ticketId: ticket.id, checklist: name, create: chosen.map(i => ({ item: i.id, title: i.title, optional: !!i.optional })), created: [] };
+      if (!ticket.checklist) await p.tickets.update(ticket.id, { checklist: { name, skipped: {} } });
       const created = [];
       for (const i of chosen) {
-        const description = [i.why, i.description, `From blueprint ${bp.title ?? bp.name} › ${i.id} (parent: ${ticket.title}).`].filter(Boolean).join('\n\n');
+        const description = [i.why, i.description, `From checklist ${bp.title ?? bp.name} › ${i.id} (parent: ${ticket.title}).`].filter(Boolean).join('\n\n');
         const child = i.kind === 'decision'
-          ? (await p.decisions.ask(i.title, { parentId: ticket.id, why: i.why, options: i.options ?? [], criteria: i.criteria ?? [], owner: i.owner, reversible: i.reversible, origin: { blueprint: name, item: i.id } })).decision
-          : await p.tickets.create({ title: i.title, description, why: i.why || undefined, acceptance: i.acceptance?.map(text => ({ text, met: false })), kind: i.kind ?? 'task', parentId: ticket.id, labels: i.labels ?? [], origin: { blueprint: name, item: i.id } });
+          ? (await p.decisions.ask(i.title, { parentId: ticket.id, why: i.why, options: i.options ?? [], criteria: i.criteria ?? [], owner: i.owner, reversible: i.reversible, origin: { checklist: name, item: i.id } })).decision
+          : await p.tickets.create({ title: i.title, description, why: i.why || undefined, acceptance: i.acceptance?.map(text => ({ text, met: false })), kind: i.kind ?? 'task', parentId: ticket.id, labels: i.labels ?? [], origin: { checklist: name, item: i.id } });
         created.push({ item: i.id, id: child.id, key: p.ticketKey(child), title: child.title });
       }
       // `after` on an item makes its ticket wait for the tickets of the listed items (created now or earlier).
@@ -268,60 +268,60 @@ export function attachBlueprintApi(p) {
         const from = idOf.get(dep), to = idOf.get(i.id);
         if (from && to && from !== to) await p.relations.add(from, to, 'blocks').catch(e => { if (e.code !== 'DUPLICATE_RELATION') throw e; });
       }
-      return { ticketId: ticket.id, blueprint: name, created, coverage: await coverage(ticket.id) };
+      return { ticketId: ticket.id, checklist: name, created, coverage: await coverage(ticket.id) };
     },
     /** Record that an item does not apply, with a reason (or remove that decision with reason=null). */
     async skip(ticketRef, itemId, reason) {
       const ticket = await p.tickets.get(ticketRef);
-      if (!ticket.blueprint) throw new ValidationError('This ticket has no blueprint; apply one first');
-      const bp = resolve(await all(), ticket.blueprint.name);
-      if (!bp.items.some(i => i.id === itemId)) throw new ValidationError(`Blueprint ${bp.name} has no item ${itemId}`);
-      const skipped = { ...(ticket.blueprint.skipped ?? {}) };
+      if (!ticket.checklist) throw new ValidationError('This ticket has no checklist; apply one first');
+      const bp = resolve(await all(), ticket.checklist.name);
+      if (!bp.items.some(i => i.id === itemId)) throw new ValidationError(`Checklist ${bp.name} has no item ${itemId}`);
+      const skipped = { ...(ticket.checklist.skipped ?? {}) };
       if (reason === null) delete skipped[itemId];
       else { if (typeof reason !== 'string' || !reason.trim()) throw new ValidationError('Give a short reason why the item does not apply'); skipped[itemId] = reason.trim(); }
-      const answered = { ...(ticket.blueprint.answered ?? {}) }; if (reason !== null) delete answered[itemId];
-      await p.tickets.update(ticket.id, { blueprint: { ...ticket.blueprint, skipped, answered } });
+      const answered = { ...(ticket.checklist.answered ?? {}) }; if (reason !== null) delete answered[itemId];
+      await p.tickets.update(ticket.id, { checklist: { ...ticket.checklist, skipped, answered } });
       return coverage(ticket.id);
     },
     /** Record that an item is answered on the ticket itself (description, acceptance, files ...) and needs no ticket of its own; note=null removes it. */
     async answer(ticketRef, itemId, note) {
       const ticket = await p.tickets.get(ticketRef);
-      if (!ticket.blueprint) throw new ValidationError('This ticket has no blueprint; attach one first (heist blueprint attach TICKET NAME)');
-      const bp = resolve(await all(), ticket.blueprint.name);
-      if (!bp.items.some(i => i.id === itemId)) throw new ValidationError(`Blueprint ${bp.name} has no item ${itemId}`);
-      const answered = { ...(ticket.blueprint.answered ?? {}) }, skipped = { ...(ticket.blueprint.skipped ?? {}) };
+      if (!ticket.checklist) throw new ValidationError('This ticket has no checklist; attach one first (heist checklist attach TICKET NAME)');
+      const bp = resolve(await all(), ticket.checklist.name);
+      if (!bp.items.some(i => i.id === itemId)) throw new ValidationError(`Checklist ${bp.name} has no item ${itemId}`);
+      const answered = { ...(ticket.checklist.answered ?? {}) }, skipped = { ...(ticket.checklist.skipped ?? {}) };
       if (note === null) delete answered[itemId];
       else { if (typeof note !== 'string' || !note.trim()) throw new ValidationError('Say where on the ticket the item is answered, or give the answer'); answered[itemId] = note.trim(); delete skipped[itemId]; }
-      await p.tickets.update(ticket.id, { blueprint: { ...ticket.blueprint, skipped, answered } });
+      await p.tickets.update(ticket.id, { checklist: { ...ticket.checklist, skipped, answered } });
       return coverage(ticket.id);
     },
-    async detach(ticketRef) { const ticket = await p.tickets.get(ticketRef); const { blueprint: _b, ...rest } = ticket; await p.tickets.update(ticket.id, { blueprint: null }); return rest; },
-    /** Write a built-in (or new empty) blueprint into .heist/blueprints/ so the project can customise it. */
+    async detach(ticketRef) { const ticket = await p.tickets.get(ticketRef); const { checklist: _b, ...rest } = ticket; await p.tickets.update(ticket.id, { checklist: null }); return rest; },
+    /** Write a built-in (or new empty) checklist into .heist/checklists/ so the project can customise it. */
     async init(name, { from } = {}) {
-      if (!NAME_RE.test(name ?? '')) throw new ValidationError('Blueprint name must be lowercase letters, digits and dashes');
+      if (!NAME_RE.test(name ?? '')) throw new ValidationError('Checklist name must be lowercase letters, digits and dashes');
       const file = path.join(dir, `${name}.json`);
-      const base = from ? BUILTIN_BLUEPRINTS.find(b => b.name === from) ?? (await local()).find(b => b.name === from) : BUILTIN_BLUEPRINTS.find(b => b.name === name);
-      if (from && !base) throw new NotFoundError(`Unknown blueprint: ${from}`);
+      const base = from ? BUILTIN_CHECKLISTS.find(b => b.name === from) ?? (await local()).find(b => b.name === from) : BUILTIN_CHECKLISTS.find(b => b.name === name);
+      if (from && !base) throw new NotFoundError(`Unknown checklist: ${from}`);
       const bp = base ? { ...structuredClone(base), name, source: undefined } : { name, title: name, description: '', match: [name], items: [{ id: 'first-item', title: 'Describe what this kind of ticket always needs', why: '' }] };
       delete bp.source;
-      validateBlueprint(bp);
+      validateChecklist(bp);
       await fs.mkdir(dir, { recursive: true });
-      try { await fs.writeFile(file, `${JSON.stringify(bp, null, 2)}\n`, { flag: 'wx' }); } catch (e) { if (e.code === 'EEXIST') throw new HeistError(`Blueprint ${name} already exists in .heist/blueprints/`, 'CONFLICT'); throw e; }
+      try { await fs.writeFile(file, `${JSON.stringify(bp, null, 2)}\n`, { flag: 'wx' }); } catch (e) { if (e.code === 'EEXIST') throw new HeistError(`Checklist ${name} already exists in .heist/checklists/`, 'CONFLICT'); throw e; }
       return { name, file: path.relative(p.root, file).split(path.sep).join('/') };
     },
-    /** Project-wide check: tickets with missing blueprint items, and tickets that look like a blueprint but have none. */
+    /** Project-wide check: tickets with missing checklist items, and tickets that look like a checklist but have none. */
     async check() {
       const tickets = await p.tickets.list({ limit: Infinity }); const map = await all(); const warnings = [];
       for (const t of tickets) {
         if (['done', 'cancelled'].includes(t.status) || t.origin) continue;
-        if (t.blueprint) {
+        if (t.checklist) {
           const c = await coverage(t.id);
-          if (c.error) warnings.push({ code: 'BLUEPRINT_MISSING', ticketId: t.id, message: `${p.ticketKey(t) ?? t.id} uses unknown blueprint ${t.blueprint.name}` });
-          if (c.missing.length) warnings.push({ code: 'BLUEPRINT_ITEMS_MISSING', ticketId: t.id, items: c.missing, message: `${p.ticketKey(t) ?? t.id} "${t.title}" is missing ${c.missing.length} ${t.blueprint.name} item(s): ${c.missing.join(', ')}` });
-          if (c.undecided.length) warnings.push({ code: 'BLUEPRINT_UNDECIDED', ticketId: t.id, items: c.undecided, message: `${p.ticketKey(t) ?? t.id} "${t.title}" has undecided optional items: ${c.undecided.join(', ')}` });
+          if (c.error) warnings.push({ code: 'CHECKLIST_MISSING', ticketId: t.id, message: `${p.ticketKey(t) ?? t.id} uses unknown checklist ${t.checklist.name}` });
+          if (c.missing.length) warnings.push({ code: 'CHECKLIST_ITEMS_MISSING', ticketId: t.id, items: c.missing, message: `${p.ticketKey(t) ?? t.id} "${t.title}" is missing ${c.missing.length} ${t.checklist.name} item(s): ${c.missing.join(', ')}` });
+          if (c.undecided.length) warnings.push({ code: 'CHECKLIST_UNDECIDED', ticketId: t.id, items: c.undecided, message: `${p.ticketKey(t) ?? t.id} "${t.title}" has undecided optional items: ${c.undecided.join(', ')}` });
         } else {
           const best = [...map.values()].map(b => [b, matchScore(b, t)]).filter(([, s]) => s >= 3).sort((a, b) => b[1] - a[1])[0];
-          if (best) warnings.push({ code: 'BLUEPRINT_SUGGESTED', ticketId: t.id, blueprint: best[0].name, message: `${p.ticketKey(t) ?? t.id} "${t.title}" looks like a ${best[0].name}; run heist blueprint apply ${p.ticketKey(t) ?? t.id} ${best[0].name} --dry-run` });
+          if (best) warnings.push({ code: 'CHECKLIST_SUGGESTED', ticketId: t.id, checklist: best[0].name, message: `${p.ticketKey(t) ?? t.id} "${t.title}" looks like a ${best[0].name}; run heist checklist apply ${p.ticketKey(t) ?? t.id} ${best[0].name} --dry-run` });
         }
       }
       return warnings;

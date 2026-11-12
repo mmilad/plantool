@@ -397,7 +397,7 @@ export async function checkProject(p) {
       warn('UNLINKED_MENTION', `Ticket ${p.ticketKey(t) ?? t.id} mentions "${o.title}" (${p.ticketKey(o) ?? o.id}) without a relation; link it if it is a dependency`, { ticketId: t.id, otherId: o.id });
     }
   }
-  for (const w of await p.blueprints?.check?.() ?? []) if (w.code !== 'BLUEPRINT_SUGGESTED') warnings.push(w);
+  for (const w of await p.checklists?.check?.() ?? []) if (w.code !== 'CHECKLIST_SUGGESTED') warnings.push(w);
   return { valid: errors.length === 0, errors, warnings, counts: { components: m.components.length, types: m.types.length, contracts: m.contracts.length, ticketsWithCodePlan: tickets.filter(t => t.codePlan && Object.keys(t.codePlan).length).length } };
 }
 

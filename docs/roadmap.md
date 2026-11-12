@@ -1,6 +1,6 @@
 # Roadmap
 
-> Status 2026-11-11: milestones 0 to 5 are implemented and merged. Three things were decided differently from the text below and are recorded in `implementation-decisions.md`: a machine-local project registry with a multi-project `heist serve` (2026-11-08), optional local semantic search with `multilingual-e5-small` (2026-11-08), and decisions, blueprints and contracts as planning tools for agents. Open work is tracked in heist itself (`heist next`), not in this file.
+> Status 2026-11-11: milestones 0 to 5 are implemented and merged. Three things were decided differently from the text below and are recorded in `implementation-decisions.md`: a machine-local project registry with a multi-project `heist serve` (2026-11-08), optional local semantic search with `multilingual-e5-small` (2026-11-08), and decisions, checklists and contracts as planning tools for agents. Open work is tracked in heist itself (`heist next`), not in this file.
 
 This roadmap records the broader product direction and is maintained passively while the first usable release is implemented. It is not a prerequisite checklist for each UI increment. Work proceeds in small, visible slices; only the current slice is actively planned, and implementation findings are recorded here when they change scope or sequencing.
 

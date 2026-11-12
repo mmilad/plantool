@@ -3,7 +3,7 @@ import { DEFAULT_STATUSES, RELATION_TYPES, SEARCH_TYPES } from './index.js';
 import { TICKET_KINDS } from './workflow.js';
 import { fieldsFor } from './fields.js';
 import { DEFAULT_COMPONENT_KINDS } from './design.js';
-import { BUILTIN_BLUEPRINTS } from './blueprints.js';
+import { BUILTIN_CHECKLISTS } from './checklists.js';
 import { TICKET_SIZES } from './decisions.js';
 import { GUIDE } from './guide.js';
 
@@ -33,7 +33,7 @@ Never edit \`.heist/\` by hand. Use the CLI or the API.
 
 ## Language
 
-Write everything that goes into the plan and the code in English: ticket titles and descriptions, decisions and options, rationales, blueprints, commit messages, code and code comments. Talk to the person in whatever language they use.
+Write everything that goes into the plan and the code in English: ticket titles and descriptions, decisions and options, rationales, checklists, commit messages, code and code comments. Talk to the person in whatever language they use.
 
 ## Node types
 
@@ -64,11 +64,11 @@ ${GUIDE.workflow}
 
 ${GUIDE.decisions}
 
-${GUIDE.blueprints}
+${GUIDE.checklists}
 
 ${GUIDE.contracts}
 
-Blueprints available by default: ${list(BUILTIN_BLUEPRINTS.map(b => b.name))}. Projects can add their own.
+Checklists available by default: ${list(BUILTIN_CHECKLISTS.map(b => b.name))}. Projects can add their own.
 
 Search covers ${list(SEARCH_TYPES)} by text, and semantically when the index is available. Use search to find an existing ticket before you create a new one.
 

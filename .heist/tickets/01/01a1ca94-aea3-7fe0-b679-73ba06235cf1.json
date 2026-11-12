@@ -38,7 +38,7 @@
   "createdBy": "claude",
   "createdAt": "2026-11-11T12:28:24.099Z",
   "updatedAt": "2026-11-11T18:22:09.913Z",
-  "blueprint": {
+  "checklist": {
     "name": "feature",
     "skipped": {
       "data": "Reads ticket titles and descriptions only; nothing new is stored.",

@@ -12,7 +12,7 @@ test('agent plans the Pokemon trading card app end to end', async t => {
 
   // 1. The product starts from a single sentence.
   const root = await p.tickets.create({ title: 'Pokemon trading card app' });
-  const bp = await p.blueprints.apply(root.id, 'product');
+  const bp = await p.checklists.apply(root.id, 'product');
   const item = name => bp.created.find(c => c.item === name);
   const goal = item('goal'), accounts = item('accounts'), platform = item('platform'), stack = item('stack');
   assert.ok(goal && accounts && platform && stack);

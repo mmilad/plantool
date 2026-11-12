@@ -11,7 +11,7 @@
   "properties": {},
   "parentId": "01a1ca94-aea3-7fe0-b679-73ba06235cf1",
   "origin": {
-    "blueprint": "feature",
+    "checklist": "feature",
     "item": "tests"
   },
   "why": "Agents need to know what \"verified\" means for this feature.",

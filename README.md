@@ -80,22 +80,22 @@ A ticket is ready when it is `todo`, has no open children, and neither it nor an
 
 Tickets have a `kind` of `task`, `feature`, `bug`, `decision` or `option`. A decision asks a question; its options are children with pros, cons and weighted scores. Agents own decisions by default and may decide them. A person can take one with `--owner human`; then only `--by human` decides or reopens it. A person can always change an agent's decision with `--by human`. `heist decisions` lists what needs a person, `heist decide DECISION` shows the comparison and the suggestion.
 
-## Blueprints: plan the whole heist
+## Checklists: plan the whole heist
 
-A "header" is never just a header: it needs a logo, navigation, a burger menu on mobile, a skip link, states, tests. Blueprints are checklists that expand a ticket into everything it really needs.
+A "header" is never just a header: it needs a logo, navigation, a burger menu on mobile, a skip link, states, tests. Checklists name the parts a kind of thing really needs and expand a ticket into them.
 
 ```sh
-pnpm exec heist blueprint list                     # built-in: ui-component, header, footer, form, page, service, api-endpoint, login
-pnpm exec heist blueprint suggest PM-12            # which blueprint fits this ticket
-pnpm exec heist blueprint apply PM-12 header --dry-run
-pnpm exec heist blueprint apply PM-12 header       # child tickets for all required items
-pnpm exec heist blueprint apply PM-12 header --only cart   # add an optional item later
-pnpm exec heist blueprint skip PM-12 sticky --reason "static header is enough"
-pnpm exec heist blueprint status PM-12             # planned / done / not needed / missing
-pnpm exec heist blueprint init header              # copy into .heist/blueprints/header.json and adapt it
+pnpm exec heist checklist list                     # built-in: ui-component, header, footer, form, page, service, api-endpoint, login
+pnpm exec heist checklist suggest PM-12            # which checklist fits this ticket
+pnpm exec heist checklist apply PM-12 header --dry-run
+pnpm exec heist checklist apply PM-12 header       # child tickets for all required items
+pnpm exec heist checklist apply PM-12 header --only cart   # add an optional item later
+pnpm exec heist checklist skip PM-12 sticky --reason "static header is enough"
+pnpm exec heist checklist status PM-12             # planned / done / not needed / missing
+pnpm exec heist checklist init header              # copy into .heist/checklists/header.json and adapt it
 ```
 
-Optional items are decisions, not defaults: they stay "undecided" until you create a ticket for them or skip them with a reason. `heist check` warns about missing and undecided items, `heist context` includes the checklist for agents, and the ticket view in `heist serve` has a **Checklist** section to preview, apply and decide items. Project blueprints in `.heist/blueprints/` override built-ins of the same name and can `extend` another blueprint.
+Optional items are decisions, not defaults: they stay "undecided" until you create a ticket for them or skip them with a reason. `heist check` warns about missing and undecided items, `heist context` includes the checklist for agents, and the ticket view in `heist serve` has a **Checklist** section to preview, apply and decide items. Project checklists in `.heist/checklists/` override built-ins of the same name and can `extend` another checklist.
 
 ## Decisions
 
