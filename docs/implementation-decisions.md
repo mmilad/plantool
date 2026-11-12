@@ -167,3 +167,14 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Still missing in the web view: editing these fields and starting a new ticket from the description template (HEIST-21).
 - The open tickets of this repository were rewritten to this standard.
 
+## Editing blueprints, tickets and comments (owner decision 2026-11-12)
+
+- Blueprints can be changed from the CLI (`heist blueprint expect|drop|template|reset`) and on the Blueprints page of the web view; both use `project.blueprints.save/expect/drop/reset` and write `.heist/blueprints/<kind>.json`. `heist blueprint init` remains for editing the file directly.
+- A section whose name is not a field of the kind yet is created as a project field (`config.fields`, kinds limited to that kind) in the same call. Project fields can be text, list, number, bool or enum; not a checklist.
+- Routes: `GET /api/blueprints/:kind`, `PUT /api/blueprints/:kind` (sections and template), `POST /api/blueprints/:kind/expect` (add or change one section, creating the field if needed), `DELETE /api/blueprints/:kind` (reset).
+- The ticket page edits every field of the kind, blueprint sections first. To-dos and acceptance criteria are edited as one line per item; ticks are kept for lines whose text did not change. Emptying a field removes it from the ticket. The existing conflict handling applies: a save after someone else changed the ticket is refused and the typed text is kept.
+- People comment on the ticket page (author `person`). The CLI records the author from `HEIST_AGENT` or `--author`, and `heist comment list` reads them.
+- The create dialog names what the chosen kind expects and starts from its description template.
+- The rule for agents was narrowed: the plan's records are never edited by hand; blueprints and checklists are settings and may be changed with the commands or in their files.
+- Checked in headless Chromium on Linux: edit and save, comment, create dialog, a new section, reorder, template, save. Not checked on Windows.
+

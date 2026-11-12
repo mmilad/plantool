@@ -95,6 +95,11 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
       m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/blueprint$/.exec(pathname);
       if(m&&req.method==='GET')return send(res,200,await project.blueprints.expected(m[1]));
       if(pathname==='/api/blueprints'&&req.method==='GET')return send(res,200,await project.blueprints.list());
+      m=/^\/api\/blueprints\/([a-z]+)(\/expect)?$/.exec(pathname);
+      if(m&&!m[2]&&req.method==='GET')return send(res,200,await project.blueprints.describe(m[1]));
+      if(m&&!m[2]&&req.method==='PUT'){const input=await body(req);return send(res,200,await project.blueprints.save(m[1],{expects:input.expects,template:input.template}));}
+      if(m&&!m[2]&&req.method==='DELETE')return send(res,200,await project.blueprints.reset(m[1]));
+      if(m&&m[2]&&req.method==='POST'){const input=await body(req);return send(res,200,await project.blueprints.expect(m[1],input.field,{hint:input.hint,optional:input.optional,leaf:input.leaf,before:input.before,type:input.type,values:input.values,label:input.label}));}
       if(pathname==='/api/checklists'&&req.method==='GET')return send(res,200,await project.checklists.list());
       m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/checklist(\/skip)?$/.exec(pathname);
       if(m&&!m[2]&&req.method==='GET'){const coverage=await project.checklists.coverage(m[1]);return send(res,200,{coverage,suggestions:coverage.checklist?[]:await project.checklists.suggest(m[1]),checklists:coverage.checklist?[]:await project.checklists.list()});}

@@ -4,8 +4,9 @@
 // Built-in blueprints ship with heist; a project replaces one with .heist/blueprints/<kind>.json.
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { randomBytes } from 'node:crypto';
 import { ValidationError, NotFoundError, HeistError } from './index.js';
-import { fieldsFor } from './fields.js';
+import { fieldsFor, customFields } from './fields.js';
 
 const KINDS = ['task', 'feature', 'bug', 'decision', 'option'];
 const expect = (field, hint, extra = {}) => ({ field, hint, ...extra });
@@ -99,7 +100,7 @@ export function attachBlueprintApi(p) {
   async function expected(ticketOrRef, { tickets, blueprints } = {}) {
     const ticket = typeof ticketOrRef === 'object' ? ticketOrRef : await p.tickets.get(ticketOrRef);
     const kind = ticket.kind ?? 'task'; const bp = (blueprints ?? await all()).get(kind);
-    if (!bp) return { ticketId: ticket.id, kind, blueprint: null, items: [], others: [], missing: [], optional: [] };
+    if (!bp) return { ticketId: ticket.id, kind, blueprint: null, items: [], others: [], editable: [], missing: [], optional: [] };
     const hasChildren = (tickets ?? await p.tickets.list({ limit: Infinity })).some(t => t.parentId === ticket.id);
     const defs = new Map(fieldsFor(kind, p.config).map(f => [f.name, f]));
     const items = bp.expects.filter(e => !(e.when === 'leaf' && hasChildren)).map(e => {
@@ -110,7 +111,10 @@ export function attachBlueprintApi(p) {
     // Filled fields the blueprint does not name are still part of the ticket; views show them after the expected ones.
     const named = new Set(bp.expects.map(e => e.field));
     const others = [...defs.values()].filter(d => !named.has(d.name) && d.name !== 'createdBy').map(d => ({ field: d.name, label: d.label, type: d.type, value: d.custom ? ticket.properties?.[d.name] : ticket[d.name] })).filter(o => filled(o.value));
-    return { ticketId: ticket.id, kind, blueprint: { kind, title: bp.title ?? kind, source: bp.source }, items, others, missing: items.filter(i => !i.filled && !i.optional).map(i => i.field), optional: items.filter(i => !i.filled && i.optional).map(i => i.field) };
+    // Everything a person may edit on this ticket: blueprint sections first, then the other fields of the kind.
+    const order = [...bp.expects.map(e => e.field), ...[...defs.keys()].filter(n => !named.has(n))];
+    const editable = order.filter(n => !['createdBy', 'outcome'].includes(n)).map(n => { const d = defs.get(n), e = bp.expects.find(x => x.field === n); return { field: n, label: d?.label ?? 'Description', type: d?.type ?? 'text', values: d?.values, shape: d?.shape, custom: !!d?.custom, hint: e?.hint ?? d?.help ?? '', expected: !!e && !e.optional, value: n === 'description' ? ticket.description : d?.custom ? ticket.properties?.[n] : ticket[n] }; });
+    return { ticketId: ticket.id, kind, blueprint: { kind, title: bp.title ?? kind, source: bp.source }, items, others, editable, missing: items.filter(i => !i.filled && !i.optional).map(i => i.field), optional: items.filter(i => !i.filled && i.optional).map(i => i.field) };
   }
   p.blueprints = {
     async list() { return [...(await all()).values()].map(b => ({ kind: b.kind, title: b.title ?? b.kind, description: b.description ?? '', source: b.source, expects: b.expects.filter(e => !e.optional).map(e => e.field), optional: b.expects.filter(e => e.optional).map(e => e.field), template: !!b.template })); },
@@ -126,6 +130,71 @@ export function attachBlueprintApi(p) {
       await fs.mkdir(dir, { recursive: true });
       try { await fs.writeFile(file, `${JSON.stringify({ ...structuredClone(base), template: base.template ?? '' }, null, 2)}\n`, { flag: 'wx' }); } catch (e) { if (e.code === 'EEXIST') throw new HeistError(`Blueprint ${kind} already exists in .heist/blueprints/`, 'CONFLICT'); throw e; }
       return { kind, file: path.relative(p.root, file).split(path.sep).join('/') };
+    },
+    /** A blueprint with everything a form needs: labels and types of its sections, and the fields of the kind it does not use yet. */
+    async describe(kind) {
+      if (!KINDS.includes(kind)) throw new ValidationError(`Blueprint kind must be one of ${KINDS.join(', ')}`);
+      const bp = (await all()).get(kind) ?? { kind, title: kind, description: '', expects: [], source: 'none' };
+      const defs = new Map(fieldsFor(kind, p.config).map(f => [f.name, f])); const used = new Set(bp.expects.map(e => e.field));
+      const info = n => ({ field: n, label: defs.get(n)?.label ?? 'Description', type: defs.get(n)?.type ?? 'text', custom: !!defs.get(n)?.custom });
+      return { kind, title: bp.title ?? kind, description: bp.description ?? '', source: bp.source, template: bp.template ?? '',
+        expects: bp.expects.map(e => ({ ...info(e.field), hint: e.hint ?? '', optional: !!e.optional, leaf: e.when === 'leaf' })),
+        available: ['description', ...defs.keys()].filter(n => !used.has(n) && !['createdBy', 'outcome'].includes(n)).map(info), fieldTypes: ['text', 'list', 'number', 'bool', 'enum'] };
+    },
+    /** Replace the sections and the template of a kind's blueprint; written to .heist/blueprints/<kind>.json. */
+    async save(kind, { expects, template } = {}) {
+      if (!KINDS.includes(kind)) throw new ValidationError(`Blueprint kind must be one of ${KINDS.join(', ')}`);
+      const cur = (await all()).get(kind) ?? { kind, title: kind, description: '', expects: [] };
+      if (expects !== undefined && !Array.isArray(expects)) throw new ValidationError('expects must be a list');
+      const clean = (expects ?? cur.expects).map(e => ({ field: e?.field, ...(e?.hint ? { hint: String(e.hint) } : {}), ...(e?.optional ? { optional: true } : {}), ...(e?.leaf || e?.when === 'leaf' ? { when: 'leaf' } : {}) }));
+      const text = template === undefined ? cur.template : template;
+      const bp = { kind, title: cur.title ?? kind, description: cur.description ?? '', expects: clean, ...(text ? { template: String(text) } : {}) };
+      validateBlueprint(bp, p.config);
+      await fs.mkdir(dir, { recursive: true });
+      const file = path.join(dir, `${kind}.json`), temp = `${file}.${process.pid}.${randomBytes(5).toString('hex')}.tmp`;
+      await fs.writeFile(temp, `${JSON.stringify(bp, null, 2)}\n`, { flag: 'wx' }); await fs.rename(temp, file);
+      return this.describe(kind);
+    },
+    /**
+     * Expect a section, or change one that is expected already. A field the kind does not have yet is created as a
+     * project field (config.fields) in the same step, so a new section needs one call.
+     */
+    async expect(kind, field, { hint, optional, leaf, before, type, values, label } = {}) {
+      if (!KINDS.includes(kind)) throw new ValidationError(`Blueprint kind must be one of ${KINDS.join(', ')}`);
+      if (typeof field !== 'string' || !field) throw new ValidationError('Name the field to expect');
+      let created = false;
+      if (field !== 'description' && !fieldsFor(kind, p.config).some(f => f.name === field)) {
+        const list = [...(p.config.fields ?? [])]; const i = list.findIndex(f => f.name === field);
+        if (i >= 0) list[i] = { ...list[i], kinds: [...new Set([...(list[i].kinds ?? KINDS), kind])] };
+        else { list.push({ name: field, type: type ?? 'text', ...(label ? { label } : {}), ...(values?.length ? { values } : {}), kinds: [kind] }); created = true; }
+        customFields({ fields: list });
+        await p.saveConfig({ ...p.config, fields: list });
+      } else if (type !== undefined) throw new ValidationError(`${field} exists already; its type cannot be changed here`);
+      const cur = (await all()).get(kind) ?? { expects: [] }; const expects = cur.expects.map(e => ({ ...e }));
+      let entry = expects.find(e => e.field === field);
+      if (!entry) { entry = { field }; expects.push(entry); }
+      if (hint !== undefined) entry.hint = hint;
+      if (optional !== undefined) entry.optional = !!optional;
+      if (leaf !== undefined) entry.when = leaf ? 'leaf' : undefined;
+      if (before !== undefined) {
+        const rest = expects.filter(e => e !== entry), at = rest.findIndex(e => e.field === before);
+        if (at < 0) throw new ValidationError(`Blueprint ${kind} does not expect ${before}`);
+        rest.splice(at, 0, entry); expects.splice(0, expects.length, ...rest);
+      }
+      return { ...(await this.save(kind, { expects })), created };
+    },
+    /** Stop expecting a section. The field itself stays; tickets keep what they have. */
+    async drop(kind, field) {
+      const cur = await this.get(kind);
+      if (!cur.expects.some(e => e.field === field)) throw new ValidationError(`Blueprint ${kind} does not expect ${field}`);
+      return this.save(kind, { expects: cur.expects.filter(e => e.field !== field) });
+    },
+    /** Remove the project's blueprint of a kind, so the built-in one applies again. */
+    async reset(kind) {
+      if (!KINDS.includes(kind)) throw new ValidationError(`Blueprint kind must be one of ${KINDS.join(', ')}`);
+      let removed = true;
+      try { await fs.unlink(path.join(dir, `${kind}.json`)); } catch (e) { if (e.code !== 'ENOENT') throw e; removed = false; }
+      return { kind, reset: removed, blueprint: await this.describe(kind) };
     },
     /** Open tickets that lack something their blueprint expects (required fields only). */
     async check() {

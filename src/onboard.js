@@ -29,7 +29,7 @@ You are working in a project that plans its work with heist. heist keeps the pla
 - Local web view: a human-facing view of the same plan. Editing there changes the same data.
 - Planning method: \`heist guide\` (topics: ${list(Object.keys(GUIDE).filter(k => k !== 'overview'))}).
 
-Never edit \`.heist/\` by hand. Use the CLI or the API.
+Never edit the plan's records under \`.heist/\` by hand (tickets, relationships, comments, decisions, components, contracts): the CLI and the API validate, number and lock, and they carry out what a change implies. Blueprints and checklists are settings; change them with \`heist blueprint …\` or edit their files under \`.heist/blueprints/\` and \`.heist/checklists/\`.
 
 ## Language
 

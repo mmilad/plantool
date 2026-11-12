@@ -156,3 +156,21 @@ test('decision routes create, read, score and decide through the local server', 
   const decided = await write(`/api/decisions/${id}/decide`, 'POST', { option: created.options[0].id, why: 'fastest in our tests' }); assert.equal(decided.status, 200);
   assert.equal(JSON.parse(decided.body).chosen, created.options[0].id);
 });
+
+test('blueprint and comment routes let a person change what is expected and leave a note', async t => {
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-bp-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));
+  const host=new URL(app.url).host;const page=await send(app.url,'GET',{host});const token=/"csrf":"([a-f0-9]+)"/.exec(page.body)?.[1];
+  const call=async(method,url,body)=>{const r=await send(app.url+url,method,{host,origin:app.url,'content-type':'application/json','x-heist-csrf':token},body===undefined?'':JSON.stringify(body));return {status:r.status,json:JSON.parse(r.body)};};
+  const task=await call('GET','/api/blueprints/task');assert.equal(task.status,200);assert.equal(task.json.expects[0].field,'description');
+  const added=await call('POST','/api/blueprints/task/expect',{field:'screenshots',label:'Screenshots',type:'list'});assert.equal(added.status,200,JSON.stringify(added.json));assert.equal(added.json.created,true);
+  const saved=await call('PUT','/api/blueprints/task',{expects:[{field:'description',hint:'Say it plainly'},{field:'screenshots',optional:true}],template:'## Context'});
+  assert.equal(saved.status,200,JSON.stringify(saved.json));assert.deepEqual(saved.json.expects.map(e=>e.field),['description','screenshots']);assert.equal(saved.json.source,'project');
+  const made=await call('POST','/api/tickets',{title:'From the browser'});assert.equal(made.json.description,'## Context');
+  const fields=await call('GET','/api/tickets/'+made.json.id+'/blueprint');assert.deepEqual(fields.json.missing,['description']);assert.ok(fields.json.editable.some(f=>f.field==='screenshots'&&f.custom));
+  const note=await call('POST','/api/tickets/'+made.json.id+'/comments',{body:'Looks right',author:'person'});assert.equal(note.status,201);assert.equal(note.json.author,'person');
+  assert.equal((await call('POST','/api/tickets/'+made.json.id+'/comments',{body:'  '})).status,400);
+  assert.equal((await call('PUT','/api/blueprints/task',{expects:[{field:'nope'}]})).status,400);
+  const reset=await call('DELETE','/api/blueprints/task');assert.equal(reset.json.reset,true);assert.equal(reset.json.blueprint.source,'built-in');
+});
+

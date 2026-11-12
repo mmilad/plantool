@@ -59,3 +59,31 @@ test('a project blueprint changes what is expected and can carry a description t
   await fs.writeFile(abs, JSON.stringify({ name: 'bug', items: [{ id: 'a', title: 'A' }] }));
   await assert.rejects(p.blueprints.list(), /checklists/);
 });
+
+test('blueprints are changed through the API: sections, a new project field, template and reset', async t => {
+  const p = await project(t);
+  const added = await p.blueprints.expect('bug', 'severity', { type: 'enum', values: ['low', 'high'], label: 'Severity', hint: 'How bad is it', before: 'repro' });
+  assert.equal(added.created, true);
+  assert.deepEqual(added.expects.slice(0, 3).map(e => e.field), ['description', 'severity', 'repro']);
+  assert.deepEqual(p.config.fields, [{ name: 'severity', type: 'enum', label: 'Severity', values: ['low', 'high'], kinds: ['bug'] }]);
+  const bug = await p.tickets.create({ title: 'Cart loses items', kind: 'bug', description: 'Seen on the cart page.' });
+  assert.ok((await p.blueprints.expected(bug.id)).missing.includes('severity'));
+  await p.tickets.update(bug.id, { properties: { severity: 'high' } });
+  const view = await p.blueprints.expected(bug.id);
+  assert.ok(!view.missing.includes('severity')); assert.equal(view.items.find(i => i.field === 'severity').value, 'high');
+  assert.equal(view.editable.find(f => f.field === 'severity').custom, true);
+  // change an existing section, drop one, set a template
+  assert.equal((await p.blueprints.expect('bug', 'why', { optional: false, hint: 'Who suffers' })).expects.find(e => e.field === 'why').optional, false);
+  await assert.rejects(p.blueprints.expect('bug', 'why', { type: 'list' }), { code: 'VALIDATION' });
+  await assert.rejects(p.blueprints.expect('bug', '9lives'), { code: 'VALIDATION' });
+  await assert.rejects(p.blueprints.expect('bug', 'why', { before: 'nope' }), { code: 'VALIDATION' });
+  assert.ok(!(await p.blueprints.drop('bug', 'files')).expects.some(e => e.field === 'files'));
+  await assert.rejects(p.blueprints.drop('bug', 'files'), { code: 'VALIDATION' });
+  assert.ok((await p.blueprints.describe('bug')).available.some(a => a.field === 'files'));
+  assert.equal((await p.blueprints.save('bug', { template: '## Seen where' })).template, '## Seen where');
+  assert.equal((await p.tickets.create({ title: 'Another', kind: 'bug' })).description, '## Seen where');
+  // reset returns to the built-in; the project field stays
+  assert.equal((await p.blueprints.reset('bug')).reset, true); assert.equal((await p.blueprints.reset('bug')).reset, false);
+  assert.equal((await p.blueprints.describe('bug')).source, 'built-in'); assert.equal(p.config.fields.length, 1);
+  await assert.rejects(p.blueprints.save('story', {}), { code: 'VALIDATION' });
+});

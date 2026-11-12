@@ -88,10 +88,16 @@ A blueprint says what is expected of a ticket of a kind, like an issue or pull r
 pnpm exec heist blueprint list                     # what each kind expects
 pnpm exec heist blueprint status SHOP-12           # which expected fields of this ticket are still empty
 pnpm exec heist blueprint check                    # open tickets that lack something
-pnpm exec heist blueprint init bug                 # copy into .heist/blueprints/bug.json and adapt it
+pnpm exec heist blueprint expect bug severity --type enum --values low,high --hint "How bad is it"
+                                                   # a new section; the project field is created with it
+pnpm exec heist blueprint drop bug files           # stop expecting a section
+pnpm exec heist blueprint template bug --file bug-template.md   # the description new bugs start with
+pnpm exec heist blueprint reset bug                # back to the built-in blueprint
 ```
 
 `heist ticket create` names what is still empty, and `heist check` counts the tickets that lack something. Nothing is blocked. A project blueprint can change the expected fields (including the project's own fields) and can carry a `template`: a ticket created without a description starts with that text.
+
+In the web view, the Blueprints page changes the same things, the ticket page edits every section of a ticket and takes comments, and the create dialog starts from the template of the chosen kind.
 
 Blueprints and checklists complement each other: the blueprint describes the ticket itself, the checklist the parts it breaks into.
 

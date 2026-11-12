@@ -114,7 +114,8 @@ export async function openProject({ cwd = process.cwd(), cache = false } = {}) {
   p.searchPage = (query, options) => searchPage(p, query, options);
   p.context = (id, options) => contextFor(p, id, options);
   p.tree = (id, options) => buildTree(p, id, options);
-  attachDesignApi(p); attachChecklistApi(p); attachBlueprintApi(p); attachDecisionApi(p); p.fields = kind => fieldsFor(kind ?? 'task', p.config);
+  attachDesignApi(p); p.saveConfig = config => writeConfig(p, config);
+  attachChecklistApi(p); attachBlueprintApi(p); attachDecisionApi(p); p.fields = kind => fieldsFor(kind ?? 'task', p.config);
   p.semantic = { status: o => semanticStatus(p, o), update: o => updateIndex(p, o), rebuild: o => updateIndex(p, { ...o, rebuild: true }), search: (q, o) => semanticSearch(p, q, o), hybrid: (q, o) => hybridSearch(p, q, o), similar: (id, o) => similarTickets(p, id, o) };
   p.next = options => nextTickets(p, options);
   p.claim = (id, options) => claimTicket(p, id, options);

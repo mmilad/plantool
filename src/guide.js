@@ -59,8 +59,13 @@ A title and a why are not enough: write the description so that the ticket can b
 - heist ticket create tells you what is still empty; heist blueprint status TICKET shows it later.
 - Fill the fields on the ticket (heist ticket update ID --why … --accept "a;b" …). No extra tickets for this.
 - heist blueprint check lists open tickets that lack something; heist check counts them.
-- A project changes what it expects, or adds a description template for new tickets: heist blueprint init KIND,
-  then edit .heist/blueprints/KIND.json (expects: field, hint, optional, when "leaf"; template: text).
+- A project changes what it expects: heist blueprint expect KIND FIELD --hint "…" [--optional] [--leaf]
+  [--before FIELD]. A name the kind does not have yet becomes a project field in the same step
+  (--type text|list|number|bool|enum, --values a,b, --label "…"); tickets fill it with --set NAME=VALUE.
+  heist blueprint drop KIND FIELD removes a section, heist blueprint template KIND --text "…" sets the
+  description new tickets start with, heist blueprint reset KIND returns to the built-in blueprint.
+  People do the same on the Blueprints page of the web view.
+- heist comment add ID "…" leaves a note for the person or the next agent; heist comment list ID reads them.
 Blueprint and checklist complement each other: the blueprint describes the ticket, the checklist its parts.`,
   checklists: `# Checklists
 

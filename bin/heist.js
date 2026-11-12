@@ -44,7 +44,8 @@ Usage:
   heist goal|plan|decision list [--format json]
   heist goal|plan|decision show ID [--format json]
   heist goal|plan|decision update ID [--title T] [--status S] [--body TEXT] [--links ID,ID]
-  heist comment add TICKET_ID TEXT
+  heist comment add TICKET_ID TEXT [--author NAME]   (author defaults to $HEIST_AGENT)
+  heist comment list TICKET_ID [--format json]
   heist relation add SOURCE_ID TARGET_ID TYPE
   heist relation list [ID]
   heist relation remove RELATION_ID | SOURCE_ID TARGET_ID TYPE
@@ -98,7 +99,13 @@ Blueprints (what is expected of a ticket of a kind, like an issue template):
   heist blueprint show KIND                          task | feature | bug | decision
   heist blueprint status TICKET                      expected fields of this ticket, filled or missing
   heist blueprint check                              open tickets that lack what their blueprint expects
-  heist blueprint init KIND                          copy into .heist/blueprints/ to change expectations or add a description template
+  heist blueprint expect KIND FIELD [--hint TEXT] [--optional|--required] [--leaf] [--before FIELD]
+                                                    add or change a section; a new name becomes a project field
+                                                    ([--type text|list|number|bool|enum] [--values a,b] [--label TEXT])
+  heist blueprint drop KIND FIELD                    stop expecting a section
+  heist blueprint template KIND --text TEXT | --file PATH | --clear   the description new tickets start with
+  heist blueprint reset KIND                         back to the built-in blueprint
+  heist blueprint init KIND                          copy into .heist/blueprints/ to edit the file directly
 
 Checklists (what a kind of thing really needs; they expand a ticket into its parts):
   heist checklist list [--format json]
@@ -128,7 +135,7 @@ All commands operate on the nearest project-local .heist/ directory. Ticket IDs 
 
 function parse(args) {
   const opts={}, positional=[];
-  for(let i=0;i<args.length;i++){const a=args[i];if(a.startsWith('--')){const k=a.slice(2);if(['open','force','write','dry-run','optional','evaluation','no-evaluation','files','all','reopen','reversible','irreversible','unmet','undone'].includes(k)&&(k!=='files'||i+1>=args.length||args[i+1].startsWith('--'))){opts[k]=true;continue;}if(i+1>=args.length)throw new Error(`Missing value for ${a}`);const key=k.replaceAll('-','_'),v=args[++i];opts[key]=opts[key]===undefined?v:[].concat(opts[key],v);}else positional.push(a);}
+  for(let i=0;i<args.length;i++){const a=args[i];if(a.startsWith('--')){const k=a.slice(2);if(['open','force','write','dry-run','optional','evaluation','no-evaluation','files','all','reopen','reversible','irreversible','unmet','undone','required','leaf','clear'].includes(k)&&(k!=='files'||i+1>=args.length||args[i+1].startsWith('--'))){opts[k]=true;continue;}if(i+1>=args.length)throw new Error(`Missing value for ${a}`);const key=k.replaceAll('-','_'),v=args[++i];opts[key]=opts[key]===undefined?v:[].concat(opts[key],v);}else positional.push(a);}
   return {opts,positional};
 }
 const withKeys=v=>{const k=globalThis.__heistKey;if(!k)return v;const f=x=>x&&typeof x==='object'&&'id'in x&&Number.isInteger(x.number)&&x.key===undefined?{key:`${k}-${x.number}`,...x}:x;return Array.isArray(v)?v.map(f):f(v);};
@@ -195,7 +202,8 @@ async function main(argv) {
     if(sub==='list'){const all=await project.documents.list(kind,{body:false});if(opts.format==='json'){out(all,'json');return;}if(!all.length)console.log('No documents.');for(const d of all)console.log(`${d.id}  ${d.status}  ${d.title}`);return;}
     if(sub==='show'){const r=await project.documents.getVersioned(kind,positional[0]);if(opts.format==='json'){out({...r.document,revision:r.revision},'json');return;}console.log(`${command} ${r.document.id}  ${r.document.status}  ${r.document.title}\nlinks: ${(r.document.links??[]).join(', ')||'none'}\n\n${r.document.body??''}`);return;}
     const patch={};for(const k of ['title','status','body'])if(opts[k]!==undefined)patch[k]=opts[k];if(opts.links!==undefined)patch.links=labels(opts.links);const r=await project.documents.update(kind,positional[0],patch);out(opts.format==='json'?{...r.document,revision:r.revision,changed:r.changed}:(r.changed?`Updated ${command} ${r.document.id}`:'No changes.'),opts.format);return;}
-  if(command==='comment'&&sub==='add') {const {positional}=parse(rest);out(await project.comments.add(positional[0],{body:positional.slice(1).join(' ')}));return;}
+  if(command==='comment'&&sub==='add') {const {opts,positional}=parse(rest);out(await project.comments.add(positional[0],{body:positional.slice(1).join(' '),author:one(opts.author)??process.env.HEIST_AGENT??undefined}),opts.format);return;}
+  if(command==='comment'&&sub==='list') {const {opts,positional}=parse(rest);const all=await project.comments.list((await project.tickets.get(positional[0])).id);if(opts.format==='json'){out(all,'json');return;}console.log(all.length?all.map(c=>`${c.author??'local'} · ${c.createdAt}\n  ${String(c.body).split('\n').join('\n  ')}`).join('\n\n'):'No comments yet.');return;}
   if(command==='relation'&&sub==='add') {const {positional}=parse(rest);out(await project.relations.add(...positional));return;}
   if(command==='relation'&&sub==='list') {const {positional,opts}=parse(rest);out(await project.relations.list(positional[0]),opts.format);return;}
   if(command==='relation'&&sub==='remove') {const {positional}=parse(rest);let id=positional[0];if(positional.length===3){const match=(await project.relations.list(positional[0])).find(r=>r.sourceId===positional[0]&&r.targetId===positional[1]&&r.type===positional[2]);if(!match)throw new NotFoundError('No matching relationship');id=match.id;}await project.relations.remove(id);out(`Removed relationship ${id}`);return;}
@@ -242,7 +250,12 @@ async function main(argv) {
     if(sub==='status'){const e=await project.blueprints.expected(positional[0]);if(fmt==='json'){out(e,'json');return;}if(!e.blueprint){console.log(`No blueprint for kind ${e.kind}.`);return;}console.log(`Blueprint ${e.kind}`);for(const i of e.items)console.log(`  ${i.filled?'✓':i.optional?'–':'○'} ${i.field.padEnd(13)} ${i.filled?'':i.optional?'optional, empty: ':'missing: '}${i.filled?'':i.hint+'  ['+i.flag+']'}`);return;}
     if(sub==='check'){const rows=await project.blueprints.check();if(fmt==='json'){out(rows,'json');return;}console.log(rows.length?rows.map(r=>`! ${r.key??r.ticketId} (${r.kind}) "${r.title}" lacks ${r.missing.join(', ')}`).join('\n'):'Every open ticket has what its blueprint expects.');return;}
     if(sub==='init'){const r=await project.blueprints.init(positional[0]);out(fmt==='json'?r:`Wrote ${r.file}; edit expects and template to fit this project.`,fmt);return;}
-    throw new Error('Usage: heist blueprint list|show KIND|status TICKET|check|init KIND');}
+    const sections=b=>b.expects.map(e=>`  ${e.field.padEnd(13)} ${e.optional?'optional':'expected'}${e.leaf?' (tickets without children)':''}  ${e.hint}`).join('\n');
+    if(sub==='expect'){if(!positional[1])throw new Error('Usage: heist blueprint expect KIND FIELD [--hint TEXT] [--optional|--required] [--leaf] [--before FIELD] [--type text|list|number|bool|enum] [--values a,b] [--label TEXT]');const r=await project.blueprints.expect(positional[0],positional[1],{hint:one(opts.hint),optional:opts.optional?true:opts.required?false:undefined,leaf:opts.leaf?true:undefined,before:one(opts.before),type:one(opts.type),values:labels(opts.values),label:one(opts.label)});if(fmt==='json'){out(r,'json');return;}console.log(`${r.created?`Created the project field ${positional[1]}. `:''}A ${r.kind} now has these sections:\n${sections(r)}`);return;}
+    if(sub==='drop'){if(!positional[1])throw new Error('Usage: heist blueprint drop KIND FIELD');const r=await project.blueprints.drop(positional[0],positional[1]);if(fmt==='json'){out(r,'json');return;}console.log(`A ${r.kind} now has these sections:\n${sections(r)}`);return;}
+    if(sub==='template'){const {readFile}=await import('node:fs/promises');const text=opts.clear?'':opts.file!==undefined&&opts.file!==true?await readFile(one(opts.file),'utf8'):one(opts.text);if(text===undefined)throw new Error('Usage: heist blueprint template KIND --text TEXT | --file PATH | --clear');const r=await project.blueprints.save(positional[0],{template:text});if(fmt==='json'){out(r,'json');return;}console.log(r.template?`New ${r.kind} tickets start with this description:\n${r.template}`:`New ${r.kind} tickets start with an empty description.`);return;}
+    if(sub==='reset'){const r=await project.blueprints.reset(positional[0]);if(fmt==='json'){out(r,'json');return;}console.log(r.reset?`The built-in ${r.kind} blueprint applies again.`:`The ${r.kind} blueprint was not changed in this project; nothing to reset.`);return;}
+    throw new Error('Usage: heist blueprint list|show KIND|status TICKET|check|init KIND|expect KIND FIELD|drop KIND FIELD|template KIND|reset KIND');}
   if(command==='checklist') {const {opts,positional}=parse(rest);const fmt=opts.format;const icon={done:'✓',planned:'•',answered:'✓',skipped:'–',cancelled:'×',open:'○'};
     const statusText=c=>{if(!c.checklist)return 'No checklist on this ticket. Try: heist checklist suggest '+positional[0];const lines=[`Checklist ${c.checklist.name}${c.checklist.title?' ('+c.checklist.title+')':''}`];for(const i of c.items)lines.push(`  ${icon[i.state]} ${i.id.padEnd(18)} ${i.title}${i.optional?' (optional)':''}${i.ticket?'  → '+(i.ticket.key??i.ticket.id):''}${i.reason?'  — skipped: '+i.reason:''}${i.answer?'  — on the ticket: '+i.answer:''}`);if(c.missing.length)lines.push(`Missing: ${c.missing.join(', ')}`);if(c.undecided.length)lines.push(`Undecided optional items: ${c.undecided.join(', ')} (apply with --only, or skip with a reason)`);return lines.join('\n');};
     if(sub==='list'){const all=await project.checklists.list();if(fmt==='json'){out(all,'json');return;}for(const b of all)console.log(`${b.name.padEnd(14)} ${String(b.items).padStart(2)} items  ${b.source==='project'?'[project] ':''}${b.description}${b.extends?' (extends '+b.extends+')':''}`);return;}
