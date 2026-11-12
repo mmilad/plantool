@@ -4,7 +4,7 @@
   "number": 7,
   "title": "Rebase the search quality set on the current plan",
   "kind": "task",
-  "description": "",
+  "description": "The search quality check in bench/ measures how well keyword, semantic and hybrid search find tickets. Its question set points at tickets of the first plan (PM-12, PM-58 ...), which was reset on 2026-11-08, so the check cannot run any more and the threshold for likely overlap in heist similar cannot be re-measured. Give the check its own fixture plan so it does not depend on this repository's tickets, then compare the plain z-score of heist similar with the robust strength used by the create hint.",
   "status": "todo",
   "priority": "normal",
   "labels": [],
@@ -33,5 +33,23 @@
   "size": "s",
   "createdBy": "claude",
   "createdAt": "2026-11-11T12:28:25.553Z",
-  "updatedAt": "2026-11-11T18:22:11.968Z"
+  "updatedAt": "2026-11-12T13:27:42.318Z",
+  "todos": [
+    {
+      "text": "Add a fixture plan to bench/ (tickets with titles and descriptions, including known duplicates and related groups)",
+      "met": false
+    },
+    {
+      "text": "Point search-eval.json at the fixture keys",
+      "met": false
+    },
+    {
+      "text": "Run the check with the real model and record the numbers in implementation-decisions.md",
+      "met": false
+    },
+    {
+      "text": "Decide from the numbers whether heist similar switches to the robust strength",
+      "met": false
+    }
+  ]
 }

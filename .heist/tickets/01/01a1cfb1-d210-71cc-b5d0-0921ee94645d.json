@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "id": "01a1cfb1-d210-71cc-b5d0-0921ee94645d",
   "number": 21,
-  "title": "Web view shows what the blueprint expects",
+  "title": "Web view: edit the blueprint fields and start new tickets from the template",
   "kind": "task",
-  "description": "",
+  "description": "The ticket page now shows the blueprint sections (why, to do, acceptance criteria ...) and lets a person tick to-dos and criteria. Two things are still missing for people who work in the browser: the edit form only knows title, description, status, kind, priority and labels, and the create form does not start with the description template of the kind.",
   "status": "todo",
   "priority": "normal",
   "labels": [],
@@ -13,11 +13,15 @@
   "why": "People using the web view do not see which expected fields of a ticket are empty; only the CLI shows it.",
   "acceptance": [
     {
-      "text": "Ticket detail lists missing expected fields with their hints",
+      "text": "The edit form can change why, to-dos and acceptance criteria",
       "met": false
     },
     {
-      "text": "The create form starts with the description template of the kind",
+      "text": "The create form starts with the description template of the chosen kind",
+      "met": false
+    },
+    {
+      "text": "Missing expected fields are named in the create form",
       "met": false
     }
   ],
@@ -27,5 +31,5 @@
   "size": "s",
   "createdBy": "claude",
   "createdAt": "2026-11-12T12:18:19.792Z",
-  "updatedAt": "2026-11-12T12:18:19.792Z"
+  "updatedAt": "2026-11-12T13:27:42.737Z"
 }

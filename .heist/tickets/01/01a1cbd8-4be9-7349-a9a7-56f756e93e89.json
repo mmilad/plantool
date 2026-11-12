@@ -4,7 +4,7 @@
   "number": 13,
   "title": "Create hint reuses the semantic index",
   "kind": "task",
-  "description": "",
+  "description": "When the optional model is installed, ticket create looks for tickets close in meaning. Today it embeds the text of every other ticket again on each call and loads the model in every CLI start: about one second per 300 tickets plus the model start. Projects that built the semantic index (heist index update) already have those vectors stored. Use them, and embed only the new ticket.",
   "status": "todo",
   "priority": "normal",
   "labels": [],
@@ -28,5 +28,5 @@
   "size": "m",
   "createdBy": "claude",
   "createdAt": "2026-11-11T18:21:52.489Z",
-  "updatedAt": "2026-11-11T18:21:52.489Z"
+  "updatedAt": "2026-11-12T13:27:42.523Z"
 }

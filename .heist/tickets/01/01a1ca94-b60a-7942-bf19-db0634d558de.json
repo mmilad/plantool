@@ -4,7 +4,7 @@
   "number": 9,
   "title": "MCP server over the public API",
   "kind": "feature",
-  "description": "",
+  "description": "Parked; not planned in detail yet. Agents that have no shell cannot use the CLI. An MCP server would offer the same operations as tools. Known so far: a short briefing belongs in the server instructions and the full briefing behind a guide tool (see the comment on this ticket); callers over MCP could decide as a person, so permissions need a design first.",
   "status": "todo",
   "priority": "low",
   "labels": [],
@@ -18,5 +18,5 @@
     "permissions need a design first"
   ],
   "createdAt": "2026-11-11T12:28:25.994Z",
-  "updatedAt": "2026-11-11T12:28:25.994Z"
+  "updatedAt": "2026-11-12T13:27:42.940Z"
 }

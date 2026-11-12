@@ -4,7 +4,7 @@
   "number": 3,
   "title": "Check the real model on the owner's Windows machine",
   "kind": "task",
-  "description": "",
+  "description": "For the owner, on the Windows machine. The similarity hints use a local embedding model. It was only ever run on Linux. This checks that the optional package loads on Windows, that the model downloads into the heist cache and that the results make sense. Nothing is changed in the repository. If a step fails, copy the error into the chat.",
   "status": "todo",
   "priority": "normal",
   "labels": [],
@@ -28,5 +28,31 @@
   "size": "xs",
   "createdBy": "claude",
   "createdAt": "2026-11-11T12:28:24.582Z",
-  "updatedAt": "2026-11-11T12:28:24.582Z"
+  "updatedAt": "2026-11-12T13:27:41.702Z",
+  "todos": [
+    {
+      "text": "Open a terminal in D:\\newProjects\\planus-manus and run: pnpm install",
+      "met": false
+    },
+    {
+      "text": "Run: set HEIST_TEST_REAL_MODEL=1 (PowerShell: $env:HEIST_TEST_REAL_MODEL=1)",
+      "met": false
+    },
+    {
+      "text": "Run: node --test test/semantic-real.test.js (the first run downloads about 120 MB)",
+      "met": false
+    },
+    {
+      "text": "Run: heist index update",
+      "met": false
+    },
+    {
+      "text": "Run: heist similar HEIST-13 and look whether the listed tickets are about search or similarity",
+      "met": false
+    },
+    {
+      "text": "Check that the folder %USERPROFILE%\\.heist\\cache\\models exists and is not empty",
+      "met": false
+    }
+  ]
 }
