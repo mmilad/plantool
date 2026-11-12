@@ -108,6 +108,7 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Built-ins live in `src/blueprints.js`; projects add or override them as readable JSON in `.heist/blueprints/<name>.json` (validated on load).
 - Applying stores `blueprint: {name, skipped}` on the ticket and creates child tickets with `origin: {blueprint, item}`. Coverage is derived from those children and the skip reasons, so nothing is duplicated and re-applying only fills gaps. One blueprint per ticket; nest tickets for more.
 - Optional items are never created by default; they count as "undecided" until created or skipped with a reason. Missing and undecided items are warnings in `heist check`, not blockers for `done`.
+- An item is covered in one of three ways, chosen by the planner per item and not by the blueprint (owner guidance 2026-11-12, HEIST-14): a child ticket when it is work of its own (`apply --only`), an answer on the ticket itself when it is information (`answer --note`, stored in `blueprint.answered`), or a skip with a reason. `blueprint attach` puts the checklist on a ticket without creating tickets. `apply` without `--only` still creates every required item.
 - Suggestions are keyword based (title and labels, or a `blueprint:<name>` label) and only shown, never applied automatically. A ticket of kind `feature` is also offered the `feature` blueprint (2026-11-11).
 
 ## Claims across worktrees (PM-82, 2026-11-08)

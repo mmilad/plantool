@@ -35,7 +35,7 @@ export const BUILTIN_BLUEPRINTS = Object.freeze([
     match: ['feature', 'flow'],
     items: [
       item('behaviour', 'Describe what the user does and what happens, step by step', 'Agents build what is written; a vague sentence becomes a vague feature.'),
-      item('states', 'Define empty, loading, error and permission cases', 'The happy path is the easy part; the other states decide whether it feels finished.', { after: ['behaviour'] }),
+      item('states', 'Define what happens outside the happy path (empty, loading, error, no permission, bad input)', 'The happy path is the easy part; the other states decide whether it feels finished.', { after: ['behaviour'] }),
       item('data', 'Name the data it reads and writes, and where it comes from', 'Data decides storage, contracts and what can be tested.', { after: ['behaviour'] }),
       item('contracts', 'Plan the contracts it uses or provides before the code', 'Other parts can start against an agreed shape instead of waiting.', { after: ['data'] }),
       item('tests', 'Write down how it is proven to work', 'Agents need to know what "verified" means for this feature.', { after: ['behaviour'] }),
@@ -222,11 +222,11 @@ export function attachBlueprintApi(p) {
     const map = await all();
     let bp; try { bp = resolve(map, ticket.blueprint.name); } catch (e) { return { ticketId: ticket.id, blueprint: { name: ticket.blueprint.name, missing: true }, error: e.message, items: [], missing: [], undecided: [] }; }
     const children = (await p.tickets.list({ limit: Infinity })).filter(t => t.parentId === ticket.id);
-    const skipped = ticket.blueprint.skipped ?? {};
+    const skipped = ticket.blueprint.skipped ?? {}, answered = ticket.blueprint.answered ?? {};
     const items = bp.items.map(i => {
       const child = children.find(c => c.origin?.blueprint === bp.name && c.origin?.item === i.id) ?? children.find(c => c.origin?.item === i.id);
-      const state = child ? (child.status === 'done' ? 'done' : child.status === 'cancelled' ? 'cancelled' : 'planned') : skipped[i.id] !== undefined ? 'skipped' : 'open';
-      return { id: i.id, title: i.title, why: i.why ?? '', optional: !!i.optional, from: i.from, state, ticket: child ? { id: child.id, key: p.ticketKey(child), title: child.title, status: child.status } : null, reason: skipped[i.id] };
+      const state = child ? (child.status === 'done' ? 'done' : child.status === 'cancelled' ? 'cancelled' : 'planned') : skipped[i.id] !== undefined ? 'skipped' : answered[i.id] !== undefined ? 'answered' : 'open';
+      return { id: i.id, title: i.title, why: i.why ?? '', optional: !!i.optional, from: i.from, state, ticket: child ? { id: child.id, key: p.ticketKey(child), title: child.title, status: child.status } : null, reason: skipped[i.id], answer: answered[i.id] };
     });
     return { ticketId: ticket.id, blueprint: { name: bp.name, title: bp.title, source: bp.source }, items, missing: items.filter(i => i.state === 'open' && !i.optional).map(i => i.id), undecided: items.filter(i => i.state === 'open' && i.optional).map(i => i.id) };
   }
@@ -238,7 +238,11 @@ export function attachBlueprintApi(p) {
       return [...(await all()).values()].map(b => ({ name: b.name, title: b.title ?? b.name, score: matchScore(b, ticket) + (ticket.kind === b.name ? 3 : 0) })).filter(x => x.score >= 3).sort((a, b) => b.score - a.score || a.name.localeCompare(b.name)).slice(0, limit);
     },
     coverage,
-    /** Attach a blueprint and create child tickets for the chosen items (default: all required items not yet covered). */
+    /**
+     * Attach a blueprint and create child tickets for the chosen items (default: all required items not yet covered;
+     * `only: []` attaches without creating anything). Whether an item becomes a ticket is the planner's call per item:
+     * work becomes a ticket (apply), information is answered on the ticket itself (answer), the rest is skipped (skip).
+     */
     async apply(ticketRef, name, { only, includeOptional = false, dryRun = false } = {}) {
       const ticket = await p.tickets.get(ticketRef);
       if (ticket.blueprint && ticket.blueprint.name !== name) throw new HeistError(`Ticket already uses blueprint ${ticket.blueprint.name}`, 'CONFLICT', { blueprint: ticket.blueprint.name });
@@ -275,7 +279,20 @@ export function attachBlueprintApi(p) {
       const skipped = { ...(ticket.blueprint.skipped ?? {}) };
       if (reason === null) delete skipped[itemId];
       else { if (typeof reason !== 'string' || !reason.trim()) throw new ValidationError('Give a short reason why the item does not apply'); skipped[itemId] = reason.trim(); }
-      await p.tickets.update(ticket.id, { blueprint: { ...ticket.blueprint, skipped } });
+      const answered = { ...(ticket.blueprint.answered ?? {}) }; if (reason !== null) delete answered[itemId];
+      await p.tickets.update(ticket.id, { blueprint: { ...ticket.blueprint, skipped, answered } });
+      return coverage(ticket.id);
+    },
+    /** Record that an item is answered on the ticket itself (description, acceptance, files ...) and needs no ticket of its own; note=null removes it. */
+    async answer(ticketRef, itemId, note) {
+      const ticket = await p.tickets.get(ticketRef);
+      if (!ticket.blueprint) throw new ValidationError('This ticket has no blueprint; attach one first (heist blueprint attach TICKET NAME)');
+      const bp = resolve(await all(), ticket.blueprint.name);
+      if (!bp.items.some(i => i.id === itemId)) throw new ValidationError(`Blueprint ${bp.name} has no item ${itemId}`);
+      const answered = { ...(ticket.blueprint.answered ?? {}) }, skipped = { ...(ticket.blueprint.skipped ?? {}) };
+      if (note === null) delete answered[itemId];
+      else { if (typeof note !== 'string' || !note.trim()) throw new ValidationError('Say where on the ticket the item is answered, or give the answer'); answered[itemId] = note.trim(); delete skipped[itemId]; }
+      await p.tickets.update(ticket.id, { blueprint: { ...ticket.blueprint, skipped, answered } });
       return coverage(ticket.id);
     },
     async detach(ticketRef) { const ticket = await p.tickets.get(ticketRef); const { blueprint: _b, ...rest } = ticket; await p.tickets.update(ticket.id, { blueprint: null }); return rest; },

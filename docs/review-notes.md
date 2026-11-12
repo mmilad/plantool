@@ -45,7 +45,7 @@ Tested: the acceptance run with the Pokémon example through the CLI (as an agen
   - `behaviour` and `tests` fit, but they overlap with the ticket's own description and acceptance criteria. For a small feature they produce child tickets whose only work is to write those fields.
   - `states` ("empty, loading, error and permission cases") is worded for UI. For a CLI or library feature the same question is "which edge cases and failures".
   - `data` and `contracts` were skipped with a reason, which worked well.
-  - Not changed yet: whether the blueprint should fill fields on the feature instead of creating child tickets is a design question (HEIST-14).
+  - Decided on 2026-11-12 (HEIST-14): the planner chooses per item. Work becomes a child ticket, information is answered on the ticket itself (`heist blueprint answer`), the rest is skipped. `heist blueprint attach` puts the checklist on a ticket without creating tickets. The `states` item was reworded.
 - `heist guide decisions` printed its last line twice. Fixed.
 
 ### Still open
@@ -53,3 +53,4 @@ Tested: the acceptance run with the Pokémon example through the CLI (as an agen
 - Decisions view in a browser (HEIST-4), real model on Windows (HEIST-3), name collision check (HEIST-8).
 - `likelyOverlap` in `heist similar` has the same group weakness as the plain z-score; the quality set in `bench/` still points at the removed PM tickets (HEIST-7).
 - The create hint embeds all tickets on every call (HEIST-13).
+- `package.json` exported `schema/heist.schema.json`, but the file was still named `pman.schema.json`, so the export was broken since the rename. Renamed on 2026-11-12.

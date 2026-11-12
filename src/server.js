@@ -98,6 +98,8 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
       if(m&&!m[2]&&req.method==='POST'){const input=await body(req);const r=await project.blueprints.apply(m[1],input.name,{only:Array.isArray(input.only)?input.only:undefined,includeOptional:!!input.includeOptional,dryRun:!!input.dryRun});return send(res,input.dryRun?200:201,r);}
       if(m&&!m[2]&&req.method==='DELETE'){await project.blueprints.detach(m[1]);return send(res,200,{detached:true});}
       if(m&&m[2]&&req.method==='POST'){const input=await body(req);return send(res,200,await project.blueprints.skip(m[1],input.item,input.reason===undefined?'':input.reason));}
+      m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/blueprint\/answer$/.exec(pathname);
+      if(m&&req.method==='POST'){const input=await body(req);return send(res,200,await project.blueprints.answer(m[1],input.item,input.note===undefined?'':input.note));}
       m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/similar$/.exec(pathname);
       if(m&&req.method==='GET'){try{return send(res,200,{available:true,items:await project.semantic.similar(m[1],{limit:intParam(url,'limit',5,1,20)})});}catch(e){if(['SEMANTIC_UNAVAILABLE','NOT_INDEXED'].includes(e.code)||/not been built|not indexed/i.test(e.message))return send(res,200,{available:false,reason:e.message,items:[]});throw e;}}
       m=/^\/api\/relations\/([0-9a-f-]{36})$/.exec(pathname);

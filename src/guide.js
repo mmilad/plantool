@@ -52,8 +52,14 @@ A decision is a plan node (kind decision) with options as children (kind option)
 
 Checklists of what a kind of thing really needs (header, footer, form, page, service, api-endpoint, login,
 ui-component, product). Items can be tasks or decisions; optional items are decisions to make, not defaults.
-- heist blueprint suggest TICKET, heist blueprint apply TICKET NAME [--dry-run] [--only a,b]
+A blueprint lists what to think of. What becomes a ticket is your call, item by item:
+- Work of its own becomes a child ticket: heist blueprint apply TICKET NAME --only a,b (without --only: every
+  required item; --dry-run shows what would be created).
+- Information belongs on the ticket itself (description, --accept, --files, --why …). Write it there, then record
+  it: heist blueprint answer TICKET ITEM --note "see acceptance". Do not create tickets whose only work is writing.
 - heist blueprint skip TICKET ITEM --reason "…" when an item does not apply.
+- heist blueprint suggest TICKET finds a fitting blueprint; heist blueprint attach TICKET NAME puts the checklist
+  on the ticket without creating anything.
 - When you notice the same parts again and again, capture them: heist blueprint init NAME, edit
   .heist/blueprints/NAME.json (items with id, title, why, optional, kind, options). That is how a project
   teaches the next agent.`,
