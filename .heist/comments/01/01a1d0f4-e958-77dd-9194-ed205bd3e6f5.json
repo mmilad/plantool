@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d0f4-e958-77dd-9194-ed205bd3e6f5",
+  "ticketId": "01a1d0ef-916f-769f-b91a-01d46f7b312c",
+  "body": "Not done, although the description names it: saving a blueprint in the web view overwrites a change made on disk or from the CLI in the meantime; there is no conflict check as there is for tickets. Also open: the ticket edit form cannot change the kind of a ticket.",
+  "author": "claude",
+  "createdAt": "2026-11-12T18:11:13.881Z"
+}
