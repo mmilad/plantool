@@ -142,3 +142,14 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - `likelyOverlap` in `heist similar` still uses the plain z-score. It has the same group weakness and should be checked against the robust strength once the plan has enough real tickets (HEIST-7).
 - Known cost: the hint embeds every other ticket on each `ticket create` (up to 2000) and loads the model in every CLI call. Reusing the semantic index is planned (HEIST-13).
 - `test/semantic-real.test.js` runs the real model when `HEIST_TEST_REAL_MODEL=1`; it is skipped otherwise. It passed on Linux/Node 22 on 2026-11-11; Windows is still to be checked (HEIST-3).
+
+## Blueprints and checklists (owner decision 2026-11-12)
+
+- What was called a blueprint until now (a list of parts that expands a ticket, for example header or product) is a **checklist**: `heist checklist`, `project.checklists`, `.heist/checklists/`, ticket fields `checklist` and `origin.checklist`, warning codes `CHECKLIST_*`. Older sections of this file were renamed with it. Nothing was published, so there is no compatibility layer; this repository's plan was migrated.
+- A **blueprint** is now what the owner first meant by the word: what is expected of a ticket of a kind, like a Linear issue template or a GitHub pull request template. One blueprint per kind (`task`, `feature`, `bug`, `decision`), built in, replaceable per project with `.heist/blueprints/<kind>.json`.
+- A blueprint lists `expects` (field, hint, `optional`, `when: "leaf"` for fields that only make sense on tickets without children) and may carry a `template` for the description. Fields are the existing ticket fields plus `description` and the project's custom fields; no new ticket fields were added.
+- Nothing is enforced. `ticket create` names what is still empty, `heist blueprint status` and the context packet (`expected`) show it later, `heist blueprint check` lists the tickets, and `heist check` adds one summary warning instead of one per ticket.
+- A file with `items` in `.heist/blueprints/` is refused with a pointer to `.heist/checklists/`, in case an old checklist is left there.
+- The feature checklist lost its items `behaviour` and `tests`; the feature blueprint expects them on the ticket (description, acceptance). It keeps `states`, `data` and `contracts`.
+- Not done yet: the web view does not show the expected fields (HEIST-21).
+

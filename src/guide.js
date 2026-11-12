@@ -30,7 +30,7 @@ Plan like a heist: before anything is built, every part, every open question and
 - Prefer asking one clear question with options over guessing; prefer a small first release.
 - Keep titles short and concrete ("Burger menu on mobile", not "Mobile stuff").
 
-Topics: heist guide decisions | checklists | metadata | workflow`,
+Topics: heist guide decisions | blueprints | checklists | metadata | workflow | contracts`,
 
   decisions: `# Decisions
 
@@ -48,6 +48,16 @@ A decision is a plan node (kind decision) with options as children (kind option)
   becomes ready, blocked work is released. heist decide DECISION --reopen undoes it.
 - heist decisions lists open decisions; '?' marks the ones a person has to make.`,
 
+  blueprints: `# Blueprints
+
+A blueprint says what is expected of a ticket of a kind, like an issue template: a task has a why and acceptance
+criteria, a bug has steps to reproduce, a feature describes what the user does. It is about the ticket itself.
+- heist ticket create tells you what is still empty; heist blueprint status TICKET shows it later.
+- Fill the fields on the ticket (heist ticket update ID --why … --accept "a;b" …). No extra tickets for this.
+- heist blueprint check lists open tickets that lack something; heist check counts them.
+- A project changes what it expects, or adds a description template for new tickets: heist blueprint init KIND,
+  then edit .heist/blueprints/KIND.json (expects: field, hint, optional, when "leaf"; template: text).
+Blueprint and checklist complement each other: the blueprint describes the ticket, the checklist its parts.`,
   checklists: `# Checklists
 
 Checklists of what a kind of thing really needs (header, footer, form, page, service, api-endpoint, login,

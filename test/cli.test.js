@@ -31,5 +31,11 @@ test('ticket create points at possibly related tickets by title', async t => {
   const related = cli('ticket', 'create', '--title', 'Trade offer flow review');
   assert.match(related.stderr, /Possibly related: SHOP-1\b/);
   const unrelated = cli('ticket', 'create', '--title', 'Accounts settings page');
-  assert.equal(unrelated.stderr.trim(), '');
+  assert.doesNotMatch(unrelated.stderr, /Possibly related/);
+  // the blueprint of the kind says what is still expected; a complete ticket gets no hint
+  assert.match(unrelated.stderr, /Expected for a task, still empty: why \(--why\), acceptance/);
+  const complete = cli('ticket', 'create', '--title', 'Printer queue', '--why', 'Orders need labels', '--accept', 'A label prints');
+  assert.equal(complete.stderr.trim(), '');
+  assert.match(cli('blueprint', 'status', 'SHOP-3').stdout, /○ why/);
+  assert.match(cli('blueprint', 'check').stdout, /SHOP-1 \(task\)/);
 });

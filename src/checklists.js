@@ -31,14 +31,12 @@ export const BUILTIN_CHECKLISTS = Object.freeze([
     ],
   },
   {
-    name: 'feature', title: 'Feature', description: 'What a user-facing feature needs before it is built: behaviour, edge cases, data and proof.',
+    name: 'feature', title: 'Feature', description: 'What a feature needs besides its own description: edge cases, data and contracts. Behaviour and proof belong on the ticket (see the feature blueprint).',
     match: ['feature', 'flow'],
     items: [
-      item('behaviour', 'Describe what the user does and what happens, step by step', 'Agents build what is written; a vague sentence becomes a vague feature.'),
-      item('states', 'Define what happens outside the happy path (empty, loading, error, no permission, bad input)', 'The happy path is the easy part; the other states decide whether it feels finished.', { after: ['behaviour'] }),
-      item('data', 'Name the data it reads and writes, and where it comes from', 'Data decides storage, contracts and what can be tested.', { after: ['behaviour'] }),
+      item('states', 'Define what happens outside the happy path (empty, loading, error, no permission, bad input)', 'The happy path is the easy part; the other states decide whether it feels finished.'),
+      item('data', 'Name the data it reads and writes, and where it comes from', 'Data decides storage, contracts and what can be tested.'),
       item('contracts', 'Plan the contracts it uses or provides before the code', 'Other parts can start against an agreed shape instead of waiting.', { after: ['data'] }),
-      item('tests', 'Write down how it is proven to work', 'Agents need to know what "verified" means for this feature.', { after: ['behaviour'] }),
     ],
   },
   {
@@ -165,8 +163,9 @@ function validateChecklist(bp, source) {
 
 export function validateTicketChecklist(value) {
   if (value === undefined || value === null) return;
-  if (typeof value !== 'object' || Array.isArray(value) || !NAME_RE.test(value.name ?? '')) throw new ValidationError('Ticket checklist must be {name, skipped}');
+  if (typeof value !== 'object' || Array.isArray(value) || !NAME_RE.test(value.name ?? '')) throw new ValidationError('Ticket checklist must be {name, skipped, answered}');
   if (value.skipped !== undefined && (typeof value.skipped !== 'object' || Array.isArray(value.skipped) || Object.entries(value.skipped).some(([k, v]) => !ITEM_RE.test(k) || typeof v !== 'string'))) throw new ValidationError('Ticket checklist.skipped must map item ids to reasons');
+  if (value.answered !== undefined && (typeof value.answered !== 'object' || Array.isArray(value.answered) || Object.entries(value.answered).some(([k, v]) => !ITEM_RE.test(k) || typeof v !== 'string'))) throw new ValidationError('Ticket checklist.answered must map item ids to notes');
 }
 export function validateTicketOrigin(value) {
   if (value === undefined || value === null) return;

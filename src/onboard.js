@@ -64,6 +64,8 @@ ${GUIDE.workflow}
 
 ${GUIDE.decisions}
 
+${GUIDE.blueprints}
+
 ${GUIDE.checklists}
 
 ${GUIDE.contracts}

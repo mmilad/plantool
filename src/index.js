@@ -6,6 +6,7 @@ export { TICKET_KINDS } from './workflow.js';
 import { attachDesignApi, validateCodePlanShape, resolvedCodePlan } from './design.js';
 import { semanticStatus, updateIndex, semanticSearch, hybridSearch, similarTickets } from './semantic.js';
 import { attachChecklistApi, validateTicketChecklist, validateTicketOrigin } from './checklists.js';
+import { attachBlueprintApi } from './blueprints.js';
 import { attachDecisionApi, validatePlanningFields } from './decisions.js';
 import { validateFields, fieldWarnings, fieldsFor } from './fields.js';
 export { DEFAULT_COMPONENT_KINDS, normalizeSchema } from './design.js';
@@ -113,7 +114,7 @@ export async function openProject({ cwd = process.cwd(), cache = false } = {}) {
   p.searchPage = (query, options) => searchPage(p, query, options);
   p.context = (id, options) => contextFor(p, id, options);
   p.tree = (id, options) => buildTree(p, id, options);
-  attachDesignApi(p); attachChecklistApi(p); attachDecisionApi(p); p.fields = kind => fieldsFor(kind ?? 'task', p.config);
+  attachDesignApi(p); attachChecklistApi(p); attachBlueprintApi(p); attachDecisionApi(p); p.fields = kind => fieldsFor(kind ?? 'task', p.config);
   p.semantic = { status: o => semanticStatus(p, o), update: o => updateIndex(p, o), rebuild: o => updateIndex(p, { ...o, rebuild: true }), search: (q, o) => semanticSearch(p, q, o), hybrid: (q, o) => hybridSearch(p, q, o), similar: (id, o) => similarTickets(p, id, o) };
   p.next = options => nextTickets(p, options);
   p.claim = (id, options) => claimTicket(p, id, options);
@@ -200,6 +201,8 @@ function ticketApi(p) {
     async create(input) {
       if (input?.parentId && !UUID_RE.test(input.parentId)) input = { ...input, parentId: await ticketRef(p, input.parentId) };
       validateTicketInput(input, statuses, p.config);
+      // A blueprint may carry a description template; a ticket created without a description starts with it.
+      if (!input.description && !input.origin) { const template = await p.blueprints?.template?.(input.kind ?? 'task'); if (template) input = { ...input, description: template }; }
       const parentRec = input.parentId ? (await readJson(idPath(path.join(p.dir, 'tickets'), input.parentId))).value : null;
       if (input.kind === 'option' && parentRec?.kind !== 'decision') throw new ValidationError('An option must be a child of a decision');
       return withLock(p, 'ticket-number', async () => {
@@ -440,7 +443,7 @@ export async function contextFor(p,id,{budget=8000}={}) {
   const docs=[];for(const kind of kinds)for(const d of await p.documents.list(kind))if((d.links??[]).includes(id)||d.body.includes(id)||d.title.toLowerCase().includes(ticket.title.toLowerCase()))docs.push({id:d.id,type:kind,title:d.title,path:path.relative(p.root,idPath(path.join(p.dir,kind),d.id,'.md')).split(path.sep).join('/')});
   const brief=x=>({id:x.id,key:ticketKey(p,x),title:x.title,kind:x.kind??'task',status:x.status,priority:x.priority,parentId:x.parentId,description:x.description??'',...Object.fromEntries(['why','acceptance','files','size','assumptions','evaluation','refs','outcome','repro','risks','createdBy'].filter(k=>x[k]!==undefined).map(k=>[k,x[k]]))});
   const ticketPath=path.relative(p.root,idPath(path.join(p.dir,'tickets'),id)).split(path.sep).join('/');
-  const g=await workGraph(p),ready=readinessOf(g,ticket);const packet={readiness:{ready:ready.ready,reasons:ready.reasons},ticket:{...brief(ticket),kind:ticket.kind??'task',assignee:ticket.assignee??null},codePlan:await resolvedCodePlan(p,ticket),decision:ticket.kind==='decision'?await p.decisions.evaluate(ticket.id):ticket.kind==='option'&&ticket.parentId?await p.decisions.evaluate(ticket.parentId).catch(()=>undefined):undefined,checklist:ticket.checklist?await p.checklists.coverage(ticket.id).then(c=>({name:c.checklist?.name,missing:c.missing,undecided:c.undecided,items:c.items.map(i=>({id:i.id,title:i.title,state:i.state,optional:i.optional||undefined,ticket:i.ticket?.key??i.ticket?.id,reason:i.reason}))})).catch(()=>null):undefined,ancestors:ancestors.map(brief),descendants:selectedDesc.map(brief),relationships:rel,comments,documents:docs,sources:{ticket:ticketPath,ancestors:ancestors.map(x=>path.relative(p.root,idPath(path.join(p.dir,'tickets'),x.id)).split(path.sep).join('/'))}},omitted={comments:0,relationships:0,documents:0,ancestors:0,descendants:Math.max(0,descendantsList.length-selectedDesc.length),descriptionBytes:0};
+  const g=await workGraph(p),ready=readinessOf(g,ticket);const packet={readiness:{ready:ready.ready,reasons:ready.reasons},ticket:{...brief(ticket),kind:ticket.kind??'task',assignee:ticket.assignee??null},codePlan:await resolvedCodePlan(p,ticket),decision:ticket.kind==='decision'?await p.decisions.evaluate(ticket.id):ticket.kind==='option'&&ticket.parentId?await p.decisions.evaluate(ticket.parentId).catch(()=>undefined):undefined,expected:await p.blueprints.expected(ticket.id).then(e=>e.missing.length?{missing:e.items.filter(i=>!i.filled&&!i.optional).map(i=>({field:i.field,hint:i.hint,flag:i.flag}))}:undefined),checklist:ticket.checklist?await p.checklists.coverage(ticket.id).then(c=>({name:c.checklist?.name,missing:c.missing,undecided:c.undecided,items:c.items.map(i=>({id:i.id,title:i.title,state:i.state,optional:i.optional||undefined,ticket:i.ticket?.key??i.ticket?.id,reason:i.reason}))})).catch(()=>null):undefined,ancestors:ancestors.map(brief),descendants:selectedDesc.map(brief),relationships:rel,comments,documents:docs,sources:{ticket:ticketPath,ancestors:ancestors.map(x=>path.relative(p.root,idPath(path.join(p.dir,'tickets'),x.id)).split(path.sep).join('/'))}},omitted={comments:0,relationships:0,documents:0,ancestors:0,descendants:Math.max(0,descendantsList.length-selectedDesc.length),descriptionBytes:0};
   const size=()=>Buffer.byteLength(JSON.stringify({...packet,omitted,truncated:false,budget:max},null,2));
   for(const key of ['comments','relationships','documents','descendants'])while(size()>max&&packet[key].length){packet[key].pop();omitted[key]++;}
   if(size()>max&&packet.codePlan?.types&&Object.keys(packet.codePlan.types).length){omitted.codePlanTypes=Object.keys(packet.codePlan.types).length;packet.codePlan.types={};}

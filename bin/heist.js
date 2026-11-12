@@ -88,7 +88,14 @@ Metadata (heist fields [KIND] lists what each kind supports):
 
 Start and method:
   heist new "What you want to build" [--why TEXT]   top ticket + product checklist (goal, platform, stack, ...)
-  heist guide [decisions|checklists|metadata|workflow|contracts]   the planning method for agents
+  heist guide [decisions|blueprints|checklists|metadata|workflow|contracts]   the planning method for agents
+
+Blueprints (what is expected of a ticket of a kind, like an issue template):
+  heist blueprint list [--format json]
+  heist blueprint show KIND                          task | feature | bug | decision
+  heist blueprint status TICKET                      expected fields of this ticket, filled or missing
+  heist blueprint check                              open tickets that lack what their blueprint expects
+  heist blueprint init KIND                          copy into .heist/blueprints/ to change expectations or add a description template
 
 Checklists (what a kind of thing really needs; they expand a ticket into its parts):
   heist checklist list [--format json]
@@ -165,6 +172,7 @@ async function main(argv) {
         ? `Note: a ticket with the same title exists: ${label(twin.x)}. If it is the same work, link it instead: heist relation add ${label(t)} ${label(twin.x)} duplicates`
         : `Possibly related: ${related.map(r => label(r.x)).join(', ')}. If one of them is the same work or a dependency, link it (heist relation add ... implements|blocks|relates_to).`);
     }
+    if (opts.format !== 'json') { const e = await project.blueprints.expected(t.id); if (e.missing.length) console.error(`Expected for a ${e.kind}, still empty: ${e.items.filter(i => !i.filled && !i.optional).map(i => `${i.field} (${i.flag})`).join(', ')}. Add with heist ticket update ${label(t)} …; heist blueprint show ${e.kind} explains them.`); }
     out(t,opts.format,'ticket');return;}
   if(command==='ticket'&&sub==='list') {const {opts}=parse(rest);out(await project.tickets.list({status:opts.status,parentId:opts.parent,limit:Number(opts.limit??5000)}),opts.format);return;}
   if(command==='ticket'&&sub==='show') {const {opts,positional}=parse(rest);out(await project.tickets.get(positional[0]),opts.format,'ticket');return;}
@@ -216,6 +224,13 @@ async function main(argv) {
     if(e.suggested&&!e.chosen)console.log(`  suggested: ${e.suggested.title} (${e.suggested.reason})`);if(e.recommendation)console.log(`  recommended by ${e.recommendation.by}: ${e.options.find(o=>o.id===e.recommendation.option)?.title} — ${e.recommendation.why}`);if(e.chosen)console.log(`  chosen: ${e.options.find(o=>o.id===e.chosen)?.title} — ${e.rationale}`);
     if(e.activated?.length)console.log(`  now part of the plan: ${e.activated.map(t=>(t.key??t.id)+' '+t.title).join('; ')}`);return;}
   if(command==='decisions') {const {opts}=parse([sub,...rest].filter(Boolean));const rows=await project.decisions.list({all:!!opts.all});if(opts.format==='json'){out(rows,'json');return;}if(!rows.length){console.log('No open decisions.');return;}for(const r of rows)console.log(`${r.owner==='human'&&r.status==='open'?'? ':'  '}${(r.key??r.id).padEnd(8)} ${r.question}  [${r.status}, ${r.owner}${r.options?', '+r.options+' options':', no options yet'}${r.recommendation?', recommended: '+r.recommendation:r.suggested?', suggested: '+r.suggested:''}]`);return;}
+  if(command==='blueprint') {const {opts,positional}=parse(rest);const fmt=opts.format;
+    if(sub==='list'||sub===undefined){const all=await project.blueprints.list();if(fmt==='json'){out(all,'json');return;}for(const b of all)console.log(`${b.kind.padEnd(9)} expects ${b.expects.join(', ')}${b.optional.length?'; optional '+b.optional.join(', '):''}${b.template?'; has a description template':''}${b.source==='project'?'  [project]':''}`);return;}
+    if(sub==='show'){const b=await project.blueprints.get(positional[0]);if(fmt==='json'){out(b,'json');return;}console.log(`${b.kind} — ${b.title??''}${b.source==='project'?'  [project]':''}\n${b.description??''}\n`);for(const e of b.expects)console.log(`  ${e.field.padEnd(13)} ${e.optional?'optional':'expected'}${e.when==='leaf'?' (tickets without children)':''}  ${e.hint??''}`);if(b.template)console.log(`\nDescription template:\n${b.template}`);return;}
+    if(sub==='status'){const e=await project.blueprints.expected(positional[0]);if(fmt==='json'){out(e,'json');return;}if(!e.blueprint){console.log(`No blueprint for kind ${e.kind}.`);return;}console.log(`Blueprint ${e.kind}`);for(const i of e.items)console.log(`  ${i.filled?'✓':i.optional?'–':'○'} ${i.field.padEnd(13)} ${i.filled?'':i.optional?'optional, empty: ':'missing: '}${i.filled?'':i.hint+'  ['+i.flag+']'}`);return;}
+    if(sub==='check'){const rows=await project.blueprints.check();if(fmt==='json'){out(rows,'json');return;}console.log(rows.length?rows.map(r=>`! ${r.key??r.ticketId} (${r.kind}) "${r.title}" lacks ${r.missing.join(', ')}`).join('\n'):'Every open ticket has what its blueprint expects.');return;}
+    if(sub==='init'){const r=await project.blueprints.init(positional[0]);out(fmt==='json'?r:`Wrote ${r.file}; edit expects and template to fit this project.`,fmt);return;}
+    throw new Error('Usage: heist blueprint list|show KIND|status TICKET|check|init KIND');}
   if(command==='checklist') {const {opts,positional}=parse(rest);const fmt=opts.format;const icon={done:'✓',planned:'•',answered:'✓',skipped:'–',cancelled:'×',open:'○'};
     const statusText=c=>{if(!c.checklist)return 'No checklist on this ticket. Try: heist checklist suggest '+positional[0];const lines=[`Checklist ${c.checklist.name}${c.checklist.title?' ('+c.checklist.title+')':''}`];for(const i of c.items)lines.push(`  ${icon[i.state]} ${i.id.padEnd(18)} ${i.title}${i.optional?' (optional)':''}${i.ticket?'  → '+(i.ticket.key??i.ticket.id):''}${i.reason?'  — skipped: '+i.reason:''}${i.answer?'  — on the ticket: '+i.answer:''}`);if(c.missing.length)lines.push(`Missing: ${c.missing.join(', ')}`);if(c.undecided.length)lines.push(`Undecided optional items: ${c.undecided.join(', ')} (apply with --only, or skip with a reason)`);return lines.join('\n');};
     if(sub==='list'){const all=await project.checklists.list();if(fmt==='json'){out(all,'json');return;}for(const b of all)console.log(`${b.name.padEnd(14)} ${String(b.items).padStart(2)} items  ${b.source==='project'?'[project] ':''}${b.description}${b.extends?' (extends '+b.extends+')':''}`);return;}

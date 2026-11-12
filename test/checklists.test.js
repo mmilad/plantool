@@ -33,12 +33,12 @@ test('checklists resolve inheritance, suggest by title and expand a ticket into 
   // an item can be answered on the ticket itself instead of becoming a ticket; attaching creates nothing
   const feat = await p.tickets.create({ title: 'Trade offers', kind: 'feature' });
   const attached = await p.checklists.apply(feat.id, 'feature', { only: [] });
-  assert.equal(attached.created.length, 0); assert.equal(attached.coverage.missing.length, 5);
-  await assert.rejects(p.checklists.answer(feat.id, 'tests', ''), { code: 'VALIDATION' });
-  const ans = await p.checklists.answer(feat.id, 'tests', 'see acceptance');
-  assert.equal(ans.items.find(i => i.id === 'tests').state, 'answered'); assert.ok(!ans.missing.includes('tests'));
-  assert.equal((await p.checklists.apply(feat.id, 'feature')).created.length, 4);
-  assert.equal((await p.checklists.answer(feat.id, 'tests', null)).items.find(i => i.id === 'tests').state, 'open');
+  assert.equal(attached.created.length, 0); assert.equal(attached.coverage.missing.length, 3);
+  await assert.rejects(p.checklists.answer(feat.id, 'states', ''), { code: 'VALIDATION' });
+  const ans = await p.checklists.answer(feat.id, 'states', 'see description');
+  assert.equal(ans.items.find(i => i.id === 'states').state, 'answered'); assert.ok(!ans.missing.includes('states'));
+  assert.equal((await p.checklists.apply(feat.id, 'feature')).created.length, 2);
+  assert.equal((await p.checklists.answer(feat.id, 'states', null)).items.find(i => i.id === 'states').state, 'open');
   const ctx = await p.context(h.id, { budget: 1e9 });
   assert.equal(ctx.checklist.name, 'header'); assert.ok(ctx.checklist.undecided.includes('sticky'));
   const check = await p.check();

@@ -92,6 +92,9 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
       if(m&&req.method==='POST'){const input=await body(req);const d=await project.documents.create(m[1],{title:input.title,body:input.body,status:input.status,links:input.links});const r=await project.documents.getVersioned(m[1],d.id);return send(res,201,{...r.document,kind:m[1],revision:r.revision});}
       m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/relations$/.exec(pathname);
       if(m&&req.method==='GET'){await project.tickets.get(m[1]);const tid=await project.resolveTicket(m[1]);const rels=await project.relations.list(tid);const tickets=new Map((await project.tickets.list({limit:Infinity})).map(x=>[x.id,x]));return send(res,200,rels.map(r=>{const outgoing=r.sourceId===tid,other=tickets.get(outgoing?r.targetId:r.sourceId);return {id:r.id,type:r.type,direction:outgoing?'outgoing':'incoming',ticket:other?{id:other.id,key:project.ticketKey(other),title:other.title,status:other.status}:{id:outgoing?r.targetId:r.sourceId,missing:true}};}));}
+      m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/blueprint$/.exec(pathname);
+      if(m&&req.method==='GET')return send(res,200,await project.blueprints.expected(m[1]));
+      if(pathname==='/api/blueprints'&&req.method==='GET')return send(res,200,await project.blueprints.list());
       if(pathname==='/api/checklists'&&req.method==='GET')return send(res,200,await project.checklists.list());
       m=/^\/api\/tickets\/([A-Za-z0-9-]+)\/checklist(\/skip)?$/.exec(pathname);
       if(m&&!m[2]&&req.method==='GET'){const coverage=await project.checklists.coverage(m[1]);return send(res,200,{coverage,suggestions:coverage.checklist?[]:await project.checklists.suggest(m[1]),checklists:coverage.checklist?[]:await project.checklists.list()});}

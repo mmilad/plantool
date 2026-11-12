@@ -398,6 +398,8 @@ export async function checkProject(p) {
     }
   }
   for (const w of await p.checklists?.check?.() ?? []) if (w.code !== 'CHECKLIST_SUGGESTED') warnings.push(w);
+  const thin = await p.blueprints?.check?.() ?? [];
+  if (thin.length) warn('BLUEPRINT_FIELDS_MISSING', `${thin.length} open ticket(s) lack what their blueprint expects (${thin.slice(0, 5).map(r => `${r.key ?? r.ticketId}: ${r.missing.join(', ')}`).join('; ')}${thin.length > 5 ? '; …' : ''}). See heist blueprint check`, { tickets: thin.map(r => r.ticketId) });
   return { valid: errors.length === 0, errors, warnings, counts: { components: m.components.length, types: m.types.length, contracts: m.contracts.length, ticketsWithCodePlan: tickets.filter(t => t.codePlan && Object.keys(t.codePlan).length).length } };
 }
 
