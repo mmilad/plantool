@@ -74,8 +74,14 @@ Checklists available by default: ${list(BUILTIN_CHECKLISTS.map(b => b.name))}. P
 
 Search covers ${list(SEARCH_TYPES)} by text, and semantically when the index is available. Use search to find an existing ticket before you create a new one.
 
-## Your own tools and knowledge
+## Keep what you learned
 
-heist does not tell you how to work with it beyond this briefing. You can build your own helpers on the CLI or the API, write notes, add instruction files or skills for your tool, and decide for yourself what is worth keeping. If something repeats often enough to be a procedure, you may capture it. Keep whatever you create outside \`.heist/\`, and tell the person what you created.
+A later session starts without this briefing. Make sure it finds heist again:
+
+- If your tool reads an instruction file in the project (for example \`AGENTS.md\` or \`CLAUDE.md\`) and that file does not mention heist yet, add a short note: this project plans its work with heist, run \`heist agent onboard\` first. Keep what is already in the file.
+- Write down how you use heist here, in whatever form your tool keeps notes: the commands you rely on, the project's own conventions, mistakes you do not want to repeat.
+- When something repeats often enough to be a procedure, capture it as a skill, script or helper on the CLI or the API, if you think it is worth it. That is your call.
+
+heist does not write any of this for you and does not prescribe a format. Keep whatever you create outside \`.heist/\`, and tell the person what you created and where.
 `;
 }

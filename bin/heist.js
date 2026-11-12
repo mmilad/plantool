@@ -25,6 +25,8 @@ import { guide, GUIDE } from '../src/guide.js';
 
 const usage = `heist — Git-native planning and issue tracking
 
+New here (agent or person)? Run: heist agent onboard
+
 Usage:
   heist init [--name NAME] [--key KEY]
   heist projects [list|add PATH|remove ID|KEY|PATH|prune] [--format json]

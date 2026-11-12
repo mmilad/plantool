@@ -153,3 +153,9 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - The feature checklist lost its items `behaviour` and `tests`; the feature blueprint expects them on the ticket (description, acceptance). It keeps `states`, `data` and `contracts`.
 - Not done yet: the web view does not show the expected fields (HEIST-21).
 
+## Onboarding keeps itself alive (owner decision 2026-11-12)
+
+- `heist agent onboard` still only prints. It now tells the agent to make sure a later session finds heist again: add a short note to the instruction file its tool reads (for example `AGENTS.md` or `CLAUDE.md`) if heist is not mentioned there, write down how it uses heist, and capture procedures as skills or helpers when it thinks that is worth it. heist writes none of this itself and prescribes no format.
+- There is therefore no `heist` command that edits `AGENTS.md`. The one thing a person still has to do is tell the first agent in a project to run `heist agent onboard`; `heist --help` now starts with that line.
+- For the MCP server (HEIST-9): a short version of the briefing belongs in the server instructions, the full text behind a guide tool, so not every session pays for the whole briefing.
+

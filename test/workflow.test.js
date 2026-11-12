@@ -83,6 +83,7 @@ test('concurrent claims by different agents leave exactly one owner', async t =>
 test('agent onboard prints the briefing and writes nothing', async t => {
   const p = await project(t); const before = await fs.readdir(p.root);
   const text = onboardText();
+  assert.match(text, /## Keep what you learned/); assert.match(text, /AGENTS\.md/); assert.match(text, /outside `\.heist\/`/);
   for (const word of ['heist guide', 'implements', 'blocks', 'todo', 'in_progress', 'MCP', 'Language', 'in English']) assert.ok(text.includes(word), `briefing mentions ${word}`);
   assert.deepEqual(await fs.readdir(p.root), before);
 });

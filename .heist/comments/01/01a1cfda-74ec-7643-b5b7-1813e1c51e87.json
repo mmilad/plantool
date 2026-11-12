@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cfda-74ec-7643-b5b7-1813e1c51e87",
+  "ticketId": "01a1ca94-b60a-7942-bf19-db0634d558de",
+  "body": "Onboarding over MCP: short briefing in the server instructions (what heist is, next/claim/done, plan in English, do not decide a person's decisions); full briefing and guide topics behind a guide tool. See implementation-decisions.md, Onboarding keeps itself alive.",
+  "author": "local",
+  "createdAt": "2026-11-12T13:02:42.924Z"
+}
