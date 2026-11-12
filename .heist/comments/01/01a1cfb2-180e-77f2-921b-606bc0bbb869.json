@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cfb2-180e-77f2-921b-606bc0bbb869",
+  "ticketId": "01a1cfb1-d13c-7112-a750-6a111e7e74c7",
+  "body": "Blueprints per kind with expected fields and an optional description template. The feature checklist lost behaviour and tests, which the feature blueprint now expects on the ticket.",
+  "author": "claude",
+  "createdAt": "2026-11-12T12:18:37.710Z"
+}

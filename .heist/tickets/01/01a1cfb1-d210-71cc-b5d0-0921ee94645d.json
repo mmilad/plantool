@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cfb1-d210-71cc-b5d0-0921ee94645d",
+  "number": 21,
+  "title": "Web view shows what the blueprint expects",
+  "kind": "task",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "People using the web view do not see which expected fields of a ticket are empty; only the CLI shows it.",
+  "acceptance": [
+    {
+      "text": "Ticket detail lists missing expected fields with their hints",
+      "met": false
+    },
+    {
+      "text": "The create form starts with the description template of the kind",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/ui.js"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-12T12:18:19.792Z",
+  "updatedAt": "2026-11-12T12:18:19.792Z"
+}
