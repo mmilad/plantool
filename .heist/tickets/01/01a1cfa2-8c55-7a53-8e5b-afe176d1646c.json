@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cfa2-8c55-7a53-8e5b-afe176d1646c",
+  "number": 18,
+  "title": "The planner chooses per item: ticket, answer on the ticket, or skip",
+  "kind": "option",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1cbd8-4cb4-70cd-be8c-6a1473a6509e",
+  "option": {
+    "pros": [
+      "Meta information stays on the ticket",
+      "Real work still becomes tickets",
+      "The blueprint stays a plain checklist"
+    ],
+    "cons": [
+      "apply without --only still creates every required item"
+    ],
+    "scores": {}
+  },
+  "createdBy": "claude",
+  "createdAt": "2026-11-12T12:01:38.901Z",
+  "updatedAt": "2026-11-12T12:01:53.206Z"
+}

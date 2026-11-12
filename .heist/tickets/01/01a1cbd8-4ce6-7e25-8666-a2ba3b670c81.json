@@ -5,7 +5,7 @@
   "title": "Keep child tickets",
   "kind": "option",
   "description": "",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -16,5 +16,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-11T18:21:52.742Z",
-  "updatedAt": "2026-11-11T18:21:52.742Z"
+  "updatedAt": "2026-11-12T12:01:53.009Z"
 }
