@@ -22,25 +22,25 @@
     },
     {
       "text": "HEIST_TEST_REAL_MODEL=1 test passes",
-      "met": false
+      "met": true
     }
   ],
   "size": "xs",
   "createdBy": "claude",
   "createdAt": "2026-11-11T12:28:24.582Z",
-  "updatedAt": "2026-11-12T13:27:41.702Z",
+  "updatedAt": "2026-11-13T13:05:30.446Z",
   "todos": [
     {
       "text": "Open a terminal in D:\\newProjects\\planus-manus and run: pnpm install",
-      "met": false
+      "met": true
     },
     {
       "text": "Run: set HEIST_TEST_REAL_MODEL=1 (PowerShell: $env:HEIST_TEST_REAL_MODEL=1)",
-      "met": false
+      "met": true
     },
     {
       "text": "Run: node --test test/semantic-real.test.js (the first run downloads about 120 MB)",
-      "met": false
+      "met": true
     },
     {
       "text": "Run: heist index update",
