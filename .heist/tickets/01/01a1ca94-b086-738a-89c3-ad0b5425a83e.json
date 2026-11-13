@@ -28,7 +28,7 @@
   "size": "xs",
   "createdBy": "claude",
   "createdAt": "2026-11-11T12:28:24.582Z",
-  "updatedAt": "2026-11-13T13:05:30.446Z",
+  "updatedAt": "2026-11-13T13:57:55.571Z",
   "todos": [
     {
       "text": "Open a terminal in D:\\newProjects\\planus-manus and run: pnpm install",
@@ -44,7 +44,7 @@
     },
     {
       "text": "Run: heist index update",
-      "met": false
+      "met": true
     },
     {
       "text": "Run: heist similar HEIST-13 and look whether the listed tickets are about search or similarity",
