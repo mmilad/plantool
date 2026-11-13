@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d4dc-771e-7f55-8fb6-00c38b070d68",
+  "ticketId": "01a1d0ef-916f-769f-b91a-01d46f7b312c",
+  "body": "Owner, 2026-11-13: saving a blueprint in the web view may simply overwrite. Blueprints change rarely, the files are in Git, and no conflict check is wanted. Not an open point.",
+  "author": "claude",
+  "createdAt": "2026-11-13T12:23:00.638Z"
+}
