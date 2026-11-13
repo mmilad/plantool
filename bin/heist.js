@@ -26,6 +26,7 @@ import { guide, GUIDE } from '../src/guide.js';
 const usage = `heist — Git-native planning and issue tracking
 
 New here (agent or person)? Run: heist agent onboard
+heist --version (or -v) prints the installed version.
 
 Usage:
   heist init [--name NAME] [--key KEY]
@@ -159,7 +160,8 @@ const out=(value,format='text',kind)=>{
   else console.log(JSON.stringify(value,null,2));
 };
 async function main(argv) {
-  if(argv.includes('--help')||argv[0]==='help'||!argv.length){console.log(usage);return;}
+  if(argv[0]==='--version'||argv[0]==='-v'||argv[0]==='-V'||argv[0]==='version'){const {readFile}=await import('node:fs/promises');const pkg=JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8'));console.log(`${pkg.name} ${pkg.version}`);return;}
+  if(argv.includes('--help')||argv[0]==='-h'||argv[0]==='help'||!argv.length){console.log(usage);return;}
   const [command,sub,...rest]=argv;
   if(command==='init'){const {opts}=parse([sub,...rest].filter(Boolean));const c=await initProject({name:opts.name,key:opts.key});await autoRegister(await openProject());out(`Initialized ${c.name} (${c.key}) at .heist/`);return;}
   if(command==='serve'){const {opts}=parse([sub,...rest].filter(Boolean));const s=await serve({port:opts.port===undefined?4000:Number(opts.port),open:!!opts.open,register:process.env.HEIST_NO_REGISTER!=='1'});const n=(await listProjects()).length;console.log(`heist is serving ${n} registered project${n===1?'':'s'}${s.project?` (opened in ${s.project.config.name})`:''} at ${s.url}`);console.log('Press Ctrl-C to stop.');await new Promise(resolve=>s.server.once('close',resolve));return;}

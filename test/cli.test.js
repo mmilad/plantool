@@ -27,6 +27,7 @@ test('ticket create points at possibly related tickets by title', async t => {
   const bin = path.resolve('bin/heist.js'); const env = { ...process.env, HEIST_NO_REGISTER: '1' };
   const cli = (...a) => spawnSync(process.execPath, [bin, ...a], { cwd, env, encoding: 'utf8' });
   assert.equal(cli('init', '--name', 'shop').status, 0);
+  for (const flag of ['--version', '-v', 'version']) assert.match(cli(flag).stdout, /^@mmilad\/heist \d+\.\d+\.\d+\n$/);
   cli('ticket', 'create', '--title', 'Trade offer flow');
   const related = cli('ticket', 'create', '--title', 'Trade offer flow review');
   assert.match(related.stderr, /Possibly related: SHOP-1\b/);
