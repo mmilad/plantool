@@ -164,7 +164,9 @@ For outputs, removing a field, making it optional, adding enum values or changin
 
 ## Roadmap
 
-The local web UI offers **Roadmap → Structure / Timeline / Dependencies**. Structure includes open, done and cancelled work; filtered ancestors stay visible as context. Timeline shows completed work grouped by month, with bounded paging and date ranges. Dependencies shows a bounded, responsive table of blocked tickets and their blockers. Ticket links open the shared detail view.
+The local web UI offers **Roadmap → Structure / Timeline / Dependencies / Graph**. Structure includes open, done and cancelled work; filtered ancestors stay visible as context. Timeline shows completed work grouped by month, with bounded paging and date ranges. Dependencies shows a bounded, responsive table of blocked tickets and their blockers. Ticket links open the shared detail view.
+
+The **Graph** tab draws the tickets that have relations as boxes in columns, coloured by status. A `blocks` relation is a solid line with an arrow from the blocker to the blocked ticket. Every other relation type is a dashed line. A click on a box opens the ticket. Tickets without any relation are counted in the status line but not drawn. `heist graph` returns the same data: `nodes` (with `layer` and `row`), `edges`, `layers`, `hidden`, `totalNodes` and `truncated`. At most 200 tickets are returned; use `--root` to narrow the result. The HTTP route is `GET /api/roadmap/graph`, and the URL mode is `?view=roadmap&mode=graph`.
 
 ```sh
 heist tree --fields plan --blocked --format json
@@ -173,6 +175,7 @@ heist timeline --since 2026-01-01 --order desc --limit 50 --format json
 heist roadmap backfill-completion --dry-run
 heist roadmap backfill-completion
 heist deps --root APP-12 --format json
+heist graph --root APP-12 --format json
 heist deps --include-finished
 ```
 

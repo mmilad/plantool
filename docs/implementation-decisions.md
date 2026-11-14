@@ -198,3 +198,13 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - The rule for agents was narrowed: the plan's records are never edited by hand; blueprints and checklists are settings and may be changed with the commands or in their files.
 - Checked in headless Chromium on Linux: edit and save, comment, create dialog, a new section, reorder, template, save. Not checked on Windows.
 
+## Relation graph (HEIST-47, 2026-11-14)
+
+- The Roadmap page has a fourth tab, Graph, and there is a command `heist graph [--root ID] [--limit N] [--format json]`. Both use `project.relationGraph` (route `GET /api/roadmap/graph`).
+- Layout: layered columns. A ticket is placed in a column after the tickets that block it; rows count down inside a column.
+- Drawing: our own SVG in `src/ui.js`, no graph library. This keeps the page free of dependencies and the layout fixed and testable.
+- All relation types are drawn. `blocks` is a solid line with an arrow, the others are dashed lines without an arrow.
+- Tickets without any relation are counted (`hidden`) but not drawn. The status line says how many.
+- At most 200 tickets are drawn; `truncated` says when the result was cut, and a root ticket narrows it.
+- The Dependencies table stays. It lists blockers per ticket; the Graph shows all relation types in one picture.
+- Not checked in a browser: the drawing was run in Node against the real data only.
