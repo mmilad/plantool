@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db62-ac6b-7627-bef2-46294ca81675",
+  "ticketId": "01a1ca94-b451-7883-b1a0-0b9999d869ad",
+  "body": "Gate runs on a fixture plan (34 tickets). Semantic R@5 0.83, MRR 0.93; keyword 0.15. Plain z keeps likelyOverlap (6% of related pairs at 3.5, 0% unrelated); robust is reported as robust. Decision in implementation-decisions.md.",
+  "author": "claude",
+  "createdAt": "2026-11-14T18:47:19.403Z"
+}
