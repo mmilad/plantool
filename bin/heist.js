@@ -173,12 +173,28 @@ function parse(args) {
 }
 const withKeys=v=>{const k=globalThis.__heistKey;if(!k)return v;const f=x=>x&&typeof x==='object'&&'id'in x&&Number.isInteger(x.number)&&x.key===undefined?{key:`${k}-${x.number}`,...x}:x;return Array.isArray(v)?v.map(f):f(v);};
 // A ticket as a person reads it: the sections of its blueprint in order, then whatever else is filled.
+// One stderr line when a context packet was cut: names what is missing and the budget that returns everything.
+const contextCutLine=r=>{const o=r.omitted??{},key=r.ticket?.key??r.ticket?.id,parts=[];const labels={comments:['comment','comments'],relationships:['relationship','relationships'],documents:['document','documents'],ancestors:['ancestor','ancestors']};
+  for(const k of ['comments','relationships','documents','ancestors']){const n=o[k]??0;if(n>0)parts.push(`${n} ${n===1?labels[k][0]:labels[k][1]}`);}
+  const hard=r.descendants?.length===20&&(o.descendants??0)>0;const cutChildren=hard?0:(o.descendants??0);if(cutChildren>0)parts.push(`${cutChildren} ${cutChildren===1?'child ticket':'child tickets'}`);
+  if((o.descriptionBytes??0)>0)parts.push('the end of the description');if((o.codePlanTypes??0)>0)parts.push('the types of the code plan');if(o.codePlan===true)parts.push('the code plan');
+  if(!parts.length)return `Context for ${key} lists only the first 20 child tickets.`;
+  return `Context for ${key} was cut to fit ${r.budget} bytes: left out ${parts.join(', ')}. Use --budget ${Math.ceil((r.fullBytes??0)/1000)*1000} to get all of it${hard?'; child tickets beyond the first 20 stay left out':''}.`;};
 const ticketText=async(project,t)=>{
   const e=await project.blueprints.expected(t.id);const lines=[`${project.ticketKey(t)??t.id}  ${t.title}`,`${t.kind??'task'} · ${t.status}${t.priority&&t.priority!=='normal'?' · '+t.priority:''}${t.assignee?.agent?' · claimed by '+t.assignee.agent:''}`];
   const show=(label,type,v)=>{lines.push('',label);if(type==='checklist')v.forEach((a,i)=>lines.push(`  ${a.met?'[x]':'[ ]'} ${i+1}. ${a.text}`));else if(Array.isArray(v))v.forEach(x=>lines.push(`  - ${x}`));else if(v&&typeof v==='object')for(const [k,x] of Object.entries(v)){if(Array.isArray(x)?x.length:x)lines.push(`  ${k}: ${Array.isArray(x)?x.join('; '):x}`);}else lines.push(...String(v).split('\n').map(x=>'  '+x));};
   for(const i of e.items){if(i.value!==undefined)show(i.label,i.type,i.value);else if(!i.optional){lines.push('',i.label,`  (missing) ${i.hint}  [${i.flag}]`);}}
   if(!e.blueprint&&t.description)show('Description','text',t.description);
   for(const o of e.others)show(o.label,o.type,o.value);
+  const rels=await project.relations.list(t.id);
+  if(rels.length){const groups=new Map();const add=(label,line)=>{if(!groups.has(label))groups.set(label,[]);groups.get(label).push(line);};
+    for(const r of rels){const isSource=r.sourceId===t.id,o=await project.tickets.get(isSource?r.targetId:r.sourceId),line=`${project.ticketKey(o)??o.id}  ${o.title}  (${o.status})`;
+      if(r.type==='blocks')add(isSource?'blocks':'blocked by',line);else add(r.type.replace(/_/g,' '),line);}
+    lines.push('','Relations');for(const [label,items] of groups){lines.push(`  ${label}`);for(const x of items)lines.push(`    ${x}`);}}
+  const cp=t.codePlan??{},cpKinds=['implements','consumes','changes'].filter(k=>(cp[k]??[]).length);
+  if(cpKinds.length){const resolved=(await project.context(t.id,{budget:1e9})).codePlan??{};lines.push('','Code plan');
+    for(const k of cpKinds)for(const e of cp[k]){const id=e.component??e.id,r=(resolved[k]??[]).find(x=>x.id===id),name=r?.name??id;
+      lines.push(`  ${k} ${name}${r?.kind?` (${r.kind})`:''}   heist contract show ${name}`);if(k==='consumes'&&e.requires?.length)lines.push(`    requires ${e.requires.join(', ')}`);}}
   return lines.join('\n');};
 const out=(value,format='text',kind)=>{
   if(format==='json'){console.log(JSON.stringify(withKeys(value),null,2));return;}
@@ -346,7 +362,7 @@ async function main(argv) {
   if(command==='similar') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const rows=await project.semantic.similar(positional[0],{limit:Number(opts.limit??5),minScore:Number(opts.min??0),minStrength:Number(opts.strength??1.5)});if(opts.format==='json'){out(rows,'json');return;}if(!rows.length){console.log('No similar tickets above the threshold.');return;}for(const r of rows)console.log(`${r.score.toFixed(2)}  z ${r.strength.toFixed(1).padStart(4)}  ${(r.key??r.id).padEnd(10)} ${r.title}${r.likelyOverlap?'  ← likely overlap':''}${r.relation?`  [${r.relation}]`:''}`);return;}
   if(command==='search'&&['semantic','hybrid'].includes(parse([sub,...rest].filter(Boolean)).opts.mode)) {const {opts,positional}=parse([sub,...rest].filter(Boolean));const q=positional.join(' ');const types=labels(opts.type);const r=opts.mode==='semantic'?{mode:'semantic',...(await project.semantic.search(q,{types,limit:Number(opts.limit??20)}))}:await project.semantic.hybrid(q,{types});const hits=r.hits.slice(0,Number(opts.limit??20));if(opts.format==='json'){out({...r,hits},'json');return;}if(r.fallbackReason)console.log(`(keyword only: ${r.fallbackReason})`);if(!hits.length){console.log('No results.');return;}for(const h of hits){const t=h.type==='ticket'?(await project.tickets.get(h.id).then(x=>project.ticketKey(x)).catch(()=>null)):null;console.log(`${(t??h.id.slice(0,8)).padEnd(10)}  ${h.type.padEnd(8)}  ${h.similarity!==undefined?h.similarity.toFixed(2)+' ':''}${h.title}`);}return;}
   if(command==='search') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const page=await project.searchPage(positional.join(' '),{offset:Number(opts.offset??0),limit:Number(opts.limit??20),types:labels(opts.type)});if(opts.format==='json'){out(page,'json');return;}if(!page.items.length){console.log('No results.');return;}for(const h of page.items)console.log(`${(h.key??h.id).padEnd(10)}  ${h.type.padEnd(8)}  ${h.title}`);console.log(`${page.offset+1}-${page.offset+page.items.length} of ${page.total}${page.nextOffset!==null?`; next: --offset ${page.nextOffset}`:''}`);return;}
-  if(command==='context') {const {opts,positional}=parse([sub,...rest].filter(Boolean));out(await project.context(positional[0],{budget:Number(opts.budget??8000)}),opts.format);return;}
+  if(command==='context') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const result=await project.context(positional[0],{budget:Number(opts.budget??24000)});if(result.truncated)console.error(contextCutLine(result));out(result,opts.format);return;}
   if(command==='validate') {const {opts}=parse([sub,...rest].filter(Boolean));const result=await project.validate();out(result,opts.format);if(!result.valid)process.exitCode=1;return;}
   throw new Error(`Unknown command: ${command}\n\n${usage}`);
 }

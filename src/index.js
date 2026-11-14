@@ -586,7 +586,7 @@ export async function searchPage(p, query, { offset = 0, limit = 20, types, snap
   const items=all.slice(offset,offset+limit);
   return {query:String(query).trim(),items,total:all.length,offset,limit,nextOffset:offset+items.length<all.length?offset+items.length:null,snapshot:current};
 }
-export async function contextFor(p,id,{budget=8000}={}) {
+export async function contextFor(p,id,{budget=24000}={}) {
   id=await ticketRef(p,id);if(!Number.isFinite(Number(budget))||Number(budget)<512)throw new ValidationError('Context budget must be at least 512 bytes');const max=Number(budget);const ticket=await p.tickets.get(id),all=await listJson(p,'tickets'),map=new Map(all.map(x=>[x.id,x])),ancestors=[];let cur=ticket.parentId;
   while(cur){const a=map.get(cur);if(!a)break;ancestors.unshift(a);cur=a.parentId;}
   const descendantsList=descendants(all,id),selectedDesc=descendantsList.slice(0,20);
@@ -596,15 +596,17 @@ export async function contextFor(p,id,{budget=8000}={}) {
   const brief=x=>({id:x.id,key:ticketKey(p,x),title:x.title,kind:x.kind??'task',status:x.status,priority:x.priority,parentId:x.parentId,description:x.description??'',...Object.fromEntries(['why','acceptance','todos','files','size','assumptions','evaluation','refs','outcome','repro','risks','createdBy'].filter(k=>x[k]!==undefined).map(k=>[k,x[k]]))});
   const ticketPath=path.relative(p.root,idPath(path.join(p.dir,'tickets'),id)).split(path.sep).join('/');
   const g=await workGraph(p),ready=readinessOf(g,ticket);const packet={readiness:{ready:ready.ready,reasons:ready.reasons},ticket:{...brief(ticket),kind:ticket.kind??'task',assignee:ticket.assignee??null},codePlan:await resolvedCodePlan(p,ticket),decision:ticket.kind==='decision'?await p.decisions.evaluate(ticket.id):ticket.kind==='option'&&ticket.parentId?await p.decisions.evaluate(ticket.parentId).catch(()=>undefined):undefined,expected:await p.blueprints.expected(ticket.id).then(e=>e.missing.length?{missing:e.items.filter(i=>!i.filled&&!i.optional).map(i=>({field:i.field,hint:i.hint,flag:i.flag}))}:undefined),checklist:ticket.checklist?await p.checklists.coverage(ticket.id).then(c=>({name:c.checklist?.name,missing:c.missing,undecided:c.undecided,items:c.items.map(i=>({id:i.id,title:i.title,state:i.state,optional:i.optional||undefined,ticket:i.ticket?.key??i.ticket?.id,reason:i.reason}))})).catch(()=>null):undefined,ancestors:ancestors.map(brief),descendants:selectedDesc.map(brief),relationships:rel,comments,documents:docs,sources:{ticket:ticketPath,ancestors:ancestors.map(x=>path.relative(p.root,idPath(path.join(p.dir,'tickets'),x.id)).split(path.sep).join('/'))}},omitted={comments:0,relationships:0,documents:0,ancestors:0,descendants:Math.max(0,descendantsList.length-selectedDesc.length),descriptionBytes:0};
-  const size=()=>Buffer.byteLength(JSON.stringify({...packet,omitted,truncated:false,budget:max},null,2));
-  for(const key of ['comments','relationships','documents','descendants'])while(size()>max&&packet[key].length){packet[key].pop();omitted[key]++;}
-  if(size()>max&&packet.codePlan?.types&&Object.keys(packet.codePlan.types).length){omitted.codePlanTypes=Object.keys(packet.codePlan.types).length;packet.codePlan.types={};}
-  if(size()>max&&packet.codePlan){packet.codePlan=null;omitted.codePlan=true;}
+  // fullBytes: size of the complete packet, measured before anything is cut (twice, so the field's own digits are counted)
+  let fullBytes=0;const size=()=>Buffer.byteLength(JSON.stringify({...packet,omitted,truncated:false,budget:max,fullBytes},null,2));fullBytes=size();fullBytes=size();
+  for(const key of ['comments','documents','descendants'])while(size()>max&&packet[key].length){packet[key].pop();omitted[key]++;}
   while(size()>max&&packet.ancestors.length){packet.ancestors.pop();packet.sources.ancestors.pop();omitted.ancestors++;}
+  for(;size()>max&&packet.relationships.length;){packet.relationships.pop();omitted.relationships++;}
   if(size()>max&&packet.ticket.description){const original=packet.ticket.description;let low=0,high=original.length;while(low<high){const mid=Math.ceil((low+high)/2);packet.ticket.description=original.slice(0,mid)+'…';if(size()<=max)low=mid;else high=mid-1;}packet.ticket.description=original.slice(0,low)+'…';omitted.descriptionBytes=Buffer.byteLength(original.slice(low));}
   if(size()>max&&packet.ticket.title){const original=packet.ticket.title;packet.ticket.title=original.slice(0,64)+'…';}
   if(size()>max)packet.ticket.properties={};
-  const result=()=>({...packet,omitted,truncated:Object.values(omitted).some(v=>v===true||(typeof v==='number'&&v>0)),budget:max});
+  if(size()>max&&packet.codePlan?.types&&Object.keys(packet.codePlan.types).length){omitted.codePlanTypes=Object.keys(packet.codePlan.types).length;packet.codePlan.types={};}
+  if(size()>max&&packet.codePlan){packet.codePlan=null;omitted.codePlan=true;}
+  const result=()=>({...packet,omitted,truncated:Object.values(omitted).some(v=>v===true||(typeof v==='number'&&v>0)),budget:max,fullBytes});
   // final guard: counters written above can add a few bytes; shorten the description until the packet fits
   for(let out=result(),excess=Buffer.byteLength(JSON.stringify(out,null,2))-max;excess>0&&packet.ticket.description.length>1;out=result(),excess=Buffer.byteLength(JSON.stringify(out,null,2))-max){const d=packet.ticket.description.replace(/…$/,'');const cut=Math.max(1,d.length-excess-8);omitted.descriptionBytes+=Buffer.byteLength(d.slice(cut));packet.ticket.description=d.slice(0,cut)+'…';}
   return result();

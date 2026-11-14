@@ -44,6 +44,21 @@ test('ticket create points at possibly related tickets by title', async t => {
   assert.match(shown, /SHOP-4  Printer queue\ntask · todo\n\nDescription\n  Labels wait[^]*\nWhy\n  Orders need labels\n\nTo do\n  \[x\] 1\. Add the queue\n  \[ \] 2\. Show its length\n\nAcceptance criteria\n  \[ \] 1\. A label prints/);
   assert.match(cli('ticket', 'show', 'SHOP-3').stdout, /Why\n  \(missing\) /);
   assert.match(cli('blueprint', 'check').stdout, /SHOP-1 \(task\)/);
+  // relations and the code plan are listed after the blueprint sections; JSON stays the raw ticket
+  assert.equal(cli('component', 'add', '--kind', 'service', '--name', 'Queue').status, 0);
+  assert.equal(cli('contract', 'set', 'Queue', '--input', '{"jobId":"string"}', '--output', '{"position":"integer"}').status, 0);
+  assert.equal(cli('codeplan', 'add', 'SHOP-4', 'implements', 'Queue').status, 0);
+  assert.equal(cli('codeplan', 'add', 'SHOP-1', 'consumes', 'Queue', '--requires', 'jobId').status, 0);
+  assert.equal(cli('relation', 'add', 'SHOP-1', 'SHOP-4', 'blocks').status, 0);
+  assert.equal(cli('relation', 'add', 'SHOP-3', 'SHOP-4', 'relates_to').status, 0);
+  const linked = cli('ticket', 'show', 'SHOP-4').stdout;
+  assert.match(linked, /\nRelations\n  blocked by\n    SHOP-1  Trade offer flow  \(todo\)\n/);
+  assert.match(linked, /\n  relates to\n    SHOP-3  Accounts settings page  \(todo\)\n/);
+  assert.match(linked, /\n\nCode plan\n  implements Queue \(service\)   heist contract show Queue\n$/);
+  const feeding = cli('ticket', 'show', 'SHOP-1').stdout;
+  assert.match(feeding, /\n  blocks\n    SHOP-4  Printer queue  \(todo\)\n/);
+  assert.match(feeding, /\n  consumes Queue \(service\)   heist contract show Queue\n    requires jobId\n$/);
+  assert.equal(JSON.parse(cli('ticket', 'show', 'SHOP-4', '--format', 'json').stdout).title, 'Printer queue');
 });
 
 test('ticket create and update link tickets with --blocked-by, --blocks and --relates', async t => {
@@ -82,4 +97,23 @@ test('ticket create and update link tickets with --blocked-by, --blocks and --re
   // the usage text lists the flags
   const help = heist('--help');
   assert.match(help.stdout + help.stderr, /--blocked-by KEYS/);
+});
+
+test('context prints one stderr line for a cut packet and keeps stdout as JSON', async t => {
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist cut ')); t.after(() => fs.rm(cwd, { recursive: true, force: true }));
+  const env = { ...process.env, HEIST_NO_REGISTER: '1' };
+  const cliBin = path.resolve('bin/heist.js');
+  const cli = (...a) => spawnSync(process.execPath, [cliBin, ...a], { cwd, encoding: 'utf8', env });
+  assert.equal(cli('init', '--name', 'Cut test').status, 0);
+  const made = cli('ticket', 'create', '--title', 'Long', '--description', 'x'.repeat(5000));
+  assert.equal(made.status, 0, made.stderr);
+  const key = /ticket ([A-Z][A-Z0-9]*-\d+) /.exec(made.stdout)?.[1];
+  assert.ok(key, made.stdout);
+  const cut = cli('context', key, '--budget', '600');
+  assert.equal(cut.status, 0, cut.stderr);
+  assert.doesNotThrow(() => JSON.parse(cut.stdout));
+  assert.match(cut.stderr, /^Context for .+ was cut to fit 600 bytes: left out .+\. Use --budget \d+ to get all of it\.\n$/);
+  const full = cli('context', key, '--budget', '100000');
+  assert.equal(full.status, 0, full.stderr);
+  assert.equal(full.stderr, '');
 });
