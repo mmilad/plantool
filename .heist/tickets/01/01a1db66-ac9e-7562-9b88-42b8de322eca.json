@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db66-ac9e-7562-9b88-42b8de322eca",
+  "number": 59,
+  "title": "Test decision?",
+  "kind": "decision",
+  "description": "",
+  "status": "cancelled",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "decision": {
+    "owner": "human",
+    "criteria": [],
+    "chosen": null
+  },
+  "createdAt": "2026-11-14T18:51:41.598Z",
+  "updatedAt": "2026-11-14T18:57:34.035Z"
+}

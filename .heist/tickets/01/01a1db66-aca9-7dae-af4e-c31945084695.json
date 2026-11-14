@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db66-aca9-7dae-af4e-c31945084695",
+  "number": 60,
+  "title": "AB",
+  "kind": "option",
+  "description": "",
+  "status": "cancelled",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1db66-ac9e-7562-9b88-42b8de322eca",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {}
+  },
+  "createdAt": "2026-11-14T18:51:41.609Z",
+  "updatedAt": "2026-11-14T18:57:34.286Z"
+}
