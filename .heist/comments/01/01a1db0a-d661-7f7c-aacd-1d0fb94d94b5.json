@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db0a-d661-7f7c-aacd-1d0fb94d94b5",
+  "ticketId": "01a1d9eb-b76e-78b8-abee-88fdb3a7588a",
+  "body": "HEIST-51 was done by a Haiku subagent, HEIST-52 and HEIST-53 by a Sonnet subagent, each from the tickets alone. The planner reviewed the diffs and ran the Graph tab in headless Chromium: it renders this plan (25 tickets, 17 relations), a click opens the ticket, the other three tabs still work. Left as it is: lines cross and dashed lines in one column can run through boxes between their ends; a long key plus title can overflow a box; the legend calls the to-do colour Other.",
+  "author": "claude",
+  "createdAt": "2026-11-14T17:11:22.977Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db08-875a-705b-8450-cd90db19864d",
+  "ticketId": "01a1d9ed-03ec-73a5-b759-0c36ec3709e3",
+  "body": "Graph tab in the Roadmap page: SVG boxes by status, solid arrow lines for blocks, dashed lines for other relations, legend, status line, root filter, error and empty states. Test extended.",
+  "author": "sonnet",
+  "createdAt": "2026-11-14T17:08:51.674Z"
+}

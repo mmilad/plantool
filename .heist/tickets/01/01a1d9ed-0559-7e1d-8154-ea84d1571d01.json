@@ -5,7 +5,7 @@
   "title": "Document the relation graph",
   "kind": "task",
   "description": "Three places describe the roadmap and need the graph. README.md, section Roadmap: one paragraph and the command heist graph. docs/implementation-decisions.md: a new section at the end with today's date that records what was built and the decision HEIST-47 (layered columns, own SVG, no library, all relation types, tickets without relations counted but not drawn, Dependencies table kept). src/onboard.js, section Roadmap: one line for heist graph --format json and the URL mode graph. Write plain English, short sentences, no marketing words.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,37 +14,37 @@
   "acceptance": [
     {
       "text": "README names heist graph and the Graph tab",
-      "met": false
+      "met": true
     },
     {
       "text": "The decision is recorded in docs/implementation-decisions.md",
-      "met": false
+      "met": true
     },
     {
       "text": "heist agent onboard mentions heist graph",
-      "met": false
+      "met": true
     },
     {
       "text": "node --test passes",
-      "met": false
+      "met": true
     }
   ],
   "todos": [
     {
       "text": "README.md",
-      "met": false
+      "met": true
     },
     {
       "text": "docs/implementation-decisions.md",
-      "met": false
+      "met": true
     },
     {
       "text": "src/onboard.js",
-      "met": false
+      "met": true
     },
     {
       "text": "Run node --test",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -55,5 +55,16 @@
   "size": "xs",
   "createdBy": "claude",
   "createdAt": "2026-11-14T11:59:11.705Z",
-  "updatedAt": "2026-11-14T11:59:11.705Z"
+  "updatedAt": "2026-11-14T17:09:42.932Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "README, docs/implementation-decisions.md and src/onboard.js describe the Graph tab, heist graph, the URL mode graph and decision HEIST-47.",
+    "verifiedBy": "node --test passes; heist agent onboard prints the heist graph lines",
+    "changedFiles": [
+      "README.md",
+      "docs/implementation-decisions.md",
+      "src/onboard.js"
+    ]
+  },
+  "completedAt": "2026-11-14T17:09:42.932Z"
 }

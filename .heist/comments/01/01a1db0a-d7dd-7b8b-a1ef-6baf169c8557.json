@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db0a-d7dd-7b8b-a1ef-6baf169c8557",
+  "ticketId": "01a1d9eb-b76e-78b8-abee-88fdb3a7588a",
+  "body": "Found while planning and executing: the schema shorthand reads an object that has a field called type as a full JSON Schema, so the type GraphEdge was stored as a plain string until it was set again in full form. heist type set should refuse or warn in that case.",
+  "author": "claude",
+  "createdAt": "2026-11-14T17:11:23.357Z"
+}
