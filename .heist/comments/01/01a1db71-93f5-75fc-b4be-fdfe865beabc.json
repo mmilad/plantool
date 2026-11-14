@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db71-93f5-75fc-b4be-fdfe865beabc",
+  "ticketId": "01a1db70-81cc-7fa5-a1b9-4580440d0278",
+  "body": "Choose this asks for a reason in the decision view; the server message shows under the options. Choosing no longer re-renders over the error.",
+  "author": "claude",
+  "createdAt": "2026-11-14T19:03:36.182Z"
+}

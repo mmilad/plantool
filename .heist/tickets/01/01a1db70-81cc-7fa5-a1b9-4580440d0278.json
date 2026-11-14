@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db70-81cc-7fa5-a1b9-4580440d0278",
+  "number": 63,
+  "title": "Decisions view asks for the reason when choosing an option",
+  "kind": "bug",
+  "description": "Choose this fails silently: the server needs --why and the view has no field for it. Add a reason field and show server errors.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "createdAt": "2026-11-14T19:02:25.996Z",
+  "updatedAt": "2026-11-14T19:03:36.165Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Choose this asks for a reason in the decision view; the server message shows under the options. Choosing no longer re-renders over the error.",
+    "verifiedBy": "Browser check on a throwaway project: empty reason shows the message; with a reason the decision is decided and the reason is stored; node --test 109 pass.",
+    "changedFiles": [
+      ".heist/tickets/01/01a1ca94-b15c-74e1-a1ef-73ff8faedd3b.json",
+      "src/ui.js",
+      ".heist/tickets/01/01a1db70-81cc-7fa5-a1b9-4580440d0278.json"
+    ]
+  },
+  "completedAt": "2026-11-14T19:03:36.165Z"
+}
