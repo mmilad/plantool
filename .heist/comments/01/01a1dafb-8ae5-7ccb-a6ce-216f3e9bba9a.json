@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1dafb-8ae5-7ccb-a6ce-216f3e9bba9a",
+  "ticketId": "01a1d9eb-7b5f-7075-9fd8-123518597653",
+  "body": "Added --blocked-by, --blocks and --relates to ticket create and ticket update (bin/heist.js: linkSpecs, resolveLinks, applyLinks; usage text). Test in test/cli.test.js.",
+  "author": "haiku",
+  "createdAt": "2026-11-14T16:54:40.613Z"
+}

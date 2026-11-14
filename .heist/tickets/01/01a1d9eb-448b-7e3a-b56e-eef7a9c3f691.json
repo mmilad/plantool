@@ -5,7 +5,7 @@
   "title": "Set relations when a ticket is created or updated",
   "kind": "feature",
   "description": "Today a relation is added with a separate command: heist relation add SOURCE TARGET TYPE. Add flags to heist ticket create and heist ticket update so the links are written in the same call: --blocked-by A,B (each listed ticket blocks this one), --blocks A,B (this ticket blocks each listed one) and --relates A,B (relates_to, no effect on readiness). Tickets are named by key or id, separated by commas. Outside the happy path: an unknown ticket in any flag stops the command before anything is written, so no half-linked ticket is left behind; the same ticket in --blocked-by and --blocks is refused; on update a relation that already exists is skipped without an error; a blocks relation that would close a cycle is refused with the existing cycle message; with --format json the output stays the ticket only.",
-  "status": "todo",
+  "status": "done",
   "priority": "high",
   "labels": [],
   "properties": {},
@@ -14,23 +14,23 @@
   "acceptance": [
     {
       "text": "heist ticket create with --blocked-by, --blocks and --relates writes the relations in the same call",
-      "met": false
+      "met": true
     },
     {
       "text": "heist ticket update accepts the same flags",
-      "met": false
+      "met": true
     },
     {
       "text": "An unknown ticket key stops the command and no ticket and no relation is written",
-      "met": false
+      "met": true
     },
     {
       "text": "heist --help, heist guide and the README name the flags",
-      "met": false
+      "met": true
     },
     {
       "text": "node --test passes",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -42,5 +42,11 @@
   "size": "m",
   "createdBy": "claude",
   "createdAt": "2026-11-14T11:57:16.811Z",
-  "updatedAt": "2026-11-14T11:57:16.811Z"
+  "updatedAt": "2026-11-14T16:56:20.793Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Both child tickets were done by a Haiku subagent from the tickets alone; reviewed by the planner: diff read, tests run.",
+    "verifiedBy": "node --test: 98 pass, 1 skipped; diff reviewed"
+  },
+  "completedAt": "2026-11-14T16:56:20.793Z"
 }

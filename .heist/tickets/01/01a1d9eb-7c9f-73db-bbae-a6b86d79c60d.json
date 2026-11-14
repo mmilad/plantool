@@ -5,7 +5,7 @@
   "title": "Tell agents to link a ticket when they create it",
   "kind": "task",
   "description": "Three texts mention how tickets are connected and need the new flags. In src/guide.js, the main topic has step 4 'Connect the plan' and the rules of thumb: say that a new ticket is linked in the same call with --blocked-by, --blocks or --relates, and that a ticket without any link should be a deliberate choice. In bin/heist.js, the hint printed after ticket create ('Possibly related: ...') should name the flag form heist ticket update KEY --relates OTHER next to heist relation add. In README.md, add the flags to the quick start or the CLI section with one example. Keep the wording plain and short.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,37 +14,37 @@
   "acceptance": [
     {
       "text": "heist guide names the three flags",
-      "met": false
+      "met": true
     },
     {
       "text": "The hint after ticket create names heist ticket update with --relates",
-      "met": false
+      "met": true
     },
     {
       "text": "README has one example",
-      "met": false
+      "met": true
     },
     {
       "text": "node --test passes",
-      "met": false
+      "met": true
     }
   ],
   "todos": [
     {
       "text": "Update the guide text in src/guide.js",
-      "met": false
+      "met": true
     },
     {
       "text": "Update the hint in bin/heist.js",
-      "met": false
+      "met": true
     },
     {
       "text": "Add one example to README.md",
-      "met": false
+      "met": true
     },
     {
       "text": "Run node --test (test/workflow.test.js checks parts of the briefing)",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -55,5 +55,16 @@
   "size": "xs",
   "createdBy": "claude",
   "createdAt": "2026-11-14T11:57:31.167Z",
-  "updatedAt": "2026-11-14T11:57:31.167Z"
+  "updatedAt": "2026-11-14T16:55:31.660Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Guide step 4 and a rule of thumb name --blocked-by, --blocks and --relates; the create hint names heist ticket update KEY --relates OTHER; README quick start has one example.",
+    "verifiedBy": "node --test: 98 pass, 0 fail, 1 skipped. heist guide shows the new lines; a create with a possibly related ticket shows the new hint.",
+    "changedFiles": [
+      "src/guide.js",
+      "bin/heist.js",
+      "README.md"
+    ]
+  },
+  "completedAt": "2026-11-14T16:55:31.660Z"
 }
