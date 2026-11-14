@@ -289,9 +289,10 @@ export async function similarTickets(p, ticketRef, { limit = 5, minScore = 0, mi
   const linked = new Map(rels);
   // Models differ in how they spread scores, so "likely overlap" is judged relative to this ticket's
   // own distribution: how many standard deviations a candidate stands above the mean of all others.
-  const z = strengths([...best.values()]);
-  return [...best].map(([tid, score], i) => [tid, score, z[i]]).filter(([, s, z]) => s >= minScore && z >= minStrength).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, limit)
-    .map(([tid, score, z]) => { const t = byId.get(tid); return { id: tid, key: p.ticketKey(t), title: t?.title, status: t?.status, score: Math.round(score * 1000) / 1000, strength: Math.round(z * 100) / 100, likelyOverlap: z >= OVERLAP_Z && !linked.has(tid), relation: linked.get(tid) ?? null }; });
+  // `robust` (median and MAD, the create hint's measure) is reported beside it; see bench/search-eval.mjs and HEIST-7.
+  const values = [...best.values()], z = strengths(values), rz = robustStrengths(values);
+  return [...best].map(([tid, score], i) => [tid, score, z[i], rz[i]]).filter(([, s, z]) => s >= minScore && z >= minStrength).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, limit)
+    .map(([tid, score, z, rz]) => { const t = byId.get(tid); return { id: tid, key: p.ticketKey(t), title: t?.title, status: t?.status, score: Math.round(score * 1000) / 1000, strength: Math.round(z * 100) / 100, robust: Math.round(rz * 100) / 100, likelyOverlap: z >= OVERLAP_Z && !linked.has(tid), relation: linked.get(tid) ?? null }; });
 }
 
 /**
@@ -305,11 +306,11 @@ export async function similarToText(p, text, { limit = 5, minScore = 0, minStren
   const [qv] = await embedder.embed([q], { query: true });
   const scores = scoreAll(index, qv);
   const entries = index.rows.map((r, j) => [r, j]).filter(([r]) => r.source_type === 'ticket' && r.ord === -1).map(([r, j]) => [r.source_id, scores[j]]);
-  const z = strengths(entries.map(([, s]) => s));
+  const values = entries.map(([, s]) => s), z = strengths(values), rz = robustStrengths(values);
   const tickets = await p.tickets.list({ limit: Infinity }); const byId = new Map(tickets.map(t => [t.id, t]));
-  return entries.map(([tid, score], i) => [tid, score, z[i]]).filter(([, s, z]) => s >= minScore && z >= minStrength)
+  return entries.map(([tid, score], i) => [tid, score, z[i], rz[i]]).filter(([, s, z]) => s >= minScore && z >= minStrength)
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, limit)
-    .map(([tid, score, z]) => { const t = byId.get(tid); return { id: tid, key: p.ticketKey(t), title: t?.title, status: t?.status, score: Math.round(score * 1000) / 1000, strength: Math.round(z * 100) / 100, likelyOverlap: z >= OVERLAP_Z, relation: null }; });
+    .map(([tid, score, z, rz]) => { const t = byId.get(tid); return { id: tid, key: p.ticketKey(t), title: t?.title, status: t?.status, score: Math.round(score * 1000) / 1000, strength: Math.round(z * 100) / 100, robust: Math.round(rz * 100) / 100, likelyOverlap: z >= OVERLAP_Z, relation: null }; });
 }
 
 // The create hint asks a wider question than `likelyOverlap`: is anything related at all? Related tickets often come

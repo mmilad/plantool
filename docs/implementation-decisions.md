@@ -214,3 +214,11 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - `heist similar --text "..."` compares a free-text idea with every ticket's title vector, before the ticket exists. `heist similar TICKET` is unchanged apart from its default.
 - The default no longer cuts candidates by z-score (it was 1.5). The top `--limit` matches (5) are listed with their score and strength; agents decide. `--strength Z` restores a cut. `likelyOverlap` still uses the plain z-score (OVERLAP_Z 3.5), so it is only a hint.
 - Measured on the real plan: related texts score about 0.85 to 0.89, unrelated ones about 0.81. A text without a match in the plan still gets a full list, so the score band, not the list, decides relevance. Calibration stays with HEIST-7.
+
+## Calibration of likely overlap on a fixture plan (HEIST-7)
+
+- `bench/search-eval.mjs` no longer reads this repository's plan. It builds a throwaway project from the 34 fixture tickets in `bench/search-eval.json` (31 related pairs in 7 groups, 1091 unrelated pairs) and reports the search quality and the calibration.
+- Search with `multilingual-e5-small` on 24 queries: semantic Recall@5 0.83, MRR 0.93 (en 0.90 / 1.00, de 0.72 / 0.83, mixed 1.00 / 1.00). Keyword only: Recall@5 0.15. Hybrid equals semantic here.
+- Plain z (`strength`): related pairs median 2.15, 6% reach OVERLAP_Z 3.5; unrelated pairs 0% reach it (max 2.79).
+- Robust strength (`robust`, the create hint's measure): related pairs median 2.38, 26% reach HINT_STRENGTH 3.5; unrelated pairs 0.1% reach it (1 pair, max 4.31).
+- Decision: `likelyOverlap` keeps the plain z-score and OVERLAP_Z 3.5. The robust value is reported next to it as `robust`. Reason: on the repository's real plan, heist similar HEIST-24 gave HEIST-8 (Windows command name, unrelated) a robust 4.1, so the robust measure would flag unrelated short Windows tickets. The plain z stays conservative and misses most related pairs. Revisit once real duplicate pairs are recorded.
