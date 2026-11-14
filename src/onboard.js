@@ -58,7 +58,8 @@ If the snapshot is stale, restart at offset zero. \`completedAt\` is stable afte
 Legacy dates are estimates from updatedAt; \`heist roadmap backfill-completion --dry-run\` previews the explicit backfill.
 Use \`heist deps --root KEY --format json\` for explicit/provider edges (blocker to blocked). Finished endpoints are excluded unless \`--include-finished\` is set.
 Dependencies retains cross-branch and inherited ancestor blockers; contextOnly marks external nodes. Limits are 200 nodes and 500 edges; inspect omitted counts and narrow the root when truncated.
-The local UI uses \`?view=roadmap&mode=structure|timeline|deps&ticket=KEY\`. Roadmap adds no workflow requirement.
+The local UI uses \`?view=roadmap&mode=structure|timeline|deps|graph&ticket=KEY\`. Roadmap adds no workflow requirement.
+Use \`heist graph --format json\` for the tickets that have relations (nodes with layer and row, edges, hidden, truncated); the UI shows it as \`mode=graph\`.
 
 ## Relationships
 

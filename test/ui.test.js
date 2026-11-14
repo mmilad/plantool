@@ -26,6 +26,12 @@ test('the roadmap has structure, timeline and dependency routes and keeps its co
   assert.ok(html.includes("'/api/roadmap/deps?'+params"));
   assert.ok(html.includes("mode=deps"));
   assert.ok(html.includes('data.omittedEdges'));
+  assert.ok(html.includes('data-roadmap-mode="graph"'));
+  assert.ok(html.includes('id="roadmap-graph-root"'));
+  assert.ok(html.includes('id="roadmap-graph-status"'));
+  assert.ok(html.includes('id="roadmap-graph-canvas"'));
+  assert.ok(html.includes("'/api/roadmap/graph?'+params"));
+  assert.ok(html.includes("mode=graph"));
   assert.ok(html.includes('id="roadmap-status"'));
   assert.ok(html.includes('id="roadmap-range"'));
   assert.ok(html.includes("'/api/roadmap/'+(isStructure?'structure':'timeline')"));
