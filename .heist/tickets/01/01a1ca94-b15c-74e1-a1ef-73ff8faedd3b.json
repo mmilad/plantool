@@ -5,7 +5,7 @@
   "title": "Click through the decisions view in a browser",
   "kind": "task",
   "description": "For the owner, in a browser. The Decisions page of the web view was built and tested over HTTP, but nobody has used it by hand. Walk through it once and note anything that looks wrong or confusing. HEIST-14 is a decided decision you can open; create a throwaway one for choosing and reopening.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,23 +14,23 @@
   "acceptance": [
     {
       "text": "List shows open decisions",
-      "met": false
+      "met": true
     },
     {
       "text": "Needs-a-person filter works",
-      "met": false
+      "met": true
     },
     {
       "text": "Choosing an option works",
-      "met": false
+      "met": true
     },
     {
       "text": "Reopen works",
-      "met": false
+      "met": true
     },
     {
       "text": "List refreshes after a change made from the CLI",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -40,43 +40,43 @@
   "size": "s",
   "createdBy": "claude",
   "createdAt": "2026-11-11T12:28:24.796Z",
-  "updatedAt": "2026-11-12T13:27:41.905Z",
+  "updatedAt": "2026-11-14T19:10:25.001Z",
   "todos": [
     {
-      "text": "Run: heist serve, open http://127.0.0.1:4000 and choose the project heistman",
-      "met": false
+      "text": "Run: heist serve, open http://127.0.0.1:4000 and choose the project heistman A throwaway project works too.",
+      "met": true
     },
     {
       "text": "Open Decisions in the left menu: the list shows the decisions",
-      "met": false
+      "met": true
     },
     {
-      "text": "In a terminal run: heist ask \"Test decision?\" --options \"A",
-      "met": false
-    },
-    {
-      "text": "B\" --owner human",
-      "met": false
+      "text": "In a terminal run: heist ask \"Test decision?\" --options \"A;B\" --owner human",
+      "met": true
     },
     {
       "text": "Back in the browser without reloading: the new decision appears within a few seconds",
-      "met": false
+      "met": true
     },
     {
       "text": "Switch on the filter for decisions that need a person: only the test decision stays",
-      "met": false
+      "met": true
     },
     {
       "text": "Open it, choose option A: it shows as decided",
-      "met": false
+      "met": true
     },
     {
       "text": "Press Reopen: it is open again",
-      "met": false
+      "met": true
     },
     {
       "text": "Clean up: heist ticket update <key of the test decision> --status cancelled",
-      "met": false
+      "met": true
     }
-  ]
+  ],
+  "assumptions": null,
+  "refs": null,
+  "evaluation": null,
+  "completedAt": "2026-11-14T19:10:25.001Z"
 }
