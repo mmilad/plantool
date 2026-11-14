@@ -222,3 +222,12 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Plain z (`strength`): related pairs median 2.15, 6% reach OVERLAP_Z 3.5; unrelated pairs 0% reach it (max 2.79).
 - Robust strength (`robust`, the create hint's measure): related pairs median 2.38, 26% reach HINT_STRENGTH 3.5; unrelated pairs 0.1% reach it (1 pair, max 4.31).
 - Decision: `likelyOverlap` keeps the plain z-score and OVERLAP_Z 3.5. The robust value is reported next to it as `robust`. Reason: on the repository's real plan, heist similar HEIST-24 gave HEIST-8 (Windows command name, unrelated) a robust 4.1, so the robust measure would flag unrelated short Windows tickets. The plain z stays conservative and misses most related pairs. Revisit once real duplicate pairs are recorded.
+
+## MCP server (HEIST-9)
+
+- `heist mcp --agent NAME` serves the Model Context Protocol over stdio for one project (the working directory). No network port, no SDK: the protocol is newline-delimited JSON-RPC and fits in `src/mcp.js`, so the project keeps zero required dependencies.
+- Stage 1 (read) and stage 2 (work loop) only: next, ticket show and list, context, search (hybrid, keyword fallback), similar, deps, decisions, comments, validate, guide, claim, done, ticket create and update, to-do tick and rename, comment, relation, and decisions the agent owns (ask, recommend, decide).
+- The agent name comes from the server (`--agent` or `HEIST_AGENT`), never from a tool argument. No tool accepts `by`, `owner`, `author` or `createdBy`. A person's decision is refused by the same rule as on the CLI (CONFLICT).
+- Not in v1: checklist answers and skips, release, forced finish, decision and component structure, blueprints, projects, keys, index rebuilds, deletion.
+- Server instructions are short; the full briefing is behind `heist_guide`, as decided under "Onboarding keeps itself alive".
+- Usage in a client configuration: command `heist`, arguments `mcp --agent NAME`, working directory the project.

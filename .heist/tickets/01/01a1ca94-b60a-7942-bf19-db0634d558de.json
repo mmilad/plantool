@@ -4,8 +4,8 @@
   "number": 9,
   "title": "MCP server over the public API",
   "kind": "feature",
-  "description": "Parked; not planned in detail yet. Agents that have no shell cannot use the CLI. An MCP server would offer the same operations as tools. Known so far: a short briefing belongs in the server instructions and the full briefing behind a guide tool (see the comment on this ticket); callers over MCP could decide as a person, so permissions need a design first.",
-  "status": "todo",
+  "description": "Parked earlier; now built as heist mcp (stdio, stages 1 and 2 of the plan agreed on 2026-11-14). Agents without a shell use the same operations as the CLI for reading, claiming, finishing and noting. Decisions a person owns cannot be made through it. See docs/implementation-decisions.md (MCP server).",
+  "status": "done",
   "priority": "low",
   "labels": [],
   "properties": {},
@@ -18,5 +18,18 @@
     "permissions need a design first"
   ],
   "createdAt": "2026-11-11T12:28:25.994Z",
-  "updatedAt": "2026-11-12T13:27:42.940Z"
+  "updatedAt": "2026-11-14T19:47:45.750Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "heist mcp: stdio server with 21 tools (stages 1 and 2); agent name from the server; person decisions refused.",
+    "verifiedBy": "node --test 116 pass (6 MCP tests); stdio smoke test in a throwaway project; pnpm run check.",
+    "changedFiles": [
+      ".heist/tickets/01/01a1ca94-b60a-7942-bf19-db0634d558de.json",
+      "bin/heist.js",
+      "docs/implementation-decisions.md",
+      "src/mcp.js",
+      "test/mcp.test.js"
+    ]
+  },
+  "completedAt": "2026-11-14T19:47:45.750Z"
 }

@@ -164,6 +164,7 @@ Schemas: full JSON Schema subset or shorthand, e.g. '{"userId":"string","nick":"
   heist context ID [--budget BYTES] [--format json]
   heist validate [--format json]
   heist serve [--port N] [--open]   all registered projects, from any directory (default: 127.0.0.1:4000)
+  heist mcp --agent NAME            MCP server over stdio for this project: next, claim, done and notes as the named agent
 
 All commands operate on the nearest project-local .heist/ directory. Ticket IDs can be given as UUIDs or keys such as PM-42.`;
 
@@ -213,6 +214,7 @@ async function main(argv) {
   if(argv.includes('--help')||argv[0]==='-h'||argv[0]==='help'||!argv.length){console.log(usage);return;}
   const [command,sub,...rest]=argv;
   if(command==='init'){const {opts}=parse([sub,...rest].filter(Boolean));const c=await initProject({name:opts.name,key:opts.key});await autoRegister(await openProject());out(`Initialized ${c.name} (${c.key}) at .heist/`);return;}
+  if(command==='mcp'){const {opts}=parse([sub,...rest].filter(Boolean));const agent=opts.agent??process.env.HEIST_AGENT;if(!agent){console.error('heist mcp needs an agent name: heist mcp --agent NAME (or set HEIST_AGENT)');process.exitCode=2;return;}const {serveMcp}=await import('../src/mcp.js');await serveMcp({cwd:process.cwd(),agent});return;}
   if(command==='serve'){const {opts}=parse([sub,...rest].filter(Boolean));const s=await serve({port:opts.port===undefined?4000:Number(opts.port),open:!!opts.open,register:process.env.HEIST_NO_REGISTER!=='1'});const n=(await listProjects()).length;console.log(`heist is serving ${n} registered project${n===1?'':'s'}${s.project?` (opened in ${s.project.config.name})`:''} at ${s.url}`);console.log('Press Ctrl-C to stop.');await new Promise(resolve=>s.server.once('close',resolve));return;}
   if(command==='projects'){const parsed=parse([sub,...rest].filter(x=>x!==undefined));const opts=parsed.opts;const action=parsed.positional[0]??'list';const positional=parsed.positional.slice(1);
     if(action==='list'){const all=await listProjects();if(opts.format==='json'){out(all,'json');return;}if(!all.length){console.log(`No projects registered yet (${registryHome()}). Run heist init or any heist command inside a project, or heist projects add PATH.`);return;}for(const x of all)console.log(`${(x.key??'').padEnd(8)}  ${x.name.padEnd(28)}  ${x.available?'':'[missing] '}${x.root}`);return;}
