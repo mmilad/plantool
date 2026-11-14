@@ -11,6 +11,8 @@ import { attachDecisionApi, validatePlanningFields } from './decisions.js';
 import { validateFields, fieldWarnings, fieldsFor } from './fields.js';
 import { dependencies } from './roadmap-deps.js';
 export { dependencies } from './roadmap-deps.js';
+import { relationGraph } from './relation-graph.js';
+export { relationGraph } from './relation-graph.js';
 export { DEFAULT_COMPONENT_KINDS, normalizeSchema } from './design.js';
 
 export const DEFAULT_STATUSES = Object.freeze(['todo', 'in_progress', 'done', 'cancelled']);
@@ -129,6 +131,7 @@ export async function openProject({ cwd = process.cwd(), cache = false } = {}) {
   };
   p.timeline = options => timeline(p, options);
   p.deps = options => dependencies(p, options);
+  p.relationGraph = options => relationGraph(p, options);
   p.roadmap = {
     deps: p.deps,
     backfillCompletion: options => backfillCompletion(p, options),

@@ -73,6 +73,7 @@ Usage:
                  [--limit N] [--offset N] [--snapshot TOKEN] [--format json]
   heist roadmap backfill-completion [--dry-run] [--format json]
   heist deps [--root ID] [--include-finished] [--limit N] [--snapshot TOKEN] [--format json]
+  heist graph [--root ID] [--limit N] [--format json]
   heist goal|plan|decision create --title TITLE [--body TEXT] [--links ID,ID]
   heist goal|plan|decision list [--format json]
   heist goal|plan|decision show ID [--format json]
@@ -266,6 +267,18 @@ async function main(argv) {
     for(const row of page.items)console.log(`${row.completedAt}  ${(row.key??row.id).padEnd(10)}  ${row.title}${row.completionSource==='updatedAt'?' [estimated from updatedAt]':''}`);
     if(!page.items.length)console.log('No completed tickets in this range.');
     if(page.nextOffset!==null)console.log(`More: --offset ${page.nextOffset} --snapshot ${page.snapshot}`);
+    return;
+  }
+  if(command==='graph') {
+    const {opts,positional}=parse([sub,...rest].filter(Boolean));
+    if(positional.length||Object.keys(opts).some(k=>!['root','limit','format'].includes(k)))throw new HeistError('Use graph [--root ID] [--limit N] [--format json]','USAGE_ERROR');
+    const result=await project.relationGraph({root:one(opts.root),limit:Number(one(opts.limit)??200)});
+    if(opts.format==='json'){out(result,'json');return;}
+    const nodes=new Map(result.nodes.map(n=>[n.id,n]));
+    const label=id=>{const n=nodes.get(id);return `${n.key??n.id} ${n.title}`;};
+    for(const edge of result.edges)console.log(`${label(edge.sourceId)} [${edge.type}] ${label(edge.targetId)}`);
+    if(!result.edges.length)console.log('No relations to draw.');
+    console.log(`${result.nodes.length}/${result.totalNodes} nodes, ${result.edges.length} edges, ${result.hidden} hidden tickets (no relation), ${result.layers} layers.`);
     return;
   }
   if(command==='deps') {
