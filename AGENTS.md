@@ -1,6 +1,6 @@
 # Agent notes
 
-Run `heist agent onboard` to learn how this project plans its work. The plan lives in `.heist/`; `heist next` lists what is ready, `heist ticket show KEY` shows a ticket as a document.
+Run `heist agent onboard` once, the first time you work here, to learn how this project plans its work, and keep the key rules in your own notes. Do not repeat it in every session; repeat it only when `heist --version` changes or your notes are gone. The plan lives in `.heist/`; `heist next` lists what is ready, `heist ticket show KEY` shows a ticket as a document.
 
 ## Working in this repository
 
