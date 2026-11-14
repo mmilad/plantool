@@ -21,10 +21,14 @@ Plan like a heist: before anything is built, every part, every open question and
    is never just a header.
 4. Connect the plan: \`blocks\` relations for order, decisions block the work that depends on them,
    code plans and contracts for code other code calls (heist codeplan, heist check).
+   Link each new ticket in the same call: --blocked-by (the tickets it waits for), --blocks (the work that
+   waits for it), --relates (related work that does not change the order). A ticket without any link is a
+   deliberate choice; say why.
 5. Show the person what needs them: heist decisions. Then work with heist next / claim / done.
 
 ## Rules of thumb
 - Every node says why it exists (--why). Leaves have acceptance criteria (--accept "a;b").
+- Link a new ticket when you create it (--blocked-by, --blocks, --relates); no link is a deliberate choice.
 - Write down what you assumed without asking (--assume "a;b"); the person confirms or corrects it.
 - Plan where the code will go (--files) and record what really changed when done (heist done --files).
 - Prefer asking one clear question with options over guessing; prefer a small first release.

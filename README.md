@@ -39,6 +39,8 @@ pnpm exec heist validate
 pnpm exec heist serve
 ```
 
+Link tickets when you create or update them: `heist ticket create --title "Write the tests" --blocked-by SHOP-1 --relates SHOP-2`, or `heist ticket update SHOP-3 --blocks SHOP-4`. `--blocked-by` names the tickets that must finish first, `--blocks` the tickets that wait for this one, `--relates` related work that does not change the order.
+
 Create children at any level by passing `--parent <ticket-id>`. The server uses `http://127.0.0.1:4000` by default and stays in the foreground; stop it with Ctrl-C. If the port is occupied, it reports the conflict and starts no additional server. Choose another port explicitly with `heist serve --port N`. It serves every registered project (see above), from any directory. `--open` asks the operating system to open the URL only after the server starts successfully.
 
 ## CLI

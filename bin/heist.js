@@ -12,6 +12,30 @@ const labels=v=>v===undefined?undefined:[].concat(v).flatMap(x=>String(x).split(
 // Sentences may contain commas: lists of sentences are separated with ';' or by repeating the flag.
 const items=v=>v===undefined?undefined:[].concat(v).flatMap(x=>String(x).split(';')).map(x=>x.trim()).filter(Boolean);
 const one=v=>Array.isArray(v)?v.at(-1):v;
+// --blocked-by, --blocks and --relates on ticket create/update. Every listed ticket is resolved before anything is written.
+const linkSpecs=opts=>[
+  ...(labels(opts.blocked_by)??[]).map(key=>({key,flag:'--blocked-by',type:'blocks',thisIsTarget:true})),
+  ...(labels(opts.blocks)??[]).map(key=>({key,flag:'--blocks',type:'blocks',thisIsTarget:false})),
+  ...(labels(opts.relates)??[]).map(key=>({key,flag:'--relates',type:'relates_to',thisIsTarget:false})),
+];
+const resolveLinks=async(project,opts)=>{
+  const links=[];
+  for(const s of linkSpecs(opts)) links.push({...s,id:await project.resolveTicket(s.key)});
+  const blockedBy=new Set(links.filter(s=>s.flag==='--blocked-by').map(s=>s.id));
+  const both=links.find(s=>s.flag==='--blocks'&&blockedBy.has(s.id));
+  if(both) throw new HeistError(`${both.key} is listed in both --blocked-by and --blocks`,'VALIDATION');
+  return links;
+};
+const applyLinks=async(project,ticketId,links,format)=>{
+  if(!links.length) return;
+  const named=[];
+  for(const s of links){
+    const [source,target]=s.thisIsTarget?[s.id,ticketId]:[ticketId,s.id];
+    try{ await project.relations.add(source,target,s.type); named.push(`${s.flag} ${s.key}`); }
+    catch(e){ if(e.code!=='DUPLICATE_RELATION') throw e; named.push(`${s.flag} ${s.key} (already linked)`); }
+  }
+  if(format!=='json') console.error(`Linked: ${named.join(', ')}`);
+};
 /** Standard metadata flags shared by ticket create/update. */
 function fieldFlags(opts){const f={};if(opts.why!==undefined)f.why=one(opts.why);if(opts.accept!==undefined)f.acceptance=items(opts.accept).map(text=>({text,met:false}));if(opts.todo!==undefined)f.todos=items(opts.todo).map(text=>({text,met:false}));if(opts.files!==undefined&&opts.files!==true)f.files=labels(opts.files);if(opts.size!==undefined)f.size=one(opts.size);if(opts.assume!==undefined)f.assumptions=items(opts.assume);if(opts.refs!==undefined)f.refs=labels(opts.refs);if(opts.risks!==undefined)f.risks=items(opts.risks);if(opts.evaluation)f.evaluation=true;if(opts['no-evaluation'])f.evaluation=false;
   if(opts.steps!==undefined||opts.expected!==undefined||opts.actual!==undefined||opts.environment!==undefined)f.repro={...(opts.steps!==undefined?{steps:items(opts.steps)}:{}),...(opts.expected!==undefined?{expected:one(opts.expected)}:{}),...(opts.actual!==undefined?{actual:one(opts.actual)}:{}),...(opts.environment!==undefined?{environment:one(opts.environment)}:{})};
@@ -35,10 +59,12 @@ Usage:
   heist keys renumber                fix duplicate KEY-n numbers (e.g. after merging branches)
   heist ticket create --title TITLE [--parent ID] [--description TEXT] [--status STATUS]
                      [--kind task|feature|bug] [--priority low|normal|high|urgent] [--labels A,B]
+                     [--blocked-by KEYS] [--blocks KEYS] [--relates KEYS]
   heist ticket list [--status STATUS] [--parent ID] [--format json]
   heist ticket show ID [--format json]
   heist ticket update ID [--title TITLE] [--status STATUS] [--description TEXT]
                      [--kind KIND] [--priority PRIORITY] [--labels A,B] [--force]
+                     [--blocked-by KEYS] [--blocks KEYS] [--relates KEYS]
   heist ticket move ID [--parent ID]
   heist tree [ID] [--max-depth N] [--limit N] [--offset N] [--format json]
              [--fields full|row|plan] [--status A,B] [--hide A,B] [--kind A,B]
@@ -179,7 +205,8 @@ async function main(argv) {
     throw new Error(`Unknown projects command: ${action}`);}
   if(command==='guide'){const text=guide(sub);if(!text)throw new Error(`Unknown guide topic: ${sub}. Topics: ${Object.keys(GUIDE).join(', ')}`);console.log(text);return;}
   const project=await openProject();globalThis.__heistKey=project.key;await autoRegister(project);
-  if(command==='ticket'&&sub==='create') {const {opts}=parse(rest);const kind=one(opts.kind)??'task';const props=customFlags(project,kind,opts);const t=await project.tickets.create({title:one(opts.title),description:one(opts.description),status:opts.status,kind,priority:opts.priority,labels:labels(opts.labels),parentId:opts.parent??null,createdBy:process.env.HEIST_AGENT||undefined,...fieldFlags(opts),...(props?{properties:props}:{})});
+  if(command==='ticket'&&sub==='create') {const {opts}=parse(rest);const links=await resolveLinks(project,opts);const kind=one(opts.kind)??'task';const props=customFlags(project,kind,opts);const t=await project.tickets.create({title:one(opts.title),description:one(opts.description),status:opts.status,kind,priority:opts.priority,labels:labels(opts.labels),parentId:opts.parent??null,createdBy:process.env.HEIST_AGENT||undefined,...fieldFlags(opts),...(props?{properties:props}:{})});
+    await applyLinks(project,t.id,links,opts.format);
     const norm = x => String(x ?? '').toLocaleLowerCase().replace(/\s+/g, ' ').trim();
     const words = x => new Set(String(x ?? '').toLocaleLowerCase().split(/[^\p{L}\p{N}]+/u).filter(w => w.length >= 3));
     const mine = words(t.title);
@@ -196,13 +223,13 @@ async function main(argv) {
       const twin = related.find(r => r.same);
       console.error(twin
         ? `Note: a ticket with the same title exists: ${label(twin.x)}. If it is the same work, link it instead: heist relation add ${label(t)} ${label(twin.x)} duplicates`
-        : `Possibly related: ${related.map(r => label(r.x)).join(', ')}. If one of them is the same work or a dependency, link it (heist relation add ... implements|blocks|relates_to).`);
+        : `Possibly related: ${related.map(r => label(r.x)).join(', ')}. If one of them is the same work or a dependency, link it: heist ticket update KEY --relates OTHER (or --blocked-by / --blocks), or heist relation add ... implements|blocks|relates_to.`);
     }
     if (opts.format !== 'json') { const e = await project.blueprints.expected(t.id); if (e.missing.length) console.error(`Expected for a ${e.kind}, still empty: ${e.items.filter(i => !i.filled && !i.optional).map(i => `${i.field} (${i.flag})`).join(', ')}. Add with heist ticket update ${label(t)} …; heist blueprint show ${e.kind} explains them.`); }
     out(t,opts.format,'ticket');return;}
   if(command==='ticket'&&sub==='list') {const {opts}=parse(rest);out(await project.tickets.list({status:opts.status,parentId:opts.parent,limit:Number(opts.limit??5000)}),opts.format);return;}
   if(command==='ticket'&&sub==='show') {const {opts,positional}=parse(rest);const t=await project.tickets.get(positional[0]);if(opts.format==='json'){out(t,'json');return;}console.log(await ticketText(project,t));return;}
-  if(command==='ticket'&&sub==='update') {const {opts,positional}=parse(rest),patch={};for(const k of ['title','status','description','priority','kind'])if(opts[k]!==undefined)patch[k]=one(opts[k]);if(opts.labels!==undefined)patch.labels=labels(opts.labels);Object.assign(patch,fieldFlags(opts));if(opts.set!==undefined){const cur=await project.tickets.get(positional[0]);patch.properties=customFlags(project,patch.kind??cur.kind??'task',opts,cur.properties??{});}if(opts.add_accept!==undefined){const cur=await project.tickets.get(positional[0]);patch.acceptance=[...(cur.acceptance??[]),...items(opts.add_accept).map(text=>({text,met:false}))];}if(opts.add_todo!==undefined){const cur=await project.tickets.get(positional[0]);patch.todos=[...(cur.todos??[]),...items(opts.add_todo).map(text=>({text,met:false}))];}out(await project.tickets.update(positional[0],patch,{force:!!opts.force}),opts.format,'ticket');return;}
+  if(command==='ticket'&&sub==='update') {const {opts,positional}=parse(rest),patch={};const links=await resolveLinks(project,opts);for(const k of ['title','status','description','priority','kind'])if(opts[k]!==undefined)patch[k]=one(opts[k]);if(opts.labels!==undefined)patch.labels=labels(opts.labels);Object.assign(patch,fieldFlags(opts));if(opts.set!==undefined){const cur=await project.tickets.get(positional[0]);patch.properties=customFlags(project,patch.kind??cur.kind??'task',opts,cur.properties??{});}if(opts.add_accept!==undefined){const cur=await project.tickets.get(positional[0]);patch.acceptance=[...(cur.acceptance??[]),...items(opts.add_accept).map(text=>({text,met:false}))];}if(opts.add_todo!==undefined){const cur=await project.tickets.get(positional[0]);patch.todos=[...(cur.todos??[]),...items(opts.add_todo).map(text=>({text,met:false}))];}const updated=await project.tickets.update(positional[0],patch,{force:!!opts.force});if(links.length)await applyLinks(project,await project.resolveTicket(positional[0]),links,opts.format);out(updated,opts.format,'ticket');return;}
   if(command==='ticket'&&sub==='move') {const {opts,positional}=parse(rest);out(await project.tickets.move(positional[0],opts.parent??null),opts.format,'ticket');return;}
   if(command==='tree') {
     const {opts,positional}=parse([sub,...rest].filter(Boolean));

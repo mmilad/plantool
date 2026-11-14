@@ -45,3 +45,41 @@ test('ticket create points at possibly related tickets by title', async t => {
   assert.match(cli('ticket', 'show', 'SHOP-3').stdout, /Why\n  \(missing\) /);
   assert.match(cli('blueprint', 'check').stdout, /SHOP-1 \(task\)/);
 });
+
+test('ticket create and update link tickets with --blocked-by, --blocks and --relates', async t => {
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist links '));
+  t.after(() => fs.rm(cwd, { recursive: true, force: true }));
+  const env = { ...process.env, HEIST_NO_REGISTER: '1', HEIST_SIMILAR: 'off' };
+  const heist = (...a) => spawnSync(process.execPath, [cli, ...a], { cwd, env, encoding: 'utf8' });
+  const idOf = key => JSON.parse(heist('ticket', 'show', key, '--format', 'json').stdout).id;
+  const relations = () => JSON.parse(heist('relation', 'list', '--format', 'json').stdout);
+  const linked = (type, source, target) => relations().some(r => r.type === type && r.sourceId === source && r.targetId === target);
+  assert.equal(heist('init', '--name', 'links', '--key', 'LNK').status, 0);
+  assert.equal(heist('ticket', 'create', '--title', 'Base one').status, 0);
+  assert.equal(heist('ticket', 'create', '--title', 'Base two').status, 0);
+  // create: --blocked-by X makes X the blocker, --relates links both ways in the stored direction
+  const third = heist('ticket', 'create', '--title', 'Third', '--blocked-by', 'LNK-1', '--relates', 'LNK-2');
+  assert.equal(third.status, 0, third.stderr);
+  assert.match(third.stderr, /--blocked-by LNK-1, --relates LNK-2/);
+  assert.ok(linked('blocks', idOf('LNK-1'), idOf('LNK-3')));
+  assert.ok(linked('relates_to', idOf('LNK-3'), idOf('LNK-2')));
+  // create: --blocks X makes the new ticket the blocker
+  assert.equal(heist('ticket', 'create', '--title', 'Fourth', '--blocks', 'LNK-3').status, 0);
+  assert.ok(linked('blocks', idOf('LNK-4'), idOf('LNK-3')));
+  // update: new link is written, a repeated link is skipped without failing
+  assert.equal(heist('ticket', 'update', 'LNK-2', '--blocks', 'LNK-1').status, 0);
+  assert.ok(linked('blocks', idOf('LNK-2'), idOf('LNK-1')));
+  const again = heist('ticket', 'update', 'LNK-2', '--blocks', 'LNK-1');
+  assert.equal(again.status, 0, again.stderr);
+  assert.match(again.stderr, /already linked/);
+  // an unknown key exits non-zero and creates no ticket
+  const before = JSON.parse(heist('ticket', 'list', '--format', 'json').stdout).length;
+  const ghost = heist('ticket', 'create', '--title', 'Ghost', '--blocked-by', 'LNK-99');
+  assert.notEqual(ghost.status, 0);
+  assert.equal(JSON.parse(heist('ticket', 'list', '--format', 'json').stdout).length, before);
+  // a ticket listed in both --blocked-by and --blocks is refused
+  assert.notEqual(heist('ticket', 'create', '--title', 'Both', '--blocked-by', 'LNK-1', '--blocks', 'LNK-1').status, 0);
+  // the usage text lists the flags
+  const help = heist('--help');
+  assert.match(help.stdout + help.stderr, /--blocked-by KEYS/);
+});
