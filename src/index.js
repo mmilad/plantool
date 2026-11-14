@@ -4,7 +4,7 @@ import path from 'node:path';
 import { TICKET_KINDS, workGraph, readinessOf, nextTickets, claimTicket, releaseTicket, finishTicket, withLock } from './workflow.js';
 export { TICKET_KINDS } from './workflow.js';
 import { attachDesignApi, validateCodePlanShape, resolvedCodePlan } from './design.js';
-import { semanticStatus, updateIndex, semanticSearch, hybridSearch, similarTickets } from './semantic.js';
+import { semanticStatus, updateIndex, semanticSearch, hybridSearch, similarTickets, similarToText } from './semantic.js';
 import { attachChecklistApi, validateTicketChecklist, validateTicketOrigin } from './checklists.js';
 import { attachBlueprintApi } from './blueprints.js';
 import { attachDecisionApi, validatePlanningFields } from './decisions.js';
@@ -139,7 +139,7 @@ export async function openProject({ cwd = process.cwd(), cache = false } = {}) {
   };
   attachDesignApi(p); p.saveConfig = config => writeConfig(p, config);
   attachChecklistApi(p); attachBlueprintApi(p); attachDecisionApi(p); p.fields = kind => fieldsFor(kind ?? 'task', p.config);
-  p.semantic = { status: o => semanticStatus(p, o), update: o => updateIndex(p, o), rebuild: o => updateIndex(p, { ...o, rebuild: true }), search: (q, o) => semanticSearch(p, q, o), hybrid: (q, o) => hybridSearch(p, q, o), similar: (id, o) => similarTickets(p, id, o) };
+  p.semantic = { status: o => semanticStatus(p, o), update: o => updateIndex(p, o), rebuild: o => updateIndex(p, { ...o, rebuild: true }), search: (q, o) => semanticSearch(p, q, o), hybrid: (q, o) => hybridSearch(p, q, o), similar: (id, o) => similarTickets(p, id, o), similarText: (t, o) => similarToText(p, t, o) };
   p.next = options => nextTickets(p, options);
   p.claim = (id, options) => claimTicket(p, id, options);
   p.release = (id, options) => releaseTicket(p, id, options);

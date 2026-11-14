@@ -55,6 +55,10 @@ test('semantic, hybrid and similar search rank related texts and fall back to ke
   assert.equal(hybrid.mode, 'hybrid'); assert.ok(hybrid.hits.some(h => h.matchedBy.includes('semantic')));
   const similar = await p.semantic.similar(p.ticketKey(nav), { minScore: 0, minStrength: -Infinity });
   assert.equal(similar[0].id, other.id, 'closest unrelated-by-hierarchy ticket first'); assert.ok(!similar.some(s => s.id === header.id), 'ancestors are excluded');
+  const byText = await p.semantic.similarText('navigation menu at the top', { limit: 2 });
+  assert.equal(byText.length, 2, 'free text lists the top matches without a strength cut');
+  assert.ok(byText.some(s => s.id === other.id) && byText.some(s => s.id === nav.id), 'both navigation tickets come first');
+  await assert.rejects(() => p.semantic.similarText('  '), { code: 'VALIDATION' });
   await assert.rejects(() => p.semantic.search('   '), { code: 'VALIDATION' });
 });
 

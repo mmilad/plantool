@@ -208,3 +208,9 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - At most 200 tickets are drawn; `truncated` says when the result was cut, and a root ticket narrows it.
 - The Dependencies table stays. It lists blockers per ticket; the Graph shows all relation types in one picture.
 - Not checked in a browser: the drawing was run in Node against the real data only.
+
+## Similar tickets for a new idea (HEIST-58)
+
+- `heist similar --text "..."` compares a free-text idea with every ticket's title vector, before the ticket exists. `heist similar TICKET` is unchanged apart from its default.
+- The default no longer cuts candidates by z-score (it was 1.5). The top `--limit` matches (5) are listed with their score and strength; agents decide. `--strength Z` restores a cut. `likelyOverlap` still uses the plain z-score (OVERLAP_Z 3.5), so it is only a hint.
+- Measured on the real plan: related texts score about 0.85 to 0.89, unrelated ones about 0.81. A text without a match in the plan still gets a full list, so the score band, not the list, decides relevance. Calibration stays with HEIST-7.
