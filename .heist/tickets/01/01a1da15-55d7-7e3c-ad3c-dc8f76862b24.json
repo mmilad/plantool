@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1da15-55d7-7e3c-ad3c-dc8f76862b24",
+  "number": 55,
+  "title": "Context packet: cut the contract last, default budget 24000, report the full size",
+  "kind": "task",
+  "description": "Work in the function contextFor in src/index.js (search for 'export async function contextFor'). It builds the object packet and then removes parts in a fixed order until size() is at most the budget. Keep that mechanism and change this: a) Default budget 24000 instead of 8000, in contextFor and in the context command in bin/heist.js (search for command==='context'). b) New order of cutting: comments, documents, descendants; then ancestors, starting with the one closest to the ticket as today; then relationships; then the description of the ticket, shortened with the existing binary search; only then the types of the code plan; and last the code plan itself. Keep the counters in omitted as they are (comments, relationships, documents, ancestors, descendants, descriptionBytes, codePlanTypes, codePlan). c) Before anything is removed, store the size of the complete packet and return it as fullBytes next to budget, so a caller can ask for exactly that much. The existing final guard that shortens the description once more must stay, and the packet must never be larger than the budget. Lines in this file are very long; make small exact edits and run node --check src/index.js after each. Do not change what the packet contains, only the order of cutting, the default and the new field. The web view asks with a huge budget and needs no change.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1da15-545e-76f4-b5dd-f9c08e4ce4aa",
+  "why": "This is the rule change in the core; the CLI message builds on it.",
+  "acceptance": [
+    {
+      "text": "Default budget is 24000",
+      "met": false
+    },
+    {
+      "text": "The code plan is the last part to be cut",
+      "met": false
+    },
+    {
+      "text": "fullBytes is returned",
+      "met": false
+    },
+    {
+      "text": "The packet never exceeds the budget",
+      "met": false
+    },
+    {
+      "text": "node --test passes",
+      "met": false
+    }
+  ],
+  "todos": [
+    {
+      "text": "Read contextFor and the tests that mention context in test/core.test.js and test/design.test.js",
+      "met": false
+    },
+    {
+      "text": "Change the default in src/index.js and bin/heist.js",
+      "met": false
+    },
+    {
+      "text": "Reorder the cutting steps",
+      "met": false
+    },
+    {
+      "text": "Add fullBytes",
+      "met": false
+    },
+    {
+      "text": "Add a test to test/core.test.js: a ticket with a long description, a parent with a long description, two relationships and a consumed contract keeps codePlan and relationships at a budget where the parent has to go, and JSON.stringify(result, null, 2) is never longer than the budget",
+      "met": false
+    },
+    {
+      "text": "Add fullBytes to the type in src/index.d.ts if the context result is typed there",
+      "met": false
+    },
+    {
+      "text": "Run node --test",
+      "met": false
+    },
+    {
+      "text": "Check on this repository: node bin/heist.js context HEIST-52 must contain codePlan",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/index.js",
+    "bin/heist.js",
+    "src/index.d.ts",
+    "test/core.test.js"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-14T12:43:13.751Z",
+  "updatedAt": "2026-11-14T12:43:13.751Z"
+}
