@@ -28,7 +28,9 @@
         "properties": { "type": "object" },
         "parentId": { "oneOf": [{ "$ref": "#/$defs/uuidv7" }, { "type": "null" }] },
         "createdAt": { "type": "string", "format": "date-time" },
-        "updatedAt": { "type": "string", "format": "date-time" }
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "completedAtSource": { "const": "updatedAt" }
       },
       "additionalProperties": true
     },

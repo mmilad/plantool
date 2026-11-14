@@ -31,7 +31,7 @@ export async function workGraph(p) {
   const descendants = id => { const out = [], stack = [...(children.get(id) ?? [])]; while (stack.length) { const t = stack.pop(); out.push(t); stack.push(...(children.get(t.id) ?? [])); } return out; };
   const openBlockers = id => [...new Set(blockersOf.get(id) ?? [])].map(x => byId.get(x)).filter(t => t && !isFinished(t));
   const isProviderEdge = (source, target) => !!providerOf.get(target)?.has(source);
-  return { tickets, byId, children, blockersOf, blocksOut, ancestors, descendants, openBlockers, isProviderEdge, design };
+  return { tickets, byId, children, blockersOf, blocksOut, ancestors, descendants, openBlockers, isProviderEdge, design, explicitEdges: rels };
 }
 
 const leaseActive = (t, now) => !!t.assignee?.expiresAt && Date.parse(t.assignee.expiresAt) > now;
@@ -47,11 +47,26 @@ export function readinessOf(g, ticket, now = Date.now()) {
   const viaProvider = own.filter(t => g.isProviderEdge(t.id, ticket.id)), explicit = own.filter(t => !viaProvider.includes(t));
   if (explicit.length) reasons.push(`blocked by ${explicit.map(t => t.id).join(', ')}`);
   if (viaProvider.length) reasons.push(`waits for provider ticket(s) ${viaProvider.map(t => t.id).join(', ')}`);
-  for (const a of g.ancestors(ticket.id)) {
-    if (a.status === 'cancelled') reasons.push(`ancestor ${a.id} is cancelled`);
-    const ab = g.openBlockers(a.id);
-    if (ab.length) reasons.push(`ancestor ${a.id} is blocked by ${ab.map(t => t.id).join(', ')}`);
+  if (!g.ancestorReadinessCache) g.ancestorReadinessCache = new Map();
+  if (!g.ancestorReadinessCache.has(ticket.id)) {
+    const chain=[],seen=new Set([ticket.id]);let cur=g.byId.get(ticket.id)?.parentId;
+    while(cur&&g.byId.has(cur)&&!seen.has(cur)&&!g.ancestorReadinessCache.has(cur)){seen.add(cur);chain.push(g.byId.get(cur));cur=g.byId.get(cur).parentId;}
+    let inherited=cur&&g.ancestorReadinessCache.has(cur)?g.ancestorReadinessCache.get(cur):[];
+    const addAncestorReasons=a=>{
+      const extra=[];
+      if(a.status==='cancelled')extra.push(`ancestor ${a.id} is cancelled`);
+      const ab=g.openBlockers(a.id);if(ab.length)extra.push(`ancestor ${a.id} is blocked by ${ab.map(t=>t.id).join(', ')}`);
+      if(extra.length)inherited=[...inherited,...extra];
+    };
+    if(cur&&g.byId.has(cur)&&g.ancestorReadinessCache.has(cur))addAncestorReasons(g.byId.get(cur));
+    for(let i=chain.length-1;i>=0;i--){
+      const a=chain[i];
+      g.ancestorReadinessCache.set(a.id,inherited);
+      addAncestorReasons(a);
+    }
+    g.ancestorReadinessCache.set(ticket.id,inherited);
   }
+  reasons.push(...g.ancestorReadinessCache.get(ticket.id));
   if (ticket.status === 'in_progress' && leaseActive(ticket, now)) reasons.push(`claimed by ${ticket.assignee.agent} until ${ticket.assignee.expiresAt}`);
   return { ready: reasons.length === 0, reasons, openChildren: openChildren.map(t => t.id), blockers: own.map(t => t.id) };
 }

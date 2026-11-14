@@ -9,6 +9,8 @@ import { attachChecklistApi, validateTicketChecklist, validateTicketOrigin } fro
 import { attachBlueprintApi } from './blueprints.js';
 import { attachDecisionApi, validatePlanningFields } from './decisions.js';
 import { validateFields, fieldWarnings, fieldsFor } from './fields.js';
+import { dependencies } from './roadmap-deps.js';
+export { dependencies } from './roadmap-deps.js';
 export { DEFAULT_COMPONENT_KINDS, normalizeSchema } from './design.js';
 
 export const DEFAULT_STATUSES = Object.freeze(['todo', 'in_progress', 'done', 'cancelled']);
@@ -33,6 +35,13 @@ export function uuidv7(now = Date.now()) {
   const h = b.toString('hex'); return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;
 }
 const nowIso = () => new Date().toISOString();
+function validIsoDate(value, allowDateOnly = false) {
+  if (typeof value !== 'string') return false;
+  const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test(value);
+  if (!(allowDateOnly && dateOnly) && !/^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(value)) return false;
+  if (!Number.isFinite(Date.parse(value))) return false;
+  return new Date(value.slice(0,10)+'T00:00:00.000Z').toISOString().slice(0,10) === value.slice(0,10);
+}
 const idPath = (base, id, ext = '.json') => path.join(base, id.slice(0, 2), `${id}${ext}`);
 const canonical = value => `${JSON.stringify(value, null, 2)}\n`;
 const hash = text => createHash('sha256').update(text).digest('hex');
@@ -113,7 +122,18 @@ export async function openProject({ cwd = process.cwd(), cache = false } = {}) {
   p.search = (query, options) => searchProject(p, query, options);
   p.searchPage = (query, options) => searchPage(p, query, options);
   p.context = (id, options) => contextFor(p, id, options);
-  p.tree = (id, options) => buildTree(p, id, options);
+  p.tree = (id, options) => {
+    const delegated=options&&(options.fields==='plan'||options.status!==undefined||options.hide!==undefined||options.kind!==undefined||options.query!==undefined||options.ready!==undefined||options.blocked!==undefined||options.snapshot!==undefined);
+    if(!delegated)return buildTree(p,id,options);
+    return roadmapStructure(p,id,options).then(page=>options.withTotal?page:page.items);
+  };
+  p.timeline = options => timeline(p, options);
+  p.deps = options => dependencies(p, options);
+  p.roadmap = {
+    deps: p.deps,
+    backfillCompletion: options => backfillCompletion(p, options),
+    structure: (id, options) => roadmapStructure(p, id, options),
+  };
   attachDesignApi(p); p.saveConfig = config => writeConfig(p, config);
   attachChecklistApi(p); attachBlueprintApi(p); attachDecisionApi(p); p.fields = kind => fieldsFor(kind ?? 'task', p.config);
   p.semantic = { status: o => semanticStatus(p, o), update: o => updateIndex(p, o), rebuild: o => updateIndex(p, { ...o, rebuild: true }), search: (q, o) => semanticSearch(p, q, o), hybrid: (q, o) => hybridSearch(p, q, o), similar: (id, o) => similarTickets(p, id, o) };
@@ -194,12 +214,16 @@ function validateTicketInput(input, statuses, config = {}) {
   if(input.assignee!=null&&(typeof input.assignee!=='object'||typeof input.assignee.agent!=='string'||!input.assignee.agent.trim()||Number.isNaN(Date.parse(input.assignee.expiresAt))))throw new ValidationError('Ticket assignee must have an agent name and an expiresAt timestamp');
   validateCodePlanShape(input.codePlan); validateTicketChecklist(input.checklist); validateTicketOrigin(input.origin); validatePlanningFields(input); validateFields(input, config);
   if(input.properties!==undefined&&(!input.properties||typeof input.properties!=='object'||Array.isArray(input.properties)))throw new ValidationError('Ticket properties must be an object');
+  if(input.completedAt!==undefined&&(!validIsoDate(input.completedAt)||input.status!=='done'))throw new ValidationError('completedAt must be an ISO timestamp on a done ticket');
+  if(input.completedAtSource!==undefined&&(input.completedAtSource!=='updatedAt'||!input.completedAt))throw new ValidationError('completedAtSource must identify an existing completion estimate');
 }
 
 function ticketApi(p) {
   const statuses = p.config.statuses;
   return {
     async create(input) {
+      if (Object.hasOwn(input ?? {}, 'completedAt')) throw new ValidationError('completedAt is managed by Heist and cannot be set when creating a ticket');
+      if (Object.hasOwn(input ?? {}, 'completedAtSource')) throw new ValidationError('completedAtSource is managed by Heist');
       if (input?.parentId && !UUID_RE.test(input.parentId)) input = { ...input, parentId: await ticketRef(p, input.parentId) };
       validateTicketInput(input, statuses, p.config);
       // A blueprint may carry a description template; a ticket created without a description starts with it.
@@ -208,7 +232,7 @@ function ticketApi(p) {
       if (input.kind === 'option' && parentRec?.kind !== 'decision') throw new ValidationError('An option must be a child of a decision');
       return withLock(p, 'ticket-number', async () => {
       const number = (await listJson(p, 'tickets')).reduce((m, x) => Math.max(m, Number.isInteger(x.number) ? x.number : 0), 0) + 1;
-      const date = nowIso(); const rec = { schemaVersion: 1, id: uuidv7(), number, title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status: input.status ?? statuses[0], priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.codePlan ? { codePlan: input.codePlan } : {}), ...(input.checklist ? { checklist: input.checklist } : {}), ...(input.origin ? { origin: input.origin } : {}), ...Object.fromEntries(['why','acceptance','todos','files','size','assumptions','evaluation','decision','option','createdBy','refs','outcome','repro','risks'].filter(k=>input[k]!==undefined&&input[k]!==null&&input[k]!==''&&!(Array.isArray(input[k])&&!input[k].length)).map(k=>[k,input[k]])), createdAt: date, updatedAt: date };
+      const date = nowIso(), status=input.status??statuses[0]; const rec = { schemaVersion: 1, id: uuidv7(), number, title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status, priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.codePlan ? { codePlan: input.codePlan } : {}), ...(input.checklist ? { checklist: input.checklist } : {}), ...(input.origin ? { origin: input.origin } : {}), ...Object.fromEntries(['why','acceptance','todos','files','size','assumptions','evaluation','decision','option','createdBy','refs','outcome','repro','risks'].filter(k=>input[k]!==undefined&&input[k]!==null&&input[k]!==''&&!(Array.isArray(input[k])&&!input[k].length)).map(k=>[k,input[k]])), ...(status === 'done' ? { completedAt: date } : {}), createdAt: date, updatedAt: date };
       return writeJson(p, 'tickets', rec, { create: true });
       });
     },
@@ -216,9 +240,17 @@ function ticketApi(p) {
     async getVersioned(id) { id = await ticketRef(p, id); const file=idPath(path.join(p.dir,'tickets'),id);await assertSafePath(p.dir,file);const r = await readJson(file); return {ticket:r.value,revision:r.revision}; },
     async list({ status, parentId, limit = 5000 } = {}) { const a = await listJson(p, 'tickets'); return a.filter(x => (!status || x.status === status) && (parentId === undefined || x.parentId === parentId)).sort(sortRecords).slice(0, limit); },
     async update(id, patch, {expectedRevision, force = false} = {}) {
-      id = await ticketRef(p, id); if (patch.parentId && !UUID_RE.test(patch.parentId)) patch = { ...patch, parentId: await ticketRef(p, patch.parentId) }; const file = idPath(path.join(p.dir, 'tickets'), id); await assertSafePath(p.dir,file); const current = await readJson(file), rec = current.value;
+      id = await ticketRef(p, id); if (patch.parentId && !UUID_RE.test(patch.parentId)) patch = { ...patch, parentId: await ticketRef(p, patch.parentId) };
+      return withLock(p, `ticket-write-${id}`, async()=>{
+      const file = idPath(path.join(p.dir, 'tickets'), id); await assertSafePath(p.dir,file); const current = await readJson(file), rec = current.value;
+      if(Object.hasOwn(patch??{},'completedAt')&&patch.completedAt!==rec.completedAt)throw new ValidationError('completedAt is managed by Heist; use p.roadmap.backfillCompletion() for legacy tickets');
+      if(Object.hasOwn(patch??{},'completedAtSource')&&patch.completedAtSource!==rec.completedAtSource)throw new ValidationError('completedAtSource is managed by Heist');
       if(expectedRevision&&expectedRevision!==current.revision)throw new ConflictError(`Record changed since it was read: ${id}`,{id});
       const next = { ...rec, ...patch, id, number: rec.number, schemaVersion: 1, createdAt: rec.createdAt, updatedAt: nowIso() };
+      if (next.status === 'done' && rec.status !== 'done') { next.completedAt = next.updatedAt; delete next.completedAtSource; }
+      else if (next.status !== 'done') { delete next.completedAt; delete next.completedAtSource; }
+      else if (rec.completedAt !== undefined) next.completedAt = rec.completedAt;
+      else { next.completedAt=rec.updatedAt; next.completedAtSource='updatedAt'; }
       validateTicketInput(next, statuses, p.config); if (next.parentId === id) throw new CycleError('A ticket cannot be its own parent');
       if (next.parentId) await ensureCanParent(p, id, next.parentId);
       if (next.status === 'done' && rec.status !== 'done' && !force) {
@@ -228,6 +260,7 @@ function ticketApi(p) {
       const written = await writeJson(p, 'tickets', next, { expectedRevision: current.revision });
       if (next.status === 'done' && rec.status !== 'done') await p.decisions?.settle?.(next);
       return written;
+      });
     },
     async move(id, parentId) { return this.update(id, { parentId: parentId ?? null }); },
     async rollup(id) { const rows = await buildTree(p,id); return rows[0].rollup; },
@@ -295,6 +328,124 @@ export async function buildTree(p, id = null, { maxDepth = Infinity, limit = 500
     : page.map(({ticket,depth})=>({...ticket,depth,rollup:rollups.get(ticket.id)}));
   if(withTotal)return {items:rows,total:visible.length};
   return rows;
+}
+
+function listOption(value, label) {
+  if (value === undefined || value === null || value === '') return [];
+  const values = Array.isArray(value) ? value : String(value).split(',');
+  if (values.some(x => typeof x !== 'string' || !x.trim())) throw new ValidationError(`${label} must contain non-empty values`);
+  return [...new Set(values.map(x => x.trim()))];
+}
+function roadmapPageOptions({ limit = 50, offset = 0, snapshot } = {}) {
+  if (!Number.isInteger(limit) || limit < 1 || limit > 200) throw new ValidationError('limit must be an integer between 1 and 200');
+  if (!Number.isInteger(offset) || offset < 0) throw new ValidationError('offset must be a non-negative integer');
+  if (snapshot !== undefined && typeof snapshot !== 'string') throw new ValidationError('snapshot must be a string');
+  return { limit, offset, snapshot };
+}
+function boundedOutcome(ticket) {
+  const source = ticket.outcome;
+  if (source === undefined || source === null) return {};
+  if (typeof source === 'string') return { summary: source.slice(0, 240) };
+  const out = {};
+  if (typeof source.summary === 'string') out.summary = source.summary.slice(0, 240);
+  if (Array.isArray(source.changedFiles)) out.changedFiles = source.changedFiles.slice(0, 10).map(x => String(x).slice(0, 160));
+  return out;
+}
+/** Paginated completion history. Legacy done tickets use updatedAt until explicitly backfilled. */
+export async function timeline(p, options = {}) {
+  const { since, until, kind, kinds, status, order = 'asc', limit, offset, snapshot } = options;
+  const page = roadmapPageOptions({ limit, offset, snapshot });
+  if(status!==undefined&&listOption(status,'status').some(s=>s!=='done'))throw new ValidationError('Roadmap timeline supports status done only; cancelled tickets are not timeline entries');
+  if (order !== 'asc' && order !== 'desc') throw new ValidationError("order must be 'asc' or 'desc'");
+  const isoDate=/^\d{4}-\d{2}-\d{2}$/;
+  const bound=(value,end=false)=>{if(value===undefined)return end?Infinity:-Infinity;if(isoDate.test(value)){const date=new Date(`${value}T00:00:00.000Z`);if(date.toISOString().slice(0,10)!==value)throw new ValidationError(`${end?'until':'since'} must be a valid ISO date`);return date.getTime()+(end?86_400_000-1:0);}return Date.parse(value);};
+  for (const [name, value] of [['since', since], ['until', until]]) if (value !== undefined && !validIsoDate(value,true)) throw new ValidationError(`${name} must be a valid ISO date or date-time`);
+  const start=bound(since), end=bound(until,true);
+  if(start>end)throw new ValidationError('since must be at or before until');
+  const selectedKinds = listOption(kinds ?? kind, 'kind');
+  if(selectedKinds.some(k=>!TICKET_KINDS.includes(k)))throw new ValidationError(`Unknown ticket kind: ${selectedKinds.find(k=>!TICKET_KINDS.includes(k))}`);
+  const tickets = await listJson(p, 'tickets'), allById = new Map(tickets.map(t => [t.id,t]));
+  const all = tickets.filter(t => t.status === 'done');
+  const rows = all.map(t => {
+    const parent = t.parentId ? allById.get(t.parentId) : null;
+    const completedAt = t.completedAt ?? t.updatedAt;
+    return { id:t.id, key:ticketKey(p,t), title:t.title, kind:t.kind??'task', status:t.status, completedAt, completionSource:t.completedAtSource==='updatedAt'||!t.completedAt?'updatedAt':'recorded', parentId:t.parentId??null, parentKey:parent?ticketKey(p,parent):null, parentTitle:parent?.title??null, outcome:boundedOutcome(t) };
+  });
+  const filtered = rows.filter(r => (!selectedKinds.length||selectedKinds.includes(r.kind)) && Date.parse(r.completedAt)>=start && Date.parse(r.completedAt)<=end);
+  filtered.sort((a,b) => (order==='asc'?1:-1)*(Date.parse(a.completedAt)-Date.parse(b.completedAt)) || (order==='asc'?1:-1)*(a.id.localeCompare(b.id)));
+  const current=hash(`${JSON.stringify(filtered)}:${JSON.stringify({since:since??null,until:until??null,kinds:selectedKinds,order})}`).slice(0,16);
+  if(page.snapshot&&page.snapshot!==current)throw new HeistError('Roadmap changed since the first page; restart from the first page','STALE_ROADMAP',{snapshot:current});
+  const items=filtered.slice(page.offset,page.offset+page.limit);
+  return {items,total:filtered.length,offset:page.offset,limit:page.limit,nextOffset:page.offset+items.length<filtered.length?page.offset+items.length:null,snapshot:current};
+}
+
+async function backfillCompletion(p, { dryRun = false } = {}) {
+  if (typeof dryRun !== 'boolean') throw new ValidationError('dryRun must be a boolean');
+  return withLock(p, 'roadmap-completion-backfill', async () => {
+    const current = await listJson(p, 'tickets');
+    const candidates = current.filter(t => t.status === 'done' && !t.completedAt);
+    const changed=[],skipped=[];
+    if (!dryRun) for (const candidate of candidates) {
+      await withLock(p, `ticket-write-${candidate.id}`, async () => {
+        const {ticket,revision}=await p.tickets.getVersioned(candidate.id);
+        if(ticket.status!=='done'||ticket.completedAt)return;
+        const timestamp=validIsoDate(ticket.updatedAt)?ticket.updatedAt:null;
+        if(!timestamp){skipped.push({id:ticket.id,key:ticketKey(p,ticket),reason:'invalid-updatedAt'});return;}
+        const next={...ticket,completedAt:timestamp,completedAtSource:'updatedAt'};
+        await writeJson(p,'tickets',next,{expectedRevision:revision});
+        changed.push({id:ticket.id,key:ticketKey(p,ticket),completedAt:timestamp});
+      });
+    }
+    if(dryRun)for(const ticket of candidates)if(!validIsoDate(ticket.updatedAt))skipped.push({id:ticket.id,key:ticketKey(p,ticket),reason:'invalid-updatedAt'});
+    const items=(dryRun?candidates.filter(t=>validIsoDate(t.updatedAt)).map(t=>({id:t.id,key:ticketKey(p,t),completedAt:t.updatedAt})):changed);
+    return {dryRun,candidates:candidates.length,changed:changed.length,skipped,items};
+  });
+}
+
+/** Filterable structure projection; filters are applied before pagination and required ancestors remain as context stubs. */
+async function roadmapStructure(p, id = null, options = {}) {
+  const {limit,offset,snapshot}=roadmapPageOptions(options);
+  const {maxDepth=Infinity,fields='plan',status,hide,kind,query,ready,blocked}=options;
+  if (!(maxDepth===Infinity||(Number.isInteger(maxDepth)&&maxDepth>=0))) throw new ValidationError('maxDepth must be a non-negative integer');
+  if (!['plan','row','full'].includes(fields)) throw new ValidationError("fields must be 'plan', 'row', or 'full'");
+  const statuses=listOption(status,'status'), hidden=listOption(hide,'hide'), kindsFilter=listOption(kind,'kind');
+  for(const s of [...statuses,...hidden])if(!p.config.statuses.includes(s))throw new ValidationError(`Unknown status: ${s}`);
+  if(kindsFilter.some(k=>!TICKET_KINDS.includes(k)))throw new ValidationError(`Unknown ticket kind: ${kindsFilter.find(k=>!TICKET_KINDS.includes(k))}`);
+  if (ready !== undefined && typeof ready !== 'boolean') throw new ValidationError('ready must be a boolean');
+  if (blocked !== undefined && typeof blocked !== 'boolean') throw new ValidationError('blocked must be a boolean');
+  const q=query===undefined?'':String(query).trim().toLocaleLowerCase();
+  const all=await listJson(p,'tickets'), byId=new Map(all.map(t=>[t.id,t]));
+  if (id) { id=await ticketRef(p,id); if(!byId.has(id))throw new NotFoundError(`Ticket not found: ${id}`); }
+  const children=childIndex(all), roots=id?[byId.get(id)]:children.get(null)??[], ordered=[], stack=[];
+  for(let i=roots.length-1;i>=0;i--)stack.push({ticket:roots[i],depth:0});
+  while(stack.length){const item=stack.pop();if(item.depth>maxDepth)continue;ordered.push(item);const cs=children.get(item.ticket.id)??[];for(let i=cs.length-1;i>=0;i--)stack.push({ticket:cs[i],depth:item.depth+1});}
+  const g=await workGraph(p), treeRows=await buildTree(p,id,{maxDepth,limit:Infinity,fields:'row'}), treeById=new Map(treeRows.map(x=>[x.id,x]));
+  const matches=new Set();
+  for(const {ticket:t} of ordered){
+    const r=readinessOf(g,t);
+    if(statuses.length&&!statuses.includes(t.status)||hidden.includes(t.status)||kindsFilter.length&&!kindsFilter.includes(t.kind??'task')||q&&!`${t.title} ${t.description??''} ${ticketKey(p,t)??''}`.toLocaleLowerCase().includes(q)||ready===true&&!r.ready||blocked===true&&!(r.blockers.length||r.reasons.some(x=>x.includes('blocked by')||x.includes('waits for provider'))) )continue;
+    matches.add(t.id);
+  }
+  const included=new Set(matches),contextVisited=new Set();
+  for(const selected of matches){let cur=byId.get(selected)?.parentId;while(cur&&byId.has(cur)&&!contextVisited.has(cur)){contextVisited.add(cur);included.add(cur);cur=byId.get(cur).parentId;}}
+  const snapshotOptions={root:id??null,maxDepth,fields,status:[...statuses].sort(),hide:[...hidden].sort(),kind:[...kindsFilter].sort(),query:q,ready:ready===true,blocked:blocked===true};
+  const designState=[];
+  for(const folder of designFolders)designState.push(...(await listJson(p,folder)).map(x=>`${folder}:${x.id}:${x.updatedAt??x.createdAt}`));
+  const selectedRows=ordered.filter(x=>included.has(x.ticket.id));
+  const inheritedBlockers=new Map();
+  if(id){let chain=g.ancestors(id).reverse(),inherited=[];for(const a of chain)inherited=[...inherited,...g.openBlockers(a.id).map(b=>({id:b.id,key:ticketKey(p,b),title:b.title,via:g.isProviderEdge(b.id,a.id)?'provider':'blocks'}))];if(chain.length)inheritedBlockers.set(id,inherited);}
+  const output=selectedRows.map(({ticket:t,depth})=>{
+    const isMatch=matches.has(t.id), r=readinessOf(g,t), base=treeById.get(t.id)??{childCount:(children.get(t.id)??[]).length,rollup:t.status};
+    const inherited=(id===t.id?inheritedBlockers.get(id):inheritedBlockers.get(t.parentId))??[], direct=g.openBlockers(t.id).map(b=>({id:b.id,key:ticketKey(p,b),title:b.title,via:g.isProviderEdge(b.id,t.id)?'provider':'blocks'}));
+    const blockers=[...new Map([...inherited,...direct].map(b=>[b.id,b])).values()];
+    inheritedBlockers.set(t.id,blockers);
+    const row={id:t.id,parentId:t.parentId??null,depth,title:t.title,number:t.number??null,key:ticketKey(p,t),kind:t.kind??'task',status:t.status,priority:t.priority,labels:t.labels??[],assignee:t.assignee?.agent??null,childCount:base.childCount,rollup:base.rollup,updatedAt:t.updatedAt,ready:r.ready,readyReasons:r.reasons,blockedBy:blockers,...(!isMatch?{contextOnly:true}:{})};
+    return fields==='full'?{...t,...row,assignee:t.assignee??null}:row;
+  });
+  const graphToken=hash(`${JSON.stringify(output)}:${JSON.stringify((await listJson(p,'relationships')).map(x=>`${x.id}:${x.updatedAt??x.createdAt}`).sort())}:${JSON.stringify(designState.sort())}:${JSON.stringify(snapshotOptions)}`).slice(0,16);
+  if(snapshot&&snapshot!==graphToken)throw new HeistError('Roadmap changed since the first page; restart from the first page','STALE_ROADMAP',{snapshot:graphToken});
+  const pageRows=output.slice(offset,offset+limit);
+  return {items:pageRows,total:output.length,offset,limit,nextOffset:offset+pageRows.length<output.length?offset+pageRows.length:null,snapshot:graphToken};
 }
 
 function parseDoc(text, file) {
@@ -399,7 +550,7 @@ export async function validateProject(p) {
   const cycles=blockingCycleNodes(rs);if(cycles.size)errors.push(`Blocking dependency cycle involves ${[...cycles].sort().join(', ')}`);
   const warnings=[],byNumber=new Map();for(const t of tickets)if(Number.isInteger(t.number)){if(!byNumber.has(t.number))byNumber.set(t.number,[]);byNumber.get(t.number).push(t.id);}
   for(const [n,list] of byNumber)if(list.length>1)warnings.push(`Ticket key ${p.key}-${n} is used by ${list.length} tickets (${list.join(', ')}); run heist keys renumber`);
-  for(const t of tickets){try{const extra=fieldWarnings(t,p.config);if(extra.length)warnings.push(`Ticket ${ticketKey(p,t)??t.id} (${t.kind??'task'}) has fields that do not belong to its kind: ${extra.join(', ')}`);}catch(e){errors.push(e.message);}}
+  for(const t of tickets){try{const extra=fieldWarnings(t,p.config);if(extra.length)warnings.push(`Ticket ${ticketKey(p,t)??t.id} (${t.kind??'task'}) has fields that do not belong to its kind: ${extra.join(', ')}`);}catch(e){errors.push(e.message);}if(t.status==='done'&&!t.completedAt)warnings.push(`Ticket ${ticketKey(p,t)??t.id} is done without completedAt; run roadmap backfill-completion`);if(t.completedAt!==undefined&&!Number.isFinite(Date.parse(t.completedAt)))errors.push(`Ticket ${ticketKey(p,t)??t.id} has an invalid completedAt timestamp`);}
   const unnumbered=tickets.filter(t=>!Number.isInteger(t.number)).length;if(unnumbered)warnings.push(`${unnumbered} ticket(s) have no number yet; run heist keys init`);
   return { valid:errors.length===0, errors, warnings, counts:{tickets:tickets.length,documents:docIds.size,relationships:rs.length,comments:comments.length,components:components.length,types:types.length,contracts:contracts.length} };
 }

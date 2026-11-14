@@ -41,6 +41,12 @@ Usage:
                      [--kind KIND] [--priority PRIORITY] [--labels A,B] [--force]
   heist ticket move ID [--parent ID]
   heist tree [ID] [--max-depth N] [--limit N] [--offset N] [--format json]
+             [--fields full|row|plan] [--status A,B] [--hide A,B] [--kind A,B]
+             [--ready] [--blocked] [--query TEXT] [--verbose] [--snapshot TOKEN]
+  heist timeline [--since ISO] [--until ISO] [--kind A,B] [--order asc|desc]
+                 [--limit N] [--offset N] [--snapshot TOKEN] [--format json]
+  heist roadmap backfill-completion [--dry-run] [--format json]
+  heist deps [--root ID] [--include-finished] [--limit N] [--snapshot TOKEN] [--format json]
   heist goal|plan|decision create --title TITLE [--body TEXT] [--links ID,ID]
   heist goal|plan|decision list [--format json]
   heist goal|plan|decision show ID [--format json]
@@ -136,7 +142,7 @@ All commands operate on the nearest project-local .heist/ directory. Ticket IDs 
 
 function parse(args) {
   const opts={}, positional=[];
-  for(let i=0;i<args.length;i++){const a=args[i];if(a.startsWith('--')){const k=a.slice(2);if(['open','force','write','dry-run','optional','evaluation','no-evaluation','files','all','reopen','reversible','irreversible','unmet','undone','required','leaf','clear'].includes(k)&&(k!=='files'||i+1>=args.length||args[i+1].startsWith('--'))){opts[k]=true;continue;}if(i+1>=args.length)throw new Error(`Missing value for ${a}`);const key=k.replaceAll('-','_'),v=args[++i];opts[key]=opts[key]===undefined?v:[].concat(opts[key],v);}else positional.push(a);}
+  for(let i=0;i<args.length;i++){const a=args[i];if(a.startsWith('--')){const k=a.slice(2);if(['open','force','write','dry-run','optional','evaluation','no-evaluation','files','all','reopen','reversible','irreversible','unmet','undone','required','leaf','clear','ready','blocked','verbose','include-finished'].includes(k)&&(k!=='files'||i+1>=args.length||args[i+1].startsWith('--'))){opts[k]=true;continue;}if(i+1>=args.length)throw new Error(`Missing value for ${a}`);const key=k.replaceAll('-','_'),v=args[++i];opts[key]=opts[key]===undefined?v:[].concat(opts[key],v);}else positional.push(a);}
   return {opts,positional};
 }
 const withKeys=v=>{const k=globalThis.__heistKey;if(!k)return v;const f=x=>x&&typeof x==='object'&&'id'in x&&Number.isInteger(x.number)&&x.key===undefined?{key:`${k}-${x.number}`,...x}:x;return Array.isArray(v)?v.map(f):f(v);};
@@ -198,7 +204,41 @@ async function main(argv) {
   if(command==='ticket'&&sub==='show') {const {opts,positional}=parse(rest);const t=await project.tickets.get(positional[0]);if(opts.format==='json'){out(t,'json');return;}console.log(await ticketText(project,t));return;}
   if(command==='ticket'&&sub==='update') {const {opts,positional}=parse(rest),patch={};for(const k of ['title','status','description','priority','kind'])if(opts[k]!==undefined)patch[k]=one(opts[k]);if(opts.labels!==undefined)patch.labels=labels(opts.labels);Object.assign(patch,fieldFlags(opts));if(opts.set!==undefined){const cur=await project.tickets.get(positional[0]);patch.properties=customFlags(project,patch.kind??cur.kind??'task',opts,cur.properties??{});}if(opts.add_accept!==undefined){const cur=await project.tickets.get(positional[0]);patch.acceptance=[...(cur.acceptance??[]),...items(opts.add_accept).map(text=>({text,met:false}))];}if(opts.add_todo!==undefined){const cur=await project.tickets.get(positional[0]);patch.todos=[...(cur.todos??[]),...items(opts.add_todo).map(text=>({text,met:false}))];}out(await project.tickets.update(positional[0],patch,{force:!!opts.force}),opts.format,'ticket');return;}
   if(command==='ticket'&&sub==='move') {const {opts,positional}=parse(rest);out(await project.tickets.move(positional[0],opts.parent??null),opts.format,'ticket');return;}
-  if(command==='tree') {const {opts,positional}=parse([sub,...rest].filter(Boolean));out(await project.tree(positional[0]??null,{maxDepth:opts.max_depth===undefined?Infinity:Number(opts.max_depth),limit:Number(opts.limit??5000),offset:Number(opts.offset??0)}),opts.format);return;}
+  if(command==='tree') {
+    const {opts,positional}=parse([sub,...rest].filter(Boolean));
+    const enriched=opts.fields==='plan'||['status','hide','kind','ready','blocked','query','verbose','snapshot'].some(k=>opts[k]!==undefined);
+    const options={maxDepth:opts.max_depth===undefined?Infinity:Number(opts.max_depth),limit:Number(opts.limit??(enriched?50:5000)),offset:Number(opts.offset??0),fields:opts.fields??(enriched?'plan':'full')};
+    if(!enriched){out(await project.tree(positional[0]??null,options),opts.format);return;}
+    const page=await project.roadmap.structure(positional[0]??null,{...options,status:labels(opts.status),hide:labels(opts.hide),kind:labels(opts.kind),ready:!!opts.ready,blocked:!!opts.blocked,query:one(opts.query),snapshot:one(opts.snapshot)});
+    if(opts.format==='json'){out(page,'json');return;}
+    for(const row of page.items){out([{...row,title:row.title+(row.contextOnly?' [context]':'')}]);if(opts.verbose)for(const b of row.blockedBy??[])console.log(`             ← ${b.via==='provider'?'provider':'blocked by'} ${b.key??b.id}  ${b.title}`);}
+    if(!page.items.length)console.log('No matching items.');
+    if(page.nextOffset!==null)console.log(`More: --offset ${page.nextOffset} --snapshot ${page.snapshot}`);
+    return;
+  }
+  if(command==='timeline') {
+    const {opts}=parse([sub,...rest].filter(Boolean));
+    const page=await project.timeline({since:one(opts.since),until:one(opts.until),status:labels(opts.status),kind:labels(opts.kind),order:one(opts.order)??'asc',limit:Number(opts.limit??50),offset:Number(opts.offset??0),snapshot:one(opts.snapshot)});
+    if(opts.format==='json'){out(page,'json');return;}
+    for(const row of page.items)console.log(`${row.completedAt}  ${(row.key??row.id).padEnd(10)}  ${row.title}${row.completionSource==='updatedAt'?' [estimated from updatedAt]':''}`);
+    if(!page.items.length)console.log('No completed tickets in this range.');
+    if(page.nextOffset!==null)console.log(`More: --offset ${page.nextOffset} --snapshot ${page.snapshot}`);
+    return;
+  }
+  if(command==='deps') {
+    const {opts,positional}=parse([sub,...rest].filter(Boolean));
+    if(positional.length||Object.keys(opts).some(k=>!['root','include-finished','limit','snapshot','format'].includes(k)))throw new HeistError('Use deps [--root ID] [--include-finished] [--limit N] [--snapshot TOKEN] [--format json]','USAGE_ERROR');
+    const result=await project.deps({root:one(opts.root),includeFinished:!!opts['include-finished'],limit:Number(one(opts.limit)??200),snapshot:one(opts.snapshot)});
+    if(opts.format==='json'){out(result,'json');return;}
+    const nodes=new Map(result.nodes.map(n=>[n.id,n]));
+    const label=id=>{const n=nodes.get(id);return `${n.key??n.id} ${n.title}${n.contextOnly?' [context]':''}`;};
+    for(const edge of result.edges)console.log(`${label(edge.targetId)} ← ${label(edge.sourceId)} [${edge.via}${edge.inherited?', inherited':''}]${edge.components?.length?' '+edge.components.map(c=>`${c.name} (${c.stage})`).join(', '):''}`);
+    if(!result.edges.length)console.log(result.truncated?'No edges fit within the node limit.':'No matching dependencies.');
+    console.log(`${result.nodes.length}/${result.totalNodes} nodes, ${result.edges.length}/${result.totalEdges} edges.`);
+    if(result.truncated)console.log(`Omitted ${result.omittedNodes} nodes and ${result.omittedEdges} edges. Narrow with --root ID (maximum 200 nodes and 500 edges).`);
+    return;
+  }
+  if(command==='roadmap'&&sub==='backfill-completion') {const {opts}=parse(rest);out(await project.roadmap.backfillCompletion({dryRun:!!opts['dry-run']}),opts.format);return;}
   if(['goal','plan','decision'].includes(command)&&sub==='create') {const {opts}=parse(rest);const kind={goal:'goals',plan:'plans',decision:'decisions'}[command];out(await project.documents.create(kind,{title:opts.title,body:opts.body??'',links:opts.links?opts.links.split(',').filter(Boolean):[]}),opts.format);return;}
   if(['goal','plan','decision'].includes(command)&&['list','show','update'].includes(sub)) {const {opts,positional}=parse(rest);const kind={goal:'goals',plan:'plans',decision:'decisions'}[command];
     if(sub==='list'){const all=await project.documents.list(kind,{body:false});if(opts.format==='json'){out(all,'json');return;}if(!all.length)console.log('No documents.');for(const d of all)console.log(`${d.id}  ${d.status}  ${d.title}`);return;}

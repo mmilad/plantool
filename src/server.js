@@ -54,6 +54,9 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
       const project=ctx.project;
 
       if (req.method==='GET'&&pathname==='/api/version')return send(res,200,await ctx.version());
+      if (req.method==='GET'&&pathname==='/api/roadmap/deps')return send(res,200,await project.deps({root:url.searchParams.get('root')??undefined,includeFinished:boolParam(url,'includeFinished'),limit:intParam(url,'limit',200,1,200),snapshot:url.searchParams.get('snapshot')??undefined}));
+      if (req.method==='GET'&&pathname==='/api/roadmap/timeline')return send(res,200,await project.timeline({since:url.searchParams.get('since')??undefined,until:url.searchParams.get('until')??undefined,kind:url.searchParams.get('kind')??undefined,status:url.searchParams.get('status')??undefined,order:url.searchParams.get('order')??'asc',limit:intParam(url,'limit',50,1,200),offset:intParam(url,'offset',0,0),snapshot:url.searchParams.get('snapshot')??undefined}));
+      if (req.method==='GET'&&pathname==='/api/roadmap/structure')return send(res,200,await project.roadmap.structure(url.searchParams.get('root')||null,{fields:url.searchParams.get('fields')??'plan',status:url.searchParams.get('status')??undefined,hide:url.searchParams.get('hide')??undefined,kind:url.searchParams.get('kind')??undefined,query:url.searchParams.get('q')??undefined,ready:boolParam(url,'ready'),blocked:boolParam(url,'blocked'),maxDepth:intParam(url,'maxDepth',Infinity,0),limit:intParam(url,'limit',50,1,200),offset:intParam(url,'offset',0,0),snapshot:url.searchParams.get('snapshot')??undefined}));
       if (req.method==='GET'&&pathname==='/api/tree'){const offset=intParam(url,'offset',0,0),limit=intParam(url,'limit',5000,1,5000);const {items,total}=await project.tree(null,{limit,offset,fields:'row',withTotal:true});return send(res,200,{items,total,offset,limit});}
       if (req.method==='GET'&&pathname==='/api/search/status')return send(res,200,{...await project.semantic.status(),indexing:ctx.indexing||undefined});
       if (req.method==='POST'&&pathname==='/api/index/update'){ctx.semanticEnabled=true;startIndex(ctx);return send(res,202,{started:true});}
@@ -121,7 +124,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
       if(pathname==='/api/next'&&req.method==='GET')return send(res,200,await project.next({limit:intParam(url,'limit',5,1,50)}));
       if(pathname==='/api/validate'&&req.method==='GET')return send(res,200,await project.validate());
       return send(res,404,{error:'Not found'});
-    } catch(e) { return send(res,e.code==='NOT_FOUND'?404:e.code==='VALIDATION'?400:e.code==='CONFLICT'?409:e.code==='CYCLE'||e.code==='OPEN_WORK'||e.code==='STALE_SEARCH'||e.code==='DUPLICATE_RELATION'?409:500,{error:[...contexts.values()].reduce((msg,c)=>msg.split(c.project.root+path.sep).join('').split(c.project.root).join('.'),String(e.message)),code:e.code??'ERROR'}); }
+    } catch(e) { return send(res,e.code==='NOT_FOUND'?404:e.code==='VALIDATION'?400:e.code==='CONFLICT'?409:e.code==='CYCLE'||e.code==='OPEN_WORK'||e.code==='STALE_SEARCH'||e.code==='STALE_ROADMAP'||e.code==='DUPLICATE_RELATION'?409:500,{error:[...contexts.values()].reduce((msg,c)=>msg.split(c.project.root+path.sep).join('').split(c.project.root).join('.'),String(e.message)),code:e.code??'ERROR'}); }
   });
   await new Promise((resolve,reject)=>{
     server.once('error',error=>{
@@ -156,6 +159,7 @@ function makeContext(project){let cached=null;const ctx={project,semanticEnabled
   ctx.timer=setInterval(async()=>{try{if(!ctx.semanticEnabled){const st=await project.semantic.status();ctx.semanticEnabled=!!st.generation;}if(!ctx.semanticEnabled||ctx.indexing)return;const v=await ctx.version();const key=v.parts.tree+v.parts.documents+v.parts.comments;if(key!==ctx.lastIndexVersion){ctx.lastIndexVersion=key;startIndex(ctx);}}catch{}},10000);ctx.timer.unref?.();
   return ctx;}
 function intParam(url,name,fallback,min,max=Number.MAX_SAFE_INTEGER){const raw=url.searchParams.get(name);if(raw===null)return fallback;const n=Number(raw);if(!Number.isInteger(n)||n<min||n>max)throw new ValidationError(`${name} must be an integer between ${min} and ${max}`);return n;}
+function boolParam(url,name){const raw=url.searchParams.get(name);if(raw===null)return false;if(raw==='true'||raw==='1')return true;if(raw==='false'||raw==='0')return false;throw new ValidationError(`${name} must be true or false`);}
 async function fingerprint(dir,h){let entries;try{entries=await fs.readdir(dir,{withFileTypes:true});}catch{h.update(`${dir}:missing\n`);return;}entries.sort((a,b)=>a.name.localeCompare(b.name));for(const e of entries){const full=path.join(dir,e.name);if(e.isDirectory()){await fingerprint(full,h);continue;}if(e.name.endsWith('.tmp'))continue;const st=await fs.stat(full).catch(()=>null);if(st)h.update(`${e.name}:${st.size}:${st.mtimeMs}\n`);}}
 function safeToken(a,b){if(typeof a!=='string'||a.length!==b.length)return false;return timingSafeEqual(Buffer.from(a),Buffer.from(b));}
 async function body(req){let data='';for await(const c of req){data+=c;if(data.length>1_000_000)throw new ValidationError('Request body is too large');}try{return JSON.parse(data||'{}')}catch{throw new ValidationError('Request body must be JSON');}}
