@@ -262,7 +262,8 @@ export async function hybridSearch(p, query, { types, embedder } = {}) {
 }
 
 /** Tickets whose text is close to the given ticket; ancestors and descendants are excluded. */
-// Calibrated on this repository's first plan (a planted duplicate scored z 3.7, related siblings up to 3.0); revisit with more data.
+// Calibrated on the first plan of this repository (a planted duplicate scored z 3.7, related siblings up to 3.0) and checked on the
+// fixture plan of bench/search-eval.mjs (HEIST-7): plain z reaches 3.5 for 6% of related pairs and 0% of unrelated ones.
 export const OVERLAP_Z = 3.5;
 /** How far each score stands above the mean of all scores, in standard deviations. */
 export function strengths(values) {
