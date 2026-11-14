@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1daff-567a-7dca-8cb9-6d9e1facc8ea",
+  "ticketId": "01a1da15-55d7-7e3c-ad3c-dc8f76862b24",
+  "body": "contextFor default budget 24000; cut order comments/documents/descendants, ancestors, relationships, description, title/properties, codePlanTypes, codePlan; fullBytes returned (complete packet size, measured before cutting); CLI default 24000; test added in core.test.js",
+  "author": "haiku",
+  "createdAt": "2026-11-14T16:58:49.338Z"
+}

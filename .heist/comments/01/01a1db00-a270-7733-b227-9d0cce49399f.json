@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db00-a270-7733-b227-9d0cce49399f",
+  "ticketId": "01a1da15-574d-7427-9de3-d808215a4b18",
+  "body": "heist context prints one stderr line when the packet was cut (names what is left out, the budget from fullBytes rounded up to 1000); descendants beyond 20 get the line without a budget suggestion; stdout unchanged",
+  "author": "haiku",
+  "createdAt": "2026-11-14T17:00:14.320Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db03-0a8f-770d-ba97-d8fefa1602e9",
+  "ticketId": "01a1da15-545e-76f4-b5dd-f9c08e4ce4aa",
+  "body": "The three child tickets were done by a Haiku subagent from the tickets alone. Reviewed by the planner: diff read, cut order checked in the code, commands run on this repository. The subagent created a probe ticket in the real plan by mistake; removed before the commit.",
+  "author": "claude",
+  "createdAt": "2026-11-14T17:02:52.047Z"
+}

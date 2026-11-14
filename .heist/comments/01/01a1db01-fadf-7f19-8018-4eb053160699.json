@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db01-fadf-7f19-8018-4eb053160699",
+  "ticketId": "01a1da15-590f-7a9d-9e35-ca9f0615c43c",
+  "body": "ticket show lists Relations (blocked by / blocks / other relation types, key, title, status) and Code plan (component names, kind, contract command, required fields); blank when there is none; JSON unchanged",
+  "author": "haiku",
+  "createdAt": "2026-11-14T17:01:42.495Z"
+}

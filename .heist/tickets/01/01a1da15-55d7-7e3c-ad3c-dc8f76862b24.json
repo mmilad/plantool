@@ -5,7 +5,7 @@
   "title": "Context packet: cut the contract last, default budget 24000, report the full size",
   "kind": "task",
   "description": "Work in the function contextFor in src/index.js (search for 'export async function contextFor'). It builds the object packet and then removes parts in a fixed order until size() is at most the budget. Keep that mechanism and change this: a) Default budget 24000 instead of 8000, in contextFor and in the context command in bin/heist.js (search for command==='context'). b) New order of cutting: comments, documents, descendants; then ancestors, starting with the one closest to the ticket as today; then relationships; then the description of the ticket, shortened with the existing binary search; only then the types of the code plan; and last the code plan itself. Keep the counters in omitted as they are (comments, relationships, documents, ancestors, descendants, descriptionBytes, codePlanTypes, codePlan). c) Before anything is removed, store the size of the complete packet and return it as fullBytes next to budget, so a caller can ask for exactly that much. The existing final guard that shortens the description once more must stay, and the packet must never be larger than the budget. Lines in this file are very long; make small exact edits and run node --check src/index.js after each. Do not change what the packet contains, only the order of cutting, the default and the new field. The web view asks with a huge budget and needs no change.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,57 +14,57 @@
   "acceptance": [
     {
       "text": "Default budget is 24000",
-      "met": false
+      "met": true
     },
     {
       "text": "The code plan is the last part to be cut",
-      "met": false
+      "met": true
     },
     {
       "text": "fullBytes is returned",
-      "met": false
+      "met": true
     },
     {
       "text": "The packet never exceeds the budget",
-      "met": false
+      "met": true
     },
     {
       "text": "node --test passes",
-      "met": false
+      "met": true
     }
   ],
   "todos": [
     {
       "text": "Read contextFor and the tests that mention context in test/core.test.js and test/design.test.js",
-      "met": false
+      "met": true
     },
     {
       "text": "Change the default in src/index.js and bin/heist.js",
-      "met": false
+      "met": true
     },
     {
       "text": "Reorder the cutting steps",
-      "met": false
+      "met": true
     },
     {
       "text": "Add fullBytes",
-      "met": false
+      "met": true
     },
     {
       "text": "Add a test to test/core.test.js: a ticket with a long description, a parent with a long description, two relationships and a consumed contract keeps codePlan and relationships at a budget where the parent has to go, and JSON.stringify(result, null, 2) is never longer than the budget",
-      "met": false
+      "met": true
     },
     {
       "text": "Add fullBytes to the type in src/index.d.ts if the context result is typed there",
-      "met": false
+      "met": true
     },
     {
       "text": "Run node --test",
-      "met": false
+      "met": true
     },
     {
       "text": "Check on this repository: node bin/heist.js context HEIST-52 must contain codePlan",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -76,5 +76,16 @@
   "size": "s",
   "createdBy": "claude",
   "createdAt": "2026-11-14T12:43:13.751Z",
-  "updatedAt": "2026-11-14T12:43:13.751Z"
+  "updatedAt": "2026-11-14T16:58:49.001Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "contextFor default budget 24000; cut order comments/documents/descendants, ancestors, relationships, description, title/properties, codePlanTypes, codePlan; fullBytes returned (complete packet size, measured before cutting); CLI default 24000; test added in core.test.js",
+    "verifiedBy": "node --test: 99 pass, 0 fail; node bin/heist.js context HEIST-52 --format json contains codePlan",
+    "changedFiles": [
+      "src/index.js",
+      "bin/heist.js",
+      "test/core.test.js"
+    ]
+  },
+  "completedAt": "2026-11-14T16:58:49.001Z"
 }

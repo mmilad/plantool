@@ -5,7 +5,7 @@
   "title": "heist ticket show lists the code plan and the relations",
   "kind": "task",
   "description": "In bin/heist.js the function ticketText prints a ticket as a document: the sections of its blueprint, then other filled fields. Add two sections at the end, each only when there is something to show. Relations: read project.relations.list(ticket.id). For each relation print one line with the other ticket's key, title and status, grouped as 'blocked by' (type blocks and this ticket is the target), 'blocks' (type blocks and this ticket is the source) and, for every other type, the type name with underscores replaced by spaces (for example 'relates to'). Get the other ticket with project.tickets.get(id). Code plan: the ticket record has a field codePlan with the lists implements, consumes and changes; each entry names a component id. The command heist codeplan show in the same file shows how to get the resolved names: project.context(id, {budget: 1e9}) returns codePlan with name and kind per entry. Print one line per entry, for example 'consumes relationGraph (function)   heist contract show relationGraph', and for consumes also the required fields if the entry has requires. Keep --format json unchanged: it prints the raw ticket.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,49 +14,49 @@
   "acceptance": [
     {
       "text": "heist ticket show prints blockers, blocked tickets and other relations with key, title and status",
-      "met": false
+      "met": true
     },
     {
       "text": "It prints the code plan with component names",
-      "met": false
+      "met": true
     },
     {
       "text": "Tickets without relations or code plan look as before",
-      "met": false
+      "met": true
     },
     {
       "text": "--format json is unchanged",
-      "met": false
+      "met": true
     },
     {
       "text": "node --test passes",
-      "met": false
+      "met": true
     }
   ],
   "todos": [
     {
       "text": "Read ticketText and the codeplan show branch in bin/heist.js",
-      "met": false
+      "met": true
     },
     {
       "text": "Add the Relations section",
-      "met": false
+      "met": true
     },
     {
       "text": "Add the Code plan section",
-      "met": false
+      "met": true
     },
     {
       "text": "Extend the test in test/cli.test.js that checks heist ticket show: link two tickets and check the lines",
-      "met": false
+      "met": true
     },
     {
       "text": "Run node --test",
-      "met": false
+      "met": true
     },
     {
       "text": "Check on this repository: node bin/heist.js ticket show HEIST-52 shows 'blocked by HEIST-51' and 'consumes relationGraph'",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -66,5 +66,15 @@
   "size": "s",
   "createdBy": "claude",
   "createdAt": "2026-11-14T12:43:14.575Z",
-  "updatedAt": "2026-11-14T12:43:14.575Z"
+  "updatedAt": "2026-11-14T17:01:42.133Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "ticket show lists Relations (blocked by / blocks / other relation types, key, title, status) and Code plan (component names, kind, contract command, required fields); blank when there is none; JSON unchanged",
+    "verifiedBy": "node --test: 100 pass, 0 fail, 1 skipped; cli test links SHOP tickets and checks the sections; node bin/heist.js ticket show HEIST-52 lists HEIST-51 under blocked by and consumes relationGraph",
+    "changedFiles": [
+      "bin/heist.js",
+      "test/cli.test.js"
+    ]
+  },
+  "completedAt": "2026-11-14T17:01:42.133Z"
 }

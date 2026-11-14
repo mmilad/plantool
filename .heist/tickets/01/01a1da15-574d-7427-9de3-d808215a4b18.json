@@ -5,7 +5,7 @@
   "title": "heist context says on stderr what it left out",
   "kind": "task",
   "description": "In bin/heist.js, in the context command (search for command==='context'): after the packet is built and before it is printed, look at result.truncated. If it is true, write one line to stderr with console.error. It names the ticket, what was left out and how to get all of it. Build the list from result.omitted: a number above 0 for comments, relationships, documents, ancestors or descendants becomes for example '2 relationships'; descriptionBytes above 0 becomes 'the end of the description'; codePlanTypes becomes 'the types of the code plan'; codePlan true becomes 'the code plan'. Example line: Context for HEIST-52 was cut to fit 24000 bytes: left out 1 ancestor, the code plan. Use --budget 31000 to get everything. The number is result.fullBytes rounded up to the next thousand. One exception: descendants beyond the first 20 are always left out, whatever the budget; if that is the only thing missing, say '... lists only the first 20 child tickets' and do not suggest a budget. Print the line for text and for --format json alike; stdout must stay unchanged.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,33 +14,33 @@
   "acceptance": [
     {
       "text": "A cut packet prints one line on stderr that names what is missing and a budget",
-      "met": false
+      "met": true
     },
     {
       "text": "A complete packet prints nothing on stderr",
-      "met": false
+      "met": true
     },
     {
       "text": "stdout is unchanged",
-      "met": false
+      "met": true
     },
     {
       "text": "node --test passes",
-      "met": false
+      "met": true
     }
   ],
   "todos": [
     {
       "text": "Add the message in bin/heist.js",
-      "met": false
+      "met": true
     },
     {
       "text": "Add a test to test/cli.test.js that runs heist context with --budget 600 on a ticket with a long description and checks stderr and that stdout is still valid JSON",
-      "met": false
+      "met": true
     },
     {
       "text": "Run node --test",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -50,5 +50,15 @@
   "size": "xs",
   "createdBy": "claude",
   "createdAt": "2026-11-14T12:43:14.124Z",
-  "updatedAt": "2026-11-14T12:43:14.124Z"
+  "updatedAt": "2026-11-14T17:00:13.986Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "heist context prints one stderr line when the packet was cut (names what is left out, the budget from fullBytes rounded up to 1000); descendants beyond 20 get the line without a budget suggestion; stdout unchanged",
+    "verifiedBy": "node --test: 100 pass, 0 fail, 1 skipped; cli test checks a --budget 600 cut (one stderr line, stdout valid JSON) and an empty stderr for a complete packet; manual run: context HEIST-52 --budget 600 printed the line",
+    "changedFiles": [
+      "bin/heist.js",
+      "test/cli.test.js"
+    ]
+  },
+  "completedAt": "2026-11-14T17:00:13.986Z"
 }

@@ -5,7 +5,7 @@
   "title": "heist context keeps the contract and says what it left out",
   "kind": "feature",
   "description": "heist context KEY gives an agent everything about one ticket in one packet, cut to a budget in bytes (default 8000). Tickets now carry long descriptions, so the default is often too small. Today the packet is cut in this order: comments, relationships, documents, descendants, then the types of the code plan, then the whole code plan, then ancestors, then the description. So the contract goes before the parent ticket does. Change three things. 1) Order: keep the contract as long as possible. 2) Default: raise it so ordinary tickets fit. 3) Say it: when something was left out, the CLI prints one line on stderr that names what is missing and the budget that would fit everything. Separately, heist ticket show gets two more sections, Code plan and Relations, so a person reading a ticket sees that a contract is attached and what the ticket depends on. Outside the happy path: the packet must still never be larger than the budget; a budget below 512 is still refused; with --format json the stderr line is still printed, because stdout stays clean JSON.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -14,23 +14,23 @@
   "acceptance": [
     {
       "text": "With the default budget, heist context HEIST-52 contains the code plan and both relationships",
-      "met": false
+      "met": true
     },
     {
       "text": "A packet is never larger than its budget",
-      "met": false
+      "met": true
     },
     {
       "text": "When something is left out, stderr names it and a budget that fits everything",
-      "met": false
+      "met": true
     },
     {
       "text": "heist ticket show lists the code plan and the relations of a ticket",
-      "met": false
+      "met": true
     },
     {
       "text": "node --test passes",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -42,5 +42,11 @@
   "size": "m",
   "createdBy": "claude",
   "createdAt": "2026-11-14T12:43:13.374Z",
-  "updatedAt": "2026-11-14T12:43:13.374Z"
+  "updatedAt": "2026-11-14T17:02:51.763Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "The three child tickets were done by a Haiku subagent from the tickets alone. Reviewed by the planner: diff read, cut order checked in the code, commands run on this repository. The subagent created a probe ticket in the real plan by mistake; removed before the commit.",
+    "verifiedBy": "node --test: 100 pass, 1 skipped; heist context HEIST-52 keeps the code plan and both relations with the default budget; with --budget 9000 it names what it left out on stderr"
+  },
+  "completedAt": "2026-11-14T17:02:51.763Z"
 }
