@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db75-3614-7f5d-867e-428aa6d174aa",
+  "number": 66,
+  "title": "B",
+  "kind": "option",
+  "description": "",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1db75-3604-7f32-832e-9f83fc330571",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {}
+  },
+  "createdAt": "2026-11-14T19:07:34.292Z",
+  "updatedAt": "2026-11-14T19:09:20.192Z"
+}
