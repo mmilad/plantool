@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d6b4-2c7f-7699-9413-ee7bdaf702cf",
+  "ticketId": "01a1d566-fa50-73a8-8a1a-43a675427cf7",
+  "body": "Added filtered plan projections with context ancestors, inherited explicit/provider blockers and workflow readiness. Preserved default tree output.",
+  "author": "codex",
+  "createdAt": "2026-11-13T20:58:14.527Z"
+}

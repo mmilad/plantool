@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d568-c31c-7078-9da4-1734045dd768",
+  "ticketId": "01a1d566-fa35-7c96-9e4e-c84821fbdb51",
+  "body": "Closed failed SQLite initialization handles before quarantine; only corruption or obsolete schemas trigger recovery; concurrent opens share one initialization.",
+  "author": "codex",
+  "createdAt": "2026-11-13T14:56:15.132Z"
+}

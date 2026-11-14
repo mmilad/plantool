@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d566-fb12-74c6-89da-7ead72291254",
+  "number": 40,
+  "title": "Use blockedBy with distinct via blocks or provider",
+  "kind": "option",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d566-fb09-7f9d-8646-c03cb35bbc1e",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {}
+  },
+  "createdAt": "2026-11-13T14:54:18.386Z",
+  "updatedAt": "2026-11-13T14:54:18.413Z",
+  "completedAt": "2026-11-13T14:54:18.413Z"
+}

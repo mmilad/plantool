@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d566-fab3-7614-8c16-095214e4da7f",
+  "number": 35,
+  "title": "Include cancelled using updatedAt",
+  "kind": "option",
+  "description": "",
+  "status": "cancelled",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d566-faa5-7316-b17e-4eadfe8edc3d",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {}
+  },
+  "createdAt": "2026-11-13T14:54:18.291Z",
+  "updatedAt": "2026-11-13T14:54:18.304Z"
+}

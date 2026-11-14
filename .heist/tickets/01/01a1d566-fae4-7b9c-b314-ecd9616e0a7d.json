@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d566-fae4-7b9c-b314-ecd9616e0a7d",
+  "number": 38,
+  "title": "Remove all nonmatching ancestors",
+  "kind": "option",
+  "description": "",
+  "status": "cancelled",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d566-fad7-710a-97c5-a85daa6f19a9",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {}
+  },
+  "createdAt": "2026-11-13T14:54:18.340Z",
+  "updatedAt": "2026-11-13T14:54:18.354Z"
+}

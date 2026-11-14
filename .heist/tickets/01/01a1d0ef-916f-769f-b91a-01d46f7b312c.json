@@ -82,5 +82,7 @@
       "test/blueprints.test.js",
       "test/server.test.js"
     ]
-  }
+  },
+  "completedAt": "2026-11-12T18:10:50.400Z",
+  "completedAtSource": "updatedAt"
 }

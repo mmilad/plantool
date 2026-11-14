@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d566-fb17-731c-b8cf-13557b4e14f2",
+  "number": 41,
+  "title": "Merge all blocker types into one label",
+  "kind": "option",
+  "description": "",
+  "status": "cancelled",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d566-fb09-7f9d-8646-c03cb35bbc1e",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {}
+  },
+  "createdAt": "2026-11-13T14:54:18.391Z",
+  "updatedAt": "2026-11-13T14:54:18.408Z"
+}

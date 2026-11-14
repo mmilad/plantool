@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d6b4-2c1e-7b26-a4aa-aaadb899b8f2",
+  "ticketId": "01a1d566-fa45-75c6-93c3-051cafa89a43",
+  "body": "Added managed completion timestamps, reopen clearing and durable estimated-date provenance. Backfilled 14 legacy records with all existing fields preserved; rerun changed zero records. Serialized updates and backfill to prevent lost concurrent edits.",
+  "author": "codex",
+  "createdAt": "2026-11-13T20:58:14.430Z"
+}

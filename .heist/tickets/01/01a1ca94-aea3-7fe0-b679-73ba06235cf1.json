@@ -54,5 +54,7 @@
       "test/semantic.test.js",
       "docs/implementation-decisions.md"
     ]
-  }
+  },
+  "completedAt": "2026-11-11T18:22:09.913Z",
+  "completedAtSource": "updatedAt"
 }

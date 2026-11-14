@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d566-faa5-7316-b17e-4eadfe8edc3d",
+  "number": 33,
+  "title": "Which tickets belong in the completion timeline?",
+  "kind": "decision",
+  "description": "Cancellation is not completion and has no reliable cancellation timestamp. Structure retains cancelled tickets; timeline rejects unsupported status filters.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d566-fa3d-726d-94f4-a5663ab7b550",
+  "why": "Cancellation is not completion and has no reliable cancellation timestamp. Structure retains cancelled tickets; timeline rejects unsupported status filters.",
+  "decision": {
+    "owner": "agent",
+    "criteria": [],
+    "chosen": "01a1d566-faad-777c-a29d-1eed9f193012",
+    "reversible": true,
+    "rationale": "Cancellation is not completion and has no reliable cancellation timestamp. Structure retains cancelled tickets; timeline rejects unsupported status filters.",
+    "decidedBy": "codex",
+    "decidedAt": "2026-11-13T14:54:18.314Z",
+    "cancelled": [
+      "01a1d566-fab3-7614-8c16-095214e4da7f"
+    ]
+  },
+  "createdBy": "codex",
+  "createdAt": "2026-11-13T14:54:18.277Z",
+  "updatedAt": "2026-11-13T14:54:18.314Z",
+  "refs": [
+    ".heist/plans/01/01a1d54a-790f-77e5-88e2-4c4ff8ea68f1.md"
+  ],
+  "completedAt": "2026-11-13T14:54:18.314Z"
+}

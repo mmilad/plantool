@@ -39,5 +39,7 @@
     "changedFiles": [
       "test/semantic-real.test.js"
     ]
-  }
+  },
+  "completedAt": "2026-11-11T18:22:10.438Z",
+  "completedAtSource": "updatedAt"
 }

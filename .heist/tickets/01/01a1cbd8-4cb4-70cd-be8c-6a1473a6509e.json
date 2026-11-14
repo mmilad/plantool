@@ -26,5 +26,7 @@
   },
   "createdBy": "claude",
   "createdAt": "2026-11-11T18:21:52.692Z",
-  "updatedAt": "2026-11-12T12:01:53.280Z"
+  "updatedAt": "2026-11-12T12:01:53.280Z",
+  "completedAt": "2026-11-12T12:01:53.280Z",
+  "completedAtSource": "updatedAt"
 }

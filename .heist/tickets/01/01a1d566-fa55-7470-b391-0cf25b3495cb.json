@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d566-fa55-7470-b391-0cf25b3495cb",
+  "number": 29,
+  "title": "Add Roadmap Structure and Timeline to the local web UI",
+  "kind": "task",
+  "description": "Integrate Roadmap into project navigation with Structure and Timeline modes, filters, bounded paging, shared ticket detail and deep links. Verify browser interactions and responsive layout.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d566-fa3d-726d-94f4-a5663ab7b550",
+  "why": "Deliver the reviewed roadmap plan without regressions in existing project workflows.",
+  "acceptance": [
+    {
+      "text": "All statuses appear in Structure by default",
+      "met": true
+    },
+    {
+      "text": "Timeline groups completion rows by month and pages older history",
+      "met": true
+    },
+    {
+      "text": "Project changes and stale responses cannot show mixed data",
+      "met": true
+    },
+    {
+      "text": "Desktop and mobile browser checks pass",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/ui.js",
+    "test/ui.test.js"
+  ],
+  "size": "m",
+  "createdBy": "codex",
+  "refs": [
+    ".heist/plans/01/01a1d54a-790f-77e5-88e2-4c4ff8ea68f1.md"
+  ],
+  "createdAt": "2026-11-13T14:54:18.197Z",
+  "updatedAt": "2026-11-13T20:58:14.561Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Added Roadmap Structure and Timeline, bounded pages, filters, month groups, shared details and return-to-page navigation. Verified 1280px/320px layouts, nested collapse, provider filters, project isolation, empty views and visible stale-page restart using 2000 disposable tickets.",
+    "verifiedBy": "Windows Node 24: npm run check 91 passed, 1 opt-in real-model test skipped; final roadmap tests 14/14; TypeScript declarations 0 diagnostics; browser verification at 1280x850 and 320x740; 2000-ticket benchmark warm timeline 22ms, structure 82ms.",
+    "changedFiles": [
+      "src/ui.js",
+      "test/ui.test.js",
+      "bench/roadmap.mjs"
+    ]
+  },
+  "completedAt": "2026-11-13T20:58:14.561Z"
+}

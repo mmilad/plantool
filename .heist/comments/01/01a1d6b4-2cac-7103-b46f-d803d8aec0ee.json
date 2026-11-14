@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d6b4-2cac-7103-b46f-d803d8aec0ee",
+  "ticketId": "01a1d566-fa55-7470-b391-0cf25b3495cb",
+  "body": "Added Roadmap Structure and Timeline, bounded pages, filters, month groups, shared details and return-to-page navigation. Verified 1280px/320px layouts, nested collapse, provider filters, project isolation, empty views and visible stale-page restart using 2000 disposable tickets.",
+  "author": "codex",
+  "createdAt": "2026-11-13T20:58:14.572Z"
+}

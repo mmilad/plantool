@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d566-fa3d-726d-94f4-a5663ab7b550",
+  "number": 25,
+  "title": "Deliver Roadmap Structure and Timeline",
+  "kind": "feature",
+  "description": "Implement phases 1 through 3 of the linked plan after fixing cache repair. Completion history, CLI/API projections, filtered structure and browser navigation share the canonical ticket model. Dependencies visualization remains a later phase.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Deliver the reviewed roadmap plan without regressions in existing project workflows.",
+  "acceptance": [
+    {
+      "text": "Completion timestamps survive edits and reset on reopen",
+      "met": true
+    },
+    {
+      "text": "CLI and HTTP share paginated roadmap projections",
+      "met": true
+    },
+    {
+      "text": "Structure and Timeline are usable on desktop and mobile",
+      "met": true
+    },
+    {
+      "text": "Existing CLI tree defaults and workflow tests remain compatible",
+      "met": true
+    }
+  ],
+  "size": "l",
+  "createdBy": "codex",
+  "refs": [
+    ".heist/plans/01/01a1d54a-790f-77e5-88e2-4c4ff8ea68f1.md"
+  ],
+  "createdAt": "2026-11-13T14:54:18.173Z",
+  "updatedAt": "2026-11-13T20:58:14.600Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Delivered the roadmap release slice and linked decisions. CLI/API/UI use shared projections; Dependencies remains deferred to HEIST-42.",
+    "verifiedBy": "Windows Node 24: npm run check 91 passed, 1 opt-in real-model test skipped; final roadmap tests 14/14; TypeScript declarations 0 diagnostics; browser verification at 1280x850 and 320x740; 2000-ticket benchmark warm timeline 22ms, structure 82ms.",
+    "changedFiles": [
+      "README.md",
+      "docs/implementation-decisions.md",
+      "src/onboard.js"
+    ]
+  },
+  "completedAt": "2026-11-13T20:58:14.600Z"
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d6b4-2c4c-72fe-a544-2bae550c2a79",
+  "ticketId": "01a1d566-fa4b-7012-9c1c-a70d6c8cae40",
+  "body": "Added deterministic, bounded timeline pages to public API, CLI and HTTP with inclusive ISO date bounds and stale-snapshot handling.",
+  "author": "codex",
+  "createdAt": "2026-11-13T20:58:14.476Z"
+}

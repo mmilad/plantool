@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9cd-b6af-7530-b42d-953461151bd4",
+  "ticketId": "01a1d566-fb40-71bb-978e-8be22f8cc226",
+  "body": "Delivered bounded Dependencies across CLI, public API, project-scoped HTTP and responsive UI; fixed Roadmap refresh after browser verification.",
+  "author": "codex",
+  "createdAt": "2026-11-14T11:24:59.951Z"
+}

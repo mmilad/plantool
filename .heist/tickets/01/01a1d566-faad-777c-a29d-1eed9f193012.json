@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d566-faad-777c-a29d-1eed9f193012",
+  "number": 34,
+  "title": "Done tickets only; cancellation history deferred",
+  "kind": "option",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d566-faa5-7316-b17e-4eadfe8edc3d",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {}
+  },
+  "createdAt": "2026-11-13T14:54:18.285Z",
+  "updatedAt": "2026-11-13T14:54:18.308Z",
+  "completedAt": "2026-11-13T14:54:18.308Z"
+}

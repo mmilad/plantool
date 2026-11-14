@@ -20,5 +20,7 @@
   "assignee": null,
   "outcome": {
     "summary": "Unit test with a fake embedder; opt-in test with the real model (HEIST-2)."
-  }
+  },
+  "completedAt": "2026-11-11T18:22:08.363Z",
+  "completedAtSource": "updatedAt"
 }
