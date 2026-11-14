@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-b8c1-7b73-a244-ee4ee3340f71",
+  "number": 47,
+  "title": "How is the relation graph laid out and drawn?",
+  "kind": "decision",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d9eb-b76e-78b8-abee-88fdb3a7588a",
+  "why": "The tasks below need a fixed answer; a weaker agent should not have to choose a layout.",
+  "decision": {
+    "owner": "agent",
+    "criteria": [
+      {
+        "id": "readable-as-an-order",
+        "name": "Readable as an order",
+        "weight": 3
+      },
+      {
+        "id": "no-new-dependency",
+        "name": "No new dependency",
+        "weight": 3
+      },
+      {
+        "id": "same-picture-on-every-open",
+        "name": "Same picture on every open",
+        "weight": 2
+      },
+      {
+        "id": "effort",
+        "name": "Effort",
+        "weight": 1
+      }
+    ],
+    "chosen": "01a1d9eb-b916-7315-9b7c-5c3270838534",
+    "reversible": true,
+    "rationale": "The owner asked for a picture, so a table is not enough. heist serve loads no external assets, which rules out a graph library. Blocking relations cannot form a cycle, so tickets can be placed in columns by their longest chain of blockers; that reads as an order and is identical on every open. Codex chose a table for the Dependencies tab for accessibility; that tab stays, and the graph is an additional tab.",
+    "decidedBy": "claude",
+    "decidedAt": "2026-11-14T11:58:05.838Z",
+    "cancelled": [
+      "01a1d9eb-b96b-7a0b-be13-1392fb13fc59",
+      "01a1d9eb-b9c7-78d6-94bd-c4e1827cd07c"
+    ]
+  },
+  "createdBy": "claude",
+  "createdAt": "2026-11-14T11:57:46.561Z",
+  "updatedAt": "2026-11-14T11:58:05.842Z",
+  "completedAt": "2026-11-14T11:58:05.842Z"
+}

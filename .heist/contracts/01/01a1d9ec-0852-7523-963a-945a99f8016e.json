@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9ec-0852-7523-963a-945a99f8016e",
+  "componentId": "01a1d9ec-07a0-7914-a550-d10bb41b2209",
+  "version": 1,
+  "description": "nodes: tickets with at least one relation, at most limit (default and maximum 200). edges: relations whose two ends are both in nodes. layers: number of columns. hidden: tickets without any relation. truncated: true when nodes were cut at the limit.",
+  "input": {
+    "type": "object",
+    "properties": {
+      "root": {
+        "type": "string"
+      },
+      "limit": {
+        "type": "integer"
+      }
+    },
+    "required": []
+  },
+  "output": {
+    "type": "object",
+    "properties": {
+      "nodes": {
+        "type": "array",
+        "items": {
+          "$ref": "GraphNode"
+        }
+      },
+      "edges": {
+        "type": "array",
+        "items": {
+          "$ref": "GraphEdge"
+        }
+      },
+      "layers": {
+        "type": "integer"
+      },
+      "hidden": {
+        "type": "integer"
+      },
+      "totalNodes": {
+        "type": "integer"
+      },
+      "truncated": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "nodes",
+      "edges",
+      "layers",
+      "hidden",
+      "totalNodes",
+      "truncated"
+    ]
+  },
+  "history": [],
+  "createdAt": "2026-11-14T11:58:06.930Z",
+  "updatedAt": "2026-11-14T11:58:06.930Z"
+}

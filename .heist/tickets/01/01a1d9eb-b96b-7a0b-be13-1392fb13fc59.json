@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-b96b-7a0b-be13-1392fb13fc59",
+  "number": 49,
+  "title": "Force-directed layout with a graph library",
+  "kind": "option",
+  "description": "",
+  "status": "cancelled",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d9eb-b8c1-7b73-a244-ee4ee3340f71",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {
+      "readable-as-an-order": 2,
+      "no-new-dependency": 0,
+      "same-picture-on-every-open": 1,
+      "effort": 3
+    }
+  },
+  "createdAt": "2026-11-14T11:57:46.731Z",
+  "updatedAt": "2026-11-14T11:58:05.552Z"
+}

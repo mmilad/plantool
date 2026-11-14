@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9ec-07a0-7914-a550-d10bb41b2209",
+  "kind": "function",
+  "name": "relationGraph",
+  "description": "project.relationGraph(options): tickets that have relations, placed in layers, and their relations. Read-only.",
+  "parentId": null,
+  "createdAt": "2026-11-14T11:58:06.752Z",
+  "updatedAt": "2026-11-14T11:58:06.752Z"
+}

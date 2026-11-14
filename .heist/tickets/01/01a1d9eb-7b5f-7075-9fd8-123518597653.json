@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-7b5f-7075-9fd8-123518597653",
+  "number": 44,
+  "title": "Add --blocked-by, --blocks and --relates to ticket create and ticket update",
+  "kind": "task",
+  "description": "Work in bin/heist.js only; the API already has everything: project.relations.add(sourceId, targetId, type) and project.resolveTicket(keyOrId). Direction matters: for type blocks the source is the blocker and the target is the blocked ticket. So --blocked-by X means relations.add(X, thisTicket, 'blocks'), --blocks X means relations.add(thisTicket, X, 'blocks'), --relates X means relations.add(thisTicket, X, 'relates_to'). The helper labels() in bin/heist.js already splits comma lists. Note how the argument parser names keys: a flag with a value replaces dashes with underscores, so --blocked-by arrives as opts.blocked_by. Resolve every listed ticket with project.resolveTicket before creating or updating anything, so a typo fails early. On update, catch the error with code DUPLICATE_RELATION and continue. Print one line to stderr that names what was linked, except with --format json.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d9eb-448b-7e3a-b56e-eef7a9c3f691",
+  "why": "This is the code change of the feature; the rest is documentation.",
+  "acceptance": [
+    {
+      "text": "Create and update write the relations with the right direction",
+      "met": false
+    },
+    {
+      "text": "An unknown key writes nothing",
+      "met": false
+    },
+    {
+      "text": "A duplicate on update is skipped",
+      "met": false
+    },
+    {
+      "text": "The usage text lists the flags",
+      "met": false
+    },
+    {
+      "text": "node --test passes",
+      "met": false
+    }
+  ],
+  "todos": [
+    {
+      "text": "Read the ticket create and ticket update branches in bin/heist.js and the relation add branch",
+      "met": false
+    },
+    {
+      "text": "Write a small function that takes the ticket id and opts, resolves all listed tickets first and then adds the relations",
+      "met": false
+    },
+    {
+      "text": "Call it from ticket create after the ticket exists and from ticket update",
+      "met": false
+    },
+    {
+      "text": "Refuse a ticket that is listed in both --blocked-by and --blocks",
+      "met": false
+    },
+    {
+      "text": "Add the flags to the usage text next to ticket create and ticket update",
+      "met": false
+    },
+    {
+      "text": "Add a test to test/cli.test.js: create with each flag, check heist relation list --format json, check that an unknown key exits non-zero and creates no ticket",
+      "met": false
+    },
+    {
+      "text": "Run node --test",
+      "met": false
+    }
+  ],
+  "files": [
+    "bin/heist.js",
+    "test/cli.test.js"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-14T11:57:30.847Z",
+  "updatedAt": "2026-11-14T11:57:30.847Z"
+}

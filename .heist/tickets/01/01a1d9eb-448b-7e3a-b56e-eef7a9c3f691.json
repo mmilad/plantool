@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-448b-7e3a-b56e-eef7a9c3f691",
+  "number": 43,
+  "title": "Set relations when a ticket is created or updated",
+  "kind": "feature",
+  "description": "Today a relation is added with a separate command: heist relation add SOURCE TARGET TYPE. Add flags to heist ticket create and heist ticket update so the links are written in the same call: --blocked-by A,B (each listed ticket blocks this one), --blocks A,B (this ticket blocks each listed one) and --relates A,B (relates_to, no effect on readiness). Tickets are named by key or id, separated by commas. Outside the happy path: an unknown ticket in any flag stops the command before anything is written, so no half-linked ticket is left behind; the same ticket in --blocked-by and --blocks is refused; on update a relation that already exists is skipped without an error; a blocks relation that would close a cycle is refused with the existing cycle message; with --format json the output stays the ticket only.",
+  "status": "todo",
+  "priority": "high",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Only 9 relations exist among 42 tickets, because a relation needs a second command after ticket create and is easily left out. Readiness, heist next and the roadmap views only show what is linked.",
+  "acceptance": [
+    {
+      "text": "heist ticket create with --blocked-by, --blocks and --relates writes the relations in the same call",
+      "met": false
+    },
+    {
+      "text": "heist ticket update accepts the same flags",
+      "met": false
+    },
+    {
+      "text": "An unknown ticket key stops the command and no ticket and no relation is written",
+      "met": false
+    },
+    {
+      "text": "heist --help, heist guide and the README name the flags",
+      "met": false
+    },
+    {
+      "text": "node --test passes",
+      "met": false
+    }
+  ],
+  "files": [
+    "bin/heist.js",
+    "test/cli.test.js",
+    "src/guide.js",
+    "README.md"
+  ],
+  "size": "m",
+  "createdBy": "claude",
+  "createdAt": "2026-11-14T11:57:16.811Z",
+  "updatedAt": "2026-11-14T11:57:16.811Z"
+}

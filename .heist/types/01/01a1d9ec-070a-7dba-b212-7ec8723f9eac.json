@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9ec-070a-7dba-b212-7ec8723f9eac",
+  "name": "GraphEdge",
+  "version": 1,
+  "description": "One relation. type is a relation type such as blocks or relates_to. For blocks the source is the blocker.",
+  "schema": {
+    "type": "string"
+  },
+  "history": [],
+  "createdAt": "2026-11-14T11:58:06.602Z",
+  "updatedAt": "2026-11-14T11:58:06.602Z"
+}

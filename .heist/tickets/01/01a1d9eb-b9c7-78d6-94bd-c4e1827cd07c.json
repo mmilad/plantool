@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-b9c7-78d6-94bd-c4e1827cd07c",
+  "number": 50,
+  "title": "Extend the Dependencies table instead of a picture",
+  "kind": "option",
+  "description": "",
+  "status": "cancelled",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d9eb-b8c1-7b73-a244-ee4ee3340f71",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {
+      "readable-as-an-order": 2,
+      "no-new-dependency": 5,
+      "same-picture-on-every-open": 5,
+      "effort": 5
+    }
+  },
+  "createdAt": "2026-11-14T11:57:46.823Z",
+  "updatedAt": "2026-11-14T11:58:05.646Z"
+}

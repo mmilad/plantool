@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9ec-0660-7855-92e9-1e44fe74e354",
+  "name": "GraphNode",
+  "version": 1,
+  "description": "One ticket in the relation graph. layer is the column (0 = no open or finished blocker in the graph), row is the position inside the column.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "key": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "kind": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "layer": {
+        "type": "integer"
+      },
+      "row": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "id",
+      "title",
+      "kind",
+      "status",
+      "layer",
+      "row"
+    ]
+  },
+  "history": [],
+  "createdAt": "2026-11-14T11:58:06.432Z",
+  "updatedAt": "2026-11-14T11:58:06.432Z"
+}

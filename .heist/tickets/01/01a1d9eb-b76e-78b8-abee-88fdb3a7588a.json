@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-b76e-78b8-abee-88fdb3a7588a",
+  "number": 46,
+  "title": "Relation graph in the Roadmap page",
+  "kind": "feature",
+  "description": "Add a fourth tab Graph to the Roadmap page, next to Structure, Timeline and Dependencies. It draws every ticket that has at least one relation as a box (key and title), coloured by status: done green, to do white, in progress blue, cancelled grey. Lines connect related tickets: blocks is a solid line with an arrow from the blocker to the blocked ticket, every other relation type is a dashed line without an arrow. Blocker chains run from left to right, so the picture reads as an order. Clicking a box opens the ticket. A line under the picture says how many tickets have no relation and are not shown. The same data is available as heist graph and as an API call, like every other roadmap view. The Dependencies table stays as it is. Outside the happy path: a project without relations shows a short message instead of an empty picture; more than 200 tickets are cut off with a notice and a field to choose a root ticket; an unknown root gives the usual not-found message; on a narrow screen the picture scrolls sideways.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "The owner wants to see at a glance how tickets hang together and what is done: a picture with one box per ticket, lines for relations and a colour per status. The Dependencies tab is a table and shows only blockers.",
+  "acceptance": [
+    {
+      "text": "The Roadmap page has a Graph tab that draws tickets with relations, coloured by status",
+      "met": false
+    },
+    {
+      "text": "blocks, relates_to and the other relation types are all drawn and can be told apart",
+      "met": false
+    },
+    {
+      "text": "heist graph --format json and the API return the same nodes and edges the picture uses",
+      "met": false
+    },
+    {
+      "text": "Tickets without relations are counted, not drawn",
+      "met": false
+    },
+    {
+      "text": "node --test passes",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/relation-graph.js",
+    "src/index.js",
+    "src/server.js",
+    "bin/heist.js",
+    "src/ui.js"
+  ],
+  "size": "l",
+  "createdBy": "claude",
+  "refs": [
+    ".heist/plans/01/01a1d54a-790f-77e5-88e2-4c4ff8ea68f1.md"
+  ],
+  "createdAt": "2026-11-14T11:57:46.222Z",
+  "updatedAt": "2026-11-14T11:59:15.942Z",
+  "checklist": {
+    "name": "feature",
+    "skipped": {},
+    "answered": {
+      "states": "In the description: no relations, more than 200 tickets, unknown root, narrow screen.",
+      "data": "Reads tickets and relations; writes nothing.",
+      "contracts": "Contract relationGraph with the types GraphNode and GraphEdge."
+    }
+  }
+}

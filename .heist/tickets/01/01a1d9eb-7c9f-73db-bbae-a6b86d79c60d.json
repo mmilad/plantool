@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-7c9f-73db-bbae-a6b86d79c60d",
+  "number": 45,
+  "title": "Tell agents to link a ticket when they create it",
+  "kind": "task",
+  "description": "Three texts mention how tickets are connected and need the new flags. In src/guide.js, the main topic has step 4 'Connect the plan' and the rules of thumb: say that a new ticket is linked in the same call with --blocked-by, --blocks or --relates, and that a ticket without any link should be a deliberate choice. In bin/heist.js, the hint printed after ticket create ('Possibly related: ...') should name the flag form heist ticket update KEY --relates OTHER next to heist relation add. In README.md, add the flags to the quick start or the CLI section with one example. Keep the wording plain and short.",
+  "status": "todo",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d9eb-448b-7e3a-b56e-eef7a9c3f691",
+  "why": "The flags only help if agents use them; the planning method must say so.",
+  "acceptance": [
+    {
+      "text": "heist guide names the three flags",
+      "met": false
+    },
+    {
+      "text": "The hint after ticket create names heist ticket update with --relates",
+      "met": false
+    },
+    {
+      "text": "README has one example",
+      "met": false
+    },
+    {
+      "text": "node --test passes",
+      "met": false
+    }
+  ],
+  "todos": [
+    {
+      "text": "Update the guide text in src/guide.js",
+      "met": false
+    },
+    {
+      "text": "Update the hint in bin/heist.js",
+      "met": false
+    },
+    {
+      "text": "Add one example to README.md",
+      "met": false
+    },
+    {
+      "text": "Run node --test (test/workflow.test.js checks parts of the briefing)",
+      "met": false
+    }
+  ],
+  "files": [
+    "src/guide.js",
+    "bin/heist.js",
+    "README.md"
+  ],
+  "size": "xs",
+  "createdBy": "claude",
+  "createdAt": "2026-11-14T11:57:31.167Z",
+  "updatedAt": "2026-11-14T11:57:31.167Z"
+}

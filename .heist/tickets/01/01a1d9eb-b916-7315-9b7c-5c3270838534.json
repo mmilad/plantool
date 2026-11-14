@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-b916-7315-9b7c-5c3270838534",
+  "number": 48,
+  "title": "Layered left to right, own SVG, no library",
+  "kind": "option",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d9eb-b8c1-7b73-a244-ee4ee3340f71",
+  "option": {
+    "pros": [],
+    "cons": [],
+    "scores": {
+      "readable-as-an-order": 5,
+      "no-new-dependency": 5,
+      "same-picture-on-every-open": 5,
+      "effort": 3
+    }
+  },
+  "createdAt": "2026-11-14T11:57:46.646Z",
+  "updatedAt": "2026-11-14T11:58:05.744Z",
+  "completedAt": "2026-11-14T11:58:05.744Z"
+}
