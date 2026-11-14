@@ -2,6 +2,26 @@
 
 This file records material choices made while implementing the first usable release against the merged planning contract.
 
+## Roadmap completion and structure (2026-11-13)
+
+- Roadmap phases 1–3 share the canonical tickets and existing workflow readiness. Dependencies follows as phase 4 (HEIST-42); no milestones or event-history entity is introduced.
+- `completedAt` is managed by the ticket write path: entering `done` sets it, ordinary edits keep it, and leaving `done` removes it. A later completion receives a new timestamp. Derived parent rollups do not create completion events.
+- Legacy done tickets remain readable. Until backfill, the timeline uses `updatedAt` and identifies the date as an estimate; validation warns without invalidating the store. `heist roadmap backfill-completion --dry-run` previews the explicit, idempotent migration; running without the flag stores the fallback date and preserves `updatedAt`. Historical completion dates cannot be reconstructed exactly from this fallback.
+- An ordinary edit of a legacy done ticket pins its previous `updatedAt` as the completion estimate before advancing the update date. `completedAtSource: "updatedAt"` keeps estimates labelled after migration; reopening removes this marker too. Backfill reports invalid legacy dates in `skipped` without inventing a timestamp. Ticket updates and backfill share a write lock so neither can overwrite the other's changes.
+- Timeline contains done tickets only. Cancelled work stays visible in Structure; cancellation history needs a separate timestamp contract before inclusion. Open work is not appended to completion history.
+- Structure filters keep nonmatching ancestors as `contextOnly` rows, retaining real depth and explaining the context marker. These rows are navigation context, not matching tickets. `blockedBy[].via` distinguishes explicit `blocks` from contract `provider` dependencies, including inherited blockers.
+- Roadmap pagination is deterministic, with a ticket-ID tie-break and a snapshot token. A stale token yields `STALE_ROADMAP` (HTTP 409); callers restart from the first page. Reads never backfill canonical data.
+- Existing `heist tree` behavior stays unchanged without new flags. Enriched projections and timeline are available through the public API, CLI and project-scoped HTTP endpoints.
+
+## Roadmap dependencies (2026-11-14)
+
+- Phase 4 uses an accessible edge table on desktop and small screens, sharing one read-only projection across CLI, public API and HTTP. There is no graph layout dependency or new canonical record type.
+- `workGraph` supplies explicit blockers and provider edges, preserving mock/full provider selection. Equal provider/consumer pairs coalesce their component references; an explicit block between the same tickets remains a distinct edge. Direction is blocker to blocked.
+- Default edges have two unfinished endpoints. `includeFinished` exposes all historical relationships, including cancelled endpoints. This view does not claim that every displayed ticket is ready or blocked solely by these edges; child, decision and claim checks still belong to readiness.
+- A root selects its subtree and direct cross-boundary dependencies plus incoming blockers of its ancestors. Outside endpoints are context; inherited edges retain the actual ancestor target. We do not invent a direct block on every descendant.
+- The response retains the selected root, scoped endpoints, then outside context in deterministic key/ID order. At most 200 nodes and 500 edges are returned, with endpoint closure and exact omitted counts. Dense graphs therefore remain bounded even below the node cap. The UI asks users to narrow their root when truncated.
+- Snapshots cover the full scoped projection and query, including the cap. Hidden dependency changes invalidate the snapshot too. Repeated reads never mutate canonical records.
+
 ## Runtime and package
 
 - Executable: `heist`; npm package: `@mmilad/heist`, selected by the owner on 2026-10-29. This replaces the planning docs' provisional package name `heistman`; the executable stays `heist`.

@@ -50,6 +50,16 @@ Ticket status: ${list(DEFAULT_STATUSES)}. A parent is rolled up from its childre
 \`heist next\` lists only work that is ready: todo, not blocked, decisions made, and the providers of the contracts it consumes finished.
 Claims are leases (default 60 minutes), shared between git worktrees. Decisions have a status of their own (open, decided, cancelled) and an owner (human or agent).
 
+## Roadmap
+
+Use \`heist tree --fields plan --format json\` for readiness, explicit/provider blockers and filtered ancestor context.
+Use \`heist timeline --order desc --limit 50 --format json\` for completed work; page with the returned offset and snapshot.
+If the snapshot is stale, restart at offset zero. \`completedAt\` is stable after completion and cleared on reopen.
+Legacy dates are estimates from updatedAt; \`heist roadmap backfill-completion --dry-run\` previews the explicit backfill.
+Use \`heist deps --root KEY --format json\` for explicit/provider edges (blocker to blocked). Finished endpoints are excluded unless \`--include-finished\` is set.
+Dependencies retains cross-branch and inherited ancestor blockers; contextOnly marks external nodes. Limits are 200 nodes and 500 edges; inspect omitted counts and narrow the root when truncated.
+The local UI uses \`?view=roadmap&mode=structure|timeline|deps&ticket=KEY\`. Roadmap adds no workflow requirement.
+
 ## Relationships
 
 Relation types: ${list(RELATION_TYPES)}.

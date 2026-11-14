@@ -160,6 +160,28 @@ pnpm exec heist type set User --schema '{"userId":"string","mail":"string"}' --d
 
 For outputs, removing a field, making it optional, adding enum values or changing its type incompatibly is breaking; for inputs, a new required field, narrowing a type or removing enum values is breaking.
 
+## Roadmap
+
+The local web UI offers **Roadmap → Structure / Timeline / Dependencies**. Structure includes open, done and cancelled work; filtered ancestors stay visible as context. Timeline shows completed work grouped by month, with bounded paging and date ranges. Dependencies shows a bounded, responsive table of blocked tickets and their blockers. Ticket links open the shared detail view.
+
+```sh
+heist tree --fields plan --blocked --format json
+heist tree --fields plan --status todo,in_progress --kind task,feature
+heist timeline --since 2026-01-01 --order desc --limit 50 --format json
+heist roadmap backfill-completion --dry-run
+heist roadmap backfill-completion
+heist deps --root APP-12 --format json
+heist deps --include-finished
+```
+
+`completedAt` is set on completion, survives edits, and is cleared on reopening. Legacy done tickets use an explicitly labelled `updatedAt` estimate; backfill or an ordinary edit pins that estimate and keeps its provenance. Backfill is optional and idempotent, preserves `updatedAt`, and does not recover exact historical dates. Invalid legacy dates are reported as skipped. `validate` warns about missing completion dates. Cancelled tickets are excluded from Timeline.
+
+Use `project.timeline(options)` and `project.roadmap.structure(root, options)` for the same `{items,total,offset,limit,nextOffset,snapshot}` pages. HTTP routes are `GET /api/roadmap/timeline` and `GET /api/roadmap/structure`, also under `/api/projects/:id/roadmap/...`. Timeline accepts `since`, `until` (inclusive ISO dates/timestamps), `kind`, `order`, `limit` (1–200), `offset`, and `snapshot`. Structure accepts `root`, `status`, `hide`, `kind`, `q`, `ready`, `blocked`, `maxDepth` and the paging parameters. CLI uses `--query` and `--max-depth`. Pass the returned snapshot when fetching another page; on `STALE_ROADMAP` (HTTP 409), restart at offset zero. Default `heist tree` output remains unchanged.
+
+Dependencies is available through `project.deps(options)` (also `project.roadmap.deps`), exported `dependencies(project, options)`, and `GET /api/roadmap/deps` (also project-scoped). Options are `root` (ticket key/UUID), `includeFinished` (default false), `limit` (1–200, default 200), and optional `snapshot`. It returns `{nodes,edges,totalNodes,totalEdges,limit,edgeLimit,truncated,omittedNodes,omittedEdges,rootId,snapshot}`. Edges point from `sourceId` (blocker) to `targetId` (blocked), with `via: blocks|provider`. Provider edges include their components and mock/full stages; multiple components between the same tickets share one provider edge. Explicit and provider edges stay separate.
+
+By default both endpoints must be unfinished. A root selects its subtree, incoming and outgoing cross-branch dependencies, and blockers of its ancestors. External nodes are marked `contextOnly`; ancestor edges keep their actual endpoints and are marked `inherited`. The selected root is retained even if isolated. Results contain at most 200 nodes and 500 edges, and every returned edge has both endpoints. Counts disclose all omissions; narrow with `--root` when truncated. Nodes prioritize the selected root, then scoped endpoints, then external context. A snapshot covers the full scoped projection and options; on `STALE_ROADMAP`, refresh without the old token. These are dependency relationships, not a complete readiness explanation: open children, decisions and claims remain available in Structure and `next`.
+
 ## TypeScript API
 
 ```ts
