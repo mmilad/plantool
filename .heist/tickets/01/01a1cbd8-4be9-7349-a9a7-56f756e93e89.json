@@ -5,7 +5,7 @@
   "title": "Create hint reuses the semantic index",
   "kind": "task",
   "description": "When the optional model is installed, ticket create looks for tickets close in meaning. Today it embeds the text of every other ticket again on each call and loads the model in every CLI start: about one second per 300 tickets plus the model start. Projects that built the semantic index (heist index update) already have those vectors stored. Use them, and embed only the new ticket.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -28,5 +28,16 @@
   "size": "m",
   "createdBy": "claude",
   "createdAt": "2026-11-11T18:21:52.489Z",
-  "updatedAt": "2026-11-12T13:27:42.523Z"
+  "updatedAt": "2026-11-14T18:43:43.413Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "ticket create with an index embeds only the new ticket and reuses stored title vectors; without an index unchanged.",
+    "verifiedBy": "node --test: 109 pass, 0 fail (1 opt-in skipped); new test counts embedder calls with and without index.",
+    "changedFiles": [
+      ".heist/tickets/01/01a1ca94-b534-754e-8bd5-ce0c29c96f3a.json",
+      ".heist/tickets/01/01a1cbd8-4be9-7349-a9a7-56f756e93e89.json",
+      ".heist/comments/01/01a1db5e-68bc-7f58-bca3-d47beed2afe3.json"
+    ]
+  },
+  "completedAt": "2026-11-14T18:43:43.413Z"
 }

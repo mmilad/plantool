@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db5f-60c4-7eb6-bd26-b29af464da36",
+  "ticketId": "01a1cbd8-4be9-7349-a9a7-56f756e93e89",
+  "body": "ticket create with an index embeds only the new ticket and reuses stored title vectors; without an index unchanged.",
+  "author": "claude",
+  "createdAt": "2026-11-14T18:43:43.428Z"
+}

@@ -5,7 +5,7 @@
   "title": "Check for a heist command name collision on Windows",
   "kind": "task",
   "description": "For the owner, on the Windows machine. If another program called heist is on the PATH, typing heist may start that one instead of this tool. The check takes a minute.",
-  "status": "todo",
+  "status": "done",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -20,7 +20,7 @@
   "size": "xs",
   "createdBy": "claude",
   "createdAt": "2026-11-11T12:28:25.780Z",
-  "updatedAt": "2026-11-12T13:27:42.121Z",
+  "updatedAt": "2026-11-14T18:42:39.917Z",
   "todos": [
     {
       "text": "Run: where heist",
@@ -34,5 +34,14 @@
       "text": "If another path is listed, copy the output into the chat",
       "met": false
     }
-  ]
+  ],
+  "assignee": null,
+  "outcome": {
+    "summary": "where heist lists two copies of @mmilad/heist 0.1.0 (C:\\Program Files\\nodejs and the nvm v24.1.0 folder). Both are this package; no other program named heist is on PATH.",
+    "verifiedBy": "where heist; each heist.cmd --version prints @mmilad/heist 0.1.0.",
+    "changedFiles": [
+      ".heist/tickets/01/01a1ca94-b534-754e-8bd5-ce0c29c96f3a.json"
+    ]
+  },
+  "completedAt": "2026-11-14T18:42:39.917Z"
 }

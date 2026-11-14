@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db5e-68bc-7f58-bca3-d47beed2afe3",
+  "ticketId": "01a1ca94-b534-754e-8bd5-ce0c29c96f3a",
+  "body": "where heist lists two copies of @mmilad/heist 0.1.0 (C:\\Program Files\\nodejs and the nvm v24.1.0 folder). Both are this package; no other program named heist is on PATH.",
+  "author": "claude",
+  "createdAt": "2026-11-14T18:42:39.932Z"
+}
