@@ -112,7 +112,8 @@ consumers that are affected.
 
   workflow: `# Working the plan
 
-heist next → heist claim ID --agent NAME → heist context ID → work → heist done ID --note "…" --verified "…" --files
+heist next → heist claim ID --agent NAME → heist context ID → work → heist done ID --agent NAME --note "…" --verified "…" --files
+- done takes the name you claimed with (--agent NAME); without it, a claim held by someone else refuses the finish.
 - next only offers work that is ready: todo, no open children, no open blockers, decisions made.
 - Claims are leases (60 min) and are shared between git worktrees.
 - A parent is done only after its children; heist check warns about missing checklist items and

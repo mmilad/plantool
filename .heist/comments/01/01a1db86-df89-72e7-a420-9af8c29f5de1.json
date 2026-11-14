@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db86-df89-72e7-a420-9af8c29f5de1",
+  "ticketId": "01a1db85-be86-754e-b1d5-435dfe5dc0e3",
+  "body": "Onboarding workflow shows done with --agent; heist ticket todo ID N --text renames a to-do; CLI test added.",
+  "author": "claude",
+  "createdAt": "2026-11-14T19:26:51.785Z"
+}

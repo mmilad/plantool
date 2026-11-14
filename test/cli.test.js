@@ -117,3 +117,18 @@ test('context prints one stderr line for a cut packet and keeps stdout as JSON',
   assert.equal(full.status, 0, full.stderr);
   assert.equal(full.stderr, '');
 });
+
+test('ticket todo renames a to-do with --text and keeps its state; empty text is refused', async t => {
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist todo '));
+  t.after(() => fs.rm(cwd, { recursive: true, force: true }));
+  const env = { ...process.env, HEIST_NO_REGISTER: '1', HEIST_SIMILAR: 'off' };
+  const heist = (...a) => spawnSync(process.execPath, [cli, ...a], { cwd, env, encoding: 'utf8' });
+  assert.equal(heist('init', '--name', 'todo', '--key', 'TDO').status, 0);
+  assert.equal(heist('ticket', 'create', '--title', 'Steps', '--todo', 'first;second').status, 0);
+  assert.equal(heist('ticket', 'todo', 'TDO-1', '1').status, 0);
+  const renamed = heist('ticket', 'todo', 'TDO-1', '2', '--text', 'second, renamed');
+  assert.equal(renamed.status, 0, renamed.stderr);
+  assert.match(renamed.stdout, /\[ \] 2\. second, renamed/);
+  assert.match(heist('ticket', 'show', 'TDO-1').stdout, /\[x\] 1\. first/);
+  assert.notEqual(heist('ticket', 'todo', 'TDO-1', '2', '--text', '   ').status, 0);
+});
