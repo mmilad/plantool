@@ -61,9 +61,18 @@ test('semantic, hybrid and similar search rank related texts and fall back to ke
 test('a corrupt cache database is moved aside and rebuilt', async t => {
   const p = await setup(t); await p.tickets.create({ title: 'A' });
   closeCaches(); const dir = cacheDir(p.config.projectId); await fs.mkdir(dir, { recursive: true }); await fs.writeFile(path.join(dir, 'db.sqlite'), 'not a database');
-  const db = await openCache(p.config.projectId); assert.ok(db);
+  const [db, concurrent] = await Promise.all([openCache(p.config.projectId), openCache(p.config.projectId)]);
+  assert.strictEqual(db, concurrent, 'simultaneous opens share one initialized connection');
   assert.ok((await fs.readdir(dir)).some(f => f.startsWith('db.sqlite.broken-')));
   assert.equal((await p.semantic.update()).sources, 1);
+});
+
+test('a non-database open failure is propagated without quarantining the cache path', async t => {
+  const p = await setup(t); closeCaches();
+  const dir = cacheDir(p.config.projectId); await fs.mkdir(path.join(dir, 'db.sqlite'), { recursive: true });
+  await assert.rejects(() => openCache(p.config.projectId));
+  assert.deepEqual(await fs.readdir(dir), ['db.sqlite']);
+  assert.equal((await fs.stat(path.join(dir, 'db.sqlite'))).isDirectory(), true);
 });
 
 test('relatedByEmbedding flags tickets that stand out, also in groups, needs enough tickets and returns nothing when the model is missing', async t => {

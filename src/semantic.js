@@ -25,36 +25,54 @@ async function sqlite() {
 }
 
 const dbs = new Map();
+const openingDbs = new Map();
 /** Opens (or repairs) the cache database with WAL and a busy timeout so parallel processes wait instead of failing. */
 export async function openCache(projectId) {
   if (dbs.has(projectId)) return dbs.get(projectId);
-  const { DatabaseSync } = await sqlite();
-  const dir = cacheDir(projectId); await fs.mkdir(dir, { recursive: true });
-  const file = path.join(dir, 'db.sqlite');
-  const open = () => {
-    const db = new DatabaseSync(file);
-    db.exec('PRAGMA busy_timeout = 5000; PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL;');
-    db.exec(`CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY, value TEXT);
-      CREATE TABLE IF NOT EXISTS embeddings(model TEXT NOT NULL, text_hash TEXT NOT NULL, vector BLOB NOT NULL, PRIMARY KEY(model, text_hash));
-      CREATE TABLE IF NOT EXISTS sources(root TEXT NOT NULL, model TEXT NOT NULL, source_type TEXT NOT NULL, source_id TEXT NOT NULL, content_hash TEXT NOT NULL, PRIMARY KEY(root, model, source_type, source_id));
-      CREATE TABLE IF NOT EXISTS chunks(root TEXT NOT NULL, model TEXT NOT NULL, source_type TEXT NOT NULL, source_id TEXT NOT NULL, ord INTEGER NOT NULL, text_hash TEXT NOT NULL, text TEXT NOT NULL, title TEXT NOT NULL, ticket_id TEXT, PRIMARY KEY(root, model, source_type, source_id, ord));
-      CREATE TABLE IF NOT EXISTS index_state(root TEXT NOT NULL, model TEXT NOT NULL, status TEXT NOT NULL, generation INTEGER NOT NULL DEFAULT 0, started_at TEXT, finished_at TEXT, error TEXT, sources INTEGER DEFAULT 0, chunks INTEGER DEFAULT 0, PRIMARY KEY(root, model));`);
-    const v = db.prepare("SELECT value FROM meta WHERE key='schema'").get();
-    if (!v) db.prepare("INSERT INTO meta(key, value) VALUES('schema', ?)").run(String(SCHEMA_VERSION));
-    else if (Number(v.value) !== SCHEMA_VERSION) { db.close(); throw Object.assign(new Error('schema changed'), { code: 'SCHEMA' }); }
-    db.prepare('SELECT count(*) AS n FROM chunks').get();
+  if (openingDbs.has(projectId)) return openingDbs.get(projectId);
+  const opening = (async () => {
+    const { DatabaseSync } = await sqlite();
+    const dir = cacheDir(projectId); await fs.mkdir(dir, { recursive: true });
+    const file = path.join(dir, 'db.sqlite');
+    const open = () => {
+      const db = new DatabaseSync(file);
+      try {
+        db.exec('PRAGMA busy_timeout = 5000; PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL;');
+        db.exec(`CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY, value TEXT);
+          CREATE TABLE IF NOT EXISTS embeddings(model TEXT NOT NULL, text_hash TEXT NOT NULL, vector BLOB NOT NULL, PRIMARY KEY(model, text_hash));
+          CREATE TABLE IF NOT EXISTS sources(root TEXT NOT NULL, model TEXT NOT NULL, source_type TEXT NOT NULL, source_id TEXT NOT NULL, content_hash TEXT NOT NULL, PRIMARY KEY(root, model, source_type, source_id));
+          CREATE TABLE IF NOT EXISTS chunks(root TEXT NOT NULL, model TEXT NOT NULL, source_type TEXT NOT NULL, source_id TEXT NOT NULL, ord INTEGER NOT NULL, text_hash TEXT NOT NULL, text TEXT NOT NULL, title TEXT NOT NULL, ticket_id TEXT, PRIMARY KEY(root, model, source_type, source_id, ord));
+          CREATE TABLE IF NOT EXISTS index_state(root TEXT NOT NULL, model TEXT NOT NULL, status TEXT NOT NULL, generation INTEGER NOT NULL DEFAULT 0, started_at TEXT, finished_at TEXT, error TEXT, sources INTEGER DEFAULT 0, chunks INTEGER DEFAULT 0, PRIMARY KEY(root, model));`);
+        const v = db.prepare("SELECT value FROM meta WHERE key='schema'").get();
+        if (!v) db.prepare("INSERT INTO meta(key, value) VALUES('schema', ?)").run(String(SCHEMA_VERSION));
+        else if (Number(v.value) !== SCHEMA_VERSION) throw Object.assign(new Error('schema changed'), { code: 'SCHEMA' });
+        db.prepare('SELECT count(*) AS n FROM chunks').get();
+        return db;
+      } catch (e) {
+        // A failed initialization must release its Windows file handle before repair/retry.
+        try { db.close(); } catch {}
+        throw e;
+      }
+    };
+    let db;
+    try { db = open(); }
+    catch (e) {
+      // Only discard a cache when SQLite confirms corruption or its own schema version is obsolete.
+      // Busy, permission, and other I/O errors must leave a potentially valid database untouched.
+      if (e.code !== 'SCHEMA' && ![11, 26].includes(e.errcode)) throw e;
+      const stamp = Date.now();
+      for (const ext of ['-wal', '-shm', '']) {
+        try { await fs.rename(file + ext, `${file}${ext}.broken-${stamp}`); }
+        catch (moveError) { if (moveError.code !== 'ENOENT') throw moveError; }
+      }
+      db = open();
+    }
+    dbs.set(projectId, db);
     return db;
-  };
-  let db;
-  try { db = open(); }
-  catch (e) {
-    // corrupt or outdated cache: move it aside and start fresh (it is derived data)
-    const stamp = Date.now();
-    for (const ext of ['', '-wal', '-shm']) await fs.rename(file + ext, `${file}${ext}.broken-${stamp}`).catch(() => {});
-    db = open();
-  }
-  dbs.set(projectId, db);
-  return db;
+  })();
+  openingDbs.set(projectId, opening);
+  try { return await opening; }
+  finally { if (openingDbs.get(projectId) === opening) openingDbs.delete(projectId); }
 }
 export function closeCaches() { for (const db of dbs.values()) { try { db.close(); } catch {} } dbs.clear(); }
 
