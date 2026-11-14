@@ -100,3 +100,19 @@ test('relatedByEmbedding flags tickets that stand out, also in groups, needs eno
   const none = await relatedByEmbedding(p, ticket, [...filler, { id: 'dup', title: 'Trade offer review' }], { embedder: { embed: async () => { const e = Object.assign(new Error('x'), { code: 'SEMANTIC_UNAVAILABLE' }); throw e; } } });
   assert.deepEqual(none, []);
 });
+
+test('with an index the create hint embeds only the new ticket and reuses the stored title vectors', async t => {
+  const { getEmbedder } = await import('../src/embedder.js');
+  const { relatedByEmbedding } = await import('../src/semantic.js');
+  const p = await setup(t);
+  const base = await getEmbedder({});
+  const calls = []; const counting = { id: base.id, dim: base.dim, embed: async (texts, o) => { calls.push(texts.length); return base.embed(texts, o); } };
+  const tickets = [];
+  for (let i = 0; i < 12; i++) tickets.push(await p.tickets.create({ title: `Filler topic ${i}`, description: `Details ${i}` }));
+  const withoutIndex = await relatedByEmbedding(p, { title: 'Trade offer flow' }, tickets, { embedder: counting, minStrength: -Infinity });
+  assert.equal(calls.pop(), tickets.length + 1, 'without an index every ticket is embedded');
+  await p.semantic.update({ embedder: base });
+  const withIndex = await relatedByEmbedding(p, { title: 'Trade offer flow' }, tickets, { embedder: counting, minStrength: -Infinity });
+  assert.equal(calls.pop(), 1, 'with an index only the new ticket is embedded');
+  assert.equal(withIndex.length, withoutIndex.length);
+});

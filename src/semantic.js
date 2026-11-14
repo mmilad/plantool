@@ -337,11 +337,26 @@ export async function relatedByEmbedding(p, ticket, others, { limit = 3, minStre
   if (others.length < minPopulation || others.length > maxTickets) return [];
   try { embedder ??= await getEmbedder(modelOpt(p)); } catch (e) { if (e.code === 'SEMANTIC_UNAVAILABLE') return []; throw e; }
   const textOf = x => [x.title, x.description].filter(Boolean).join('\n').slice(0, 600);
+  // With a semantic index, the other tickets' identity vectors (titles) are already stored: reuse them and embed only
+  // the new ticket and any ticket the index does not know yet. Without an index every ticket is embedded as before.
+  let stored = null; try { stored = await identityVectors(p, embedder); } catch { stored = null; }
+  const useIndex = !!stored && stored.size > 0;
+  const textOfNew = useIndex ? (x => x.title ?? '') : textOf;
+  const missing = useIndex ? others.filter(x => !stored.has(x.id)) : others;
   let vectors;
-  try { vectors = await embedder.embed([textOf(ticket), ...others.map(textOf)], { query: true }); }
+  try { vectors = await embedder.embed([textOfNew(ticket), ...missing.map(textOfNew)], { query: true }); }
   catch (e) { if (e.code === 'SEMANTIC_UNAVAILABLE') return []; throw e; }
+  const fresh = new Map(missing.map((x, i) => [x.id, vectors[i + 1]]));
   const cos = (a, b) => { let d = 0, na = 0, nb = 0; for (let i = 0; i < a.length; i++) { d += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i]; } return na && nb ? d / Math.sqrt(na * nb) : 0; };
-  const scores = others.map((x, i) => cos(vectors[0], vectors[i + 1])); const z = robustStrengths(scores);
+  const vecOf = x => (useIndex && stored.has(x.id) ? stored.get(x.id) : fresh.get(x.id));
+  const scores = others.map(x => cos(vectors[0], vecOf(x))); const z = robustStrengths(scores);
   return others.map((x, i) => ({ ticket: x, score: scores[i], strength: z[i] }))
     .filter(r => r.strength >= minStrength).sort((a, b) => b.score - a.score).slice(0, limit);
+}
+
+/** Identity vectors (ticket titles) stored by the index, keyed by ticket id. Empty when the index has none for this model. */
+async function identityVectors(p, embedder) {
+  const index = await vectors(p, embedder); const out = new Map();
+  index.rows.forEach((r, i) => { if (r.source_type === 'ticket' && r.ord === -1) out.set(r.source_id, index.matrix.subarray(i * index.dim, (i + 1) * index.dim)); });
+  return out;
 }
