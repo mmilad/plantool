@@ -5,7 +5,7 @@
   "title": "A",
   "kind": "option",
   "description": "",
-  "status": "todo",
+  "status": "cancelled",
   "priority": "normal",
   "labels": [],
   "properties": {},
@@ -16,5 +16,5 @@
     "scores": {}
   },
   "createdAt": "2026-11-14T19:07:34.286Z",
-  "updatedAt": "2026-11-14T19:09:20.197Z"
+  "updatedAt": "2026-11-15T01:25:18.867Z"
 }
