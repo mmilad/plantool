@@ -419,7 +419,9 @@ async function roadmapStructure(p, id = null, options = {}) {
   const q=query===undefined?'':String(query).trim().toLocaleLowerCase();
   const all=await listJson(p,'tickets'), byId=new Map(all.map(t=>[t.id,t]));
   if (id) { id=await ticketRef(p,id); if(!byId.has(id))throw new NotFoundError(`Ticket not found: ${id}`); }
-  const children=childIndex(all), roots=id?[byId.get(id)]:children.get(null)??[], ordered=[], stack=[];
+  // The structure view lists the newest tickets first, at every level (the number grows with creation).
+  const children=childIndex(all); for(const list of children.values()) list.sort((a,b)=>(b.number??0)-(a.number??0));
+  const roots=id?[byId.get(id)]:children.get(null)??[], ordered=[], stack=[];
   for(let i=roots.length-1;i>=0;i--)stack.push({ticket:roots[i],depth:0});
   while(stack.length){const item=stack.pop();if(item.depth>maxDepth)continue;ordered.push(item);const cs=children.get(item.ticket.id)??[];for(let i=cs.length-1;i>=0;i--)stack.push({ticket:cs[i],depth:item.depth+1});}
   const g=await workGraph(p), treeRows=await buildTree(p,id,{maxDepth,limit:Infinity,fields:'row'}), treeById=new Map(treeRows.map(x=>[x.id,x]));

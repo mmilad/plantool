@@ -138,3 +138,16 @@ test('provider readiness and inherited blocker filters match workGraph', async t
   const unfiltered=await p.roadmap.structure(null,{ready:false,blocked:false});
   assert.equal(unfiltered.total,3,'false flags do not create filters');
 });
+
+test('structure lists the newest tickets first at every level', async t => {
+  const p = await project(t);
+  const old = await p.tickets.create({ title: 'Oldest root' });
+  const newer = await p.tickets.create({ title: 'Newer root' });
+  const child1 = await p.tickets.create({ title: 'First child', parentId: newer.id });
+  const child2 = await p.tickets.create({ title: 'Second child', parentId: newer.id });
+  const page = await p.roadmap.structure(null, { fields: 'row' });
+  const rootsOrder = page.items.filter(x => x.depth === 0).map(x => x.id);
+  assert.deepEqual(rootsOrder, [newer.id, old.id]);
+  const under = page.items.filter(x => x.parentId === newer.id).map(x => x.id);
+  assert.deepEqual(under, [child2.id, child1.id]);
+});
