@@ -6,6 +6,16 @@ Heistman is a Git-native planning and ticket graph for people and coding agents.
 
 The project uses pnpm. For local development, `pnpm link --global` in this repository makes `heist` available everywhere.
 
+To install the same package the way users will get it from npm, without publishing:
+
+```bash
+npm pack --pack-destination "$HOME/heist-pkg"
+npm install -g "$HOME/heist-pkg/mmilad-heist-0.1.0.tgz"
+heist --version
+```
+
+Keeping the tarball outside the repository avoids an untracked file in Git.
+
 
 After a release is published, install the package as a project-local development dependency:
 
