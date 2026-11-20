@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d0ef-916f-769f-b91a-01d46f7b312c",
+  "number": 23,
+  "title": "Blueprints can be changed from the CLI and the web view",
+  "kind": "feature",
+  "description": "Today a blueprint is changed by editing .plan/blueprints/KIND.json by hand. Add commands to expect a section, drop one, set the description template and reset to the built-in, and a Blueprints page in the web view that does the same. A section that does not exist as a field yet is created as a project field in the same step. Outside the happy path: an unknown kind or field type is refused with the allowed values; dropping the last section is allowed; a reset of a blueprint that was never changed says so; saving in the web view while the file changed on disk shows the newer state instead of overwriting silently.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "The owner wants to shape what a ticket should say without editing JSON, and agents should be able to assist from the CLI.",
+  "acceptance": [
+    {
+      "text": "A section can be added, changed, moved and removed from the CLI",
+      "met": true
+    },
+    {
+      "text": "The same is possible in the web view",
+      "met": true
+    },
+    {
+      "text": "A new section becomes a field that tickets can fill and the ticket page shows",
+      "met": true
+    },
+    {
+      "text": "Reset returns to the built-in blueprint",
+      "met": true
+    },
+    {
+      "text": "Nothing in .plan has to be edited by hand",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "API: save, expect, drop, template and reset on project.blueprints",
+      "met": true
+    },
+    {
+      "text": "CLI: plantool blueprint expect, drop, template, reset",
+      "met": true
+    },
+    {
+      "text": "New section creates the project field and expects it in one step",
+      "met": true
+    },
+    {
+      "text": "HTTP routes for reading one blueprint, saving and resetting",
+      "met": true
+    },
+    {
+      "text": "Blueprints page in the web view",
+      "met": true
+    },
+    {
+      "text": "Tests and docs",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/blueprints.js",
+    "bin/plantool.js",
+    "src/server.js",
+    "src/ui.js"
+  ],
+  "size": "l",
+  "createdBy": "claude",
+  "createdAt": "2026-11-12T18:05:23.695Z",
+  "updatedAt": "2026-11-12T18:10:50.400Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Blueprint sections can be added, changed, moved, removed and reset from the CLI and on the Blueprints page. A new section creates its project field in the same step.",
+    "verifiedBy": "node --test: 77 pass, 1 skipped; Blueprints page run in headless Chromium on Linux (new section, reorder, template, save). Not checked on Windows.",
+    "changedFiles": [
+      "src/blueprints.js",
+      "bin/plantool.js",
+      "src/server.js",
+      "src/ui.js",
+      "src/index.js",
+      "test/blueprints.test.js",
+      "test/server.test.js"
+    ]
+  },
+  "completedAt": "2026-11-12T18:10:50.400Z",
+  "completedAtSource": "updatedAt"
+}

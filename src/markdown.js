@@ -2,7 +2,7 @@
  * Minimal, safe Markdown renderer for untrusted repository text.
  * Everything is HTML-escaped first; raw HTML is never interpreted. Supported: ATX headings,
  * paragraphs, ordered/unordered lists, blockquotes, fenced code, horizontal rules, inline
- * code, **bold**, *italic*, [links](target). Only http(s) links and internal heist IDs that
+ * code, **bold**, *italic*, [links](target). Only http(s) links and internal plantool IDs that
  * resolve(id) knows are clickable; images and other targets render as plain text.
  * The function is self-contained so the UI can embed it with Function.prototype.toString().
  *
@@ -17,12 +17,12 @@ export function renderMarkdown(source, options = {}) {
   const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   const internal = (id, text) => {
     const hit = resolve(id);
-    if (!hit) return '<span class="md-missing" title="Unresolved heist reference">' + esc(text || id) + '</span>';
+    if (!hit) return '<span class="md-missing" title="Unresolved plantool reference">' + esc(text || id) + '</span>';
     return '<a class="md-internal" href="' + esc(hit.href) + '" data-internal-type="' + esc(hit.type) + '" data-internal-id="' + esc(id) + '">' + esc(text || hit.label) + ' <span class="md-type">' + esc(hit.type) + '</span></a>';
   };
   const link = (text, target) => {
     const t = target.trim().replace(/^<|>$/g, '');
-    const id = t.replace(/^heist:/i, '');
+    const id = t.replace(/^plantool:/i, '');
     if (UUID.test(id)) return internal(id, text);
     if (/^https?:\/\/[^\s]+$/i.test(t)) return '<a class="md-external" href="' + esc(t) + '" target="_blank" rel="noopener noreferrer nofollow">' + esc(text) + ' <span aria-label="(external link)">↗</span></a>';
     return esc(text) + ' <span class="md-unsafe">(' + esc(t) + ')</span>';

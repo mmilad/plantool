@@ -6,8 +6,8 @@ import { performance } from 'node:perf_hooks';
 import { initProject, openProject, uuidv7 } from '../src/index.js';
 
 // Disposable fixtures only: never register or alter the user's project.
-const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-roadmap-bench-'));
-process.env.HEIST_HOME = path.join(cwd, 'local-home');
+const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool-roadmap-bench-'));
+process.env.PLANTOOL_HOME = path.join(cwd, 'local-home');
 const preview = process.argv.includes('--preview');
 let server;
 try {
@@ -19,7 +19,7 @@ try {
     const status=i<4?'todo':i%2===0?'done':i%7===0?'cancelled':i%5===0?'in_progress':'todo';
     const stamp=new Date(Date.UTC(2025,11+Math.floor(i/170),1+i%27,10)).toISOString();
     const record={schemaVersion:1,id,number:i+1,title:['Product delivery','API and integrations','Provider implementation','Contract consumer'][i]??`Delivery step ${String(i).padStart(4,'0')}`,description:'Disposable history for roadmap verification.',kind:i<2?'feature':'task',status,priority:'normal',labels:[],properties:{},parentId:i===0||i===2?null:i===1||i>3?rootId:branchId,createdAt:stamp,updatedAt:stamp,...(status==='done'?{completedAt:stamp,outcome:{summary:'Delivered and verified the planned behavior.'}}:{})};
-    const file=path.join(cwd,'.heist','tickets',id.slice(0,2),id+'.json');records.push({file,record});
+    const file=path.join(cwd,'.plan','tickets',id.slice(0,2),id+'.json');records.push({file,record});
   }
   for(const dir of new Set(records.map(r=>path.dirname(r.file))))await fs.mkdir(dir,{recursive:true});
   for(let i=0;i<records.length;i+=128)await Promise.all(records.slice(i,i+128).map(r=>fs.writeFile(r.file,JSON.stringify(r.record)+'\n')));
@@ -32,7 +32,7 @@ try {
   const targets=[branchId,consumerId,...records.slice(4).filter(r=>!['done','cancelled'].includes(r.record.status)).slice(0,240).map(r=>r.record.id)];
   for(const [sourceId,targetId] of [...targets.map(id=>[providerId,id]),[records[4].record.id,consumerId]]) {
     const id=uuidv7(),stamp=new Date().toISOString();
-    const dir=path.join(cwd,'.heist','relationships',id.slice(0,2));await fs.mkdir(dir,{recursive:true});
+    const dir=path.join(cwd,'.plan','relationships',id.slice(0,2));await fs.mkdir(dir,{recursive:true});
     await fs.writeFile(path.join(dir,id+'.json'),JSON.stringify({schemaVersion:1,id,sourceId,targetId,type:'blocks',createdAt:stamp})+'\n');
   }
   const measurements={};

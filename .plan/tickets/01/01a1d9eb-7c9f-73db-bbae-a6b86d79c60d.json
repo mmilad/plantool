@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-7c9f-73db-bbae-a6b86d79c60d",
+  "number": 45,
+  "title": "Tell agents to link a ticket when they create it",
+  "kind": "task",
+  "description": "Three texts mention how tickets are connected and need the new flags. In src/guide.js, the main topic has step 4 'Connect the plan' and the rules of thumb: say that a new ticket is linked in the same call with --blocked-by, --blocks or --relates, and that a ticket without any link should be a deliberate choice. In bin/plantool.js, the hint printed after ticket create ('Possibly related: ...') should name the flag form plantool ticket update KEY --relates OTHER next to plantool relation add. In README.md, add the flags to the quick start or the CLI section with one example. Keep the wording plain and short.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d9eb-448b-7e3a-b56e-eef7a9c3f691",
+  "why": "The flags only help if agents use them; the planning method must say so.",
+  "acceptance": [
+    {
+      "text": "plantool guide names the three flags",
+      "met": true
+    },
+    {
+      "text": "The hint after ticket create names plantool ticket update with --relates",
+      "met": true
+    },
+    {
+      "text": "README has one example",
+      "met": true
+    },
+    {
+      "text": "node --test passes",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "Update the guide text in src/guide.js",
+      "met": true
+    },
+    {
+      "text": "Update the hint in bin/plantool.js",
+      "met": true
+    },
+    {
+      "text": "Add one example to README.md",
+      "met": true
+    },
+    {
+      "text": "Run node --test (test/workflow.test.js checks parts of the briefing)",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/guide.js",
+    "bin/plantool.js",
+    "README.md"
+  ],
+  "size": "xs",
+  "createdBy": "claude",
+  "createdAt": "2026-11-14T11:57:31.167Z",
+  "updatedAt": "2026-11-14T16:55:31.660Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Guide step 4 and a rule of thumb name --blocked-by, --blocks and --relates; the create hint names plantool ticket update KEY --relates OTHER; README quick start has one example.",
+    "verifiedBy": "node --test: 98 pass, 0 fail, 1 skipped. plantool guide shows the new lines; a create with a possibly related ticket shows the new hint.",
+    "changedFiles": [
+      "src/guide.js",
+      "bin/plantool.js",
+      "README.md"
+    ]
+  },
+  "completedAt": "2026-11-14T16:55:31.660Z"
+}

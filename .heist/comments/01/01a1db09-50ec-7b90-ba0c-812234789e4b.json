@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1db09-50ec-7b90-ba0c-812234789e4b",
-  "ticketId": "01a1d9ed-0559-7e1d-8154-ea84d1571d01",
-  "body": "README, docs/implementation-decisions.md and src/onboard.js describe the Graph tab, heist graph, the URL mode graph and decision HEIST-47.",
-  "author": "sonnet",
-  "createdAt": "2026-11-14T17:09:43.276Z"
-}

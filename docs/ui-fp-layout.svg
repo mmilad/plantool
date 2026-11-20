@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-labelledby="title desc">
-  <title id="title">Heistman — schlichte Ticketarbeitsfläche nach fp.dev-Referenz</title>
-  <desc id="desc">Statischer Desktopentwurf mit kompaktem Kopf, Suche, Ticketliste links und ausgewähltem Ticketdetail rechts. Zehn direkte UI-Programmpakete werden mit vorhandenem heist-Status und Priorität gezeigt; Filter für Status, Priorität, Labels und Hierarchiebereich sind vorgesehen. Es gibt kein Assignee-Feld.</desc>
+  <title id="title">Plan — schlichte Ticketarbeitsfläche nach fp.dev-Referenz</title>
+  <desc id="desc">Statischer Desktopentwurf mit kompaktem Kopf, Suche, Ticketliste links und ausgewähltem Ticketdetail rechts. Zehn direkte UI-Programmpakete werden mit vorhandenem plantool-Status und Priorität gezeigt; Filter für Status, Priorität, Labels und Hierarchiebereich sind vorgesehen. Es gibt kein Assignee-Feld.</desc>
   <defs>
     <style>
       text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
@@ -28,9 +28,9 @@
   <path d="M0 57.5H1280" class="divider"/>
   <rect x="24" y="13" width="32" height="32" rx="7" fill="#202A36"/>
   <path d="M32 22h16M32 28h16M32 34h11" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
-  <text x="68" y="35" font-size="15" font-weight="650">Heistman</text>
+  <text x="68" y="35" font-size="15" font-weight="650">Plan</text>
   <path d="M190 19v20" class="divider"/>
-  <text x="210" y="35" class="small">heistman</text>
+  <text x="210" y="35" class="small">plan</text>
 
   <rect x="380" y="9" width="420" height="40" rx="7" fill="#F7F8FA" stroke="#E1E5EA"/>
   <circle cx="400" cy="28" r="6" fill="none" stroke="#697586" stroke-width="1.5"/>
@@ -105,7 +105,7 @@
   <text x="85" y="713" class="small">Lokalen UI-Server auf Port 4000</text>
   <text x="85" y="729" class="tiny muted">Offen · Hoch</text>  <!-- Selected ticket detail -->
   <rect x="511" y="133" width="744" height="40" fill="#FFFFFF"/>
-  <text x="536" y="158" class="tiny muted">HEISTMAN  /  UI-PROGRAMM  /  TICKET</text>
+  <text x="536" y="158" class="tiny muted">PLAN  /  UI-PROGRAMM  /  TICKET</text>
   <path d="M511 173h744" class="divider"/>
   <text x="536" y="220" class="heading">Schlichtes UI-Konzept mit klaren Planungsabläufen festhalten</text>
   <text x="536" y="246" class="small muted">Ticket-ID 01a189ad-5c7c-7e68-b165-79fb9f674539</text>
@@ -120,8 +120,8 @@
   <text x="859" y="330" class="small">Hoch</text>
   <text x="536" y="374" class="label muted">BESCHREIBUNG</text>
   <text x="536" y="402" class="body">Konkrete UI-Richtung und Informationsarchitektur vor der Umsetzung</text>
-  <text x="536" y="423" class="body">festlegen. Die erste visuelle Referenz ist fp.dev; Heistman zeigt</text>
-  <text x="536" y="444" class="body">nur Funktionen und Felder, die heist tatsächlich unterstützt.</text>
+  <text x="536" y="423" class="body">festlegen. Die erste visuelle Referenz ist fp.dev; Plan zeigt</text>
+  <text x="536" y="444" class="body">nur Funktionen und Felder, die plantool tatsächlich unterstützt.</text>
   <text x="536" y="480" class="small muted">Vorschlag: schlichte Zweispaltenfläche mit Liste links, Detail rechts,</text>
   <text x="536" y="499" class="small muted">dezenter Auswahl, feinen Linien und sparsamer Akzentfarbe.</text>
   <path d="M536 524h694" class="divider"/>

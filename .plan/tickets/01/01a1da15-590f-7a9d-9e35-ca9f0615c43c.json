@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1da15-590f-7a9d-9e35-ca9f0615c43c",
+  "number": 57,
+  "title": "plantool ticket show lists the code plan and the relations",
+  "kind": "task",
+  "description": "In bin/plantool.js the function ticketText prints a ticket as a document: the sections of its blueprint, then other filled fields. Add two sections at the end, each only when there is something to show. Relations: read project.relations.list(ticket.id). For each relation print one line with the other ticket's key, title and status, grouped as 'blocked by' (type blocks and this ticket is the target), 'blocks' (type blocks and this ticket is the source) and, for every other type, the type name with underscores replaced by spaces (for example 'relates to'). Get the other ticket with project.tickets.get(id). Code plan: the ticket record has a field codePlan with the lists implements, consumes and changes; each entry names a component id. The command plantool codeplan show in the same file shows how to get the resolved names: project.context(id, {budget: 1e9}) returns codePlan with name and kind per entry. Print one line per entry, for example 'consumes relationGraph (function)   plantool contract show relationGraph', and for consumes also the required fields if the entry has requires. Keep --format json unchanged: it prints the raw ticket.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1da15-545e-76f4-b5dd-f9c08e4ce4aa",
+  "why": "A person or agent reading a ticket does not see that a contract is attached or what the ticket waits for; both live outside the ticket record.",
+  "acceptance": [
+    {
+      "text": "plantool ticket show prints blockers, blocked tickets and other relations with key, title and status",
+      "met": true
+    },
+    {
+      "text": "It prints the code plan with component names",
+      "met": true
+    },
+    {
+      "text": "Tickets without relations or code plan look as before",
+      "met": true
+    },
+    {
+      "text": "--format json is unchanged",
+      "met": true
+    },
+    {
+      "text": "node --test passes",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "Read ticketText and the codeplan show branch in bin/plantool.js",
+      "met": true
+    },
+    {
+      "text": "Add the Relations section",
+      "met": true
+    },
+    {
+      "text": "Add the Code plan section",
+      "met": true
+    },
+    {
+      "text": "Extend the test in test/cli.test.js that checks plantool ticket show: link two tickets and check the lines",
+      "met": true
+    },
+    {
+      "text": "Run node --test",
+      "met": true
+    },
+    {
+      "text": "Check on this repository: node bin/plantool.js ticket show PLAN-52 shows 'blocked by PLAN-51' and 'consumes relationGraph'",
+      "met": true
+    }
+  ],
+  "files": [
+    "bin/plantool.js",
+    "test/cli.test.js"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-14T12:43:14.575Z",
+  "updatedAt": "2026-11-14T17:01:42.133Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "ticket show lists Relations (blocked by / blocks / other relation types, key, title, status) and Code plan (component names, kind, contract command, required fields); blank when there is none; JSON unchanged",
+    "verifiedBy": "node --test: 100 pass, 0 fail, 1 skipped; cli test links SHOP tickets and checks the sections; node bin/plantool.js ticket show PLAN-52 lists PLAN-51 under blocked by and consumes relationGraph",
+    "changedFiles": [
+      "bin/plantool.js",
+      "test/cli.test.js"
+    ]
+  },
+  "completedAt": "2026-11-14T17:01:42.133Z"
+}

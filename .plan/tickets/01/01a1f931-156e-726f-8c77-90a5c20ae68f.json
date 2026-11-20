@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1f931-156e-726f-8c77-90a5c20ae68f",
+  "number": 70,
+  "title": "Make ticket creation safe to retry after a lost response",
+  "kind": "feature",
+  "description": "A browser POST can create a ticket even when its response is lost. Add an idempotency key to each ticket-create submission, persist it with the created ticket, and make same-key retries return the original ticket. Reusing a key with a different payload must fail with a conflict. Keep the key stable while the same create form draft is retried.",
+  "status": "done",
+  "priority": "urgent",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "A manual retry after an uncertain POST can currently create a duplicate ticket; the owner decided this must be fixed before the first npm release.",
+  "acceptance": [
+    {
+      "text": "The browser reuses one stable idempotency key when the same create draft is submitted again",
+      "met": true
+    },
+    {
+      "text": "A same-key same-payload retry returns the original ticket without adding a second ticket, including after the server restarts",
+      "met": true
+    },
+    {
+      "text": "Reusing a key with a different payload returns a conflict and leaves ticket data unchanged",
+      "met": true
+    },
+    {
+      "text": "Core/API and HTTP tests cover retries, conflicting payloads and concurrent duplicates",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "Add a validated optional request key and canonical payload fingerprint to ticket creation",
+      "met": true
+    },
+    {
+      "text": "Make the create write and persisted request metadata atomic and replay-safe",
+      "met": true
+    },
+    {
+      "text": "Pass a stable key from the browser create form and retain it after an uncertain failure",
+      "met": true
+    },
+    {
+      "text": "Add core/API/HTTP tests for replay, mismatch, restart and concurrency",
+      "met": true
+    },
+    {
+      "text": "Update release docs and verify the complete test suite",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/index.js",
+    "src/index.d.ts",
+    "src/server.js",
+    "src/ui.js",
+    "schema/plantool.schema.json",
+    "test"
+  ],
+  "createdAt": "2026-11-20T13:41:45.966Z",
+  "updatedAt": "2026-11-20T13:55:33.809Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Added replay-safe ticket creation with persisted request keys, browser session recovery, conflict handling, and core/HTTP coverage.",
+    "verifiedBy": "npm run check passed: 119 tests passed, 0 failed, 1 optional real-model test skipped; npm pack --dry-run --json listed 25 intended files; node --check src/ui.js and plantool check passed.",
+    "changedFiles": [
+      ".plan/tickets/01/01a1ca94-b243-7135-b0f8-b279dae178c9.json",
+      ".plan/tickets/01/01a1ca94-b534-754e-8bd5-ce0c29c96f3a.json",
+      ".plan/tickets/01/01a1cbd8-4be9-7349-a9a7-56f756e93e89.json",
+      "GOAL.md",
+      "README.md",
+      "docs/architecture-proposal.md",
+      "docs/implementation-decisions.md",
+      "docs/open-questions.md",
+      "docs/product-vision.md",
+      "docs/research/fp-feature-matrix.md",
+      "docs/review-notes.md",
+      "docs/roadmap.md",
+      "package.json",
+      "schema/plantool.schema.json",
+      "src/index.d.ts",
+      "src/index.js",
+      "src/onboard.js",
+      "src/ui.js",
+      "test/claims.test.js",
+      "test/core.test.js",
+      "test/server.test.js",
+      ".plan/tickets/01/01a1f922-960c-706d-8d69-5b7806e86552.json",
+      ".plan/tickets/01/01a1f931-156e-726f-8c77-90a5c20ae68f.json"
+    ]
+  },
+  "completedAt": "2026-11-20T13:55:33.809Z"
+}

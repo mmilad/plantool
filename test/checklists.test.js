@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { initProject, openProject } from '../src/index.js';
 
-async function project(t) { const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-bp-')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd }); return openProject({ cwd }); }
+async function project(t) { const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool-bp-')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd }); return openProject({ cwd }); }
 
 test('checklists resolve inheritance, suggest by title and expand a ticket into child tickets', async t => {
   const p = await project(t);
@@ -45,7 +45,7 @@ test('checklists resolve inheritance, suggest by title and expand a ticket into 
   assert.ok(check.warnings.some(w => w.code === 'CHECKLIST_UNDECIDED'));
 });
 
-test('project checklists in .heist/checklists override built-ins and are validated', async t => {
+test('project checklists in .plan/checklists override built-ins and are validated', async t => {
   const p = await project(t);
   const r = await p.checklists.init('header');
   const file = path.join(p.root, r.file); const bp = JSON.parse(await fs.readFile(file, 'utf8'));
@@ -58,7 +58,7 @@ test('project checklists in .heist/checklists override built-ins and are validat
 });
 
 test('product checklist orders its items: the stack waits for the platform, the UI structure waits for stack and features', async t => {
-  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist order ')); t.after(() => fs.rm(cwd, { recursive: true, force: true }));
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool order ')); t.after(() => fs.rm(cwd, { recursive: true, force: true }));
   await initProject({ cwd, name: 'Shop' }); const p = await openProject({ cwd });
   const root = await p.tickets.create({ title: 'Shop app' });
   const r = await p.checklists.apply(root.id, 'product');

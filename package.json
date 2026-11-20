@@ -1,5 +1,5 @@
 {
-  "name": "@mmilad/heist",
+  "name": "@mmilad/plantool",
   "version": "0.1.0",
   "description": "Git-native planning and issue tracking for people and coding agents",
   "type": "module",
@@ -7,14 +7,14 @@
     "node": ">=22"
   },
   "bin": {
-    "heist": "./bin/heist.js"
+    "plantool": "./bin/plantool.js"
   },
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
       "import": "./src/index.js"
     },
-    "./schema": "./schema/heist.schema.json"
+    "./schema": "./schema/plantool.schema.json"
   },
   "files": [
     "bin/",
@@ -25,7 +25,7 @@
   ],
   "scripts": {
     "test": "node --test",
-    "check": "node --check src/index.js && node --check src/server.js && node --check bin/heist.js && node --check bench/scale.mjs && node --test",
+    "check": "node --check src/index.js && node --check src/server.js && node --check bin/plantool.js && node --check bench/scale.mjs && node --test",
     "benchmark:scale": "node bench/scale.mjs"
   },
   "license": "MIT",

@@ -4,9 +4,9 @@
 
 ## Recommendation
 
-Use a **file-per-entity canonical store** under **.heist/**: UTF-8 JSON for structured records and Markdown for long-form plans/specifications/decisions. Treat the store as a graph projected from explicit IDs. Build a public TypeScript library as the core and a thin **heist** CLI as its consumer.
+Use a **file-per-entity canonical store** under **.plan/**: UTF-8 JSON for structured records and Markdown for long-form plans/specifications/decisions. Treat the store as a graph projected from explicit IDs. Build a public TypeScript library as the core and a thin **plantool** CLI as its consumer.
 
-Canonical .heist plan files are inside the project and Git-tracked by default; initialization must not add them to .gitignore. A clean clone contains the goals, tickets, decisions, comments, metadata, and relationships that agents need to inspect and edit offline. Hosted services and accounts are not required. The optional semantic index is rebuildable local cache data and is never authoritative or required to read/edit plan data. Only generated caches and ephemeral sessions, process locks, and run logs are excluded from canonical Git-tracked state.
+Canonical files under `.plan/` are inside the project and Git-tracked by default; initialization must not add them to `.gitignore`. A clean clone contains the goals, tickets, decisions, comments, metadata, and relationships that agents need to inspect and edit offline. Hosted services and accounts are not required. The optional semantic index is rebuildable local cache data and is never authoritative or required to read/edit plan data. Only generated caches and ephemeral sessions, process locks, and run logs are excluded from canonical Git-tracked state.
 
 ## Storage options
 
@@ -22,7 +22,7 @@ Scores: 1 weak, 5 strong for Git-native use. Merge score describes likely ordina
 
 ## Proposed layout
 
-    .heist/
+    .plan/
       config.json
       schema.json
       goals/<id>.md
@@ -33,7 +33,7 @@ Scores: 1 weak, 5 strong for Git-native use. Merge score describes likely ordina
       relationships/<first-two-id-chars>/<relationship-id>.json
       assets/                 # optional later, user-managed
 
-All files under .heist that form canonical project state are meant to be committed with the repository; heist does not automatically ignore them. References use normalized repository-relative forward-slash paths and are checked to remain in the repository. IDs are immutable; filenames derive from IDs, never titles/parents. A future local cache is ignored by default and keyed by schema version and canonical hashes. It is disposable. Credentials, remote sessions, agent stdout and locks are not tracked.
+All files under .plan that form canonical project state are meant to be committed with the repository; plantool does not automatically ignore them. References use normalized repository-relative forward-slash paths and are checked to remain in the repository. IDs are immutable; filenames derive from IDs, never titles/parents. A future local cache is ignored by default and keyed by schema version and canonical hashes. It is disposable. Credentials, remote sessions, agent stdout and locks are not tracked.
 
 ## Core entities
 
@@ -116,7 +116,7 @@ Git linked worktrees support concurrent checkouts but are not a conflict-free sy
 
 API proposal:
 
-    import { openProject } from "@mmilad/heist";
+    import { openProject } from "@mmilad/plantool";
 
     const project = await openProject({ cwd: process.cwd() });
     const ticket = await project.tickets.get(ticketId);
@@ -129,23 +129,23 @@ Expose async methods, typed errors (NotFound, ValidationError, CycleError, Confl
 
 | Command | Purpose |
 |---|---|
-| heist init [--yes] | Create .heist without overwriting existing data. |
-| heist goal/plan/decision create | Create planning artifacts. |
-| heist ticket create --title ... [--parent ID] | Create at any depth. |
-| heist ticket show/list/update/move | Inspect, filter, edit and reparent. |
-| heist tree [ID] [--max-depth N] [--format json] | Bounded display; max depth affects output only. |
-| heist relation add/remove/list | Manage typed edges. |
-| heist context ID [--budget N] [--format json] | Deterministic packet with provenance. |
-| heist search QUERY [--format json] | Offline full-text search. |
-| heist serve [--open] [--port N] | Serve a browser UI for only the current project on loopback; run in the foreground. |
-| heist validate | Check schemas, IDs, links, cycles, paths and values. |
-| heist doctor | Read-only diagnostics; repair is explicit. |
+| plantool init [--yes] | Create .plan without overwriting existing data. |
+| plantool goal/plan/decision create | Create planning artifacts. |
+| plantool ticket create --title ... [--parent ID] | Create at any depth. |
+| plantool ticket show/list/update/move | Inspect, filter, edit and reparent. |
+| plantool tree [ID] [--max-depth N] [--format json] | Bounded display; max depth affects output only. |
+| plantool relation add/remove/list | Manage typed edges. |
+| plantool context ID [--budget N] [--format json] | Deterministic packet with provenance. |
+| plantool search QUERY [--format json] | Offline full-text search. |
+| plantool serve [--open] [--port N] | Serve a browser UI for only the current project on loopback; run in the foreground. |
+| plantool validate | Check schemas, IDs, links, cycles, paths and values. |
+| plantool doctor | Read-only diagnostics; repair is explicit. |
 
 Commands support human and JSON output, noninteractive operation, stable exit codes, stdin/file input, explicit field flags, Unicode/path safety and completions. A repo devDependency with lockfile is the reliable install. One-shot package-manager use is convenience; avoid downloading unpinned latest code in sensitive/offline workflows.
 
 ## Project-scoped local web UI
 
-Original proposal: `heist serve` was scoped to one project resolved from the current working directory. This was superseded by the 2026-11-08 decision in `implementation-decisions.md`: the shipped UI discovers projects through a machine-local registry and serves them from one loopback-only workspace. Canonical files remain project-local; removing a registry entry does not remove project data. Supported writes use the same validators and storage adapter as CLI commands.
+Original proposal: `plantool serve` was scoped to one project resolved from the current working directory. This was superseded by the 2026-11-08 decision in `implementation-decisions.md`: the shipped UI discovers projects through a machine-local registry and serves them from one loopback-only workspace. Canonical files remain project-local; removing a registry entry does not remove project data. Supported writes use the same validators and storage adapter as CLI commands.
 
 Run as a foreground process and print the URL. By default bind only to `127.0.0.1:4000`; if that port is occupied, fail clearly instead of selecting a random port or starting another instance. An explicit `--port` override may be used and must print the actual URL. `--open` may launch the browser only after a successful bind. Stop with Ctrl-C. No account or auth flow is required because the service is local to the machine and project. Do not provide a LAN bind option in the MVP.
 
@@ -153,7 +153,7 @@ No-auth local service still needs browser protections: reject unexpected Host va
 
 ## npm and platform constraints
 
-Use ordinary Node.js JS/TS files, npm bin mapping for heist and public exports. npm documents platform command shims including Windows .cmd and the Node shebang. Keep OS/CPU unrestricted absent a verified reason. Choose a supported Node LTS minimum at implementation start and test it. Avoid native dependencies, shell-specific installers, WSL, global installation and OS-specific DB binaries. Use Node built-ins where feasible. Test paths with spaces, Unicode, drive roots, UNC paths, case differences and both separators. Check package and command names before release.
+Use ordinary Node.js JS/TS files, npm bin mapping for plantool and public exports. npm documents platform command shims including Windows .cmd and the Node shebang. Keep OS/CPU unrestricted absent a verified reason. Choose a supported Node LTS minimum at implementation start and test it. Avoid native dependencies, shell-specific installers, WSL, global installation and OS-specific DB binaries. Use Node built-ins where feasible. Test paths with spaces, Unicode, drive roots, UNC paths, case differences and both separators. Check package and command names before release.
 
 Sources: [npm package.json](https://docs.npmjs.com/cli/v11/configuring-npm/package-json/) and [Node release schedule](https://nodejs.org/en/about/previous-releases).
 

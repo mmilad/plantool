@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
   <rect width="1280" height="720" fill="#F6F7F9"/>
   <rect x="0" y="0" width="1280" height="64" fill="#fff" stroke="#D8DEE7"/>
-  <text x="32" y="40" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#263445">Heistman</text>
+  <text x="32" y="40" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#263445">Plan</text>
   <text x="190" y="40" font-family="Arial,sans-serif" font-size="14" fill="#263445">Übersicht</text>
   <text x="290" y="40" font-family="Arial,sans-serif" font-size="14" fill="#5A687A">Tickets</text>
   <text x="370" y="40" font-family="Arial,sans-serif" font-size="14" fill="#5A687A">Planungsdokumente</text>

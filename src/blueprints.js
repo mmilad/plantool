@@ -1,11 +1,11 @@
 // Blueprints: what is expected of a ticket of a kind, like an issue or pull request template.
 // A blueprint names the fields a task, feature, bug or decision should have filled, and may carry a template for the description.
 // It complements checklists: a blueprint describes the ticket itself, a checklist the parts it breaks into.
-// Built-in blueprints ship with heist; a project replaces one with .heist/blueprints/<kind>.json.
+// Built-in blueprints ship with plantool; a project replaces one with .plan/blueprints/<kind>.json.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomBytes } from 'node:crypto';
-import { ValidationError, NotFoundError, HeistError } from './index.js';
+import { ValidationError, NotFoundError, PlanError } from './index.js';
 import { fieldsFor, customFields } from './fields.js';
 
 const KINDS = ['task', 'feature', 'bug', 'decision', 'option'];
@@ -60,7 +60,7 @@ const FLAGS = { todos: '--todo "a;b"', description: '--description', why: '--why
 function validateBlueprint(bp, config, source) {
   const where = source ? ` (${source})` : '';
   if (!bp || typeof bp !== 'object' || Array.isArray(bp)) throw new ValidationError(`Blueprint must be an object${where}`);
-  if (Array.isArray(bp.items)) throw new ValidationError(`This file looks like a checklist (it has items). Checklists live in .heist/checklists/${where}`);
+  if (Array.isArray(bp.items)) throw new ValidationError(`This file looks like a checklist (it has items). Checklists live in .plan/checklists/${where}`);
   if (!KINDS.includes(bp.kind)) throw new ValidationError(`Blueprint kind must be one of ${KINDS.join(', ')}${where}`);
   if (bp.template !== undefined && typeof bp.template !== 'string') throw new ValidationError(`Blueprint ${bp.kind}: template must be text${where}`);
   if (!Array.isArray(bp.expects)) throw new ValidationError(`Blueprint ${bp.kind} needs an expects array${where}`);
@@ -90,7 +90,7 @@ export function attachBlueprintApi(p) {
     try { names = (await fs.readdir(dir)).filter(f => f.endsWith('.json')); } catch (e) { if (e.code !== 'ENOENT') throw e; }
     for (const f of names.sort()) {
       let bp; try { bp = JSON.parse(await fs.readFile(path.join(dir, f), 'utf8')); } catch (e) { throw new ValidationError(`Blueprint file ${f} is not valid JSON: ${e.message}`); }
-      validateBlueprint(bp, p.config, `.heist/blueprints/${f}`);
+      validateBlueprint(bp, p.config, `.plan/blueprints/${f}`);
       if (`${bp.kind}.json` !== f) throw new ValidationError(`Blueprint file ${f} must be named ${bp.kind}.json`);
       map.set(bp.kind, { ...bp, source: 'project' });
     }
@@ -122,13 +122,13 @@ export function attachBlueprintApi(p) {
     /** The description a new ticket of this kind starts with, or undefined. */
     async template(kind) { return (await all()).get(kind ?? 'task')?.template; },
     expected,
-    /** Write the built-in blueprint of a kind into .heist/blueprints/ so the project can change what it expects. */
+    /** Write the built-in blueprint of a kind into .plan/blueprints/ so the project can change what it expects. */
     async init(kind) {
       if (!KINDS.includes(kind)) throw new ValidationError(`Blueprint kind must be one of ${KINDS.join(', ')}`);
       const base = BUILTIN_BLUEPRINTS.find(b => b.kind === kind) ?? { kind, title: kind, description: '', expects: [{ field: 'why', hint: 'The reason this exists.' }] };
       const file = path.join(dir, `${kind}.json`);
       await fs.mkdir(dir, { recursive: true });
-      try { await fs.writeFile(file, `${JSON.stringify({ ...structuredClone(base), template: base.template ?? '' }, null, 2)}\n`, { flag: 'wx' }); } catch (e) { if (e.code === 'EEXIST') throw new HeistError(`Blueprint ${kind} already exists in .heist/blueprints/`, 'CONFLICT'); throw e; }
+      try { await fs.writeFile(file, `${JSON.stringify({ ...structuredClone(base), template: base.template ?? '' }, null, 2)}\n`, { flag: 'wx' }); } catch (e) { if (e.code === 'EEXIST') throw new PlanError(`Blueprint ${kind} already exists in .plan/blueprints/`, 'CONFLICT'); throw e; }
       return { kind, file: path.relative(p.root, file).split(path.sep).join('/') };
     },
     /** A blueprint with everything a form needs: labels and types of its sections, and the fields of the kind it does not use yet. */
@@ -141,7 +141,7 @@ export function attachBlueprintApi(p) {
         expects: bp.expects.map(e => ({ ...info(e.field), hint: e.hint ?? '', optional: !!e.optional, leaf: e.when === 'leaf' })),
         available: ['description', ...defs.keys()].filter(n => !used.has(n) && !['createdBy', 'outcome'].includes(n)).map(info), fieldTypes: ['text', 'list', 'number', 'bool', 'enum'] };
     },
-    /** Replace the sections and the template of a kind's blueprint; written to .heist/blueprints/<kind>.json. */
+    /** Replace the sections and the template of a kind's blueprint; written to .plan/blueprints/<kind>.json. */
     async save(kind, { expects, template } = {}) {
       if (!KINDS.includes(kind)) throw new ValidationError(`Blueprint kind must be one of ${KINDS.join(', ')}`);
       const cur = (await all()).get(kind) ?? { kind, title: kind, description: '', expects: [] };

@@ -25,7 +25,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
     if (contexts.has(id)) return contexts.get(id);
     const entry = (await listProjects()).find(x => x.id === id);
     if (!entry) throw new NotFoundError(`Unknown project: ${id}`);
-    if (!entry.available) throw new NotFoundError(`Project is not available at ${entry.root}: ${entry.problem ?? 'missing .heist/'}`);
+    if (!entry.available) throw new NotFoundError(`Project is not available at ${entry.root}: ${entry.problem ?? 'missing .plan/'}`);
     const ctx = makeContext(await openProject({ cwd: entry.root, cache: true })); contexts.set(id, ctx); return ctx;
   }
   const token = randomBytes(32).toString('hex');
@@ -37,7 +37,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
       const url = new URL(req.url, `http://${host}`);
       if (['POST','PATCH','PUT','DELETE'].includes(req.method)) {
         const origin=req.headers.origin;
-        if (!origin || origin !== `http://${host}` || !safeToken(req.headers['x-heist-csrf'], token)) return send(res,403,{error:'Origin or CSRF validation failed'});
+        if (!origin || origin !== `http://${host}` || !safeToken(req.headers['x-plantool-csrf'], token)) return send(res,403,{error:'Origin or CSRF validation failed'});
       }
       if (req.method === 'GET' && url.pathname === '/') { res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','content-security-policy':"default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'none'"}); return res.end(renderAppHtml(token, { defaultProjectId: defaultId })); }
       if (req.method === 'OPTIONS') return send(res,405,{error:'CORS disabled'});
@@ -130,7 +130,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
   await new Promise((resolve,reject)=>{
     server.once('error',error=>{
       if(error.code==='EADDRINUSE'){
-        const inUse=new Error(`Port ${port} is already in use at http://127.0.0.1:${port}; no additional heist server was started. Close the existing process or choose another explicit port with --port N.`);
+        const inUse=new Error(`Port ${port} is already in use at http://127.0.0.1:${port}; no additional plantool server was started. Close the existing process or choose another explicit port with --port N.`);
         inUse.code='PORT_IN_USE';
         inUse.cause=error;
         reject(inUse);

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db05-93ad-7756-ab47-3ecfff8e79fb",
+  "ticketId": "01a1d9ed-0284-7db6-ba71-1dfb5518aa65",
+  "body": "Added relationGraph(project, {root, limit}) in src/relation-graph.js: all relation types, layers by blocks chains (Kahn queue), rows by ticket number, limit with truncated, hidden count. Wired into src/index.js (p.relationGraph), src/index.d.ts (GraphNode, GraphEdge, RelationGraphResult), GET /api/roadmap/graph in src/server.js and plantool graph [--root ID] [--limit N] [--format json] in bin/plantool.js. Layers are computed before the limit cut; the reported layers count uses the nodes that are returned.",
+  "author": "haiku",
+  "createdAt": "2026-11-14T17:05:38.221Z"
+}

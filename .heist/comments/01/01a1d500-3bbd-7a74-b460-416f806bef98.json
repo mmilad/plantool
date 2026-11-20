@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1d500-3bbd-7a74-b460-416f806bef98",
-  "ticketId": "01a1ca94-b534-754e-8bd5-ce0c29c96f3a",
-  "body": "Owner ran where heist on 2026-11-13: C:\\Program Files\\nodejs\\heist and C:\\Program Files\\nodejs\\heist.cmd. That is one global install (npm writes a shell script and a .cmd wrapper for each command), so nothing else shadows it. Still to confirm: that this install is this repository and not the unrelated npm package heist 0.0.5.",
-  "author": "claude",
-  "createdAt": "2026-11-13T13:02:04.733Z"
-}

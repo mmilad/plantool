@@ -7,7 +7,7 @@ import path from 'node:path';
 import { initProject, openProject } from '../src/index.js';
 
 test('agent plans the Pokemon trading card app end to end', async t => {
-  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist acceptance ')); t.after(() => fs.rm(cwd, { recursive: true, force: true }));
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool acceptance ')); t.after(() => fs.rm(cwd, { recursive: true, force: true }));
   await initProject({ cwd, name: 'pokecards' }); const p = await openProject({ cwd });
 
   // 1. The product starts from a single sentence.

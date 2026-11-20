@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-labelledby="title desc">
-  <title id="title">Heistman UI-Entwurf — Ungespeicherte Ticketentwürfe verwerfen</title>
+  <title id="title">Plan UI-Entwurf — Ungespeicherte Ticketentwürfe verwerfen</title>
   <desc id="desc">Desktop- und Mobilzustand zeigen eine Bestätigung, wenn ein ausgefülltes Root- oder Unterticketformular verlassen wird. Weiter bearbeiten ist die sichere vorausgewählte Aktion; Verwerfen löscht den lokalen Entwurf ohne Ticketanlage.</desc>
   <defs>
     <style>
@@ -25,7 +25,7 @@
   <g transform="translate(16 72)">
     <rect width="616" height="660" rx="10" fill="#F0F3F7" stroke="#D8DEE7"/>
     <rect x="1" y="1" width="614" height="48" rx="9" fill="#FFFFFF"/>
-    <text x="18" y="30" class="small" font-weight="650">Heistman</text>
+    <text x="18" y="30" class="small" font-weight="650">Plan</text>
     <rect x="18" y="65" width="580" height="563" rx="6" fill="#F0F3F7" opacity=".45"/>
     <rect x="64" y="98" width="488" height="500" rx="8" fill="#FFFFFF" stroke="#C8D0DB"/>
     <text x="88" y="132" class="heading">Ticket erstellen</text>
@@ -59,7 +59,7 @@
   <g transform="translate(648 72)">
     <rect width="616" height="660" rx="10" fill="#F0F3F7" stroke="#D8DEE7"/>
     <rect x="1" y="1" width="614" height="48" rx="9" fill="#FFFFFF"/>
-    <text x="18" y="30" class="small" font-weight="650">Heistman</text>
+    <text x="18" y="30" class="small" font-weight="650">Plan</text>
     <text x="530" y="30" class="small muted" text-anchor="end">Zurück</text>
     <text x="24" y="90" class="heading">Unterticket anlegen</text>
     <rect x="24" y="108" width="568" height="64" rx="5" fill="#EAF1FD" stroke="#B9CBE8"/>

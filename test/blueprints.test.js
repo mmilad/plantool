@@ -6,7 +6,7 @@ import path from 'node:path';
 import { initProject, openProject } from '../src/index.js';
 
 async function project(t) {
-  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-blueprint-')); t.after(() => fs.rm(cwd, { recursive: true, force: true }));
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool-blueprint-')); t.after(() => fs.rm(cwd, { recursive: true, force: true }));
   await initProject({ cwd, name: 'shop' }); return openProject({ cwd });
 }
 
@@ -44,7 +44,7 @@ test('blueprints say what a ticket of a kind should have and what is still empty
 test('a project blueprint changes what is expected and can carry a description template', async t => {
   const p = await project(t);
   const { file } = await p.blueprints.init('bug');
-  assert.equal(file, '.heist/blueprints/bug.json');
+  assert.equal(file, '.plan/blueprints/bug.json');
   await assert.rejects(p.blueprints.init('bug'), { code: 'CONFLICT' });
   const abs = path.join(p.root, file);
   await fs.writeFile(abs, JSON.stringify({ kind: 'bug', template: '## Seen where\n\n## What happens\n', expects: [{ field: 'description', hint: 'Where and what' }, { field: 'size', optional: true }] }));

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca95-239b-7a20-ad3e-1582a84248cc",
+  "number": 10,
+  "title": "Describe what the user does and what happens, step by step",
+  "kind": "task",
+  "description": "Agents build what is written; a vague sentence becomes a vague feature.\n\nFrom blueprint Feature › behaviour (parent: Similarity hint in ticket create uses the relative rule).",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1ca94-aea3-7fe0-b679-73ba06235cf1",
+  "origin": {
+    "checklist": "feature",
+    "item": "behaviour"
+  },
+  "why": "Agents build what is written; a vague sentence becomes a vague feature.",
+  "createdAt": "2026-11-11T12:28:54.043Z",
+  "updatedAt": "2026-11-11T18:22:07.340Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Behaviour written into the description of PLAN-1."
+  },
+  "completedAt": "2026-11-11T18:22:07.340Z",
+  "completedAtSource": "updatedAt"
+}

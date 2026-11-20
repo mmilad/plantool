@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1cbd8-9287-70e1-a905-2fc87f61874a",
-  "ticketId": "01a1ca94-af86-785c-adcc-7c850eb5673a",
-  "body": "test/semantic-real.test.js, skipped unless HEIST_TEST_REAL_MODEL=1.",
-  "author": "claude",
-  "createdAt": "2026-11-11T18:22:10.567Z"
-}

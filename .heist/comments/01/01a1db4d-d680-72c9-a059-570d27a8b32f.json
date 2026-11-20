@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1db4d-d680-72c9-a059-570d27a8b32f",
-  "ticketId": "01a1db4c-f06e-7df8-9817-ed2e419f55e4",
-  "body": "heist similar --text TEXT compares a new idea with all tickets; the default lists the top matches without a z-score cut (--strength restores it). Ticket API similar default changed the same way.",
-  "author": "claude",
-  "createdAt": "2026-11-14T18:24:33.920Z"
-}

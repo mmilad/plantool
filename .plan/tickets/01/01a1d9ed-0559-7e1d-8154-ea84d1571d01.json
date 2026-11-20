@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9ed-0559-7e1d-8154-ea84d1571d01",
+  "number": 53,
+  "title": "Document the relation graph",
+  "kind": "task",
+  "description": "Three places describe the roadmap and need the graph. README.md, section Roadmap: one paragraph and the command plantool graph. docs/implementation-decisions.md: a new section at the end with today's date that records what was built and the decision PLAN-47 (layered columns, own SVG, no library, all relation types, tickets without relations counted but not drawn, Dependencies table kept). src/onboard.js, section Roadmap: one line for plantool graph --format json and the URL mode graph. Write plain English, short sentences, no marketing words.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d9eb-b76e-78b8-abee-88fdb3a7588a",
+  "why": "Agents learn commands from the briefing and people from the README; a view nobody knows of is not used.",
+  "acceptance": [
+    {
+      "text": "README names plantool graph and the Graph tab",
+      "met": true
+    },
+    {
+      "text": "The decision is recorded in docs/implementation-decisions.md",
+      "met": true
+    },
+    {
+      "text": "plantool agent onboard mentions plantool graph",
+      "met": true
+    },
+    {
+      "text": "node --test passes",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "README.md",
+      "met": true
+    },
+    {
+      "text": "docs/implementation-decisions.md",
+      "met": true
+    },
+    {
+      "text": "src/onboard.js",
+      "met": true
+    },
+    {
+      "text": "Run node --test",
+      "met": true
+    }
+  ],
+  "files": [
+    "README.md",
+    "docs/implementation-decisions.md",
+    "src/onboard.js"
+  ],
+  "size": "xs",
+  "createdBy": "claude",
+  "createdAt": "2026-11-14T11:59:11.705Z",
+  "updatedAt": "2026-11-14T17:09:42.932Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "README, docs/implementation-decisions.md and src/onboard.js describe the Graph tab, plantool graph, the URL mode graph and decision PLAN-47.",
+    "verifiedBy": "node --test passes; plantool agent onboard prints the plantool graph lines",
+    "changedFiles": [
+      "README.md",
+      "docs/implementation-decisions.md",
+      "src/onboard.js"
+    ]
+  },
+  "completedAt": "2026-11-14T17:09:42.932Z"
+}

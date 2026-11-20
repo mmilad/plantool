@@ -42,7 +42,7 @@ export async function relationGraph(p, { root, limit = 200 } = {}) {
   const hidden = [...scope].filter(id => byId.has(id) && !nodeIds.has(id)).length;
 
   // Layer: one column right of the highest blocker. Kahn's queue over blocks relations, no recursion.
-  // Blocking relations are acyclic (heist refuses cycles); a node on a cycle would keep a partial layer.
+  // Blocking relations are acyclic (plantool refuses cycles); a node on a cycle would keep a partial layer.
   const indegree = new Map([...nodeIds].map(id => [id, 0]));
   const outgoing = new Map();
   for (const r of kept) {

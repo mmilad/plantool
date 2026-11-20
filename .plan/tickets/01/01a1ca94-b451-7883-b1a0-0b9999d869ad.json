@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca94-b451-7883-b1a0-0b9999d869ad",
+  "number": 7,
+  "title": "Rebase the search quality set on the current plan",
+  "kind": "task",
+  "description": "The search quality check in bench/ measures how well keyword, semantic and hybrid search find tickets. Its question set points at tickets of the first plan (PM-12, PM-58 ...), which was reset on 2026-11-08, so the check cannot run any more and the threshold for likely overlap in plantool similar cannot be re-measured. Give the check its own fixture plan so it does not depend on this repository's tickets, then compare the plain z-score of plantool similar with the robust strength used by the create hint.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "bench/search-eval.json points at PM tickets that were removed when the plan was reset, so the calibration cannot be repeated.",
+  "acceptance": [
+    {
+      "text": "search-eval.json refers to tickets that exist or carries its own fixture",
+      "met": true
+    },
+    {
+      "text": "OVERLAP_Z comment names how it was calibrated",
+      "met": true
+    },
+    {
+      "text": "likelyOverlap in plantool similar is compared with the robust strength on real tickets",
+      "met": true
+    }
+  ],
+  "files": [
+    "bench/search-eval.json",
+    "bench/search-eval.mjs",
+    "src/semantic.js"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T12:28:25.553Z",
+  "updatedAt": "2026-11-14T18:47:19.390Z",
+  "todos": [
+    {
+      "text": "Add a fixture plan to bench/ (tickets with titles and descriptions, including known duplicates and related groups)",
+      "met": true
+    },
+    {
+      "text": "Point search-eval.json at the fixture keys",
+      "met": true
+    },
+    {
+      "text": "Run the check with the real model and record the numbers in implementation-decisions.md",
+      "met": true
+    },
+    {
+      "text": "Decide from the numbers whether plantool similar switches to the robust strength",
+      "met": true
+    }
+  ],
+  "assignee": null,
+  "outcome": {
+    "summary": "Gate runs on a fixture plan (34 tickets). Semantic R@5 0.83, MRR 0.93; keyword 0.15. Plain z keeps likelyOverlap (6% of related pairs at 3.5, 0% unrelated); robust is reported as robust. Decision in implementation-decisions.md.",
+    "verifiedBy": "node bench/search-eval.mjs with multilingual-e5-small; node --test 108 pass on the branch.",
+    "changedFiles": [
+      ".plan/tickets/01/01a1ca94-b15c-74e1-a1ef-73ff8faedd3b.json",
+      ".plan/tickets/01/01a1ca94-b451-7883-b1a0-0b9999d869ad.json",
+      "src/semantic.js"
+    ]
+  },
+  "completedAt": "2026-11-14T18:47:19.390Z"
+}

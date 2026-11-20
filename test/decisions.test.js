@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { initProject, openProject } from '../src/index.js';
 
-async function project(t) { const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist decisions ')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd, name: 'Shop' }); return openProject({ cwd }); }
+async function project(t) { const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool decisions ')); t.after(() => fs.rm(cwd, { recursive: true, force: true })); await initProject({ cwd, name: 'Shop' }); return openProject({ cwd }); }
 
 test('an unscored option gives no suggestion, scoring it does', async t => {
   const p = await project(t);

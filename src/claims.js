@@ -1,7 +1,7 @@
 // Claims shared between Git worktrees of the same repository.
-// Each worktree has its own .heist/ files, so a claim in one worktree is invisible to the others until a merge.
-// The shared registry lives in the common Git directory (<repo>/.git/heist/claims.json), which all worktrees share
-// and which is never committed. Without Git (or with HEIST_SHARED_CLAIMS=0) everything here is a no-op.
+// Each worktree has its own .plan/ files, so a claim in one worktree is invisible to the others until a merge.
+// The shared registry lives in the common Git directory (<repo>/.git/plantool/claims.json), which all worktrees share
+// and which is never committed. Without Git (or with PLANTOOL_SHARED_CLAIMS=0) everything here is a no-op.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { ConflictError } from './index.js';
@@ -24,10 +24,10 @@ export async function gitCommonDir(root) {
 }
 
 async function registry(p) {
-  if (process.env.HEIST_SHARED_CLAIMS === '0') return null;
+  if (process.env.PLANTOOL_SHARED_CLAIMS === '0') return null;
   if (p._claimsDir !== undefined) return p._claimsDir;
   const common = await gitCommonDir(p.root);
-  p._claimsDir = common ? path.join(common, 'heist') : null;
+  p._claimsDir = common ? path.join(common, 'plantool') : null;
   return p._claimsDir;
 }
 
@@ -40,7 +40,7 @@ async function withRegistry(dir, fn) {
       if (e.code !== 'EEXIST') throw e;
       const st = await fs.stat(lock).catch(() => null);
       if (st && Date.now() - st.mtimeMs > 10_000) { await fs.rm(lock, { recursive: true, force: true }); continue; }
-      if (i > 100) throw new ConflictError('The shared claim registry is locked by another heist process');
+      if (i > 100) throw new ConflictError('The shared claim registry is locked by another plantool process');
       await new Promise(r => setTimeout(r, 50));
     }
   }

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d566-fa45-75c6-93c3-051cafa89a43",
+  "number": 26,
+  "title": "Persist completion timestamps and backfill legacy tickets",
+  "kind": "task",
+  "description": "Set completedAt on entry into done through every write path. Clear on leaving done. Add an explicit idempotent dry-run-capable backfill from updatedAt without silently rewriting reads.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d566-fa3d-726d-94f4-a5663ab7b550",
+  "why": "Deliver the reviewed roadmap plan without regressions in existing project workflows.",
+  "acceptance": [
+    {
+      "text": "Lifecycle and legacy regression tests pass",
+      "met": true
+    },
+    {
+      "text": "Backfill preserves updatedAt and is idempotent",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/index.js",
+    "schema/plantool.schema.json"
+  ],
+  "size": "m",
+  "createdBy": "codex",
+  "refs": [
+    ".plan/plans/01/01a1d54a-790f-77e5-88e2-4c4ff8ea68f1.md"
+  ],
+  "createdAt": "2026-11-13T14:54:18.181Z",
+  "updatedAt": "2026-11-13T20:58:14.417Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Added managed completion timestamps, reopen clearing and durable estimated-date provenance. Backfilled 14 legacy records with all existing fields preserved; rerun changed zero records. Serialized updates and backfill to prevent lost concurrent edits.",
+    "verifiedBy": "Windows Node 24: npm run check 91 passed, 1 opt-in real-model test skipped; final roadmap tests 14/14; TypeScript declarations 0 diagnostics; browser verification at 1280x850 and 320x740; 2000-ticket benchmark warm timeline 22ms, structure 82ms.",
+    "changedFiles": [
+      "src/index.js",
+      "src/index.d.ts",
+      "schema/plantool.schema.json",
+      "test/roadmap.test.js"
+    ]
+  },
+  "completedAt": "2026-11-13T20:58:14.417Z"
+}

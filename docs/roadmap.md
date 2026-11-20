@@ -1,12 +1,12 @@
 # Roadmap
 
-> Status 2026-11-20: the core, CLI, public API, local multi-project UI, optional semantic search, planning tools, roadmap views, and MCP stdio adapter are implemented. The milestone text below is the historical design and acceptance baseline; superseded assumptions are explicitly identified and are not current release blockers. Current unfinished work is tracked in heist; release readiness is summarized in `implementation-decisions.md`.
+> Status 2026-11-20: the core, CLI, public API, local multi-project UI, optional semantic search, planning tools, roadmap views, and MCP stdio adapter are implemented. The milestone text below is the historical design and acceptance baseline; superseded assumptions are explicitly identified and are not current release blockers. Current unfinished work is tracked in plantool; release readiness is summarized in `implementation-decisions.md`.
 
 This roadmap records the broader product direction and is maintained passively while the first usable release is implemented. It is not a prerequisite checklist for each UI increment. Work proceeds in small, visible slices; only the current slice is actively planned, and implementation findings are recorded here when they change scope or sequencing.
 
 ## MVP boundary
 
-The shipped product includes a CLI, public TypeScript API, Git-tracked canonical project data, optional local semantic search, a loopback-only multi-project `heist serve` UI, and an MCP stdio adapter. Core project data stays usable offline; semantic indexing is optional and rebuildable. The UI defaults to `127.0.0.1:4000` and fails clearly if occupied unless the caller supplies `--port`. The repository contains CI coverage for Windows, macOS, and Linux on Node 22, 24, and 26; inspect actual CI runs before claiming the release matrix passed.
+The shipped product includes a CLI, public TypeScript API, Git-tracked canonical project data, optional local semantic search, a loopback-only multi-project `plantool serve` UI, and an MCP stdio adapter. Core project data stays usable offline; semantic indexing is optional and rebuildable. The UI defaults to `127.0.0.1:4000` and fails clearly if occupied unless the caller supplies `--port`. The repository contains CI coverage for Windows, macOS, and Linux on Node 22, 24, and 26; inspect actual CI runs before claiming the release matrix passed.
 
 Out of scope: hosted sharing, credentials/auth/invites, live locks, agent execution/session management, arbitrary extensions/hooks, desktop app, binary asset hosting, time tracking, and auto-update. MCP and semantic search were added after the original scope was written.
 
@@ -20,7 +20,7 @@ Acceptance:
 
 - Schema/examples represent goals/plans/decisions/comments/relationships and tickets at arbitrary depth.
 - Root, child, grandchild, and 10,000-deep chains need no special type or nested child array.
-- Package/executable availability and heist bin collision behavior are verified; if unavailable or conflicting, owner chooses a fallback before package setup.
+- Package/executable availability and plantool bin collision behavior are verified; if unavailable or conflicting, owner chooses a fallback before package setup.
 - The selected MIT license is documented; a LICENSE file is added before the first public release.
 - No product runtime code in this milestone.
 
@@ -28,13 +28,13 @@ Acceptance:
 
 **Depends on:** Milestone 0.
 
-Tasks: initialize .heist; canonical serialization; loaders/writers; IDs; schema validation/migration foundation; graph validators; typed errors; storage adapter.
+Tasks: initialize .plan; canonical serialization; loaders/writers; IDs; schema validation/migration foundation; graph validators; typed errors; storage adapter.
 
 Acceptance:
 
 - openProject resolves repo root and reads without external service.
 - A fresh Git clone contains all canonical goals, plans, tickets, metadata, and relationships; local commands can inspect and edit that data offline.
-- heist init does not add canonical .heist files to .gitignore; only rebuildable caches and ephemeral execution state may be ignored.
+- plantool init does not add canonical .plan files to .gitignore; only rebuildable caches and ephemeral execution state may be ignored.
 - Separate records have stable IDs; title change does not change path.
 - Child creation adds one child record, not a parent list.
 - Duplicate IDs, missing parent, self-parent, cycle, dangling edge, unsupported schema and path traversal return path/ID diagnostics.
@@ -60,11 +60,11 @@ Acceptance:
 
 **Depends on:** Milestones 1–2.
 
-Tasks: heist commands; JSON/human output; exit codes; noninteractive and stdin/file modes; package exports, declarations and bin mapping.
+Tasks: plantool commands; JSON/human output; exit codes; noninteractive and stdin/file modes; package exports, declarations and bin mapping.
 
 Acceptance:
 
-- npm devDependency install followed by npx heist --help and npm exec -- heist work with chosen Node.
+- npm devDependency install followed by npx plantool --help and npm exec -- plantool work with chosen Node.
 - Public TypeScript API imports from documented exports with no CLI side effects.
 - Windows/macOS/Linux shims and paths work without WSL, global install, native dependency or separate executable.
 - Outputs deterministic; errors have documented exit codes and optional machine-readable diagnostics.
@@ -87,15 +87,15 @@ Acceptance:
 
 ## Milestone 5 — Project-scoped local web UI
 
-Superseded in part on 2026-11-08: `heist serve` runs from any directory and shows all registered projects. The acceptance points about a single project and "no project discovery" below no longer apply; the security points do.
+Superseded in part on 2026-11-08: `plantool serve` runs from any directory and shows all registered projects. The acceptance points about a single project and "no project discovery" below no longer apply; the security points do.
 
 **Depends on:** Milestones 1–4.
 
-Tasks: build a lightweight browser UI on the public TypeScript core; support project tree navigation, ticket detail and supported edits, planning documents, search/context; implement `heist serve` as a foreground server.
+Tasks: build a lightweight browser UI on the public TypeScript core; support project tree navigation, ticket detail and supported edits, planning documents, search/context; implement `plantool serve` as a foreground server.
 
 Acceptance:
 
-- `heist serve` resolves exactly one initialized project from the current working directory/nearest ancestor and refuses if none exists.
+- `plantool serve` resolves exactly one initialized project from the current working directory/nearest ancestor and refuses if none exists.
 - UI reads and writes through the same core validators and filesystem adapter as the CLI; all canonical state remains in Git-tracked project files.
 - UI shows only that project; there is no project discovery, picker, multi-project index, or account system.
 - Server binds to 127.0.0.1 only by default, prints its URL, and stops with Ctrl-C; browser launch is opt-in with `--open`.

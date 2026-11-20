@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-7b5f-7075-9fd8-123518597653",
+  "number": 44,
+  "title": "Add --blocked-by, --blocks and --relates to ticket create and ticket update",
+  "kind": "task",
+  "description": "Work in bin/plantool.js only; the API already has everything: project.relations.add(sourceId, targetId, type) and project.resolveTicket(keyOrId). Direction matters: for type blocks the source is the blocker and the target is the blocked ticket. So --blocked-by X means relations.add(X, thisTicket, 'blocks'), --blocks X means relations.add(thisTicket, X, 'blocks'), --relates X means relations.add(thisTicket, X, 'relates_to'). The helper labels() in bin/plantool.js already splits comma lists. Note how the argument parser names keys: a flag with a value replaces dashes with underscores, so --blocked-by arrives as opts.blocked_by. Resolve every listed ticket with project.resolveTicket before creating or updating anything, so a typo fails early. On update, catch the error with code DUPLICATE_RELATION and continue. Print one line to stderr that names what was linked, except with --format json.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1d9eb-448b-7e3a-b56e-eef7a9c3f691",
+  "why": "This is the code change of the feature; the rest is documentation.",
+  "acceptance": [
+    {
+      "text": "Create and update write the relations with the right direction",
+      "met": true
+    },
+    {
+      "text": "An unknown key writes nothing",
+      "met": true
+    },
+    {
+      "text": "A duplicate on update is skipped",
+      "met": true
+    },
+    {
+      "text": "The usage text lists the flags",
+      "met": true
+    },
+    {
+      "text": "node --test passes",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "Read the ticket create and ticket update branches in bin/plantool.js and the relation add branch",
+      "met": true
+    },
+    {
+      "text": "Write a small function that takes the ticket id and opts, resolves all listed tickets first and then adds the relations",
+      "met": true
+    },
+    {
+      "text": "Call it from ticket create after the ticket exists and from ticket update",
+      "met": true
+    },
+    {
+      "text": "Refuse a ticket that is listed in both --blocked-by and --blocks",
+      "met": true
+    },
+    {
+      "text": "Add the flags to the usage text next to ticket create and ticket update",
+      "met": true
+    },
+    {
+      "text": "Add a test to test/cli.test.js: create with each flag, check plantool relation list --format json, check that an unknown key exits non-zero and creates no ticket",
+      "met": true
+    },
+    {
+      "text": "Run node --test",
+      "met": true
+    }
+  ],
+  "files": [
+    "bin/plantool.js",
+    "test/cli.test.js"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-14T11:57:30.847Z",
+  "updatedAt": "2026-11-14T16:54:40.258Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Added --blocked-by, --blocks and --relates to ticket create and ticket update (bin/plantool.js: linkSpecs, resolveLinks, applyLinks; usage text). Test in test/cli.test.js.",
+    "verifiedBy": "node --test: 98 pass, 0 fail, 1 skipped before the new test was counted; new test passes in isolation. Smoke run in a temp project: directions checked against relation list, duplicate on update skipped, unknown key exits 1 with no ticket created, both-lists refused.",
+    "changedFiles": [
+      "bin/plantool.js",
+      "test/cli.test.js"
+    ]
+  },
+  "completedAt": "2026-11-14T16:54:40.258Z"
+}

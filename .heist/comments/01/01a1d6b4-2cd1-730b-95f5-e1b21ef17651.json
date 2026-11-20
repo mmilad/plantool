@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1d6b4-2cd1-730b-95f5-e1b21ef17651",
-  "ticketId": "01a1d566-fa3d-726d-94f4-a5663ab7b550",
-  "body": "Delivered the roadmap release slice and linked decisions. CLI/API/UI use shared projections; Dependencies remains deferred to HEIST-42.",
-  "author": "codex",
-  "createdAt": "2026-11-13T20:58:14.609Z"
-}

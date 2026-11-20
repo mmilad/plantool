@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cbd8-909b-7c15-9ae9-8601e2b67816",
+  "ticketId": "01a1ca94-aea3-7fe0-b679-73ba06235cf1",
+  "body": "Fixed threshold removed. Robust strength instead of the plain z-score, because groups of related tickets hid each other (z 3.6 with one related ticket, 2.3 with four). The first acceptance point changed with it: the hint and plantool similar do not share one rule yet; see PLAN-7.",
+  "author": "claude",
+  "createdAt": "2026-11-11T18:22:10.075Z"
+}

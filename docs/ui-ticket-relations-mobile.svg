@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="820" height="940" viewBox="0 0 820 940" role="img" aria-labelledby="title desc">
   <title id="title">Mobile Ticketbeziehungen — eingeklappt und geöffnet</title>
-  <desc id="desc">Zwei statische Mobilansichten des Tickets Planungsdokumente und Projektübersicht gestalten. Die geöffnete Ansicht zeigt alle vier realen heist-Beziehungen mit ihrer Richtung als navigierbare Ticketziele. Der eigene Elternpfad zeigt die Programmwurzel „Schlichte Planungsoberfläche für Heistman gestalten und umsetzen“.</desc>
+  <desc id="desc">Zwei statische Mobilansichten des Tickets Planungsdokumente und Projektübersicht gestalten. Die geöffnete Ansicht zeigt alle vier realen plantool-Beziehungen mit ihrer Richtung als navigierbare Ticketziele. Der eigene Elternpfad zeigt die Programmwurzel „Schlichte Planungsoberfläche für Plan gestalten und umsetzen“.</desc>
   <defs>
     <style>
       text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
@@ -16,7 +16,7 @@
   </defs>
   <rect width="820" height="940" fill="#FFFFFF"/>
   <text x="20" y="30" font-size="18" font-weight="650">Beziehungen im mobilen Ticketdetail</text>
-  <text x="20" y="50" class="small muted">Beispiel: „Planungsdokumente und Projektübersicht gestalten“ · heist-Stand 30.10.2026</text>
+  <text x="20" y="50" class="small muted">Beispiel: „Planungsdokumente und Projektübersicht gestalten“ · plantool-Stand 30.10.2026</text>
   <text x="24" y="78" class="small" font-weight="650">Eingeklappt</text>
   <text x="434" y="78" class="small" font-weight="650">Geöffnet</text>
 
@@ -24,7 +24,7 @@
     <rect class="screen" width="390" height="830" rx="12"/>
     <rect x="1" y="1" width="388" height="48" rx="11" fill="#FFFFFF"/>
     <path d="M1 48.5H389" stroke="#D8DEE7"/>
-    <text x="18" y="30" class="small" font-weight="650">Heistman</text>
+    <text x="18" y="30" class="small" font-weight="650">Plan</text>
     <use href="#nav-ticket" x="284" y="16" width="16" height="16" fill="none" stroke="#2457A7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
     <text x="306" y="30" class="small" fill="#2457A7">Tickets</text>
 
@@ -32,13 +32,13 @@
     <path d="M24 84h13m-5-5-5 5 5 5" fill="none" stroke="#2457A7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
     <text x="45" y="89" class="small" fill="#2457A7" font-weight="600">Zurück zur Ticketliste</text>
 
-    <text x="18" y="132" class="tiny muted">Planungsoberfläche › Ticketdetails<title>Schlichte Planungsoberfläche für Heistman gestalten und umsetzen</title></text>
+    <text x="18" y="132" class="tiny muted">Planungsoberfläche › Ticketdetails<title>Schlichte Planungsoberfläche für Plan gestalten und umsetzen</title></text>
     <text x="18" y="166" font-size="19" font-weight="650">Planungsdokumente und</text>
     <text x="18" y="190" font-size="19" font-weight="650">Projektübersicht gestalten</text>
     <text x="18" y="218" class="small muted">Status: Offen · Priorität: Normal</text>
     <rect x="14" y="242" width="362" height="62" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
     <text x="30" y="267" class="section">Elternpfad</text>
-    <text x="30" y="287" class="small muted">Planungsoberfläche für Heistman …<title>Schlichte Planungsoberfläche für Heistman gestalten und umsetzen</title></text>
+    <text x="30" y="287" class="small muted">Planungsoberfläche für Plan …<title>Schlichte Planungsoberfläche für Plan gestalten und umsetzen</title></text>
 
     <rect x="14" y="318" width="362" height="70" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
     <text x="30" y="345" class="section">Beziehungen · 4</text>
@@ -54,7 +54,7 @@
     <rect class="screen" width="390" height="830" rx="12"/>
     <rect x="1" y="1" width="388" height="48" rx="11" fill="#FFFFFF"/>
     <path d="M1 48.5H389" stroke="#D8DEE7"/>
-    <text x="18" y="30" class="small" font-weight="650">Heistman</text>
+    <text x="18" y="30" class="small" font-weight="650">Plan</text>
     <use href="#nav-ticket" x="284" y="16" width="16" height="16" fill="none" stroke="#2457A7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
     <text x="306" y="30" class="small" fill="#2457A7">Tickets</text>
 
@@ -62,13 +62,13 @@
     <path d="M24 84h13m-5-5-5 5 5 5" fill="none" stroke="#2457A7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
     <text x="45" y="89" class="small" fill="#2457A7" font-weight="600">Zurück zur Ticketliste</text>
 
-    <text x="18" y="132" class="tiny muted">Planungsoberfläche › Ticketdetails<title>Schlichte Planungsoberfläche für Heistman gestalten und umsetzen</title></text>
+    <text x="18" y="132" class="tiny muted">Planungsoberfläche › Ticketdetails<title>Schlichte Planungsoberfläche für Plan gestalten und umsetzen</title></text>
     <text x="18" y="166" font-size="19" font-weight="650">Planungsdokumente und</text>
     <text x="18" y="190" font-size="19" font-weight="650">Projektübersicht gestalten</text>
     <text x="18" y="218" class="small muted">Status: Offen · Priorität: Normal</text>
     <rect x="14" y="242" width="362" height="62" rx="7" fill="#FFFFFF" stroke="#D8DEE7"/>
     <text x="30" y="267" class="section">Elternpfad</text>
-    <text x="30" y="287" class="small muted">Planungsoberfläche für Heistman …<title>Schlichte Planungsoberfläche für Heistman gestalten und umsetzen</title></text>
+    <text x="30" y="287" class="small muted">Planungsoberfläche für Plan …<title>Schlichte Planungsoberfläche für Plan gestalten und umsetzen</title></text>
 
     <text x="18" y="339" class="section">Beziehungen · 4</text>
     <text x="18" y="360" class="tiny muted">Eingehende und ausgehende Verknüpfungen</text>

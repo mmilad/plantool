@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
-  <title id="title">Heistman UI-Entwurf — Projektübersicht</title>
+  <title id="title">Plan UI-Entwurf — Projektübersicht</title>
   <desc id="desc">Statischer Desktopentwurf der Startfläche. Die Statuskarten zählen die zehn direkten Kinder des UI-Programms, ohne Eltern und Untertickets doppelt zu zählen. Arbeit, zuletzt geänderte Tickets und Planungsdokumente bleiben direkt erreichbar. Das Änderungsdatum ist keine Kommentar- oder Aktivitätschronik.</desc>
   <defs>
     <style>
@@ -24,8 +24,8 @@
   <path d="M0 63.5H1280" stroke="#D8DEE7"/>
   <rect x="24" y="17" width="30" height="30" rx="8" fill="#2457A7"/>
   <path d="M32.75 26.375h12.5M32.75 31.375h12.5M32.75 36.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
-  <text x="64" y="30" font-size="15" font-weight="650">Heistman</text>
-  <text x="64" y="46" class="tiny muted">heistman</text>
+  <text x="64" y="30" font-size="15" font-weight="650">Plan</text>
+  <text x="64" y="46" class="tiny muted">plan</text>
   <rect x="324" y="13" width="440" height="38" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
   <circle cx="344" cy="31" r="6" fill="none" stroke="#5A687A" stroke-width="1.5"/>
   <path d="m348.5 35.5 4 4" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round"/>
@@ -74,7 +74,7 @@
   <!-- Work panels -->
   <rect x="24" y="296" width="788" height="385" rx="8" fill="#FFFFFF" stroke="#D8DEE7"/>
   <text x="48" y="329" class="section">Weiterarbeiten</text>
-  <text x="48" y="351" class="small muted">Status und Blockerbereitschaft getrennt nach heist-Daten</text>
+  <text x="48" y="351" class="small muted">Status und Blockerbereitschaft getrennt nach plantool-Daten</text>
 
   <rect x="44" y="369" width="748" height="54" rx="6" fill="#F6F7F9"/>
   <circle cx="68" cy="389" r="7" fill="#E8F5EC" stroke="#14532D"/>
@@ -94,7 +94,7 @@
   <circle cx="68" cy="513" r="7" fill="#EAF1FD" stroke="#2457A7"/>
   <path d="M65 513h6" stroke="#2457A7" stroke-width="1.5" stroke-linecap="round"/>
   <text x="88" y="515" class="small muted">IN ARBEIT</text>
-  <text x="88" y="536" class="body" font-weight="650">UI regelmäßig prüfen und den heist-Plan nachschärfen</text>
+  <text x="88" y="536" class="body" font-weight="650">UI regelmäßig prüfen und den plantool-Plan nachschärfen</text>
   <path d="m758 510 6 6-6 6" fill="none" stroke="#5A687A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 
   <rect x="44" y="555" width="748" height="98" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
@@ -110,7 +110,7 @@
   <text x="856" y="329" class="section">Zuletzt geändert</text>
   <text x="856" y="351" class="small muted">3 Tickets · nach Änderungsdatum</text>
   <rect x="848" y="363" width="392" height="48" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
-  <text x="864" y="383" class="small" font-weight="600">UI regelmäßig prüfen und den heist-Plan nachschärfen<title>UI regelmäßig prüfen und den heist-Plan nachschärfen</title></text>
+  <text x="864" y="383" class="small" font-weight="600">UI regelmäßig prüfen und den plantool-Plan nachschärfen<title>UI regelmäßig prüfen und den plantool-Plan nachschärfen</title></text>
   <text x="864" y="400" class="tiny muted">In Arbeit · UI-Programm · 31.10.2026</text>
   <rect x="848" y="415" width="392" height="48" rx="5" fill="#FFFFFF" stroke="#D8DEE7"/>
   <text x="864" y="435" class="small" font-weight="600">Schlichtes UI-Konzept mit klaren Planungsabläufen festhalten<title>Schlichtes UI-Konzept mit klaren Planungsabläufen festhalten</title></text>

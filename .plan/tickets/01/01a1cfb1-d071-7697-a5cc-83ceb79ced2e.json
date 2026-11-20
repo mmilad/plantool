@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cfb1-d071-7697-a5cc-83ceb79ced2e",
+  "number": 19,
+  "title": "Rename blueprints to checklists",
+  "kind": "task",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "The lists of parts are checklists; the name blueprint is needed for ticket templates.",
+  "acceptance": [
+    {
+      "text": "CLI, API, files and ticket fields use checklist",
+      "met": true
+    },
+    {
+      "text": "This repository's plan is migrated",
+      "met": true
+    }
+  ],
+  "size": "m",
+  "createdBy": "claude",
+  "createdAt": "2026-11-12T12:18:19.377Z",
+  "updatedAt": "2026-11-12T12:18:37.102Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "blueprint became checklist everywhere; no compatibility layer because nothing was published.",
+    "verifiedBy": "node --test; plantool validate on this repository",
+    "changedFiles": [
+      "src/checklists.js",
+      "bin/plantool.js",
+      "src/server.js",
+      "src/ui.js",
+      "README.md"
+    ]
+  },
+  "completedAt": "2026-11-12T12:18:37.102Z",
+  "completedAtSource": "updatedAt"
+}

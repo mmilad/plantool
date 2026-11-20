@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "01a1d503-6021-7a4d-abc4-52f99e683d2f",
-  "ticketId": "01a1ca94-b086-738a-89c3-ad0b5425a83e",
-  "body": "Owner ran the real-model test on Windows on 2026-11-13: pass 1, fail 0, 0.87 s (the model was already in the cache). pnpm warned that the build scripts of onnxruntime-node and protobufjs were ignored; the model loaded anyway. Still open: heist index update, heist similar, and a look at the cache folder.",
-  "author": "claude",
-  "createdAt": "2026-11-13T13:05:30.657Z"
-}

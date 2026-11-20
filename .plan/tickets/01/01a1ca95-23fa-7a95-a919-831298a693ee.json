@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca95-23fa-7a95-a919-831298a693ee",
+  "number": 12,
+  "title": "Write down how it is proven to work",
+  "kind": "task",
+  "description": "Agents need to know what \"verified\" means for this feature.\n\nFrom blueprint Feature › tests (parent: Similarity hint in ticket create uses the relative rule).",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a1ca94-aea3-7fe0-b679-73ba06235cf1",
+  "origin": {
+    "checklist": "feature",
+    "item": "tests"
+  },
+  "why": "Agents need to know what \"verified\" means for this feature.",
+  "createdAt": "2026-11-11T12:28:54.138Z",
+  "updatedAt": "2026-11-11T18:22:08.363Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Unit test with a fake embedder; opt-in test with the real model (PLAN-2)."
+  },
+  "completedAt": "2026-11-11T18:22:08.363Z",
+  "completedAtSource": "updatedAt"
+}

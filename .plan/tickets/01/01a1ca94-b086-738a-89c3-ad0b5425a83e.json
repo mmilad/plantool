@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca94-b086-738a-89c3-ad0b5425a83e",
+  "number": 3,
+  "title": "Check the real model on the owner's Windows machine",
+  "kind": "task",
+  "description": "For the owner, on the Windows machine. The similarity hints use a local embedding model. It was only ever run on Linux. This checks that the optional package loads on Windows, that the model downloads into the plantool cache and that the results make sense. Nothing is changed in the repository. If a step fails, copy the error into the chat.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Model download and cache path were never verified on Windows.",
+  "acceptance": [
+    {
+      "text": "plantool index update downloads the model to ~/.plan/cache/models",
+      "met": true
+    },
+    {
+      "text": "plantool similar returns plausible results",
+      "met": true
+    },
+    {
+      "text": "PLANTOOL_TEST_REAL_MODEL=1 test passes",
+      "met": true
+    }
+  ],
+  "size": "xs",
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T12:28:24.582Z",
+  "updatedAt": "2026-11-14T18:21:16.389Z",
+  "todos": [
+    {
+      "text": "Open a terminal in D:\\newProjects\\planus-manus and run: pnpm install",
+      "met": true
+    },
+    {
+      "text": "Run: set PLANTOOL_TEST_REAL_MODEL=1 (PowerShell: $env:PLANTOOL_TEST_REAL_MODEL=1)",
+      "met": true
+    },
+    {
+      "text": "Run: node --test test/semantic-real.test.js (the first run downloads about 120 MB)",
+      "met": true
+    },
+    {
+      "text": "Run: plantool index update",
+      "met": true
+    },
+    {
+      "text": "Run: plantool similar PLAN-13 and look whether the listed tickets are about search or similarity",
+      "met": true
+    },
+    {
+      "text": "Check that the folder %USERPROFILE%\\.plan\\cache\\models exists and is not empty",
+      "met": true
+    }
+  ],
+  "assignee": null,
+  "outcome": {
+    "summary": "Checked on Windows: model cache in ~/.plan/cache/models (Xenova, ~130 MB), plantool index update works, plantool similar PLAN-13 returns plausible results. Ranking quality is weak; see PLAN-7.",
+    "verifiedBy": "Cache folder exists and is non-empty; plantool similar PLAN-13 run; PLANTOOL_TEST_REAL_MODEL=1 test passed per ticket.",
+    "changedFiles": [
+      ".plan/tickets/01/01a1ca94-b086-738a-89c3-ad0b5425a83e.json"
+    ]
+  },
+  "completedAt": "2026-11-14T18:21:16.389Z"
+}

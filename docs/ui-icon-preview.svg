@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="850" viewBox="0 0 1280 850" role="img" aria-labelledby="title desc">
-  <title id="title">Heistman Icon-Inventar — Kandidaten</title>
-  <desc id="desc">Nicht freigegebene Vorschau einfacher, lokaler Linienzeichen für vorhandene heist-Bereiche und Aktionen einschließlich eines separaten App-Mark- und eines Beziehungssymbol-Kandidaten. Status, Priorität, Blocker sowie Beziehungstyp und -richtung werden zusätzlich ausgeschrieben. Es gibt keine Tickettyp-Icons.</desc>
+  <title id="title">Plan Icon-Inventar — Kandidaten</title>
+  <desc id="desc">Nicht freigegebene Vorschau einfacher, lokaler Linienzeichen für vorhandene plantool-Bereiche und Aktionen einschließlich eines separaten App-Mark- und eines Beziehungssymbol-Kandidaten. Status, Priorität, Blocker sowie Beziehungstyp und -richtung werden zusätzlich ausgeschrieben. Es gibt keine Tickettyp-Icons.</desc>
   <defs>
     <style>
       text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #263445; }
@@ -37,7 +37,7 @@
   <rect x="0" y="0" width="1280" height="94" fill="#FFFFFF"/>
   <path d="M0 93.5H1280" stroke="#D8DEE7"/>
   <text x="32" y="42" class="title">Icon-Inventar · Kandidaten</text>
-  <text x="32" y="70" class="body muted">Lokale Linienzeichen für vorhandene heist-Funktionen · Entwurf, nicht freigegeben</text>
+  <text x="32" y="70" class="body muted">Lokale Linienzeichen für vorhandene plantool-Funktionen · Entwurf, nicht freigegeben</text>
   <rect x="1081" y="27" width="163" height="30" rx="15" fill="#F0F3F7"/>
   <circle cx="1100" cy="42" r="4" fill="#5A687A"/>
   <text x="1112" y="46" class="small" font-weight="600">Kandidaten v0</text>

@@ -5,10 +5,10 @@ import { createHash, randomBytes } from 'node:crypto';
 import { NotFoundError, ValidationError, findProject, openProject } from './index.js';
 
 /**
- * Machine-local list of known heist projects (~/.heist/projects.json, override with HEIST_HOME).
- * It is only an index for `heist serve` and `heist projects`; canonical data stays in each repository.
+ * Machine-local list of known plantool projects (~/.plan/projects.json, override with PLANTOOL_HOME).
+ * It is only an index for `plantool serve` and `plantool projects`; canonical data stays in each repository.
  */
-export const registryHome = () => process.env.HEIST_HOME || path.join(os.homedir(), '.heist');
+export const registryHome = () => process.env.PLANTOOL_HOME || path.join(os.homedir(), '.plan');
 const registryFile = () => path.join(registryHome(), 'projects.json');
 const normalize = root => { const r = path.resolve(root); return process.platform === 'win32' ? r.toLowerCase() : r; };
 export const entryId = root => createHash('sha256').update(normalize(root)).digest('hex').slice(0, 12);
@@ -30,7 +30,7 @@ async function locked(fn) {
     try { await fs.mkdir(lock); break; } catch (e) {
       if (e.code !== 'EEXIST') throw e;
       const st = await fs.stat(lock).catch(() => null); if (st && Date.now() - st.mtimeMs > 10_000) { await fs.rm(lock, { recursive: true, force: true }); continue; }
-      if (i > 100) throw new Error('Project registry is locked by another heist process');
+      if (i > 100) throw new Error('Project registry is locked by another plantool process');
       await new Promise(r => setTimeout(r, 30));
     }
   }
@@ -51,7 +51,7 @@ export async function registerProject(project) {
 /** Registers the project at or above a path. */
 export async function addProjectPath(dir) {
   const root = await findProject(path.resolve(dir));
-  if (!root) throw new NotFoundError(`No .heist project found at or above ${path.resolve(dir)}`);
+  if (!root) throw new NotFoundError(`No .plan project found at or above ${path.resolve(dir)}`);
   return registerProject(await openProject({ cwd: root }));
 }
 

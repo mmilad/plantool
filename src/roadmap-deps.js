@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { HeistError, NotFoundError, ValidationError } from './index.js';
+import { PlanError, NotFoundError, ValidationError } from './index.js';
 import { isFinished, workGraph } from './workflow.js';
 
 const EDGE_LIMIT = 500;
@@ -55,7 +55,7 @@ export async function dependencies(p, { root, includeFinished = false, limit = 2
 
   // Hash the entire scoped projection, not just its bounded prefix: hidden changes invalidate it too.
   const current = createHash('sha256').update(JSON.stringify({ rootId, includeFinished, limit, nodes: allNodes, edges: allEdges })).digest('hex').slice(0, 16);
-  if (snapshot && snapshot !== current) throw new HeistError('Dependencies changed; refresh the dependency list', 'STALE_ROADMAP', { snapshot: current });
+  if (snapshot && snapshot !== current) throw new PlanError('Dependencies changed; refresh the dependency list', 'STALE_ROADMAP', { snapshot: current });
   const nodes = allNodes.slice(0, limit), kept = new Set(nodes.map(n => n.id));
   const edges = allEdges.filter(e => kept.has(e.sourceId) && kept.has(e.targetId)).slice(0, EDGE_LIMIT);
   const omittedNodes = allNodes.length - nodes.length, omittedEdges = allEdges.length - edges.length;

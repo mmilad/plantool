@@ -4,9 +4,9 @@ import path from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { initProject, openProject, uuidv7 } from '../src/index.js';
 
-const total = Number(process.env.HEIST_BENCH_RECORDS ?? 100_000);
-if (!Number.isSafeInteger(total) || total < 2) throw new Error('HEIST_BENCH_RECORDS must be an integer >= 2');
-const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-scale-'));
+const total = Number(process.env.PLANTOOL_BENCH_RECORDS ?? 100_000);
+if (!Number.isSafeInteger(total) || total < 2) throw new Error('PLANTOOL_BENCH_RECORDS must be an integer >= 2');
+const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool-scale-'));
 const time = () => performance.now();
 try {
   await initProject({ cwd, name: `Scale benchmark (${total})` });
@@ -14,7 +14,7 @@ try {
   for (let i = 0; i < total; i++) {
     const id = i === 0 ? rootId : uuidv7();
     const record = { schemaVersion: 1, id, title: i === 0 ? 'Scale root' : `Record ${i}`, description: i % 17 === 0 ? 'scale benchmark marker' : '', status: i % 11 === 0 ? 'in_progress' : 'todo', priority: 'normal', labels: i % 5 === 0 ? ['scale'] : [], properties: {}, parentId: i === 0 ? null : rootId, createdAt: stamp, updatedAt: stamp };
-    const file = path.join(cwd, '.heist', 'tickets', id.slice(0, 2), `${id}.json`);
+    const file = path.join(cwd, '.plan', 'tickets', id.slice(0, 2), `${id}.json`);
     records.push({ file, text: `${JSON.stringify(record)}\n` });
   }
   const dirs = [...new Set(records.map(x => path.dirname(x.file)))];

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="780" viewBox="0 0 1280 780" role="img" aria-labelledby="title desc">
-  <title id="title">Heistman UI-Entwurf — Ticketanlage am Desktop</title>
+  <title id="title">Plan UI-Entwurf — Ticketanlage am Desktop</title>
   <desc id="desc">Zwei Desktopzustände zeigen ein Root-Ticketformular aus der Projektübersicht und ein Unterticketformular aus dem geöffneten Ticketdetail. Beide Dialoge haben beschriftete Felder, Projektstatus und Prioritätsdefaults sowie Abbrechen und Speichern. Der Unterticketdialog zeigt den festen Elternkontext. Bei Fehlern bleiben Eingaben erhalten.</desc>
   <defs>
     <style>
@@ -23,7 +23,7 @@
     <rect width="616" height="676" rx="10" fill="#F0F3F7" stroke="#D8DEE7"/>
     <rect x="1" y="1" width="614" height="48" rx="9" fill="#FFFFFF"/>
     <path d="M1 48.5H615" class="stroke"/>
-    <text x="18" y="30" class="small" font-weight="650">Heistman</text>
+    <text x="18" y="30" class="small" font-weight="650">Plan</text>
     <text x="485" y="30" class="tiny muted">Projektübersicht</text>
     <rect x="14" y="66" width="588" height="590" rx="6" fill="#F0F3F7" opacity=".48"/>
     <text x="34" y="100" class="section">Projektübersicht</text>
@@ -41,7 +41,7 @@
     <text x="530" y="132" class="small muted" text-anchor="middle">×</text>
     <rect x="80" y="169" width="456" height="48" rx="6" fill="#F0F3F7" stroke="#D8DEE7"/>
     <text x="94" y="187" class="tiny muted" font-weight="650">PROJEKT</text>
-    <text x="94" y="205" class="small">heistman · ohne Eltern-Ticket</text>
+    <text x="94" y="205" class="small">plan · ohne Eltern-Ticket</text>
 
     <text x="80" y="242" class="label">Titel <tspan fill="#9B1C1C">*</tspan></text>
     <rect x="80" y="251" width="456" height="40" rx="5" class="control"/>
@@ -75,7 +75,7 @@
     <rect width="616" height="676" rx="10" fill="#F0F3F7" stroke="#D8DEE7"/>
     <rect x="1" y="1" width="614" height="48" rx="9" fill="#FFFFFF"/>
     <path d="M1 48.5H615" class="stroke"/>
-    <text x="18" y="30" class="small" font-weight="650">Heistman</text>
+    <text x="18" y="30" class="small" font-weight="650">Plan</text>
     <text x="455" y="30" class="tiny muted">Ticketdetail · Unteraufgaben</text>
     <rect x="14" y="66" width="588" height="590" rx="6" fill="#F0F3F7" opacity=".48"/>
     <text x="34" y="100" class="section">Ticketdetail</text>

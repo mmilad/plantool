@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="820" height="930" viewBox="0 0 820 930" role="img" aria-labelledby="title desc">
-  <title id="title">Heistman — mobiler Listen- und Detailwechsel im fp.dev-Stil</title>
+  <title id="title">Plan — mobiler Listen- und Detailwechsel im fp.dev-Stil</title>
   <desc id="desc">Zwei statische Mobilzustände bei jeweils 390 mal 844 CSS-Pixeln: Ticketliste und scrollbar geöffnetes Detail desselben UI-Konzepttickets. Suche, Filter, Ticketziel und Listenposition bleiben beim Zurückwechsel erhalten. Das Detail zeigt zwei 44px-Beziehungsziele und eine 44px-Aktion zu allen 34 Blockern.</desc>
   <defs>
     <style>
@@ -30,12 +30,12 @@
     <path d="M0 55.5H390" class="divider"/>
     <rect x="14" y="13" width="30" height="30" rx="7" fill="#202A36"/>
     <path d="M21 21h16m-16 6h16m-16 6h11" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
-    <text x="54" y="34" class="section">Heistman</text>
+    <text x="54" y="34" class="section">Plan</text>
     <rect x="314" y="6" width="64" height="44" rx="6" class="primary"/>
     <path d="M326 28h12m-6-6v12" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round"/>
     <text x="344" y="32" class="tiny inverse" font-weight="650">Neu</text>
 
-    <text x="16" y="82" class="tiny muted">HEISTMAN</text>
+    <text x="16" y="82" class="tiny muted">PLAN</text>
     <text x="16" y="109" class="heading">Tickets</text>
     <rect x="16" y="123" width="358" height="44" rx="6" class="control"/>
     <circle cx="34" cy="144" r="6" fill="none" stroke="#697586" stroke-width="1.5"/>

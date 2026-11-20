@@ -2,7 +2,7 @@
 // Options can carry their own plan (child tickets); that plan only becomes ready when the option is chosen,
 // except tickets marked `evaluation` (prototypes/spikes that help to decide). Choosing cancels the other options'
 // plans and unblocks everything the decision blocks.
-import { ValidationError, ConflictError, HeistError } from './index.js';
+import { ValidationError, ConflictError, PlanError } from './index.js';
 
 export const TICKET_SIZES = Object.freeze(['xs', 's', 'm', 'l', 'xl']);
 export const SIZE_POINTS = Object.freeze({ xs: 1, s: 2, m: 3, l: 5, xl: 8 });
@@ -178,7 +178,7 @@ export function attachDecisionApi(p) {
 export function decisionReasons(g, ticket) {
   const reasons = [];
   if (ticket.kind === 'option') reasons.push('options are answers to a decision, not work items');
-  if (ticket.kind === 'decision' && (ticket.decision?.owner ?? 'human') === 'human') reasons.push('a person has to make this decision (heist decisions)');
+  if (ticket.kind === 'decision' && (ticket.decision?.owner ?? 'human') === 'human') reasons.push('a person has to make this decision (plantool decisions)');
   // Plans under an option wait until that option is chosen, unless they are evaluation work.
   for (let parent = g.byId.get(ticket.parentId); parent; parent = g.byId.get(parent.parentId)) {
     if (parent.kind !== 'option') continue;
@@ -189,4 +189,4 @@ export function decisionReasons(g, ticket) {
   }
   return reasons;
 }
-export { HeistError };
+export { PlanError };

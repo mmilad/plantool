@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1dccf-edc4-7935-86ac-5b50738d0827",
+  "number": 68,
+  "title": "Roadmap structure lists the newest tickets first",
+  "kind": "bug",
+  "description": "The Structure view of the roadmap lists tickets oldest first (PLAN-1 at the top). Owner wants newest first; the order of children under a parent follows the same rule.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "createdAt": "2026-11-15T01:26:16.772Z",
+  "updatedAt": "2026-11-15T01:27:16.198Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Roadmap structure lists the newest tickets first at every level; the order of children follows the same rule.",
+    "verifiedBy": "node --test 117 pass; new roadmap test checks root and child order.",
+    "changedFiles": [
+      "src/index.js",
+      "test/roadmap.test.js",
+      ".plan/tickets/01/01a1dccf-edc4-7935-86ac-5b50738d0827.json"
+    ]
+  },
+  "completedAt": "2026-11-15T01:27:16.198Z"
+}

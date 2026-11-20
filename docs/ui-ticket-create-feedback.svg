@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
-  <title id="title">Heistman UI-Entwurf — Rückmeldungen bei der Ticketanlage</title>
+  <title id="title">Plan UI-Entwurf — Rückmeldungen bei der Ticketanlage</title>
   <desc id="desc">Vier Zustände unterscheiden Eingabeprüfung, bestätigte Ablehnung, unklare Antwort nach dem Absenden und erfolgreiche Anlage mit fehlgeschlagenem Listenabruf. Eingaben bleiben bei Fehlern erhalten; eine unklare Anfrage wird nicht blind wiederholt. Nach bestätigter Anlage bleibt ein direkter Einstieg zum neuen Ticket neben dem erneuten Laden der Liste verfügbar.</desc>
   <defs>
     <style>

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cff2-cb22-7520-81f5-f12d399ac7ae",
+  "number": 22,
+  "title": "Tickets read as documents: description, to-dos and blueprint sections in every view",
+  "kind": "feature",
+  "description": "A ticket had a title, a why and acceptance criteria, but the web view showed only the description, which was empty. Blueprints now expect a description, to-dos exist as a field, and plantool ticket show and the ticket page present the ticket in blueprint order, naming what is missing. To-dos and acceptance criteria can be ticked in the web view. Outside the happy path: kinds without a blueprint show their description and filled fields only; a failed save unticks the box and reports the error.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "The owner could not tell from the web view what the open tickets were about.",
+  "acceptance": [
+    {
+      "text": "Blueprints expect a description for task, feature and bug",
+      "met": true
+    },
+    {
+      "text": "To-dos can be set, added and ticked from the CLI",
+      "met": true
+    },
+    {
+      "text": "plantool ticket show prints the sections in blueprint order",
+      "met": true
+    },
+    {
+      "text": "The ticket page shows the sections and saves ticks",
+      "met": true
+    },
+    {
+      "text": "Open tickets of this repository have descriptions",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/blueprints.js",
+    "src/fields.js",
+    "src/ui.js",
+    "bin/plantool.js"
+  ],
+  "size": "m",
+  "createdBy": "claude",
+  "createdAt": "2026-11-12T13:29:17.857Z",
+  "updatedAt": "2026-11-12T13:29:19.188Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Blueprint sections in CLI and web view; todos field; open tickets rewritten.",
+    "verifiedBy": "node --test: 75 pass, 1 skipped; ticket page opened in headless Chromium on Linux, sections rendered and a tick was saved",
+    "changedFiles": [
+      "src/blueprints.js",
+      "src/fields.js",
+      "src/index.js",
+      "src/ui.js",
+      "bin/plantool.js",
+      "src/guide.js",
+      "README.md",
+      "docs/implementation-decisions.md"
+    ]
+  },
+  "completedAt": "2026-11-12T13:29:19.188Z",
+  "completedAtSource": "updatedAt"
+}

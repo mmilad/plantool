@@ -7,13 +7,13 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { initProject, openProject, uuidv7 } from '../src/index.js';
 
-const cli=fileURLToPath(new URL('../bin/heist.js',import.meta.url));
+const cli=fileURLToPath(new URL('../bin/plantool.js',import.meta.url));
 async function project(t){
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-roadmap-deps-'));
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'plantool-roadmap-deps-'));
   t.after(()=>fs.rm(cwd,{recursive:true,force:true}));
   await initProject({cwd,name:'Dependencies',key:'DEP'});
   const p=await openProject({cwd});
-  const run=(...args)=>spawnSync(process.execPath,[cli,...args],{cwd,env:{...process.env,HEIST_NO_REGISTER:'1',HEIST_HOME:path.join(cwd,'local-home')},encoding:'utf8'});
+  const run=(...args)=>spawnSync(process.execPath,[cli,...args],{cwd,env:{...process.env,PLANTOOL_NO_REGISTER:'1',PLANTOOL_HOME:path.join(cwd,'local-home')},encoding:'utf8'});
   return {cwd,p,run};
 }
 

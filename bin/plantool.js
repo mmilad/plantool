@@ -1,0 +1,385 @@
+#!/usr/bin/env node
+import { initProject, openProject, PlanError, NotFoundError } from '../src/index.js';
+import { onboardText } from '../src/onboard.js';
+import { registerProject, addProjectPath, removeProject, listProjects, pruneProjects, registryHome } from '../src/registry.js';
+const autoRegister=async p=>{if(process.env.PLANTOOL_NO_REGISTER==='1')return;try{await registerProject(p);}catch{}};
+import { qualifiedNames } from '../src/design.js';
+const qname=async(p,id)=>qualifiedNames(await p.components.list()).get(id);
+const qualifiedMap=async p=>qualifiedNames(await p.components.list());
+function impactText(head,impact,dryRun,names){console.log(`${dryRun?'[dry run] ':''}${head}`);for(const c of impact.changes)console.log(`  ${c.breaking?'✗ breaking':'· compatible'}  ${c.componentId?names.get(c.componentId)+' ':''}${c.side}.${c.path||'(root)'} ${c.change}${c.from?` (${c.from} → ${c.to})`:''}`);if(impact.affectedConsumers.length){console.log('  Affected open consumer tickets:');for(const a of impact.affectedConsumers)console.log(`    ${a.ticketId}  ${a.title}\n      ${a.reasons.join('; ')}`);}}
+const json=(v,flag)=>{if(v===undefined)throw new Error(`Missing ${flag}`);try{return JSON.parse(v);}catch(e){if(/^\s*[{[]/.test(v))throw new Error(`${flag} is not valid JSON: ${e.message}`);return v;}};
+const labels=v=>v===undefined?undefined:[].concat(v).flatMap(x=>String(x).split(',')).map(x=>x.trim()).filter(Boolean);
+// Sentences may contain commas: lists of sentences are separated with ';' or by repeating the flag.
+const items=v=>v===undefined?undefined:[].concat(v).flatMap(x=>String(x).split(';')).map(x=>x.trim()).filter(Boolean);
+const one=v=>Array.isArray(v)?v.at(-1):v;
+// --blocked-by, --blocks and --relates on ticket create/update. Every listed ticket is resolved before anything is written.
+const linkSpecs=opts=>[
+  ...(labels(opts.blocked_by)??[]).map(key=>({key,flag:'--blocked-by',type:'blocks',thisIsTarget:true})),
+  ...(labels(opts.blocks)??[]).map(key=>({key,flag:'--blocks',type:'blocks',thisIsTarget:false})),
+  ...(labels(opts.relates)??[]).map(key=>({key,flag:'--relates',type:'relates_to',thisIsTarget:false})),
+];
+const resolveLinks=async(project,opts)=>{
+  const links=[];
+  for(const s of linkSpecs(opts)) links.push({...s,id:await project.resolveTicket(s.key)});
+  const blockedBy=new Set(links.filter(s=>s.flag==='--blocked-by').map(s=>s.id));
+  const both=links.find(s=>s.flag==='--blocks'&&blockedBy.has(s.id));
+  if(both) throw new PlanError(`${both.key} is listed in both --blocked-by and --blocks`,'VALIDATION');
+  return links;
+};
+const applyLinks=async(project,ticketId,links,format)=>{
+  if(!links.length) return;
+  const named=[];
+  for(const s of links){
+    const [source,target]=s.thisIsTarget?[s.id,ticketId]:[ticketId,s.id];
+    try{ await project.relations.add(source,target,s.type); named.push(`${s.flag} ${s.key}`); }
+    catch(e){ if(e.code!=='DUPLICATE_RELATION') throw e; named.push(`${s.flag} ${s.key} (already linked)`); }
+  }
+  if(format!=='json') console.error(`Linked: ${named.join(', ')}`);
+};
+/** Standard metadata flags shared by ticket create/update. */
+function fieldFlags(opts){const f={};if(opts.why!==undefined)f.why=one(opts.why);if(opts.accept!==undefined)f.acceptance=items(opts.accept).map(text=>({text,met:false}));if(opts.todo!==undefined)f.todos=items(opts.todo).map(text=>({text,met:false}));if(opts.files!==undefined&&opts.files!==true)f.files=labels(opts.files);if(opts.size!==undefined)f.size=one(opts.size);if(opts.assume!==undefined)f.assumptions=items(opts.assume);if(opts.refs!==undefined)f.refs=labels(opts.refs);if(opts.risks!==undefined)f.risks=items(opts.risks);if(opts.evaluation)f.evaluation=true;if(opts['no-evaluation'])f.evaluation=false;
+  if(opts.steps!==undefined||opts.expected!==undefined||opts.actual!==undefined||opts.environment!==undefined)f.repro={...(opts.steps!==undefined?{steps:items(opts.steps)}:{}),...(opts.expected!==undefined?{expected:one(opts.expected)}:{}),...(opts.actual!==undefined?{actual:one(opts.actual)}:{}),...(opts.environment!==undefined?{environment:one(opts.environment)}:{})};
+  return f;}
+/** --set name=value for custom fields from .plan/config.json (stored under properties). */
+function customFlags(project,kind,opts,current={}){const sets=[].concat(opts.set??[]);if(!sets.length)return undefined;const defs=new Map(project.fields(kind).filter(d=>d.custom).map(d=>[d.name,d]));const props={...current};for(const s of sets){const i=String(s).indexOf('=');if(i<1)throw new Error('Use --set name=value');const name=s.slice(0,i),raw=s.slice(i+1),d=defs.get(name);if(!d)throw new Error(`Unknown custom field "${name}" for ${kind}; see plantool fields ${kind}`);props[name]=raw===''?undefined:d.type==='number'?Number(raw):d.type==='bool'?raw==='true':d.type==='list'?items(raw):raw;}return props;}
+const gitFiles=(cwd,commit)=>{try{const run=a=>execFileSync('git',a,{cwd,encoding:'utf8',stdio:['ignore','pipe','ignore']});if(commit)return run(['show','--name-only','--format=',commit]).split('\n').filter(Boolean);return [...new Set(run(['status','--porcelain']).split('\n').filter(Boolean).map(l=>l.slice(3).split(' -> ').at(-1)))];}catch{return [];}};
+import { serve } from '../src/server.js';
+import { execFileSync } from 'node:child_process';
+import { guide, GUIDE } from '../src/guide.js';
+
+const usage = `plantool — Git-native planning and issue tracking
+
+New here (agent or person)? Run: plantool agent onboard
+plantool --version (or -v) prints the installed version.
+
+Usage:
+  plantool init [--name NAME] [--key KEY]
+  plantool projects [list|add PATH|remove ID|KEY|PATH|prune] [--format json]
+  plantool keys init [--key KEY]        set the project key and number existing tickets
+  plantool keys renumber                fix duplicate KEY-n numbers (e.g. after merging branches)
+  plantool ticket create --title TITLE [--parent ID] [--description TEXT] [--status STATUS]
+                     [--kind task|feature|bug] [--priority low|normal|high|urgent] [--labels A,B]
+                     [--blocked-by KEYS] [--blocks KEYS] [--relates KEYS]
+  plantool ticket list [--status STATUS] [--parent ID] [--format json]
+  plantool ticket show ID [--format json]
+  plantool ticket update ID [--title TITLE] [--status STATUS] [--description TEXT]
+                     [--kind KIND] [--priority PRIORITY] [--labels A,B] [--force]
+                     [--blocked-by KEYS] [--blocks KEYS] [--relates KEYS]
+  plantool ticket move ID [--parent ID]
+  plantool tree [ID] [--max-depth N] [--limit N] [--offset N] [--format json]
+             [--fields full|row|plan] [--status A,B] [--hide A,B] [--kind A,B]
+             [--ready] [--blocked] [--query TEXT] [--verbose] [--snapshot TOKEN]
+  plantool timeline [--since ISO] [--until ISO] [--kind A,B] [--order asc|desc]
+                 [--limit N] [--offset N] [--snapshot TOKEN] [--format json]
+  plantool roadmap backfill-completion [--dry-run] [--format json]
+  plantool deps [--root ID] [--include-finished] [--limit N] [--snapshot TOKEN] [--format json]
+  plantool graph [--root ID] [--limit N] [--format json]
+  plantool goal|plan|decision create --title TITLE [--body TEXT] [--links ID,ID]
+  plantool goal|plan|decision list [--format json]
+  plantool goal|plan|decision show ID [--format json]
+  plantool goal|plan|decision update ID [--title T] [--status S] [--body TEXT] [--links ID,ID]
+  plantool comment add TICKET_ID TEXT [--author NAME]   (author defaults to $PLANTOOL_AGENT)
+  plantool comment list TICKET_ID [--format json]
+  plantool relation add SOURCE_ID TARGET_ID TYPE
+  plantool relation list [ID]
+  plantool relation remove RELATION_ID | SOURCE_ID TARGET_ID TYPE
+
+Agent workflow (agent name defaults to $PLANTOOL_AGENT):
+  plantool next [--limit N] [--parent ID] [--format json]
+  plantool claim ID [--agent NAME] [--lease MINUTES] [--force]
+  plantool release ID [--agent NAME] [--force]
+  plantool done ID [--note TEXT] [--agent NAME] [--force]
+  plantool agent onboard                              a briefing on plantool for agents (prints only)
+
+Code plans (components, types and contracts are maintained centrally):
+  plantool component add --kind KIND --name NAME [--parent COMPONENT] [--description TEXT]
+  plantool component list [--format json]
+  plantool component show COMPONENT [--format json]
+  plantool type set NAME --schema JSON [--description TEXT] [--dry-run]
+  plantool type list [--format json]
+  plantool contract set COMPONENT [--input JSON] [--output JSON] [--description TEXT] [--dry-run]
+  plantool contract history COMPONENT [--format json]
+  plantool contract show COMPONENT [--format json]
+  plantool codeplan add TICKET_ID implements|consumes|changes COMPONENT [--requires a,b.c:type] [--provides x,y] [--stage mock|full] [--needs mock|full]
+  plantool codeplan remove TICKET_ID implements|consumes|changes COMPONENT
+  plantool codeplan show TICKET_ID
+  plantool check [--format json]
+
+Decisions (questions with options; options can have their own plan):
+  plantool ask QUESTION [--parent ID] [--options "A;B"] [--criteria "Speed:3,Cost:1"] [--blocks ID,ID]
+           [--owner human|agent] [--reversible|--irreversible] [--decide-by DATE] [--why TEXT]
+  plantool option add DECISION --title T [--pros "a;b"] [--cons "a;b"] [--risks "a;b"] [--size m] [--why TEXT]
+  plantool option score OPTION criterion=0..5 ...
+  plantool criteria DECISION "Speed:3, Cost:1"
+  plantool decide DECISION               show options, scores, effort and the suggestion
+  plantool recommend DECISION OPTION --why TEXT
+  plantool decide DECISION OPTION --why TEXT   |   plantool decide DECISION --reopen
+  plantool decisions [--all]             open decisions; '?' = a person has to decide
+
+Metadata (plantool fields [KIND] lists what each kind supports):
+  ticket create/update also take --why TEXT --accept "a;b" --files a,b --size xs|s|m|l|xl --assume "a;b"
+     --refs a,b --risks "a;b" --evaluation --steps "a;b" --expected T --actual T --environment T --set name=value
+  plantool ticket update ID --add-accept "c"     plantool ticket check ID N [--unmet]
+     --todo "a;b" lists the steps; plantool ticket update ID --add-todo "c"; plantool ticket todo ID N [--undone] ticks one; --text "…" renames one
+  plantool which PATH                    tickets that plan or changed a file/folder
+  plantool done ID --note T [--verified T] [--files | --commit SHA | --changed a,b]   records the outcome
+
+Start and method:
+  plantool new "What you want to build" [--why TEXT]   top ticket + product checklist (goal, platform, stack, ...)
+  plantool guide [decisions|blueprints|checklists|metadata|workflow|contracts]   the planning method for agents
+
+Blueprints (what is expected of a ticket of a kind, like an issue template):
+  plantool blueprint list [--format json]
+  plantool blueprint show KIND                          task | feature | bug | decision
+  plantool blueprint status TICKET                      expected fields of this ticket, filled or missing
+  plantool blueprint check                              open tickets that lack what their blueprint expects
+  plantool blueprint expect KIND FIELD [--hint TEXT] [--optional|--required] [--leaf] [--before FIELD]
+                                                    add or change a section; a new name becomes a project field
+                                                    ([--type text|list|number|bool|enum] [--values a,b] [--label TEXT])
+  plantool blueprint drop KIND FIELD                    stop expecting a section
+  plantool blueprint template KIND --text TEXT | --file PATH | --clear   the description new tickets start with
+  plantool blueprint reset KIND                         back to the built-in blueprint
+  plantool blueprint init KIND                          copy into .plan/blueprints/ to edit the file directly
+
+Checklists (what a kind of thing really needs; they expand a ticket into its parts):
+  plantool checklist list [--format json]
+  plantool checklist show NAME [--format json]
+  plantool checklist suggest TICKET                     checklists that fit the ticket
+  plantool checklist attach TICKET NAME                 put the checklist on the ticket without creating tickets
+  plantool checklist apply TICKET NAME [--only a,b] [--optional] [--dry-run]
+                                                    create child tickets for the items that are work of their own
+  plantool checklist answer TICKET ITEM --note TEXT     the item is answered on the ticket itself (unanswer removes it)
+  plantool checklist status TICKET [--format json]      which items are planned, done, skipped or missing
+  plantool checklist skip TICKET ITEM --reason TEXT     record that an item does not apply
+  plantool checklist unskip TICKET ITEM
+  plantool checklist check [--format json]              missing items and tickets that look like a checklist
+  plantool checklist init NAME [--from BUILTIN]         copy a checklist into .plan/checklists/ to customise it
+
+COMPONENT is a qualified name (UserService.getUser), a unique short name or an ID.
+Schemas: full JSON Schema subset or shorthand, e.g. '{"userId":"string","nick":"string?","tags":"string[]","owner":"User"}'.
+
+  plantool search QUERY [--mode keyword|semantic|hybrid] [--type ticket,comment,goal,plan,decision] [--limit N] [--offset N] [--format json]
+  plantool similar TICKET|--text TEXT [--limit N] [--strength Z] [--format json]   tickets that look alike, or close to a new idea (needs the semantic index)
+  plantool index [status|update|rebuild] [--format json]              local semantic index in ~/.plan/cache (optional)
+  plantool context ID [--budget BYTES] [--format json]
+  plantool validate [--format json]
+  plantool serve [--port N] [--open]   all registered projects, from any directory (default: 127.0.0.1:4000)
+  plantool mcp --agent NAME            MCP server over stdio for this project: next, claim, done and notes as the named agent
+
+All commands operate on the nearest project-local .plan/ directory. Ticket IDs can be given as UUIDs or keys such as PM-42.`;
+
+function parse(args) {
+  const opts={}, positional=[];
+  for(let i=0;i<args.length;i++){const a=args[i];if(a.startsWith('--')){const k=a.slice(2);if(['open','force','write','dry-run','optional','evaluation','no-evaluation','files','all','reopen','reversible','irreversible','unmet','undone','required','leaf','clear','ready','blocked','verbose','include-finished'].includes(k)&&(k!=='files'||i+1>=args.length||args[i+1].startsWith('--'))){opts[k]=true;continue;}if(i+1>=args.length)throw new Error(`Missing value for ${a}`);const key=k.replaceAll('-','_'),v=args[++i];opts[key]=opts[key]===undefined?v:[].concat(opts[key],v);}else positional.push(a);}
+  return {opts,positional};
+}
+const withKeys=v=>{const k=globalThis.__planKey;if(!k)return v;const f=x=>x&&typeof x==='object'&&'id'in x&&Number.isInteger(x.number)&&x.key===undefined?{key:`${k}-${x.number}`,...x}:x;return Array.isArray(v)?v.map(f):f(v);};
+// A ticket as a person reads it: the sections of its blueprint in order, then whatever else is filled.
+// One stderr line when a context packet was cut: names what is missing and the budget that returns everything.
+const contextCutLine=r=>{const o=r.omitted??{},key=r.ticket?.key??r.ticket?.id,parts=[];const labels={comments:['comment','comments'],relationships:['relationship','relationships'],documents:['document','documents'],ancestors:['ancestor','ancestors']};
+  for(const k of ['comments','relationships','documents','ancestors']){const n=o[k]??0;if(n>0)parts.push(`${n} ${n===1?labels[k][0]:labels[k][1]}`);}
+  const hard=r.descendants?.length===20&&(o.descendants??0)>0;const cutChildren=hard?0:(o.descendants??0);if(cutChildren>0)parts.push(`${cutChildren} ${cutChildren===1?'child ticket':'child tickets'}`);
+  if((o.descriptionBytes??0)>0)parts.push('the end of the description');if((o.codePlanTypes??0)>0)parts.push('the types of the code plan');if(o.codePlan===true)parts.push('the code plan');
+  if(!parts.length)return `Context for ${key} lists only the first 20 child tickets.`;
+  return `Context for ${key} was cut to fit ${r.budget} bytes: left out ${parts.join(', ')}. Use --budget ${Math.ceil((r.fullBytes??0)/1000)*1000} to get all of it${hard?'; child tickets beyond the first 20 stay left out':''}.`;};
+const ticketText=async(project,t)=>{
+  const e=await project.blueprints.expected(t.id);const lines=[`${project.ticketKey(t)??t.id}  ${t.title}`,`${t.kind??'task'} · ${t.status}${t.priority&&t.priority!=='normal'?' · '+t.priority:''}${t.assignee?.agent?' · claimed by '+t.assignee.agent:''}`];
+  const show=(label,type,v)=>{lines.push('',label);if(type==='checklist')v.forEach((a,i)=>lines.push(`  ${a.met?'[x]':'[ ]'} ${i+1}. ${a.text}`));else if(Array.isArray(v))v.forEach(x=>lines.push(`  - ${x}`));else if(v&&typeof v==='object')for(const [k,x] of Object.entries(v)){if(Array.isArray(x)?x.length:x)lines.push(`  ${k}: ${Array.isArray(x)?x.join('; '):x}`);}else lines.push(...String(v).split('\n').map(x=>'  '+x));};
+  for(const i of e.items){if(i.value!==undefined)show(i.label,i.type,i.value);else if(!i.optional){lines.push('',i.label,`  (missing) ${i.hint}  [${i.flag}]`);}}
+  if(!e.blueprint&&t.description)show('Description','text',t.description);
+  for(const o of e.others)show(o.label,o.type,o.value);
+  const rels=await project.relations.list(t.id);
+  if(rels.length){const groups=new Map();const add=(label,line)=>{if(!groups.has(label))groups.set(label,[]);groups.get(label).push(line);};
+    for(const r of rels){const isSource=r.sourceId===t.id,o=await project.tickets.get(isSource?r.targetId:r.sourceId),line=`${project.ticketKey(o)??o.id}  ${o.title}  (${o.status})`;
+      if(r.type==='blocks')add(isSource?'blocks':'blocked by',line);else add(r.type.replace(/_/g,' '),line);}
+    lines.push('','Relations');for(const [label,items] of groups){lines.push(`  ${label}`);for(const x of items)lines.push(`    ${x}`);}}
+  const cp=t.codePlan??{},cpKinds=['implements','consumes','changes'].filter(k=>(cp[k]??[]).length);
+  if(cpKinds.length){const resolved=(await project.context(t.id,{budget:1e9})).codePlan??{};lines.push('','Code plan');
+    for(const k of cpKinds)for(const e of cp[k]){const id=e.component??e.id,r=(resolved[k]??[]).find(x=>x.id===id),name=r?.name??id;
+      lines.push(`  ${k} ${name}${r?.kind?` (${r.kind})`:''}   plantool contract show ${name}`);if(k==='consumes'&&e.requires?.length)lines.push(`    requires ${e.requires.join(', ')}`);}}
+  return lines.join('\n');};
+const out=(value,format='text',kind)=>{
+  if(format==='json'){console.log(JSON.stringify(withKeys(value),null,2));return;}
+  if(typeof value==='string'){console.log(value);return;}
+  if(Array.isArray(value)&&value.every(x=>x&&typeof x==='object'&&'id'in x&&'title'in x)){
+    for(const x of value)console.log(`${(x.key??(Number.isInteger(x.number)&&globalThis.__planKey?`${globalThis.__planKey}-${x.number}`:x.id.slice(0,8))).padEnd(10)}  ${String(x.status??x.rollup??'').padEnd(11)}  ${'depth'in x?'  '.repeat(x.depth):''}${x.title}`);
+    if(!value.length)console.log('No matching items.');return;
+  }
+  if(value&&typeof value==='object'&&'id'in value)console.log(`${kind??value.type??value.kind??'record'} ${Number.isInteger(value.number)&&globalThis.__planKey?`${globalThis.__planKey}-${value.number} `:''}${value.id}  ${value.title??''}`.trim());
+  else if(value&&typeof value==='object'&&'valid'in value){for(const e of value.errors??[])console.log(`✗ ${e}`);for(const w of value.warnings??[])console.log(`! ${w}`);console.log(value.valid?'Project is valid.':`Project has ${value.errors.length} validation error(s).`);}
+  else console.log(JSON.stringify(value,null,2));
+};
+async function main(argv) {
+  if(argv[0]==='--version'||argv[0]==='-v'||argv[0]==='-V'||argv[0]==='version'){const {readFile}=await import('node:fs/promises');const pkg=JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8'));console.log(`${pkg.name} ${pkg.version}`);return;}
+  if(argv.includes('--help')||argv[0]==='-h'||argv[0]==='help'||!argv.length){console.log(usage);return;}
+  const [command,sub,...rest]=argv;
+  if(command==='init'){const {opts}=parse([sub,...rest].filter(Boolean));const c=await initProject({name:opts.name,key:opts.key});await autoRegister(await openProject());out(`Initialized ${c.name} (${c.key}) at .plan/`);return;}
+  if(command==='mcp'){const {opts}=parse([sub,...rest].filter(Boolean));const agent=opts.agent??process.env.PLANTOOL_AGENT;if(!agent){console.error('plantool mcp needs an agent name: plantool mcp --agent NAME (or set PLANTOOL_AGENT)');process.exitCode=2;return;}const {serveMcp}=await import('../src/mcp.js');await serveMcp({cwd:process.cwd(),agent});return;}
+  if(command==='serve'){const {opts}=parse([sub,...rest].filter(Boolean));const s=await serve({port:opts.port===undefined?4000:Number(opts.port),open:!!opts.open,register:process.env.PLANTOOL_NO_REGISTER!=='1'});const n=(await listProjects()).length;console.log(`plantool is serving ${n} registered project${n===1?'':'s'}${s.project?` (opened in ${s.project.config.name})`:''} at ${s.url}`);console.log('Press Ctrl-C to stop.');await new Promise(resolve=>s.server.once('close',resolve));return;}
+  if(command==='projects'){const parsed=parse([sub,...rest].filter(x=>x!==undefined));const opts=parsed.opts;const action=parsed.positional[0]??'list';const positional=parsed.positional.slice(1);
+    if(action==='list'){const all=await listProjects();if(opts.format==='json'){out(all,'json');return;}if(!all.length){console.log(`No projects registered yet (${registryHome()}). Run plantool init or any plantool command inside a project, or plantool projects add PATH.`);return;}for(const x of all)console.log(`${(x.key??'').padEnd(8)}  ${x.name.padEnd(28)}  ${x.available?'':'[missing] '}${x.root}`);return;}
+    if(action==='add'){const e=await addProjectPath(positional[0]??'.');out(`Registered ${e.name} (${e.key}) at ${e.root}`);return;}
+    if(action==='remove'){if(!positional[0])throw new Error('Usage: plantool projects remove ID|KEY|PATH');const e=await removeProject(positional[0]);out(`Removed ${e.name} (${e.key}) from the registry; no files were changed.`);return;}
+    if(action==='prune'){const gone=await pruneProjects();out(gone.length?`Removed ${gone.length} missing project(s) from the registry.`:'Nothing to prune.');return;}
+    throw new Error(`Unknown projects command: ${action}`);}
+  if(command==='guide'){const text=guide(sub);if(!text)throw new Error(`Unknown guide topic: ${sub}. Topics: ${Object.keys(GUIDE).join(', ')}`);console.log(text);return;}
+  const project=await openProject();globalThis.__planKey=project.key;await autoRegister(project);
+  if(command==='ticket'&&sub==='create') {const {opts}=parse(rest);const links=await resolveLinks(project,opts);const kind=one(opts.kind)??'task';const props=customFlags(project,kind,opts);const t=await project.tickets.create({title:one(opts.title),description:one(opts.description),status:opts.status,kind,priority:opts.priority,labels:labels(opts.labels),parentId:opts.parent??null,createdBy:process.env.PLANTOOL_AGENT||undefined,...fieldFlags(opts),...(props?{properties:props}:{})});
+    await applyLinks(project,t.id,links,opts.format);
+    const norm = x => String(x ?? '').toLocaleLowerCase().replace(/\s+/g, ' ').trim();
+    const words = x => new Set(String(x ?? '').toLocaleLowerCase().split(/[^\p{L}\p{N}]+/u).filter(w => w.length >= 3));
+    const mine = words(t.title);
+    const others = (await project.tickets.list({ limit: Infinity })).filter(x => x.id !== t.id);
+    const related = others.map(x => { const w = words(x.title), common = [...mine].filter(v => w.has(v)).length, union = new Set([...mine, ...w]).size; return { x, score: union ? common / union : 0, same: norm(x.title) === norm(t.title) }; })
+      .filter(r => r.same || (r.score >= 0.5 && mine.size >= 2)).sort((a, b) => Number(b.same) - Number(a.same) || b.score - a.score).slice(0, 3);
+    const label = x => project.ticketKey(x) ?? x.id;
+    if (process.env.PLANTOOL_SIMILAR !== 'off' && opts.format !== 'json' && !related.some(r => r.same)) {
+      const { relatedByEmbedding } = await import('../src/semantic.js');
+      const byMeaning = await relatedByEmbedding(project, t, others).catch(() => []);
+      for (const r of byMeaning) if (!related.some(x => x.x.id === r.ticket.id)) related.push({ x: r.ticket, score: r.score, same: false });
+    }
+    if (related.length && opts.format !== 'json') {
+      const twin = related.find(r => r.same);
+      console.error(twin
+        ? `Note: a ticket with the same title exists: ${label(twin.x)}. If it is the same work, link it instead: plantool relation add ${label(t)} ${label(twin.x)} duplicates`
+        : `Possibly related: ${related.map(r => label(r.x)).join(', ')}. If one of them is the same work or a dependency, link it: plantool ticket update KEY --relates OTHER (or --blocked-by / --blocks), or plantool relation add ... implements|blocks|relates_to.`);
+    }
+    if (opts.format !== 'json') { const e = await project.blueprints.expected(t.id); if (e.missing.length) console.error(`Expected for a ${e.kind}, still empty: ${e.items.filter(i => !i.filled && !i.optional).map(i => `${i.field} (${i.flag})`).join(', ')}. Add with plantool ticket update ${label(t)} …; plantool blueprint show ${e.kind} explains them.`); }
+    out(t,opts.format,'ticket');return;}
+  if(command==='ticket'&&sub==='list') {const {opts}=parse(rest);out(await project.tickets.list({status:opts.status,parentId:opts.parent,limit:Number(opts.limit??5000)}),opts.format);return;}
+  if(command==='ticket'&&sub==='show') {const {opts,positional}=parse(rest);const t=await project.tickets.get(positional[0]);if(opts.format==='json'){out(t,'json');return;}console.log(await ticketText(project,t));return;}
+  if(command==='ticket'&&sub==='update') {const {opts,positional}=parse(rest),patch={};const links=await resolveLinks(project,opts);for(const k of ['title','status','description','priority','kind'])if(opts[k]!==undefined)patch[k]=one(opts[k]);if(opts.labels!==undefined)patch.labels=labels(opts.labels);Object.assign(patch,fieldFlags(opts));if(opts.set!==undefined){const cur=await project.tickets.get(positional[0]);patch.properties=customFlags(project,patch.kind??cur.kind??'task',opts,cur.properties??{});}if(opts.add_accept!==undefined){const cur=await project.tickets.get(positional[0]);patch.acceptance=[...(cur.acceptance??[]),...items(opts.add_accept).map(text=>({text,met:false}))];}if(opts.add_todo!==undefined){const cur=await project.tickets.get(positional[0]);patch.todos=[...(cur.todos??[]),...items(opts.add_todo).map(text=>({text,met:false}))];}const updated=await project.tickets.update(positional[0],patch,{force:!!opts.force});if(links.length)await applyLinks(project,await project.resolveTicket(positional[0]),links,opts.format);out(updated,opts.format,'ticket');return;}
+  if(command==='ticket'&&sub==='move') {const {opts,positional}=parse(rest);out(await project.tickets.move(positional[0],opts.parent??null),opts.format,'ticket');return;}
+  if(command==='tree') {
+    const {opts,positional}=parse([sub,...rest].filter(Boolean));
+    const enriched=opts.fields==='plan'||['status','hide','kind','ready','blocked','query','verbose','snapshot'].some(k=>opts[k]!==undefined);
+    const options={maxDepth:opts.max_depth===undefined?Infinity:Number(opts.max_depth),limit:Number(opts.limit??(enriched?50:5000)),offset:Number(opts.offset??0),fields:opts.fields??(enriched?'plan':'full')};
+    if(!enriched){out(await project.tree(positional[0]??null,options),opts.format);return;}
+    const page=await project.roadmap.structure(positional[0]??null,{...options,status:labels(opts.status),hide:labels(opts.hide),kind:labels(opts.kind),ready:!!opts.ready,blocked:!!opts.blocked,query:one(opts.query),snapshot:one(opts.snapshot)});
+    if(opts.format==='json'){out(page,'json');return;}
+    for(const row of page.items){out([{...row,title:row.title+(row.contextOnly?' [context]':'')}]);if(opts.verbose)for(const b of row.blockedBy??[])console.log(`             ← ${b.via==='provider'?'provider':'blocked by'} ${b.key??b.id}  ${b.title}`);}
+    if(!page.items.length)console.log('No matching items.');
+    if(page.nextOffset!==null)console.log(`More: --offset ${page.nextOffset} --snapshot ${page.snapshot}`);
+    return;
+  }
+  if(command==='timeline') {
+    const {opts}=parse([sub,...rest].filter(Boolean));
+    const page=await project.timeline({since:one(opts.since),until:one(opts.until),status:labels(opts.status),kind:labels(opts.kind),order:one(opts.order)??'asc',limit:Number(opts.limit??50),offset:Number(opts.offset??0),snapshot:one(opts.snapshot)});
+    if(opts.format==='json'){out(page,'json');return;}
+    for(const row of page.items)console.log(`${row.completedAt}  ${(row.key??row.id).padEnd(10)}  ${row.title}${row.completionSource==='updatedAt'?' [estimated from updatedAt]':''}`);
+    if(!page.items.length)console.log('No completed tickets in this range.');
+    if(page.nextOffset!==null)console.log(`More: --offset ${page.nextOffset} --snapshot ${page.snapshot}`);
+    return;
+  }
+  if(command==='graph') {
+    const {opts,positional}=parse([sub,...rest].filter(Boolean));
+    if(positional.length||Object.keys(opts).some(k=>!['root','limit','format'].includes(k)))throw new PlanError('Use graph [--root ID] [--limit N] [--format json]','USAGE_ERROR');
+    const result=await project.relationGraph({root:one(opts.root),limit:Number(one(opts.limit)??200)});
+    if(opts.format==='json'){out(result,'json');return;}
+    const nodes=new Map(result.nodes.map(n=>[n.id,n]));
+    const label=id=>{const n=nodes.get(id);return `${n.key??n.id} ${n.title}`;};
+    for(const edge of result.edges)console.log(`${label(edge.sourceId)} [${edge.type}] ${label(edge.targetId)}`);
+    if(!result.edges.length)console.log('No relations to draw.');
+    console.log(`${result.nodes.length}/${result.totalNodes} nodes, ${result.edges.length} edges, ${result.hidden} hidden tickets (no relation), ${result.layers} layers.`);
+    return;
+  }
+  if(command==='deps') {
+    const {opts,positional}=parse([sub,...rest].filter(Boolean));
+    if(positional.length||Object.keys(opts).some(k=>!['root','include-finished','limit','snapshot','format'].includes(k)))throw new PlanError('Use deps [--root ID] [--include-finished] [--limit N] [--snapshot TOKEN] [--format json]','USAGE_ERROR');
+    const result=await project.deps({root:one(opts.root),includeFinished:!!opts['include-finished'],limit:Number(one(opts.limit)??200),snapshot:one(opts.snapshot)});
+    if(opts.format==='json'){out(result,'json');return;}
+    const nodes=new Map(result.nodes.map(n=>[n.id,n]));
+    const label=id=>{const n=nodes.get(id);return `${n.key??n.id} ${n.title}${n.contextOnly?' [context]':''}`;};
+    for(const edge of result.edges)console.log(`${label(edge.targetId)} ← ${label(edge.sourceId)} [${edge.via}${edge.inherited?', inherited':''}]${edge.components?.length?' '+edge.components.map(c=>`${c.name} (${c.stage})`).join(', '):''}`);
+    if(!result.edges.length)console.log(result.truncated?'No edges fit within the node limit.':'No matching dependencies.');
+    console.log(`${result.nodes.length}/${result.totalNodes} nodes, ${result.edges.length}/${result.totalEdges} edges.`);
+    if(result.truncated)console.log(`Omitted ${result.omittedNodes} nodes and ${result.omittedEdges} edges. Narrow with --root ID (maximum 200 nodes and 500 edges).`);
+    return;
+  }
+  if(command==='roadmap'&&sub==='backfill-completion') {const {opts}=parse(rest);out(await project.roadmap.backfillCompletion({dryRun:!!opts['dry-run']}),opts.format);return;}
+  if(['goal','plan','decision'].includes(command)&&sub==='create') {const {opts}=parse(rest);const kind={goal:'goals',plan:'plans',decision:'decisions'}[command];out(await project.documents.create(kind,{title:opts.title,body:opts.body??'',links:opts.links?opts.links.split(',').filter(Boolean):[]}),opts.format);return;}
+  if(['goal','plan','decision'].includes(command)&&['list','show','update'].includes(sub)) {const {opts,positional}=parse(rest);const kind={goal:'goals',plan:'plans',decision:'decisions'}[command];
+    if(sub==='list'){const all=await project.documents.list(kind,{body:false});if(opts.format==='json'){out(all,'json');return;}if(!all.length)console.log('No documents.');for(const d of all)console.log(`${d.id}  ${d.status}  ${d.title}`);return;}
+    if(sub==='show'){const r=await project.documents.getVersioned(kind,positional[0]);if(opts.format==='json'){out({...r.document,revision:r.revision},'json');return;}console.log(`${command} ${r.document.id}  ${r.document.status}  ${r.document.title}\nlinks: ${(r.document.links??[]).join(', ')||'none'}\n\n${r.document.body??''}`);return;}
+    const patch={};for(const k of ['title','status','body'])if(opts[k]!==undefined)patch[k]=opts[k];if(opts.links!==undefined)patch.links=labels(opts.links);const r=await project.documents.update(kind,positional[0],patch);out(opts.format==='json'?{...r.document,revision:r.revision,changed:r.changed}:(r.changed?`Updated ${command} ${r.document.id}`:'No changes.'),opts.format);return;}
+  if(command==='comment'&&sub==='add') {const {opts,positional}=parse(rest);out(await project.comments.add(positional[0],{body:positional.slice(1).join(' '),author:one(opts.author)??process.env.PLANTOOL_AGENT??undefined}),opts.format);return;}
+  if(command==='comment'&&sub==='list') {const {opts,positional}=parse(rest);const all=await project.comments.list((await project.tickets.get(positional[0])).id);if(opts.format==='json'){out(all,'json');return;}console.log(all.length?all.map(c=>`${c.author??'local'} · ${c.createdAt}\n  ${String(c.body).split('\n').join('\n  ')}`).join('\n\n'):'No comments yet.');return;}
+  if(command==='relation'&&sub==='add') {const {positional}=parse(rest);out(await project.relations.add(...positional));return;}
+  if(command==='relation'&&sub==='list') {const {positional,opts}=parse(rest);out(await project.relations.list(positional[0]),opts.format);return;}
+  if(command==='relation'&&sub==='remove') {const {positional}=parse(rest);let id=positional[0];if(positional.length===3){const match=(await project.relations.list(positional[0])).find(r=>r.sourceId===positional[0]&&r.targetId===positional[1]&&r.type===positional[2]);if(!match)throw new NotFoundError('No matching relationship');id=match.id;}await project.relations.remove(id);out(`Removed relationship ${id}`);return;}
+  if(command==='next') {const {opts}=parse([sub,...rest].filter(Boolean));const rows=await project.next({limit:Number(opts.limit??5),parentId:opts.parent});if(opts.format==='json'){out(rows,'json');return;}const human=(await project.decisions.list()).filter(d=>d.owner==='human'&&d.status==='open');if(!rows.length)console.log('No ready tickets.');rows.forEach((r,i)=>console.log(`${i+1}. [${r.effectivePriority}] ${r.key?r.key+' ':''}${r.title}\n   ${r.id}  ${r.kind}${r.path.length?'  in: '+r.path.join(' > '):''}\n   ${r.reasons.join('; ')}`));if(human.length)console.log(`\n${human.length} decision(s) need a person: ${human.slice(0,3).map(d=>(d.key??d.id)+' '+d.question).join('; ')}${human.length>3?' …':''} (plantool decisions)`);return;}
+  if(command==='claim') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const t=await project.claim(positional[0],{agent:opts.agent??process.env.PLANTOOL_AGENT,leaseMinutes:opts.lease===undefined?undefined:Number(opts.lease),force:!!opts.force});out(opts.format==='json'?t:`Claimed ${t.id} for ${t.assignee.agent} until ${t.assignee.expiresAt}`,opts.format);return;}
+  if(command==='release') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const t=await project.release(positional[0],{agent:opts.agent??process.env.PLANTOOL_AGENT,force:!!opts.force});out(opts.format==='json'?t:`Released ${t.id}`,opts.format);return;}
+  if(command==='done') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const changed=opts.changed!==undefined?labels(opts.changed):opts.files||opts.commit?gitFiles(project.root,one(opts.commit)):undefined;const outcome=(opts.note||opts.verified||changed||opts.commit)?{...(opts.note?{summary:one(opts.note)}:{}),...(opts.verified?{verifiedBy:one(opts.verified)}:{}),...(changed?.length?{changedFiles:changed}:{}),...(opts.commit?{commits:labels(opts.commit)}:{})}:undefined;if(!opts.note&&opts.format!=='json')console.error('Note: no --note. A short note on what changed and how it was verified helps whoever picks this up next.');const r=await project.finish(positional[0],{note:one(opts.note),agent:opts.agent??process.env.PLANTOOL_AGENT,force:!!opts.force,outcome});if(opts.format==='json'){out(r,'json');return;}console.log(`Done ${r.ticket.id}  ${r.ticket.title}`);if(r.unblocked.length){console.log('Now ready:');for(const x of r.unblocked)console.log(`  ${x.id}  ${x.title}`);}return;}
+  if(command==='agent'&&sub==='onboard'){console.log(onboardText());return;}
+  if(command==='component'&&sub==='add') {const {opts}=parse(rest);const c=await project.components.create({kind:opts.kind,name:opts.name,parentId:opts.parent,description:opts.description});out(opts.format==='json'?c:`component ${c.id}  ${c.kind} ${await qname(project,c.id)}`,opts.format);return;}
+  if(command==='component'&&sub==='list') {const {opts}=parse(rest);const all=await project.components.list(),q=qualifiedNames(all),ks=new Map((await project.contracts.list()).map(k=>[k.componentId,k]));const rows=all.map(c=>({...c,qualifiedName:q.get(c.id),contractVersion:ks.get(c.id)?.version??null})).sort((a,b)=>a.qualifiedName.localeCompare(b.qualifiedName));if(opts.format==='json'){out(rows,'json');return;}if(!rows.length)console.log('No components.');for(const r of rows)console.log(`${r.id}  ${r.kind.padEnd(12)}  ${r.qualifiedName}${r.contractVersion?`  (contract v${r.contractVersion})`:''}`);return;}
+  if(command==='component'&&sub==='show') {const {opts,positional}=parse(rest);const c=await project.components.resolve(positional[0]);const k=(await project.contracts.list()).find(x=>x.componentId===c.id)??null;out({...c,qualifiedName:await qname(project,c.id),contract:k},'json');return;}
+  if(command==='type'&&sub==='set') {const {opts,positional}=parse(rest);const r=await project.types.set(positional[0],json(opts.schema,'--schema'),{description:opts.description,dryRun:!!opts['dry-run']});if(opts.format==='json')out(r,'json');else impactText(`type ${r.name} v${r.version}`,r.impact,!!opts['dry-run'],await qualifiedMap(project));return;}
+  if(command==='type'&&sub==='list') {const {opts}=parse(rest);const all=await project.types.list();if(opts.format==='json'){out(all,'json');return;}if(!all.length)console.log('No types.');for(const x of all)console.log(`${x.name}  ${JSON.stringify(x.schema)}`);return;}
+  if(command==='contract'&&sub==='set') {const {opts,positional}=parse(rest);const k=await project.contracts.set(positional[0],{input:opts.input===undefined?undefined:json(opts.input,'--input'),output:opts.output===undefined?undefined:json(opts.output,'--output'),description:opts.description});if(opts.format==='json')out(k,'json');else impactText(`contract ${await qname(project,k.componentId)} v${k.version}`,k.impact,!!opts['dry-run'],await qualifiedMap(project));return;}
+  if(command==='contract'&&sub==='history') {const {opts,positional}=parse(rest);const k=await project.contracts.get(positional[0]);const rows=[...(k.history??[]),{version:k.version,input:k.input,output:k.output,updatedAt:k.updatedAt}];if(opts.format==='json'){out(rows,'json');return;}for(const r of rows)console.log(`v${r.version}  ${r.updatedAt}\n  input:  ${JSON.stringify(r.input)}\n  output: ${JSON.stringify(r.output)}`);return;}
+  if(command==='contract'&&sub==='show') {const {positional}=parse(rest);out(await project.contracts.get(positional[0]),'json');return;}
+  if(command==='codeplan'&&sub==='add') {const {opts,positional}=parse(rest);const t=await project.codePlan.add(positional[0],positional[1],positional[2],{requires:labels(opts.requires),provides:labels(opts.provides),stage:one(opts.stage),needs:one(opts.needs)});out(opts.format==='json'?t.codePlan:`codeplan ${t.id} ${positional[1]} ${positional[2]}`,opts.format);return;}
+  if(command==='codeplan'&&sub==='remove') {const {positional}=parse(rest);await project.codePlan.remove(positional[0],positional[1],positional[2]);out(`Removed ${positional[1]} ${positional[2]} from ${positional[0]}`);return;}
+  if(command==='codeplan'&&sub==='show') {const {positional}=parse(rest);out((await project.context(positional[0],{budget:1e9})).codePlan??{},'json');return;}
+  if(command==='new') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const title=positional.join(' ').trim();if(!title)throw new Error('Usage: plantool new "What you want to build" [--why TEXT] [--checklist product]');const t=await project.tickets.create({title,kind:'feature',why:one(opts.why),description:one(opts.description),createdBy:process.env.PLANTOOL_AGENT||undefined});const r=await project.checklists.apply(t.id,one(opts.checklist)??'product');if(opts.format==='json'){out({ticket:t,...r},'json');return;}console.log(`${project.ticketKey(t)??t.id}  ${title}`);for(const c of r.created)console.log(`  ${(c.key??c.id).padEnd(8)} ${c.title}`);if(r.coverage.undecided.length)console.log(`Optional, decide later: ${r.coverage.undecided.join(', ')} (plantool checklist status ${project.ticketKey(t)??t.id})`);console.log(`\nNext: fill in the goal, add options to the decisions, then show the person: plantool decisions\nMethod: plantool guide`);return;}
+  if(command==='fields') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const kinds=positional.length?positional:['task','feature','bug','decision','option'];const rows=Object.fromEntries(kinds.map(k=>[k,project.fields(k)]));if(opts.format==='json'){out(rows,'json');return;}for(const k of kinds){console.log(`${k}:`);for(const f of rows[k])console.log(`  ${f.name.padEnd(13)} ${(f.type+(f.values?' ('+f.values.join('|')+')':'')).padEnd(22)} ${f.help??f.label}${f.custom?'  [project]':''}`);}return;}
+  if(command==='which') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const q=positional[0];if(!q)throw new Error('Usage: plantool which PATH');const norm=x=>String(x).replaceAll('\\','/').replace(/^\.\//,'').replace(/\/+$/,'');const target=norm(q);const hit=f=>{const x=norm(f);return x===target||target.startsWith(x+'/')||x.startsWith(target+'/');};const rows=(await project.tickets.list({limit:Infinity})).map(t=>({t,planned:(t.files??[]).filter(hit),changed:(t.outcome?.changedFiles??[]).filter(hit)})).filter(r=>r.planned.length||r.changed.length).map(({t,planned,changed})=>({id:t.id,key:project.ticketKey(t),title:t.title,status:t.status,planned,changed}));if(opts.format==='json'){out(rows,'json');return;}console.log(rows.length?rows.map(r=>`${r.key??r.id}  ${r.status.padEnd(11)} ${r.title}${r.planned.length?'  planned: '+r.planned.join(', '):''}${r.changed.length?'  changed: '+r.changed.join(', '):''}`).join('\n'):`No ticket mentions ${q}.`);return;}
+  if(command==='ticket'&&sub==='todo') {const {opts,positional}=parse(rest);const t=await project.tickets.get(positional[0]);const n=Number(positional[1]);const list=[...(t.todos??[])];if(!Number.isInteger(n)||n<1||n>list.length)throw new Error(`Usage: plantool ticket todo TICKET N [--undone | --text TEXT] (N from 1 to ${list.length})`);if(opts.text!==undefined){const text=String(opts.text).trim();if(!text)throw new Error('A to-do needs text');list[n-1]={...list[n-1],text};}else list[n-1]={...list[n-1],met:!opts.undone};await project.tickets.update(t.id,{todos:list});console.log(list.map((a,i)=>`${a.met?'[x]':'[ ]'} ${i+1}. ${a.text}`).join('\n'));return;}
+  if(command==='ticket'&&sub==='check') {const {opts,positional}=parse(rest);const t=await project.tickets.get(positional[0]);const n=Number(positional[1]);const list=[...(t.acceptance??[])];if(!Number.isInteger(n)||n<1||n>list.length)throw new Error(`Usage: plantool ticket check TICKET N [--unmet] (N from 1 to ${list.length})`);list[n-1]={...list[n-1],met:!opts.unmet};await project.tickets.update(t.id,{acceptance:list});console.log(list.map((a,i)=>`${a.met?'[x]':'[ ]'} ${i+1}. ${a.text}`).join('\n'));return;}
+  if(command==='ask') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const q=[sub,...rest].length?positional.join(' '):'';const r=await project.decisions.ask(q,{parentId:opts.parent,options:items(opts.options)??[],criteria:one(opts.criteria),owner:opts.owner,reversible:opts.reversible?true:opts.irreversible?false:undefined,decideBy:one(opts.decide_by),why:one(opts.why),blocks:labels(opts.blocks)??[],priority:opts.priority,createdBy:process.env.PLANTOOL_AGENT||undefined});if(opts.format==='json'){out(r,'json');return;}console.log(`decision ${project.ticketKey(r.decision)??r.decision.id}  ${r.decision.title}  (decided by ${r.decision.decision.owner})`);for(const o of r.options)console.log(`  option ${project.ticketKey(o)??o.id}  ${o.title}`);return;}
+  if(command==='option'&&sub==='add') {const {opts,positional}=parse(rest);const o=await project.decisions.addOption(positional[0],{title:one(opts.title)??positional.slice(1).join(' '),why:one(opts.why),pros:items(opts.pros)??[],cons:items(opts.cons)??[],risks:items(opts.risks),size:one(opts.size),createdBy:process.env.PLANTOOL_AGENT||undefined});out(opts.format==='json'?o:`option ${project.ticketKey(o)??o.id}  ${o.title}`,opts.format);return;}
+  if(command==='option'&&sub==='score') {const {opts,positional}=parse(rest);const scores={};for(const s of positional.slice(1)){const i=s.lastIndexOf('=');if(i<1)throw new Error('Use criterion=score, e.g. performance=4');scores[s.slice(0,i)]=s.slice(i+1);}const o=await project.decisions.score(positional[0],scores);out(opts.format==='json'?o:`Scored ${o.title}: ${Object.entries(o.option.scores).map(([k,v])=>k+'='+v).join(', ')}`,opts.format);return;}
+  if(command==='criteria') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const d=await project.decisions.setCriteria(positional[0],positional.slice(1).join(' '));out(opts.format==='json'?d:`Criteria: ${d.decision.criteria.map(c=>c.name+' ×'+c.weight).join(', ')}`,opts.format);return;}
+  if(command==='recommend'||command==='decide') {const {opts,positional}=parse([sub,...rest].filter(Boolean));let e;
+    if(command==='recommend'&&positional[1])e=await project.decisions.recommend(positional[0],positional[1],{why:one(opts.why),by:process.env.PLANTOOL_AGENT||opts.by});
+    else if(command==='decide'&&opts.reopen)e=await project.decisions.reopen(positional[0],{by:one(opts.by)??process.env.PLANTOOL_AGENT});
+    else if(command==='decide'&&positional[1]){e=await project.decisions.decide(positional[0],positional[1],{why:one(opts.why),by:one(opts.by)??process.env.PLANTOOL_AGENT});}
+    else e=await project.decisions.evaluate(positional[0]);
+    if(opts.format==='json'){out(e,'json');return;}
+    console.log(`${e.key??e.id}  ${e.question}\n  ${e.status}; ${e.owner==='human'?'a person decides':'an agent may decide'}${e.reversible===true?', reversible':e.reversible===false?', hard to reverse':''}${e.decideBy?', decide by '+e.decideBy:''}`);if(e.why)console.log(`  why: ${e.why}`);
+    if(e.criteria.length)console.log(`  criteria: ${e.criteria.map(c=>c.name+' ×'+c.weight).join(', ')}`);
+    for(const o of e.options){console.log(`  ${o.chosen?'✓':o.status==='cancelled'?'×':'•'} ${(o.key??'').padEnd(8)} ${o.title}${o.score!==null?'  score '+Math.round(o.score*100)+'%':''}  effort ${o.effort}${o.planned?' ('+o.planned+' planned)':''}`);for(const x of o.pros)console.log(`        + ${x}`);for(const x of o.cons)console.log(`        - ${x}`);}
+    if(e.suggested&&!e.chosen)console.log(`  suggested: ${e.suggested.title} (${e.suggested.reason})`);if(e.recommendation)console.log(`  recommended by ${e.recommendation.by}: ${e.options.find(o=>o.id===e.recommendation.option)?.title} — ${e.recommendation.why}`);if(e.chosen)console.log(`  chosen: ${e.options.find(o=>o.id===e.chosen)?.title} — ${e.rationale}`);
+    if(e.activated?.length)console.log(`  now part of the plan: ${e.activated.map(t=>(t.key??t.id)+' '+t.title).join('; ')}`);return;}
+  if(command==='decisions') {const {opts}=parse([sub,...rest].filter(Boolean));const rows=await project.decisions.list({all:!!opts.all});if(opts.format==='json'){out(rows,'json');return;}if(!rows.length){console.log('No open decisions.');return;}for(const r of rows)console.log(`${r.owner==='human'&&r.status==='open'?'? ':'  '}${(r.key??r.id).padEnd(8)} ${r.question}  [${r.status}, ${r.owner}${r.options?', '+r.options+' options':', no options yet'}${r.recommendation?', recommended: '+r.recommendation:r.suggested?', suggested: '+r.suggested:''}]`);return;}
+  if(command==='blueprint') {const {opts,positional}=parse(rest);const fmt=opts.format;
+    if(sub==='list'||sub===undefined){const all=await project.blueprints.list();if(fmt==='json'){out(all,'json');return;}for(const b of all)console.log(`${b.kind.padEnd(9)} expects ${b.expects.join(', ')}${b.optional.length?'; optional '+b.optional.join(', '):''}${b.template?'; has a description template':''}${b.source==='project'?'  [project]':''}`);return;}
+    if(sub==='show'){const b=await project.blueprints.get(positional[0]);if(fmt==='json'){out(b,'json');return;}console.log(`${b.kind} — ${b.title??''}${b.source==='project'?'  [project]':''}\n${b.description??''}\n`);for(const e of b.expects)console.log(`  ${e.field.padEnd(13)} ${e.optional?'optional':'expected'}${e.when==='leaf'?' (tickets without children)':''}  ${e.hint??''}`);if(b.template)console.log(`\nDescription template:\n${b.template}`);return;}
+    if(sub==='status'){const e=await project.blueprints.expected(positional[0]);if(fmt==='json'){out(e,'json');return;}if(!e.blueprint){console.log(`No blueprint for kind ${e.kind}.`);return;}console.log(`Blueprint ${e.kind}`);for(const i of e.items)console.log(`  ${i.filled?'✓':i.optional?'–':'○'} ${i.field.padEnd(13)} ${i.filled?'':i.optional?'optional, empty: ':'missing: '}${i.filled?'':i.hint+'  ['+i.flag+']'}`);return;}
+    if(sub==='check'){const rows=await project.blueprints.check();if(fmt==='json'){out(rows,'json');return;}console.log(rows.length?rows.map(r=>`! ${r.key??r.ticketId} (${r.kind}) "${r.title}" lacks ${r.missing.join(', ')}`).join('\n'):'Every open ticket has what its blueprint expects.');return;}
+    if(sub==='init'){const r=await project.blueprints.init(positional[0]);out(fmt==='json'?r:`Wrote ${r.file}; edit expects and template to fit this project.`,fmt);return;}
+    const sections=b=>b.expects.map(e=>`  ${e.field.padEnd(13)} ${e.optional?'optional':'expected'}${e.leaf?' (tickets without children)':''}  ${e.hint}`).join('\n');
+    if(sub==='expect'){if(!positional[1])throw new Error('Usage: plantool blueprint expect KIND FIELD [--hint TEXT] [--optional|--required] [--leaf] [--before FIELD] [--type text|list|number|bool|enum] [--values a,b] [--label TEXT]');const r=await project.blueprints.expect(positional[0],positional[1],{hint:one(opts.hint),optional:opts.optional?true:opts.required?false:undefined,leaf:opts.leaf?true:undefined,before:one(opts.before),type:one(opts.type),values:labels(opts.values),label:one(opts.label)});if(fmt==='json'){out(r,'json');return;}console.log(`${r.created?`Created the project field ${positional[1]}. `:''}A ${r.kind} now has these sections:\n${sections(r)}`);return;}
+    if(sub==='drop'){if(!positional[1])throw new Error('Usage: plantool blueprint drop KIND FIELD');const r=await project.blueprints.drop(positional[0],positional[1]);if(fmt==='json'){out(r,'json');return;}console.log(`A ${r.kind} now has these sections:\n${sections(r)}`);return;}
+    if(sub==='template'){const {readFile}=await import('node:fs/promises');const text=opts.clear?'':opts.file!==undefined&&opts.file!==true?await readFile(one(opts.file),'utf8'):one(opts.text);if(text===undefined)throw new Error('Usage: plantool blueprint template KIND --text TEXT | --file PATH | --clear');const r=await project.blueprints.save(positional[0],{template:text});if(fmt==='json'){out(r,'json');return;}console.log(r.template?`New ${r.kind} tickets start with this description:\n${r.template}`:`New ${r.kind} tickets start with an empty description.`);return;}
+    if(sub==='reset'){const r=await project.blueprints.reset(positional[0]);if(fmt==='json'){out(r,'json');return;}console.log(r.reset?`The built-in ${r.kind} blueprint applies again.`:`The ${r.kind} blueprint was not changed in this project; nothing to reset.`);return;}
+    throw new Error('Usage: plantool blueprint list|show KIND|status TICKET|check|init KIND|expect KIND FIELD|drop KIND FIELD|template KIND|reset KIND');}
+  if(command==='checklist') {const {opts,positional}=parse(rest);const fmt=opts.format;const icon={done:'✓',planned:'•',answered:'✓',skipped:'–',cancelled:'×',open:'○'};
+    const statusText=c=>{if(!c.checklist)return 'No checklist on this ticket. Try: plantool checklist suggest '+positional[0];const lines=[`Checklist ${c.checklist.name}${c.checklist.title?' ('+c.checklist.title+')':''}`];for(const i of c.items)lines.push(`  ${icon[i.state]} ${i.id.padEnd(18)} ${i.title}${i.optional?' (optional)':''}${i.ticket?'  → '+(i.ticket.key??i.ticket.id):''}${i.reason?'  — skipped: '+i.reason:''}${i.answer?'  — on the ticket: '+i.answer:''}`);if(c.missing.length)lines.push(`Missing: ${c.missing.join(', ')}`);if(c.undecided.length)lines.push(`Undecided optional items: ${c.undecided.join(', ')} (apply with --only, or skip with a reason)`);return lines.join('\n');};
+    if(sub==='list'){const all=await project.checklists.list();if(fmt==='json'){out(all,'json');return;}for(const b of all)console.log(`${b.name.padEnd(14)} ${String(b.items).padStart(2)} items  ${b.source==='project'?'[project] ':''}${b.description}${b.extends?' (extends '+b.extends+')':''}`);return;}
+    if(sub==='show'){const b=await project.checklists.get(positional[0]);if(fmt==='json'){out(b,'json');return;}console.log(`${b.name} — ${b.title??''}\n${b.description??''}\n`);for(const i of b.items)console.log(`  ${i.id.padEnd(18)} ${i.title}${i.optional?' (optional)':''}${i.from!==b.name?'  [from '+i.from+']':''}`);return;}
+    if(sub==='suggest'){const s=await project.checklists.suggest(positional[0]);if(fmt==='json'){out(s,'json');return;}console.log(s.length?s.map(x=>`${x.name}  (${x.title})`).join('\n'):'No checklist matches this ticket. See plantool checklist list.');return;}
+    if(sub==='apply'){const r=await project.checklists.apply(positional[0],positional[1],{only:opts.only?labels(opts.only):undefined,includeOptional:!!opts.optional,dryRun:!!opts['dry-run']});if(fmt==='json'){out(r,'json');return;}if(opts['dry-run']){console.log(r.create.length?`Would create ${r.create.length} child ticket(s):\n`+r.create.map(c=>`  ${c.item.padEnd(18)} ${c.title}${c.optional?' (optional)':''}`).join('\n'):'Nothing to create; all chosen items are covered.');return;}console.log(r.created.length?`Created ${r.created.length} child ticket(s):\n`+r.created.map(c=>`  ${c.key??c.id}  ${c.title}`).join('\n'):'Nothing to create; all chosen items are covered.');if(r.coverage.undecided.length)console.log(`Undecided optional items: ${r.coverage.undecided.join(', ')}`);return;}
+    if(sub==='attach'){const r=await project.checklists.apply(positional[0],positional[1],{only:[]});if(fmt==='json'){out(r,'json');return;}console.log(statusText(r.coverage));return;}
+    if(sub==='answer'||sub==='unanswer'){const c=await project.checklists.answer(positional[0],positional[1],sub==='unanswer'?null:(opts.note??''));if(fmt==='json'){out(c,'json');return;}console.log(statusText(c));return;}
+    if(sub==='status'){const c=await project.checklists.coverage(positional[0]);if(fmt==='json'){out(c,'json');return;}console.log(statusText(c));return;}
+    if(sub==='skip'||sub==='unskip'){const c=await project.checklists.skip(positional[0],positional[1],sub==='unskip'?null:opts.reason);if(fmt==='json'){out(c,'json');return;}console.log(statusText(c));return;}
+    if(sub==='check'){const w=await project.checklists.check();if(fmt==='json'){out(w,'json');return;}console.log(w.length?w.map(x=>`! ${x.message}`).join('\n'):'All checklist items are covered.');return;}
+    if(sub==='init'){const r=await project.checklists.init(positional[0],{from:opts.from});out(fmt==='json'?r:`Wrote ${r.file}; edit it to fit this project.`,fmt);return;}
+    throw new Error('Usage: plantool checklist list|show|suggest|apply|status|skip|unskip|check|init');}
+  if(command==='check') {const {opts}=parse([sub,...rest].filter(Boolean));const r=await project.check();if(opts.format==='json')out(r,'json');else{for(const e of r.errors)console.log(`✗ ${e.code}  ${e.message}`);for(const w of r.warnings)console.log(`! ${w.code}  ${w.message}`);console.log(r.valid?`Design is consistent (${r.warnings.length} warning(s)).`:`Design has ${r.errors.length} error(s) and ${r.warnings.length} warning(s).`);}if(!r.valid)process.exitCode=1;return;}
+  if(command==='keys'&&['init','renumber'].includes(sub)) {const {opts}=parse(rest);const r=sub==='init'?await project.keys.init({key:opts.key}):await project.keys.renumber();if(opts.format==='json'){out(r,'json');return;}if(sub==='init')console.log(`Project key ${r.key}; numbered ${r.assigned} of ${r.total} tickets.`);else{for(const c of r.changed)console.log(`${c.from} -> ${c.to}  ${c.id}`);console.log(r.changed.length?`Renumbered ${r.changed.length} ticket(s).`:'No duplicate keys.');}return;}
+  if(command==='index') {const {opts}=parse(rest);const action=sub&&!sub.startsWith('--')?sub:'status';if(action==='status'){const s=await project.semantic.status();if(opts.format==='json'){out(s,'json');return;}console.log(s.available?`Semantic index ready (${s.sources} sources, ${s.chunks} chunks, generation ${s.generation}${s.indexing?', updating':''}).`:`Semantic search unavailable: ${s.reason??s.error??s.status}`);return;}
+    if(action==='update'||action==='rebuild'){let last=0;const r=await project.semantic[action==='rebuild'?'rebuild':'update']({onProgress:({done,total})=>{if(process.stderr.isTTY&&Date.now()-last>500){last=Date.now();process.stderr.write(`\rIndexing ${done}/${total} …`);}}});if(process.stderr.isTTY)process.stderr.write('\r');if(opts.format==='json'){out(r,'json');return;}console.log(`Index up to date: ${r.sources} sources, ${r.chunks} chunks (${r.changed} changed, ${r.embedded} texts embedded) with ${r.model}.`);return;}
+    throw new Error(`Unknown index command: ${action}`);}
+  if(command==='similar') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const common={limit:Number(opts.limit??5),minScore:Number(opts.min??0),minStrength:opts.strength!==undefined?Number(opts.strength):-Infinity};const rows=opts.text!==undefined?await project.semantic.similarText(String(opts.text),common):await project.semantic.similar(positional[0],common);if(opts.format==='json'){out(rows,'json');return;}if(!rows.length){console.log('No similar tickets above the threshold.');return;}for(const r of rows)console.log(`${r.score.toFixed(2)}  z ${r.strength.toFixed(1).padStart(4)}  ${(r.key??r.id).padEnd(10)} ${r.title}${r.likelyOverlap?'  ← likely overlap':''}${r.relation?`  [${r.relation}]`:''}`);return;}
+  if(command==='search'&&['semantic','hybrid'].includes(parse([sub,...rest].filter(Boolean)).opts.mode)) {const {opts,positional}=parse([sub,...rest].filter(Boolean));const q=positional.join(' ');const types=labels(opts.type);const r=opts.mode==='semantic'?{mode:'semantic',...(await project.semantic.search(q,{types,limit:Number(opts.limit??20)}))}:await project.semantic.hybrid(q,{types});const hits=r.hits.slice(0,Number(opts.limit??20));if(opts.format==='json'){out({...r,hits},'json');return;}if(r.fallbackReason)console.log(`(keyword only: ${r.fallbackReason})`);if(!hits.length){console.log('No results.');return;}for(const h of hits){const t=h.type==='ticket'?(await project.tickets.get(h.id).then(x=>project.ticketKey(x)).catch(()=>null)):null;console.log(`${(t??h.id.slice(0,8)).padEnd(10)}  ${h.type.padEnd(8)}  ${h.similarity!==undefined?h.similarity.toFixed(2)+' ':''}${h.title}`);}return;}
+  if(command==='search') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const page=await project.searchPage(positional.join(' '),{offset:Number(opts.offset??0),limit:Number(opts.limit??20),types:labels(opts.type)});if(opts.format==='json'){out(page,'json');return;}if(!page.items.length){console.log('No results.');return;}for(const h of page.items)console.log(`${(h.key??h.id).padEnd(10)}  ${h.type.padEnd(8)}  ${h.title}`);console.log(`${page.offset+1}-${page.offset+page.items.length} of ${page.total}${page.nextOffset!==null?`; next: --offset ${page.nextOffset}`:''}`);return;}
+  if(command==='context') {const {opts,positional}=parse([sub,...rest].filter(Boolean));const result=await project.context(positional[0],{budget:Number(opts.budget??24000)});if(result.truncated)console.error(contextCutLine(result));out(result,opts.format);return;}
+  if(command==='validate') {const {opts}=parse([sub,...rest].filter(Boolean));const result=await project.validate();out(result,opts.format);if(!result.valid)process.exitCode=1;return;}
+  throw new Error(`Unknown command: ${command}\n\n${usage}`);
+}
+try { await main(process.argv.slice(2)); }
+catch(error){console.error(JSON.stringify({error:error.message,code:error.code??'USAGE_ERROR',details:error.details??{}},null,2));process.exitCode=error instanceof PlanError?1:2;}

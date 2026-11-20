@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db4c-f06e-7df8-9817-ed2e419f55e4",
+  "number": 58,
+  "title": "plantool similar accepts free text and lists the best matches",
+  "kind": "feature",
+  "description": "plantool similar only takes a ticket id and hides candidates below a z-score of 1.5, so agents get one or no result. Accept free text (--text) so a new idea can be checked before a ticket exists, and list the top matches with their score by default; --strength still filters.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "createdAt": "2026-11-14T18:23:35.022Z",
+  "updatedAt": "2026-11-14T18:24:33.905Z",
+  "assignee": null,
+  "why": "Agents need to check for duplicates and dependencies before creating a ticket; similar only worked with an existing ticket id and hid most candidates.",
+  "acceptance": [
+    {
+      "text": "plantool similar --text 'store data in a database' lists the best matching tickets",
+      "met": false
+    },
+    {
+      "text": "default lists the top matches without a z-score cut",
+      "met": false
+    },
+    {
+      "text": "node --test passes",
+      "met": false
+    }
+  ],
+  "outcome": {
+    "summary": "plantool similar --text TEXT compares a new idea with all tickets; the default lists the top matches without a z-score cut (--strength restores it). Ticket API similar default changed the same way.",
+    "verifiedBy": "node --test: 108 pass, 0 fail (1 opt-in skipped); pnpm run check passes; plantool similar --text run on the real plan."
+  },
+  "completedAt": "2026-11-14T18:24:33.905Z"
+}

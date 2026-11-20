@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cbd8-8ab7-7a02-b94d-813690c096b7",
+  "ticketId": "01a1ca95-23fa-7a95-a919-831298a693ee",
+  "body": "Unit test with a fake embedder; opt-in test with the real model (PLAN-2).",
+  "author": "claude",
+  "createdAt": "2026-11-11T18:22:08.567Z"
+}

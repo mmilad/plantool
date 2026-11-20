@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="810" height="930" viewBox="0 0 810 930" role="img" aria-labelledby="title desc">
-  <title id="title">Heistman UI-Entwurf — Ticketanlage mobil</title>
+  <title id="title">Plan UI-Entwurf — Ticketanlage mobil</title>
   <desc id="desc">Zwei 390-mal-844-Zustände zeigen die getrennte Anlage eines Root-Tickets aus der Projektübersicht und eines direkten Untertickets aus einem geöffneten Elternticket. Beide Formulare haben sichtbare Feldnamen, Status- und Prioritätsdefaults, optionale Labels sowie klar benannte Aktionen.</desc>
   <defs>
     <style>
@@ -28,14 +28,14 @@
     <path d="M1 58.5H389" stroke="#D8DEE7"/>
     <rect x="14" y="14" width="30" height="30" rx="8" fill="#2457A7"/>
     <path d="M22.75 23.375h12.5M22.75 28.375h12.5M22.75 33.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
-    <text x="54" y="29" font-size="14" font-weight="650">Heistman</text>
-    <text x="54" y="44" class="tiny muted">heistman</text>
+    <text x="54" y="29" font-size="14" font-weight="650">Plan</text>
+    <text x="54" y="44" class="tiny muted">plan</text>
 
     <text x="18" y="94" class="title">Ticket erstellen</text>
     <text x="18" y="115" class="small muted">Neues Ticket auf Projektebene</text>
     <rect x="12" y="128" width="366" height="50" rx="6" fill="#FFFFFF" stroke="#D8DEE7"/>
     <text x="26" y="149" class="tiny muted">PROJEKT</text>
-    <text x="26" y="168" class="small">heistman · ohne Elternzuordnung</text>
+    <text x="26" y="168" class="small">plan · ohne Elternzuordnung</text>
 
     <text x="18" y="201" class="label">Titel <tspan fill="#9B1C1C">*</tspan></text>
     <rect x="12" y="209" width="366" height="44" rx="6" class="control"/>
@@ -73,8 +73,8 @@
     <path d="M1 58.5H389" stroke="#D8DEE7"/>
     <rect x="14" y="14" width="30" height="30" rx="8" fill="#2457A7"/>
     <path d="M22.75 23.375h12.5M22.75 28.375h12.5M22.75 33.375h7.5" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round"/>
-    <text x="54" y="29" font-size="14" font-weight="650">Heistman</text>
-    <text x="54" y="44" class="tiny muted">heistman</text>
+    <text x="54" y="29" font-size="14" font-weight="650">Plan</text>
+    <text x="54" y="44" class="tiny muted">plan</text>
 
     <text x="18" y="94" class="title">Unterticket anlegen</text>
     <text x="18" y="115" class="small muted">Direkt aus dem geöffneten Elternticket</text>

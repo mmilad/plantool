@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d9eb-b76e-78b8-abee-88fdb3a7588a",
+  "number": 46,
+  "title": "Relation graph in the Roadmap page",
+  "kind": "feature",
+  "description": "Add a fourth tab Graph to the Roadmap page, next to Structure, Timeline and Dependencies. It draws every ticket that has at least one relation as a box (key and title), coloured by status: done green, to do white, in progress blue, cancelled grey. Lines connect related tickets: blocks is a solid line with an arrow from the blocker to the blocked ticket, every other relation type is a dashed line without an arrow. Blocker chains run from left to right, so the picture reads as an order. Clicking a box opens the ticket. A line under the picture says how many tickets have no relation and are not shown. The same data is available as plantool graph and as an API call, like every other roadmap view. The Dependencies table stays as it is. Outside the happy path: a project without relations shows a short message instead of an empty picture; more than 200 tickets are cut off with a notice and a field to choose a root ticket; an unknown root gives the usual not-found message; on a narrow screen the picture scrolls sideways.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "The owner wants to see at a glance how tickets hang together and what is done: a picture with one box per ticket, lines for relations and a colour per status. The Dependencies tab is a table and shows only blockers.",
+  "acceptance": [
+    {
+      "text": "The Roadmap page has a Graph tab that draws tickets with relations, coloured by status",
+      "met": true
+    },
+    {
+      "text": "blocks, relates_to and the other relation types are all drawn and can be told apart",
+      "met": true
+    },
+    {
+      "text": "plantool graph --format json and the API return the same nodes and edges the picture uses",
+      "met": true
+    },
+    {
+      "text": "Tickets without relations are counted, not drawn",
+      "met": true
+    },
+    {
+      "text": "node --test passes",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/relation-graph.js",
+    "src/index.js",
+    "src/server.js",
+    "bin/plantool.js",
+    "src/ui.js"
+  ],
+  "size": "l",
+  "createdBy": "claude",
+  "refs": [
+    ".plan/plans/01/01a1d54a-790f-77e5-88e2-4c4ff8ea68f1.md"
+  ],
+  "createdAt": "2026-11-14T11:57:46.222Z",
+  "updatedAt": "2026-11-14T17:11:22.733Z",
+  "checklist": {
+    "name": "feature",
+    "skipped": {},
+    "answered": {
+      "states": "In the description: no relations, more than 200 tickets, unknown root, narrow screen.",
+      "data": "Reads tickets and relations; writes nothing.",
+      "contracts": "Contract relationGraph with the types GraphNode and GraphEdge."
+    }
+  },
+  "assignee": null,
+  "outcome": {
+    "summary": "PLAN-51 was done by a Haiku subagent, PLAN-52 and PLAN-53 by a Sonnet subagent, each from the tickets alone. The planner reviewed the diffs and ran the Graph tab in headless Chromium: it renders this plan (25 tickets, 17 relations), a click opens the ticket, the other three tabs still work. Left as it is: lines cross and dashed lines in one column can run through boxes between their ends; a long key plus title can overflow a box; the legend calls the to-do colour Other.",
+    "verifiedBy": "node --test: 108 pass, 1 skipped; headless Chromium on Linux, no console errors; not checked on Windows"
+  },
+  "completedAt": "2026-11-14T17:11:22.733Z"
+}

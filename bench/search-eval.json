@@ -1,15 +1,15 @@
 {
-  "description": "Search quality gate (HEIST-7, earlier PM-31). Runs on its own fixture plan (the tickets below, built in a temporary project), so it does not depend on this repository's plan. Queries avoid the exact title words. Relevant targets are fixture refs.",
+  "description": "Search quality gate (PLAN-7, earlier PM-31). Runs on its own fixture plan (the tickets below, built in a temporary project), so it does not depend on this repository's plan. Queries avoid the exact title words. Relevant targets are fixture refs.",
   "tickets": [
     { "ref": "claim-a", "title": "Claim a ticket so two agents do not take it", "description": "An agent claims a ticket before it starts; other agents see the owner." },
     { "ref": "claim-b", "title": "Claims expire so a stalled agent does not block work", "description": "A claim has a lease. When it runs out, the ticket is free again." },
-    { "ref": "next-a", "title": "heist next lists the tickets that are ready to start", "description": "Only tickets whose blockers are done and whose parents are not blocked." },
+    { "ref": "next-a", "title": "plantool next lists the tickets that are ready to start", "description": "Only tickets whose blockers are done and whose parents are not blocked." },
     { "ref": "next-b", "title": "Rank ready work by priority", "description": "Urgent and high priority tickets come first in the next list." },
     { "ref": "mobile-a", "title": "Phone layout switches between the list and a ticket", "description": "On small screens show one pane at a time with a back button." },
     { "ref": "kanban-a", "title": "Drag cards between status columns", "description": "On the board a ticket moves to another column by dragging it." },
     { "ref": "kanban-b", "title": "Board view with one column per status", "description": "Columns follow the statuses of the project." },
     { "ref": "projects-a", "title": "Serve several projects from one local server", "description": "One process can show every registered project." },
-    { "ref": "projects-b", "title": "Project registry lists all local projects", "description": "Projects are registered on init and listed by heist projects." },
+    { "ref": "projects-b", "title": "Project registry lists all local projects", "description": "Projects are registered on init and listed by plantool projects." },
     { "ref": "projects-c", "title": "Project switcher in the web UI", "description": "A menu in the page to change between projects without a new server." },
     { "ref": "projects-d", "title": "Show all projects on one page", "description": "An overview page with the tickets of every project." },
     { "ref": "keys-a", "title": "Short readable ticket keys like SHOP-42", "description": "Tickets get a project key and a number instead of a long id." },

@@ -1,9 +1,9 @@
 // Checklists: reusable lists of parts that expand a ticket into everything it really needs
 // ("a header is not just a header": logo, navigation, burger menu, states, accessibility ...).
-// Built-in checklists ship with heist; a project can add or override them in .heist/checklists/<name>.json.
+// Built-in checklists ship with plantool; a project can add or override them in .plan/checklists/<name>.json.
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { ValidationError, NotFoundError, HeistError } from './index.js';
+import { ValidationError, NotFoundError, PlanError } from './index.js';
 
 const NAME_RE = /^[a-z0-9][a-z0-9-]{0,47}$/;
 const ITEM_RE = /^[a-z0-9][a-z0-9-]{0,47}$/;
@@ -106,7 +106,7 @@ export const BUILTIN_CHECKLISTS = Object.freeze([
     name: 'service', title: 'Service / module', description: 'Backend or domain logic with a public contract.',
     match: ['service', 'backend', 'repository', 'worker'],
     items: [
-      item('contract', 'Define the public contract (inputs, outputs, errors)', 'Consumers plan against it; record it with heist contract set.'),
+      item('contract', 'Define the public contract (inputs, outputs, errors)', 'Consumers plan against it; record it with plantool contract set.'),
       item('data-model', 'Data model and persistence', 'What is stored where, and how it migrates.'),
       item('errors', 'Error cases and edge cases', 'Timeouts, missing records, invalid input.'),
       item('auth', 'Authentication and permissions', 'Who may call what.'),
@@ -194,7 +194,7 @@ export function attachChecklistApi(p) {
     for (const f of names.sort()) {
       const file = path.join(dir, f);
       let bp; try { bp = JSON.parse(await fs.readFile(file, 'utf8')); } catch (e) { throw new ValidationError(`Checklist file ${f} is not valid JSON: ${e.message}`); }
-      validateChecklist(bp, `.heist/checklists/${f}`);
+      validateChecklist(bp, `.plan/checklists/${f}`);
       if (`${bp.name}.json` !== f) throw new ValidationError(`Checklist file ${f} must be named ${bp.name}.json`);
       out.push({ ...bp, source: 'project' });
     }
@@ -244,7 +244,7 @@ export function attachChecklistApi(p) {
      */
     async apply(ticketRef, name, { only, includeOptional = false, dryRun = false } = {}) {
       const ticket = await p.tickets.get(ticketRef);
-      if (ticket.checklist && ticket.checklist.name !== name) throw new HeistError(`Ticket already uses checklist ${ticket.checklist.name}`, 'CONFLICT', { checklist: ticket.checklist.name });
+      if (ticket.checklist && ticket.checklist.name !== name) throw new PlanError(`Ticket already uses checklist ${ticket.checklist.name}`, 'CONFLICT', { checklist: ticket.checklist.name });
       const bp = resolve(await all(), name);
       if (only) for (const id of only) if (!bp.items.some(i => i.id === id)) throw new ValidationError(`Checklist ${name} has no item ${id}`);
       const before = ticket.checklist ? await coverage(ticket.id) : null;
@@ -285,7 +285,7 @@ export function attachChecklistApi(p) {
     /** Record that an item is answered on the ticket itself (description, acceptance, files ...) and needs no ticket of its own; note=null removes it. */
     async answer(ticketRef, itemId, note) {
       const ticket = await p.tickets.get(ticketRef);
-      if (!ticket.checklist) throw new ValidationError('This ticket has no checklist; attach one first (heist checklist attach TICKET NAME)');
+      if (!ticket.checklist) throw new ValidationError('This ticket has no checklist; attach one first (plantool checklist attach TICKET NAME)');
       const bp = resolve(await all(), ticket.checklist.name);
       if (!bp.items.some(i => i.id === itemId)) throw new ValidationError(`Checklist ${bp.name} has no item ${itemId}`);
       const answered = { ...(ticket.checklist.answered ?? {}) }, skipped = { ...(ticket.checklist.skipped ?? {}) };
@@ -295,7 +295,7 @@ export function attachChecklistApi(p) {
       return coverage(ticket.id);
     },
     async detach(ticketRef) { const ticket = await p.tickets.get(ticketRef); const { checklist: _b, ...rest } = ticket; await p.tickets.update(ticket.id, { checklist: null }); return rest; },
-    /** Write a built-in (or new empty) checklist into .heist/checklists/ so the project can customise it. */
+    /** Write a built-in (or new empty) checklist into .plan/checklists/ so the project can customise it. */
     async init(name, { from } = {}) {
       if (!NAME_RE.test(name ?? '')) throw new ValidationError('Checklist name must be lowercase letters, digits and dashes');
       const file = path.join(dir, `${name}.json`);
@@ -305,7 +305,7 @@ export function attachChecklistApi(p) {
       delete bp.source;
       validateChecklist(bp);
       await fs.mkdir(dir, { recursive: true });
-      try { await fs.writeFile(file, `${JSON.stringify(bp, null, 2)}\n`, { flag: 'wx' }); } catch (e) { if (e.code === 'EEXIST') throw new HeistError(`Checklist ${name} already exists in .heist/checklists/`, 'CONFLICT'); throw e; }
+      try { await fs.writeFile(file, `${JSON.stringify(bp, null, 2)}\n`, { flag: 'wx' }); } catch (e) { if (e.code === 'EEXIST') throw new PlanError(`Checklist ${name} already exists in .plan/checklists/`, 'CONFLICT'); throw e; }
       return { name, file: path.relative(p.root, file).split(path.sep).join('/') };
     },
     /** Project-wide check: tickets with missing checklist items, and tickets that look like a checklist but have none. */
@@ -320,7 +320,7 @@ export function attachChecklistApi(p) {
           if (c.undecided.length) warnings.push({ code: 'CHECKLIST_UNDECIDED', ticketId: t.id, items: c.undecided, message: `${p.ticketKey(t) ?? t.id} "${t.title}" has undecided optional items: ${c.undecided.join(', ')}` });
         } else {
           const best = [...map.values()].map(b => [b, matchScore(b, t)]).filter(([, s]) => s >= 3).sort((a, b) => b[1] - a[1])[0];
-          if (best) warnings.push({ code: 'CHECKLIST_SUGGESTED', ticketId: t.id, checklist: best[0].name, message: `${p.ticketKey(t) ?? t.id} "${t.title}" looks like a ${best[0].name}; run heist checklist apply ${p.ticketKey(t) ?? t.id} ${best[0].name} --dry-run` });
+          if (best) warnings.push({ code: 'CHECKLIST_SUGGESTED', ticketId: t.id, checklist: best[0].name, message: `${p.ticketKey(t) ?? t.id} "${t.title}" looks like a ${best[0].name}; run plantool checklist apply ${p.ticketKey(t) ?? t.id} ${best[0].name} --dry-run` });
         }
       }
       return warnings;

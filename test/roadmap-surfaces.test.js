@@ -8,9 +8,9 @@ import { spawnSync } from 'node:child_process';
 import { initProject, openProject } from '../src/index.js';
 import { serve } from '../src/server.js';
 
-const cli = fileURLToPath(new URL('../bin/heist.js', import.meta.url));
+const cli = fileURLToPath(new URL('../bin/plantool.js', import.meta.url));
 async function fixture(t) {
-  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-roadmap-surfaces-'));
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool-roadmap-surfaces-'));
   t.after(() => fs.rm(cwd, {recursive:true, force:true}));
   await initProject({cwd, name:'Roadmap', key:'RM'});
   const p = await openProject({cwd});
@@ -20,7 +20,7 @@ async function fixture(t) {
   const waiting = await p.tickets.create({title:'Waiting', parentId:parent.id});
   const blocker = await p.tickets.create({title:'Blocker'});
   await p.relations.add(blocker.id, waiting.id, 'blocks');
-  const run = (...args) => spawnSync(process.execPath, [cli,...args], {cwd, env:{...process.env, HEIST_NO_REGISTER:'1', HEIST_HOME:path.join(cwd,'local-home')}, encoding:'utf8'});
+  const run = (...args) => spawnSync(process.execPath, [cli,...args], {cwd, env:{...process.env, PLANTOOL_NO_REGISTER:'1', PLANTOOL_HOME:path.join(cwd,'local-home')}, encoding:'utf8'});
   return {cwd,p,parent,first,second,waiting,blocker,run};
 }
 

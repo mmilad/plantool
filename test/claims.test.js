@@ -11,7 +11,7 @@ const git = (cwd, ...args) => execFileSync('git', args, { cwd, stdio: 'pipe', en
 let hasGit = true; try { execFileSync('git', ['--version'], { stdio: 'pipe' }); } catch { hasGit = false; }
 
 test('claims are shared between git worktrees of the same repository', { skip: !hasGit && 'git not installed' }, async t => {
-  const base = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-wt-')); t.after(() => fs.rm(base, { recursive: true, force: true }));
+  const base = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool-wt-')); t.after(() => fs.rm(base, { recursive: true, force: true }));
   const main = path.join(base, 'main'); await fs.mkdir(main);
   git(main, 'init', '-q'); await initProject({ cwd: main });
   const p1 = await openProject({ cwd: main }); const ticket = await p1.tickets.create({ title: 'Shared work' }); const other = await p1.tickets.create({ title: 'Other work' });
@@ -27,7 +27,7 @@ test('claims are shared between git worktrees of the same repository', { skip: !
   await p1.release(ticket.id, { agent: 'alice' });
   await p2.claim(ticket.id, { agent: 'bob' });
   await p2.finish(ticket.id, { agent: 'bob' });
-  const shared = JSON.parse(await fs.readFile(path.join(main, '.git', 'heist', 'claims.json'), 'utf8'));
+  const shared = JSON.parse(await fs.readFile(path.join(main, '.git', 'plantool', 'claims.json'), 'utf8'));
   assert.deepEqual(Object.keys(shared.claims), [other.id]);
   assert.equal(git(main, 'status', '--porcelain').includes('claims.json'), false);
 });

@@ -6,7 +6,7 @@ import path from 'node:path';
 import { initProject, openProject } from '../src/index.js';
 
 async function project(t) {
-  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist roadmap '));
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'plantool roadmap '));
   t.after(()=>fs.rm(cwd,{recursive:true,force:true}));
   await initProject({cwd,name:'Roadmap'});
   return openProject({cwd});

@@ -1,5 +1,5 @@
-// Search quality gate (HEIST-7, earlier PM-31): compares keyword, semantic and hybrid ranking per model on the
-// fixture plan in search-eval.json, and calibrates the "likely overlap" strength of heist similar against the
+// Search quality gate (PLAN-7, earlier PM-31): compares keyword, semantic and hybrid ranking per model on the
+// fixture plan in search-eval.json, and calibrates the "likely overlap" strength of plantool similar against the
 // robust strength used by the create hint on the same fixture.
 // Usage: node bench/search-eval.mjs [model ...]   (models download once; the default is the shipped model)
 import fs from 'node:fs/promises';
@@ -15,8 +15,8 @@ const set = JSON.parse(await fs.readFile(path.join(here, 'search-eval.json'), 'u
 const models = process.argv.slice(2).length ? process.argv.slice(2) : [DEFAULT_MODEL];
 
 // A throwaway project with the fixture plan; the repository's own plan is not touched.
-const home = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-eval-home-')); const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-eval-'));
-process.env.HEIST_HOME = home; process.env.HEIST_NO_REGISTER = '1';
+const home = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool-eval-home-')); const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool-eval-'));
+process.env.PLANTOOL_HOME = home; process.env.PLANTOOL_NO_REGISTER = '1';
 await initProject({ cwd, name: 'Fixture', key: 'FX' });
 const p = await openProject({ cwd });
 const refToId = new Map(), idToRef = new Map();

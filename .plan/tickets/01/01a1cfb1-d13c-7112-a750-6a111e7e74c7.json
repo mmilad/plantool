@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cfb1-d13c-7112-a750-6a111e7e74c7",
+  "number": 20,
+  "title": "Blueprints say what is expected of a ticket of a kind",
+  "kind": "feature",
+  "description": "Each kind has a blueprint that lists expected fields with a hint. ticket create names what is still empty; plantool blueprint status, plantool blueprint check, plantool check and the context packet show it later. A project can replace a blueprint and add a description template. Nothing is enforced. Outside the happy path: kinds without a blueprint (option) report nothing; a file with items in .plan/blueprints is refused with a pointer to checklists; an untouched template does not count as a description.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "The owner's first idea of a blueprint: like a Linear issue template or a GitHub PR template, it tells an agent what a task, feature or bug should say.",
+  "acceptance": [
+    {
+      "text": "Built-in blueprints for task, feature, bug and decision",
+      "met": true
+    },
+    {
+      "text": "Missing expected fields are shown on create, status, check and context",
+      "met": true
+    },
+    {
+      "text": "Project blueprints override built-ins and may carry a template",
+      "met": true
+    },
+    {
+      "text": "No new ticket fields",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/blueprints.js",
+    "bin/plantool.js",
+    "test/blueprints.test.js"
+  ],
+  "size": "m",
+  "createdBy": "claude",
+  "createdAt": "2026-11-12T12:18:19.580Z",
+  "updatedAt": "2026-11-12T12:18:37.570Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Blueprints per kind with expected fields and an optional description template. The feature checklist lost behaviour and tests, which the feature blueprint now expects on the ticket.",
+    "verifiedBy": "node --test: 75 pass, 1 skipped; tried on this plan: PLAN-9 is reported as thin",
+    "changedFiles": [
+      "src/blueprints.js",
+      "src/index.js",
+      "src/design.js",
+      "bin/plantool.js",
+      "src/guide.js",
+      "src/onboard.js",
+      "src/server.js",
+      "test/blueprints.test.js",
+      "README.md",
+      "docs/implementation-decisions.md"
+    ]
+  },
+  "completedAt": "2026-11-12T12:18:37.570Z",
+  "completedAtSource": "updatedAt"
+}

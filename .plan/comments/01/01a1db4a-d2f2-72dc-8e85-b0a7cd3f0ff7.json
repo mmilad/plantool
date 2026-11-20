@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1db4a-d2f2-72dc-8e85-b0a7cd3f0ff7",
+  "ticketId": "01a1ca94-b086-738a-89c3-ad0b5425a83e",
+  "body": "Checked on Windows: model cache in ~/.plan/cache/models (Xenova, ~130 MB), plantool index update works, plantool similar PLAN-13 returns plausible results. Ranking quality is weak; see PLAN-7.",
+  "author": "claude",
+  "createdAt": "2026-11-14T18:21:16.402Z"
+}

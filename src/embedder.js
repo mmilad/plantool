@@ -30,10 +30,10 @@ function hashEmbedder(dim = 64) {
 
 /**
  * Returns an embedder or throws an Error with code SEMANTIC_UNAVAILABLE and a readable reason.
- * HEIST_EMBEDDER=hash selects the test embedder.
+ * PLANTOOL_EMBEDDER=hash selects the test embedder.
  */
-export async function getEmbedder({ model = process.env.HEIST_EMBED_MODEL || DEFAULT_MODEL } = {}) {
-  if (process.env.HEIST_EMBEDDER === 'hash') return hashEmbedder();
+export async function getEmbedder({ model = process.env.PLANTOOL_EMBED_MODEL || DEFAULT_MODEL } = {}) {
+  if (process.env.PLANTOOL_EMBEDDER === 'hash') return hashEmbedder();
   if (loaded.has(model)) return loaded.get(model);
   const promise = (async () => {
     const cfg = KNOWN_MODELS[model] ?? { dtype: 'q8', pooling: 'mean', normalize: true, prefix: '', maxTokens: 256 };
@@ -41,7 +41,7 @@ export async function getEmbedder({ model = process.env.HEIST_EMBED_MODEL || DEF
     try { lib = await import('@huggingface/transformers'); }
     catch (e) { const err = new Error('Local embeddings need the optional package @huggingface/transformers (pnpm add -O @huggingface/transformers).'); err.code = 'SEMANTIC_UNAVAILABLE'; err.cause = e; throw err; }
     lib.env.cacheDir = modelsDir();
-    if (process.env.HEIST_OFFLINE === '1') lib.env.allowRemoteModels = false;
+    if (process.env.PLANTOOL_OFFLINE === '1') lib.env.allowRemoteModels = false;
     let extractor;
     try { extractor = await lib.pipeline('feature-extraction', model, { dtype: cfg.dtype }); }
     catch (e) { const err = new Error(`Embedding model ${model} could not be loaded: ${e.message}`); err.code = 'SEMANTIC_UNAVAILABLE'; err.cause = e; throw err; }

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1d566-fa35-7c96-9e4e-c84821fbdb51",
+  "number": 24,
+  "title": "Repair corrupt SQLite caches safely on Windows",
+  "kind": "bug",
+  "description": "A failed SQLite setup can leave the database handle open before quarantine, preventing Windows from renaming the damaged cache. Close unsuccessful connections and repair only corrupt databases; preserve genuine permission and lock errors.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Deliver the reviewed roadmap plan without regressions in existing project workflows.",
+  "acceptance": [
+    {
+      "text": "Corrupt cache is quarantined and rebuilt on Windows",
+      "met": true
+    },
+    {
+      "text": "Failed opens release handles and concurrent opens do not leak connections",
+      "met": true
+    },
+    {
+      "text": "Valid databases are not quarantined for unrelated errors",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/semantic.js",
+    "test/semantic.test.js"
+  ],
+  "size": "s",
+  "createdBy": "codex",
+  "refs": [
+    ".plan/plans/01/01a1d54a-790f-77e5-88e2-4c4ff8ea68f1.md"
+  ],
+  "repro": {
+    "steps": [
+      "Run the corrupt-cache semantic test on Windows"
+    ],
+    "expected": "The damaged cache is renamed and rebuilt.",
+    "actual": "The open database handle prevents reliable repair.",
+    "environment": "Windows, Node SQLite"
+  },
+  "createdAt": "2026-11-13T14:54:18.164Z",
+  "updatedAt": "2026-11-13T20:58:14.389Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Closed failed SQLite initialization handles before quarantine; only corruption or obsolete schemas trigger recovery; concurrent opens share one initialization.",
+    "verifiedBy": "node --test test/semantic.test.js: 6 passed on Windows.",
+    "changedFiles": [
+      "src/semantic.js test/semantic.test.js"
+    ]
+  },
+  "completedAt": "2026-11-13T14:56:15.117Z"
+}

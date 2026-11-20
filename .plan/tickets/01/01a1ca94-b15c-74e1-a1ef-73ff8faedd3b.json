@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1ca94-b15c-74e1-a1ef-73ff8faedd3b",
+  "number": 4,
+  "title": "Click through the decisions view in a browser",
+  "kind": "task",
+  "description": "For the owner, in a browser. The Decisions page of the web view was built and tested over HTTP, but nobody has used it by hand. Walk through it once and note anything that looks wrong or confusing. PLAN-14 is a decided decision you can open; create a throwaway one for choosing and reopening.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "The decisions view was built and tested over HTTP but never used in a browser.",
+  "acceptance": [
+    {
+      "text": "List shows open decisions",
+      "met": true
+    },
+    {
+      "text": "Needs-a-person filter works",
+      "met": true
+    },
+    {
+      "text": "Choosing an option works",
+      "met": true
+    },
+    {
+      "text": "Reopen works",
+      "met": true
+    },
+    {
+      "text": "List refreshes after a change made from the CLI",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/ui.js",
+    "src/server.js"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-11T12:28:24.796Z",
+  "updatedAt": "2026-11-14T19:10:25.001Z",
+  "todos": [
+    {
+      "text": "Run: plantool serve, open http://127.0.0.1:4000 and choose the project plan A throwaway project works too.",
+      "met": true
+    },
+    {
+      "text": "Open Decisions in the left menu: the list shows the decisions",
+      "met": true
+    },
+    {
+      "text": "In a terminal run: plantool ask \"Test decision?\" --options \"A;B\" --owner human",
+      "met": true
+    },
+    {
+      "text": "Back in the browser without reloading: the new decision appears within a few seconds",
+      "met": true
+    },
+    {
+      "text": "Switch on the filter for decisions that need a person: only the test decision stays",
+      "met": true
+    },
+    {
+      "text": "Open it, choose option A: it shows as decided",
+      "met": true
+    },
+    {
+      "text": "Press Reopen: it is open again",
+      "met": true
+    },
+    {
+      "text": "Clean up: plantool ticket update <key of the test decision> --status cancelled",
+      "met": true
+    }
+  ],
+  "assumptions": null,
+  "refs": null,
+  "evaluation": null,
+  "completedAt": "2026-11-14T19:10:25.001Z"
+}

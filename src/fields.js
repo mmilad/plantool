@@ -51,7 +51,7 @@ export function validateFields(t, config = {}) {
   for (const def of customFields(config)) { const v = t.properties?.[def.name]; if (v !== undefined && v !== null) checkValue(def, v, `properties.${def.name}`); }
 }
 
-/** Project-specific fields from .heist/config.json: {"fields": [{"name": "platform", "type": "enum", "values": [...], "kinds": ["feature"]}]} */
+/** Project-specific fields from .plan/config.json: {"fields": [{"name": "platform", "type": "enum", "values": [...], "kinds": ["feature"]}]} */
 export function customFields(config = {}) {
   const list = config.fields ?? [];
   if (!Array.isArray(list)) throw new ValidationError('config.fields must be a list');
@@ -72,7 +72,7 @@ export function fieldWarnings(t, config = {}) {
   return out;
 }
 
-/** Field definitions for one kind, for the UI and `heist fields`. */
+/** Field definitions for one kind, for the UI and `plantool fields`. */
 export function fieldsFor(kind, config = {}) {
   return [...FIELD_DEFS.filter(d => !d.internal), ...customFields(config)].filter(d => d.kinds.includes(kind)).map(({ name, type, values, label, help, shape, custom }) => ({ name, type, values, label, help, shape, custom: !!custom }));
 }

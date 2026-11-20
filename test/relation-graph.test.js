@@ -8,13 +8,13 @@ import { fileURLToPath } from 'node:url';
 import { initProject, openProject, RELATION_TYPES } from '../src/index.js';
 import { serve } from '../src/server.js';
 
-const cli = fileURLToPath(new URL('../bin/heist.js', import.meta.url));
+const cli = fileURLToPath(new URL('../bin/plantool.js', import.meta.url));
 async function project(t) {
-  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'heist-graph-'));
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool-graph-'));
   t.after(() => fs.rm(cwd, { recursive: true, force: true }));
   await initProject({ cwd, name: 'Graph', key: 'GRF' });
   const p = await openProject({ cwd });
-  const run = (...args) => spawnSync(process.execPath, [cli, ...args], { cwd, env: { ...process.env, HEIST_NO_REGISTER: '1', HEIST_HOME: path.join(cwd, 'local-home') }, encoding: 'utf8' });
+  const run = (...args) => spawnSync(process.execPath, [cli, ...args], { cwd, env: { ...process.env, PLANTOOL_NO_REGISTER: '1', PLANTOOL_HOME: path.join(cwd, 'local-home') }, encoding: 'utf8' });
   return { cwd, p, run };
 }
 const byKey = (result, id) => result.nodes.find(n => n.id === id);

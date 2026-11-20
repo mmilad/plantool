@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 
 // Runs the real embedding model. Off by default because it needs the optional package
 // @huggingface/transformers and downloads the model (~120 MB) on first use:
-//   HEIST_TEST_REAL_MODEL=1 node --test test/semantic-real.test.js
-const enabled = process.env.HEIST_TEST_REAL_MODEL === '1';
+//   PLANTOOL_TEST_REAL_MODEL=1 node --test test/semantic-real.test.js
+const enabled = process.env.PLANTOOL_TEST_REAL_MODEL === '1';
 
 const unrelated = [
   'Export the board as CSV', 'Dark mode for the settings page', 'Rate limit the public API', 'Migrate the database to schema v2',
@@ -14,12 +14,12 @@ const unrelated = [
   'Add two-factor sign in', 'Sort the catalogue by price', 'Archive tickets older than a year', 'Document the release process',
 ].map((title, i) => ({ id: `u${i}`, title }));
 
-test('real model: related tickets stand out among unrelated ones', { skip: enabled ? false : 'set HEIST_TEST_REAL_MODEL=1 to run' }, async () => {
-  delete process.env.HEIST_EMBEDDER;
+test('real model: related tickets stand out among unrelated ones', { skip: enabled ? false : 'set PLANTOOL_TEST_REAL_MODEL=1 to run' }, async () => {
+  delete process.env.PLANTOOL_EMBEDDER;
   const { getEmbedder, DEFAULT_MODEL } = await import('../src/embedder.js');
   const { relatedByEmbedding, HINT_STRENGTH } = await import('../src/semantic.js');
   const embedder = await getEmbedder();
-  assert.equal(embedder.model, process.env.HEIST_EMBED_MODEL || DEFAULT_MODEL);
+  assert.equal(embedder.model, process.env.PLANTOOL_EMBED_MODEL || DEFAULT_MODEL);
   assert.ok(embedder.dim > 0);
   const p = { config: {} };
   const ticket = { title: 'Burger menu on mobile', description: 'On phones the navigation collapses behind a menu button.' };

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1cfb1-d210-71cc-b5d0-0921ee94645d",
+  "number": 21,
+  "title": "Web view: people edit every blueprint field, comment, and start tickets from the template",
+  "kind": "task",
+  "description": "People who work in the browser can read a ticket but hardly change it: the edit form only knows title, status, priority and description, comments can be read but not written, and the create form ignores the blueprint. Make the edit form cover the sections of the ticket's blueprint (why, to-dos, acceptance criteria, files, size, risks, reproduction, project fields), add a comment form, and let the create form start from the description template and name what the kind expects. Outside the happy path: a save while someone else changed the ticket reports the conflict and keeps the typed text; an empty comment is refused; ticks already set on to-dos and criteria survive an edit of their text list.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "People using the web view do not see which expected fields of a ticket are empty; only the CLI shows it.",
+  "acceptance": [
+    {
+      "text": "Why, to-dos, acceptance criteria and the other fields of the kind can be edited in the web view",
+      "met": true
+    },
+    {
+      "text": "A comment can be written in the web view and appears without reload",
+      "met": true
+    },
+    {
+      "text": "The create form starts with the description template of the chosen kind",
+      "met": true
+    },
+    {
+      "text": "An agent can do the same from the CLI",
+      "met": true
+    }
+  ],
+  "files": [
+    "src/ui.js"
+  ],
+  "size": "s",
+  "createdBy": "claude",
+  "createdAt": "2026-11-12T12:18:19.792Z",
+  "updatedAt": "2026-11-12T18:10:50.961Z",
+  "todos": [
+    {
+      "text": "Edit form built from the blueprint and the fields of the kind",
+      "met": true
+    },
+    {
+      "text": "Comment form under the comment list",
+      "met": true
+    },
+    {
+      "text": "Create form: template and expected sections per kind",
+      "met": true
+    },
+    {
+      "text": "CLI: comment author from PLANTOOL_AGENT, plantool comment list",
+      "met": true
+    },
+    {
+      "text": "Tests and a browser run",
+      "met": true
+    }
+  ],
+  "assignee": null,
+  "outcome": {
+    "summary": "The ticket page edits every field of the kind and takes comments; the create dialog names what the kind expects and starts from the template; the CLI records the comment author and lists comments.",
+    "verifiedBy": "node --test: 77 pass, 1 skipped; edit, save, comment and create dialog run in headless Chromium on Linux. Not checked on Windows.",
+    "changedFiles": [
+      "src/ui.js",
+      "src/blueprints.js",
+      "bin/plantool.js",
+      "src/guide.js",
+      "src/onboard.js",
+      "README.md",
+      "docs/implementation-decisions.md"
+    ]
+  },
+  "completedAt": "2026-11-12T18:10:50.961Z",
+  "completedAtSource": "updatedAt"
+}
