@@ -1,14 +1,14 @@
 # Roadmap
 
-> Status 2026-11-11: milestones 0 to 5 are implemented and merged. Three things were decided differently from the text below and are recorded in `implementation-decisions.md`: a machine-local project registry with a multi-project `heist serve` (2026-11-08), optional local semantic search with `multilingual-e5-small` (2026-11-08), and decisions, checklists and contracts as planning tools for agents. Open work is tracked in heist itself (`heist next`), not in this file.
+> Status 2026-11-20: the core, CLI, public API, local multi-project UI, optional semantic search, planning tools, roadmap views, and MCP stdio adapter are implemented. The milestone text below is the historical design and acceptance baseline; superseded assumptions are explicitly identified and are not current release blockers. Current unfinished work is tracked in heist; release readiness is summarized in `implementation-decisions.md`.
 
 This roadmap records the broader product direction and is maintained passively while the first usable release is implemented. It is not a prerequisite checklist for each UI increment. Work proceeds in small, visible slices; only the current slice is actively planned, and implementation findings are recorded here when they change scope or sequencing.
 
 ## MVP boundary
 
-A fresh checkout with supported Node LTS can initialize, read, create, update, reparent, search and validate arbitrarily nested tickets and linked planning docs entirely offline. Canonical data is ordinary Git-tracked content. MVP includes CLI and public TypeScript API plus an optional `heist serve` browser UI. The UI binds to loopback, defaults to fixed port 4000, fails clearly if occupied (with only an explicit `--port` override) and has no auth. It was planned for the single current project and now shows every project in the machine-local registry. It runs on Windows/macOS/Linux and requires no hosted service, database, or MCP.
+The shipped product includes a CLI, public TypeScript API, Git-tracked canonical project data, optional local semantic search, a loopback-only multi-project `heist serve` UI, and an MCP stdio adapter. Core project data stays usable offline; semantic indexing is optional and rebuildable. The UI defaults to `127.0.0.1:4000` and fails clearly if occupied unless the caller supplies `--port`. The repository contains CI coverage for Windows, macOS, and Linux on Node 22, 24, and 26; inspect actual CI runs before claiming the release matrix passed.
 
-Out of MVP: hosted sharing, credentials/auth/invites, live locks, agent execution/session management, arbitrary extensions/hooks, desktop app, MCP adapter, binary asset hosting, dashboards, time tracking, auto-update. Semantic search was on this list and has been added as an optional feature.
+Out of scope: hosted sharing, credentials/auth/invites, live locks, agent execution/session management, arbitrary extensions/hooks, desktop app, binary asset hosting, time tracking, and auto-update. MCP and semantic search were added after the original scope was written.
 
 ## Milestone 0 — Lock the contract
 
@@ -119,11 +119,11 @@ Acceptance:
 
 ## Post-MVP
 
-1. Optional MCP adapter over stable API with least privilege, no instruction execution.
+1. Done: optional MCP stdio adapter over the stable API with a curated tool set and no instruction execution.
 2. Import/export for GitHub Issues, Beads, Markdown and hosted trackers; external IDs remain refs.
 3. Optional coordination service for leases/claims/notifications; offline files remain truth.
 4. Declarative custom property/status rules before considering executable extensions.
-5. Richer TUI/editor integrations beyond the single-project local browser UI.
+5. Richer TUI/editor integrations beyond the local multi-project browser UI.
 6. Explicit repo-relative assets and Git LFS.
 7. Done: optional local semantic search in Node.js with `multilingual-e5-small` (chosen over `all-MiniLM-L6-v2` by the quality gate), a rebuildable SQLite index outside the repository and always-available keyword fallback. Repository files remain canonical; the index is derived local data.
 

@@ -47,6 +47,9 @@ function validIsoDate(value, allowDateOnly = false) {
 const idPath = (base, id, ext = '.json') => path.join(base, id.slice(0, 2), `${id}${ext}`);
 const canonical = value => `${JSON.stringify(value, null, 2)}\n`;
 const hash = text => createHash('sha256').update(text).digest('hex');
+const sortJsonKeys = value => Array.isArray(value) ? value.map(sortJsonKeys) : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().filter(key => value[key] !== undefined).map(key => [key, sortJsonKeys(value[key])])) : value;
+const stableJson = value => JSON.stringify(sortJsonKeys(value));
+const REQUEST_KEY_RE = /^[A-Za-z0-9._:-]{16,128}$/;
 const checkId = id => { if (!UUID_RE.test(id ?? '')) throw new ValidationError(`Invalid UUIDv7 id: ${id}`, { id }); };
 const KEY_RE = /^[A-Z][A-Z0-9]{1,9}$/;
 /** Derives a Jira-like project key: initials of several words, otherwise the first letters of one word. */
@@ -219,6 +222,8 @@ function validateTicketInput(input, statuses, config = {}) {
   if(input.properties!==undefined&&(!input.properties||typeof input.properties!=='object'||Array.isArray(input.properties)))throw new ValidationError('Ticket properties must be an object');
   if(input.completedAt!==undefined&&(!validIsoDate(input.completedAt)||input.status!=='done'))throw new ValidationError('completedAt must be an ISO timestamp on a done ticket');
   if(input.completedAtSource!==undefined&&(input.completedAtSource!=='updatedAt'||!input.completedAt))throw new ValidationError('completedAtSource must identify an existing completion estimate');
+  if(input.requestKey!==undefined&&(typeof input.requestKey!=='string'||!REQUEST_KEY_RE.test(input.requestKey)))throw new ValidationError('Ticket requestKey must be 16 to 128 safe characters');
+  if(input.requestHash!==undefined&&(typeof input.requestHash!=='string'||!/^[0-9a-f]{64}$/.test(input.requestHash)))throw new ValidationError('Ticket requestHash must be a SHA-256 hex digest');
 }
 
 function ticketApi(p) {
@@ -227,15 +232,25 @@ function ticketApi(p) {
     async create(input) {
       if (Object.hasOwn(input ?? {}, 'completedAt')) throw new ValidationError('completedAt is managed by Heist and cannot be set when creating a ticket');
       if (Object.hasOwn(input ?? {}, 'completedAtSource')) throw new ValidationError('completedAtSource is managed by Heist');
+      if (Object.hasOwn(input ?? {}, 'requestHash')) throw new ValidationError('requestHash is managed by Heist');
       if (input?.parentId && !UUID_RE.test(input.parentId)) input = { ...input, parentId: await ticketRef(p, input.parentId) };
       validateTicketInput(input, statuses, p.config);
+      const requestHash = input.requestKey ? hash(stableJson(Object.fromEntries(Object.entries(input).filter(([key]) => key !== 'requestKey')))) : undefined;
       // A blueprint may carry a description template; a ticket created without a description starts with it.
       if (!input.description && !input.origin) { const template = await p.blueprints?.template?.(input.kind ?? 'task'); if (template) input = { ...input, description: template }; }
       const parentRec = input.parentId ? (await readJson(idPath(path.join(p.dir, 'tickets'), input.parentId))).value : null;
       if (input.kind === 'option' && parentRec?.kind !== 'decision') throw new ValidationError('An option must be a child of a decision');
       return withLock(p, 'ticket-number', async () => {
-      const number = (await listJson(p, 'tickets')).reduce((m, x) => Math.max(m, Number.isInteger(x.number) ? x.number : 0), 0) + 1;
-      const date = nowIso(), status=input.status??statuses[0]; const rec = { schemaVersion: 1, id: uuidv7(), number, title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status, priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.codePlan ? { codePlan: input.codePlan } : {}), ...(input.checklist ? { checklist: input.checklist } : {}), ...(input.origin ? { origin: input.origin } : {}), ...Object.fromEntries(['why','acceptance','todos','files','size','assumptions','evaluation','decision','option','createdBy','refs','outcome','repro','risks'].filter(k=>input[k]!==undefined&&input[k]!==null&&input[k]!==''&&!(Array.isArray(input[k])&&!input[k].length)).map(k=>[k,input[k]])), ...(status === 'done' ? { completedAt: date } : {}), createdAt: date, updatedAt: date };
+      const tickets = await listJson(p, 'tickets');
+      if (input.requestKey) {
+        const existing = tickets.find(ticket => ticket.requestKey === input.requestKey);
+        if (existing) {
+          if (existing.requestHash !== requestHash) throw new ConflictError('This requestKey was already used with a different ticket payload', { id: existing.id });
+          return existing;
+        }
+      }
+      const number = tickets.reduce((m, x) => Math.max(m, Number.isInteger(x.number) ? x.number : 0), 0) + 1;
+      const date = nowIso(), status=input.status??statuses[0]; const rec = { schemaVersion: 1, id: uuidv7(), number, title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status, priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.requestKey ? { requestKey: input.requestKey, requestHash } : {}), ...(input.codePlan ? { codePlan: input.codePlan } : {}), ...(input.checklist ? { checklist: input.checklist } : {}), ...(input.origin ? { origin: input.origin } : {}), ...Object.fromEntries(['why','acceptance','todos','files','size','assumptions','evaluation','decision','option','createdBy','refs','outcome','repro','risks'].filter(k=>input[k]!==undefined&&k!=='requestKey'&&input[k]!==null&&input[k]!==''&&!(Array.isArray(input[k])&&!input[k].length)).map(k=>[k,input[k]])), ...(status === 'done' ? { completedAt: date } : {}), createdAt: date, updatedAt: date };
       return writeJson(p, 'tickets', rec, { create: true });
       });
     },
@@ -244,6 +259,7 @@ function ticketApi(p) {
     async list({ status, parentId, limit = 5000 } = {}) { const a = await listJson(p, 'tickets'); return a.filter(x => (!status || x.status === status) && (parentId === undefined || x.parentId === parentId)).sort(sortRecords).slice(0, limit); },
     async update(id, patch, {expectedRevision, force = false} = {}) {
       id = await ticketRef(p, id); if (patch.parentId && !UUID_RE.test(patch.parentId)) patch = { ...patch, parentId: await ticketRef(p, patch.parentId) };
+      if (Object.hasOwn(patch ?? {}, 'requestKey') || Object.hasOwn(patch ?? {}, 'requestHash')) throw new ValidationError('Ticket creation request metadata cannot be changed');
       return withLock(p, `ticket-write-${id}`, async()=>{
       const file = idPath(path.join(p.dir, 'tickets'), id); await assertSafePath(p.dir,file); const current = await readJson(file), rec = current.value;
       if(Object.hasOwn(patch??{},'completedAt')&&patch.completedAt!==rec.completedAt)throw new ValidationError('completedAt is managed by Heist; use p.roadmap.backfillCompletion() for legacy tickets');

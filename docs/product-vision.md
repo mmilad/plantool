@@ -1,5 +1,7 @@
 # Product vision
 
+> Current product direction (2026-11-20). The original proposal below is retained as context; implementation decisions later in this document and in `implementation-decisions.md` supersede its initial single-project, pre-MCP assumptions.
+
 ## One sentence
 
 Heistman (provisional CLI name **heist**) is a Git-native planning and issue-tracking toolkit that keeps goals, plans, decisions, and arbitrarily nested tickets in the repository, available offline to people and any coding agent.
@@ -18,7 +20,8 @@ Session-local checklists disappear when a session ends; free-form Markdown plans
 - **Planning, not only CRUD:** goals, specifications, roadmaps, decisions, brainstorm notes, contextual packets, relationships, status/properties, and agent handoffs are first-class or explicitly linked.
 - **Agent-neutral core:** files, CLI, and TypeScript API are the interface. MCP and editor adapters are optional clients.
 - **Reviewable and inspectable:** canonical files are ordinary UTF-8 documents, schema-versioned and validated; derived indexes can be discarded and rebuilt.
-- **Local UI without workspace machinery:** `heist serve` presents one project in a browser from the current checkout, loopback-only and without authentication; there is no all-project dashboard or project switcher.
+- **Local multi-project UI:** `heist serve` presents projects from a machine-local registry in a browser, loopback-only and without authentication. The registry is discovery metadata; project files remain canonical.
+- **Optional agent adapter:** the CLI, TypeScript API and MCP stdio server use the same local project data; MCP exposes a curated tool set and does not provide hosted access.
 
 This is intended product fit, not a claim that no other tool combines these traits. Beads is a particularly close agent-oriented, Git-backed reference. heist should distinguish itself through plain repository files, a first-class planning-document model, direct TypeScript embedding, and an explicit arbitrary-depth contract.
 
@@ -26,7 +29,7 @@ This is intended product fit, not a claim that no other tool combines these trai
 
 A heist is planning and procurement for an undertaking: before anyone moves, the crew knows every part of the job and what each part needs. heist should plan work the same way. A ticket called "Header" is never just a header: it needs a logo, a menu, maybe a burger menu on mobile and a full navigation on desktop, states, accessibility and contracts for the data it shows. The product should help people and agents uncover these parts up front — through decomposition, dependencies, code plans and contracts, and reusable checklists — instead of discovering them during implementation.
 
-Working product name: **heistman** (candidate for the npm release; `heistman` stays the internal working name until then).
+The current package is `@mmilad/heist` and the executable is `heist`. The package remains unpublished pending release checks and confirmation that the publishing account controls the scope.
 
 ## Principles
 
@@ -61,9 +64,9 @@ A decision record links to the goal, spec, and affected tickets. Its rationale a
 
 - Recreating FP, Plane, Jira, Linear, or GitHub hosted surfaces feature-for-feature.
 - Mandatory hosted app, user directory, auth, invites, remote sync service, or online database.
-- Always-running daemon, multi-project dashboard, native addon, global install, WSL requirement, or shell script as the only install path. `heist serve` remains an optional foreground local process.
+- Always-running daemon, hosted multi-project service, native addon, WSL requirement, or shell script as the only install path. `heist serve` remains an optional foreground local process with a local project switcher.
 - Running agents, assigning remote work, launching sandboxes, or committing on behalf of a user.
 - Executing extensions or hooks just because a repository was cloned.
-- Semantic/vector search, project-management suite, time tracking, billing, or analytics.
+- Hosted semantic search, project-management suite, time tracking, billing, or analytics. Local semantic search remains optional and runs on the user's machine.
 - Guaranteeing conflict-free edits to the same record from separate branches.
 - Automatically writing user-authored AGENTS.md content. Any future setup must be additive and respect existing content.

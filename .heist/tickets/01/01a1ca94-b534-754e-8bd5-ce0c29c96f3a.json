@@ -14,25 +14,25 @@
   "acceptance": [
     {
       "text": "where heist shows only this package",
-      "met": false
+      "met": true
     }
   ],
   "size": "xs",
   "createdBy": "claude",
   "createdAt": "2026-11-11T12:28:25.780Z",
-  "updatedAt": "2026-11-14T18:42:39.917Z",
+  "updatedAt": "2026-11-20T13:38:25.906Z",
   "todos": [
     {
       "text": "Run: where heist",
-      "met": false
+      "met": true
     },
     {
       "text": "Expected: only paths that belong to this package (the pnpm global folder or this repository)",
-      "met": false
+      "met": true
     },
     {
       "text": "If another path is listed, copy the output into the chat",
-      "met": false
+      "met": true
     }
   ],
   "assignee": null,

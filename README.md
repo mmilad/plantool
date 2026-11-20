@@ -55,7 +55,7 @@ Create children at any level by passing `--parent <ticket-id>`. The server uses 
 
 ## CLI
 
-Run `heist --help` for the current command reference. The first release supports project initialization; ticket create/list/show/update/move; trees; goal, plan and decision creation; comments; typed relationships; offline search; bounded context; validation; and the project-local web UI. Output is JSON by default where useful; pass `--format json` where supported for an explicit machine-readable contract.
+Run `heist --help` for the current command reference. The CLI supports project initialization and registry management; ticket create/list/show/update/move; trees and roadmaps; goals, plans and decisions; comments; typed relationships; blueprints and checklists; code plans and contracts; keyword and optional semantic search; bounded context; validation; the local multi-project web UI; and an MCP stdio server for agent workflows. Output is JSON by default where useful; pass `--format json` where supported for an explicit machine-readable contract.
 
 ## Search
 
@@ -210,11 +210,13 @@ console.log(await project.tree());
 
 See [`src/index.d.ts`](src/index.d.ts) for the exported API and [`schema/heist.schema.json`](schema/heist.schema.json) for the project-config schema. Structured ticket records use schema version 1; long-form planning docs use Markdown with a small metadata header. UUIDv7 IDs and record paths are independent of title and parent.
 
+Ticket creation accepts an optional `requestKey` (16–128 characters from letters, numbers, `.`, `_`, `:`, and `-`). Reusing the same key with the same payload returns the original ticket, including after a process restart; reusing it with a different payload returns a conflict. The browser create form keeps the submitted draft and key in the current tab session so a retry after a lost response does not create a duplicate. Keep a key stable only while retrying the same create request.
+
 ## Product boundaries
 
 Parent rollups are derived views and never cascade status edits to children. Git remains the collaboration and history layer; simultaneous edits to the same record are not distributed transactions. The local server has no login and binds only to loopback; it checks Host and Origin and requires a per-server CSRF token for writes. It does not load extensions or remote assets.
 
-Agent launching, hosted accounts/sharing, remote sync, MCP, arbitrary extensions/hooks, binary asset ingestion, global install, and npm publication are outside this first release. The merged contract and research are in [`docs/product-vision.md`](docs/product-vision.md), [`docs/architecture-proposal.md`](docs/architecture-proposal.md), [`docs/roadmap.md`](docs/roadmap.md), and [`docs/research/fp-feature-matrix.md`](docs/research/fp-feature-matrix.md). Implementation choices are in [`docs/implementation-decisions.md`](docs/implementation-decisions.md).
+Agent launching, hosted accounts/sharing, remote sync, arbitrary extensions/hooks, binary asset ingestion, and automatic npm publication are outside the current release scope. MCP is available through `heist mcp --agent NAME`. The product contract and historical research are in [`docs/product-vision.md`](docs/product-vision.md), [`docs/architecture-proposal.md`](docs/architecture-proposal.md), [`docs/roadmap.md`](docs/roadmap.md), and [`docs/research/fp-feature-matrix.md`](docs/research/fp-feature-matrix.md). Implementation choices and release checks are in [`docs/implementation-decisions.md`](docs/implementation-decisions.md).
 
 ## Development
 

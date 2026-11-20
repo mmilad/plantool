@@ -19,6 +19,22 @@ test('serve is loopback-only and protects writes with Host, Origin and CSRF chec
   const good=await send(app.url+'/api/tickets','POST',{host:new URL(app.url).host,origin:app.url,'content-type':'application/json','x-heist-csrf':token},JSON.stringify({title:'From browser'}));assert.equal(good.status,201,good.body);
 });
 
+test('ticket create API replays an uncertain request after server restart',async t=>{
+  const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-idempotent-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
+  let app=await serve({cwd,port:0});const host={host:new URL(app.url).host};
+  const page=await send(app.url,'GET',host),token=/"csrf":"([a-f0-9]+)"/.exec(page.body)?.[1];assert.ok(token);
+  const headers={...host,origin:app.url,'content-type':'application/json','x-heist-csrf':token};
+  const payload={title:'Retry-safe ticket',requestKey:'http-create-request-0001'};
+  const first=await send(app.url+'/api/tickets','POST',headers,JSON.stringify(payload));assert.equal(first.status,201,first.body);const ticket=JSON.parse(first.body);
+  await new Promise((resolve,reject)=>app.server.close(error=>error?reject(error):resolve()));app=await serve({cwd,port:0});
+  const restartedHost={host:new URL(app.url).host},restartedPage=await send(app.url,'GET',restartedHost),restartedToken=/"csrf":"([a-f0-9]+)"/.exec(restartedPage.body)?.[1];assert.ok(restartedToken);
+  const restartedHeaders={...restartedHost,origin:app.url,'content-type':'application/json','x-heist-csrf':restartedToken};
+  const replay=await send(app.url+'/api/tickets','POST',restartedHeaders,JSON.stringify(payload));assert.equal(replay.status,201,replay.body);assert.equal(JSON.parse(replay.body).id,ticket.id);
+  const mismatch=await send(app.url+'/api/tickets','POST',restartedHeaders,JSON.stringify({...payload,title:'Changed payload'}));assert.equal(mismatch.status,409,mismatch.body);
+  const p=await (await import('../src/index.js')).openProject({cwd});assert.equal((await p.tickets.list({limit:Infinity})).length,1);
+  t.after(()=>new Promise(resolve=>app.server.close(resolve)));
+});
+
 test('document API lists metadata only and fetches one document by kind and id',async t=>{
   const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-docs-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
   const {openProject}=await import('../src/index.js');const p=await openProject({cwd});
@@ -112,7 +128,7 @@ test('relations endpoint returns both directions with counterpart tickets',async
 
 test('comments API pages from the newest window and can centre on one comment',async t=>{
   const cwd=await fs.mkdtemp(path.join(os.tmpdir(),'heist-ui-comments-'));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd});
-  const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const tk=await p.tickets.create({title:'T'});const ids=[];for(let i=0;i<45;i++)ids.push((await p.comments.add(tk.id,{body:`c${i}`})).id);
+  const {openProject}=await import('../src/index.js');const p=await openProject({cwd});const tk=await p.tickets.create({title:'T'});const ids=[];for(let i=0;i<45;i++){ids.push((await p.comments.add(tk.id,{body:`c${i}`})).id);await new Promise(resolve=>{const after=Date.now();const next=()=>Date.now()>after?resolve():setTimeout(next,1);next();});}
   const app=await serve({cwd,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host={host:new URL(app.url).host};const get=async q=>JSON.parse((await send(`${app.url}/api/tickets/${tk.id}/comments${q}`,'GET',host)).body);
   const newest=await get('');assert.equal(newest.total,45);assert.equal(newest.offset,25);assert.deepEqual(newest.items.map(c=>c.body).slice(-1),['c44']);
   const first=await get('?offset=0&limit=10');assert.equal(first.items[0].body,'c0');assert.equal(first.items.length,10);

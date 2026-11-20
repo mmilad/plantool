@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1f93d-b742-76f3-91d0-1c8b6ffb83fa",
+  "ticketId": "01a1f931-156e-726f-8c77-90a5c20ae68f",
+  "body": "Added replay-safe ticket creation with persisted request keys, browser session recovery, conflict handling, and core/HTTP coverage.",
+  "author": "codex",
+  "createdAt": "2026-11-20T13:55:33.826Z"
+}

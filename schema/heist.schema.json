@@ -30,7 +30,9 @@
         "createdAt": { "type": "string", "format": "date-time" },
         "updatedAt": { "type": "string", "format": "date-time" },
         "completedAt": { "type": "string", "format": "date-time" },
-        "completedAtSource": { "const": "updatedAt" }
+        "completedAtSource": { "const": "updatedAt" },
+        "requestKey": { "type": "string", "minLength": 16, "maxLength": 128, "pattern": "^[A-Za-z0-9._:-]+$" },
+        "requestHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
       },
       "additionalProperties": true
     },

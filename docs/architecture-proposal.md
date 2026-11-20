@@ -1,10 +1,12 @@
 # Architecture proposal
 
+> Historical baseline, 2026-10-29. This proposal records the original design options, not the complete current architecture. Decisions in `docs/implementation-decisions.md` supersede the initial single-project UI, no-registry, no-embedding, and no-MCP assumptions. The shipped implementation includes a local project registry, optional semantic index, multi-project loopback UI, and MCP stdio adapter.
+
 ## Recommendation
 
 Use a **file-per-entity canonical store** under **.heist/**: UTF-8 JSON for structured records and Markdown for long-form plans/specifications/decisions. Treat the store as a graph projected from explicit IDs. Build a public TypeScript library as the core and a thin **heist** CLI as its consumer.
 
-Canonical .heist plan files are inside the project and Git-tracked by default; initialization must not add them to .gitignore. A clean clone contains the goals, tickets, decisions, comments, metadata, and relationships that agents need to inspect and edit offline. SQLite, servers, accounts, Git remotes, and MCP are not required. Add a rebuildable local cache only if profiling justifies it; it must never be authoritative or required to read/edit plan data. Only generated caches and ephemeral sessions, process locks, and run logs are excluded from canonical Git-tracked state.
+Canonical .heist plan files are inside the project and Git-tracked by default; initialization must not add them to .gitignore. A clean clone contains the goals, tickets, decisions, comments, metadata, and relationships that agents need to inspect and edit offline. Hosted services and accounts are not required. The optional semantic index is rebuildable local cache data and is never authoritative or required to read/edit plan data. Only generated caches and ephemeral sessions, process locks, and run logs are excluded from canonical Git-tracked state.
 
 ## Storage options
 
@@ -143,7 +145,7 @@ Commands support human and JSON output, noninteractive operation, stable exit co
 
 ## Project-scoped local web UI
 
-`heist serve` is an optional local interface over the same core API and canonical `.heist/` files. Resolve exactly one initialized project from the current working directory (or nearest ancestor); refuse to start if no project is found. Do not enumerate other projects, consult a global registry, expose a project picker, or create a shared multi-project service. The UI provides a navigable ticket tree and detail/edit views, planning documents, and local search/context; supported writes use the same validators and storage adapter as CLI commands.
+Original proposal: `heist serve` was scoped to one project resolved from the current working directory. This was superseded by the 2026-11-08 decision in `implementation-decisions.md`: the shipped UI discovers projects through a machine-local registry and serves them from one loopback-only workspace. Canonical files remain project-local; removing a registry entry does not remove project data. Supported writes use the same validators and storage adapter as CLI commands.
 
 Run as a foreground process and print the URL. By default bind only to `127.0.0.1:4000`; if that port is occupied, fail clearly instead of selecting a random port or starting another instance. An explicit `--port` override may be used and must print the actual URL. `--open` may launch the browser only after a successful bind. Stop with Ctrl-C. No account or auth flow is required because the service is local to the machine and project. Do not provide a LAN bind option in the MVP.
 

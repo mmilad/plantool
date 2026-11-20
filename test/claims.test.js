@@ -17,7 +17,7 @@ test('claims are shared between git worktrees of the same repository', { skip: !
   const p1 = await openProject({ cwd: main }); const ticket = await p1.tickets.create({ title: 'Shared work' }); const other = await p1.tickets.create({ title: 'Other work' });
   git(main, 'add', '-A'); git(main, 'commit', '-qm', 'plan');
   const wt = path.join(base, 'wt'); git(main, 'worktree', 'add', '-q', wt);
-  assert.equal(path.resolve(await gitCommonDir(wt)), path.resolve(main, '.git'));
+  assert.equal(await fs.realpath(await gitCommonDir(wt)), await fs.realpath(path.join(main, '.git')));
   const p2 = await openProject({ cwd: wt });
   await p1.claim(ticket.id, { agent: 'alice' });
   assert.ok(!(await p2.next({ limit: 10 })).some(r => r.id === ticket.id), 'claimed elsewhere is not offered');

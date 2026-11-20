@@ -48,17 +48,13 @@ Tested: the acceptance run with the Pokémon example through the CLI (as an agen
   - Decided on 2026-11-12 (HEIST-14): the planner chooses per item. Work becomes a child ticket, information is answered on the ticket itself (`heist blueprint answer`), the rest is skipped. `heist blueprint attach` puts the checklist on a ticket without creating tickets. The `states` item was reworded.
 - `heist guide decisions` printed its last line twice. Fixed.
 
-### Still open
+### Status of items from this review (checked 2026-11-20)
 
-- Decisions view in a browser (HEIST-4), real model on Windows (HEIST-3), name collision check (HEIST-8).
-- `likelyOverlap` in `heist similar` has the same group weakness as the plain z-score; the quality set in `bench/` still points at the removed PM tickets (HEIST-7).
-- The create hint embeds all tickets on every call (HEIST-13).
-- `package.json` exported `schema/heist.schema.json`, but the file was still named `pman.schema.json`, so the export was broken since the rename. Renamed on 2026-11-12.
+The bullets above are historical notes from November 2026, not a current open-work list. Heist records HEIST-3, HEIST-4, HEIST-7, HEIST-8 and HEIST-13 as done, and the schema filename mismatch was fixed on 2026-11-12. HEIST-9 (MCP) and HEIST-21 (editable ticket fields) are also done. The current plan has no todo or in-progress tickets and no open decisions. Remaining npm release checks are listed in `implementation-decisions.md`.
 
 ## Blueprints and checklists (2026-11-12)
 
 - Owner: the first idea of a blueprint was a ticket template, like a Linear issue template or a GitHub pull request template: what is expected. The lists of parts are something else and both are wanted.
 - The lists of parts are now called checklists (HEIST-19). Blueprints are per ticket kind and name the expected fields (HEIST-20). Details in `implementation-decisions.md`.
-- Tried on this plan: `heist blueprint check` reports HEIST-9 (MCP server) as lacking a description and acceptance criteria, which is true; it is parked.
-- Open: the web view does not show expected fields yet (HEIST-21).
+- Historical note: at the time, `heist blueprint check` reported HEIST-9 (MCP) as incomplete and HEIST-21 as open. Both tickets are now recorded as done; MCP behavior is described in `implementation-decisions.md`.
 

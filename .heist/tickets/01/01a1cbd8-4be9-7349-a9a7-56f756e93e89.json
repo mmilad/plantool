@@ -14,11 +14,11 @@
   "acceptance": [
     {
       "text": "With an index, ticket create embeds only the new ticket",
-      "met": false
+      "met": true
     },
     {
       "text": "Without an index the behaviour is unchanged",
-      "met": false
+      "met": true
     }
   ],
   "files": [
@@ -28,7 +28,7 @@
   "size": "m",
   "createdBy": "claude",
   "createdAt": "2026-11-11T18:21:52.489Z",
-  "updatedAt": "2026-11-14T18:43:43.413Z",
+  "updatedAt": "2026-11-20T13:38:26.301Z",
   "assignee": null,
   "outcome": {
     "summary": "ticket create with an index embeds only the new ticket and reuses stored title vectors; without an index unchanged.",

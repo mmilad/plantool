@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "01a1f922-960c-706d-8d69-5b7806e86552",
+  "number": 69,
+  "title": "Align product docs with shipped features and audit npm readiness",
+  "kind": "task",
+  "description": "Update product, architecture, roadmap, README and generated agent onboarding to describe the implementation accurately. Reconcile historical research/review notes and identify any remaining work or owner decisions required before the first npm release.",
+  "status": "in_progress",
+  "priority": "high",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Several documents still say MCP is unavailable or excluded and describe the old single-project UI; release readiness must be clear before npm publication.",
+  "acceptance": [
+    {
+      "text": "No current product document contradicts shipped MCP, multi-project serve, or optional semantic search",
+      "met": true
+    },
+    {
+      "text": "The CLI onboarding accurately describes available integrations",
+      "met": true
+    },
+    {
+      "text": "Release blockers and owner decisions are listed with evidence and no publication occurs",
+      "met": true
+    }
+  ],
+  "files": [
+    "README.md",
+    "GOAL.md",
+    "src/onboard.js",
+    "docs/product-vision.md",
+    "docs/roadmap.md",
+    "docs/architecture-proposal.md",
+    "docs/implementation-decisions.md",
+    "docs/open-questions.md",
+    "docs/review-notes.md",
+    "docs/research/fp-feature-matrix.md",
+    "test/claims.test.js",
+    "test/server.test.js",
+    "package.json",
+    ".heist/tickets/01/01a1ca94-b243-7135-b0f8-b279dae178c9.json",
+    ".heist/tickets/01/01a1ca94-b534-754e-8bd5-ce0c29c96f3a.json",
+    ".heist/tickets/01/01a1cbd8-4be9-7349-a9a7-56f756e93e89.json"
+  ],
+  "createdAt": "2026-11-20T13:25:55.852Z",
+  "updatedAt": "2026-11-20T13:55:26.923Z",
+  "assignee": {
+    "agent": "codex",
+    "claimedAt": "2026-11-20T13:26:07.825Z",
+    "expiresAt": "2026-11-20T14:26:07.825Z"
+  },
+  "todos": [
+    {
+      "text": "Align current docs and generated onboarding with shipped integrations",
+      "met": true
+    },
+    {
+      "text": "Review and record the first npm release gates",
+      "met": true
+    },
+    {
+      "text": "Correct CI tests that assume path spelling or timestamp uniqueness",
+      "met": true
+    }
+  ]
+}

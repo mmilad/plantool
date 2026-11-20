@@ -48,8 +48,8 @@ This file records material choices made while implementing the first usable rele
 ## Scope
 
 - MVP includes core project/config, ticket, planning document, comment, relationship, search, context, validate and browser workflows.
-- Agent execution, auth/hosted sharing, MCP, extensions/hooks, binary asset ingestion and publication remain excluded. Semantic search was first planned as post-MVP and has since been implemented as an optional local feature; see "Embedding model and duplicate detection" below. Keyword search is always available.
-- Cross-platform CI definitions will cover Windows, macOS and Linux; only platforms actually run in this task will be reported as executed.
+- Agent execution, auth/hosted sharing, extensions/hooks, binary asset ingestion and automatic publication remain excluded. MCP is implemented as an optional stdio adapter (see "MCP server" below). Semantic search is an optional local feature; keyword search is always available.
+- Cross-platform CI is configured for Windows, macOS and Linux on Node 22, 24 and 26; check the run for the exact release commit before publishing.
 
 ## Agent planning, code plans and contracts (owner decision 2026-11-07)
 
@@ -231,3 +231,24 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Not in v1: checklist answers and skips, release, forced finish, decision and component structure, blueprints, projects, keys, index rebuilds, deletion.
 - Server instructions are short; the full briefing is behind `heist_guide`, as decided under "Onboarding keeps itself alive".
 - Usage in a client configuration: command `heist`, arguments `mcp --agent NAME`, working directory the project.
+
+## First npm release readiness (2026-11-20)
+
+At the initial review, the repository had no `todo` or `in_progress` tickets and no open decisions; `heist check` reported valid with no warnings. Follow-up work has since reopened the documentation/release audit (HEIST-69) and added the required retry-safety fix (HEIST-70). Publication is not cleared until those tickets, the exact-commit CI run, and the package installation checks are complete.
+
+Before publishing, close these evidence/owner checks:
+
+- Owner confirmed control of the `@mmilad` user scope on 2026-11-20. Recheck the current published versions and choose an unused version immediately before publishing. npm documents that each user's scope is unique and only that user can add packages; a public scoped package's first publication must explicitly use `--access public` ([scoped public packages](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/)).
+- The latest GitHub Actions run visible during this review, [run 20](https://github.com/mmilad/heistman/actions/runs/43633080902) on commit `a5e48ba`, failed. Windows and macOS exposed a brittle worktree path assertion; macOS also exposed a comment paging test that assumed unique millisecond timestamps. The local branch now compares real paths and waits for distinct timestamps in that fixture. Those test changes still need a successful fresh matrix run before release.
+- Run the release-candidate checks against the exact commit: syntax and tests, declaration/package contents, tarball installation, CLI and API smoke checks, and the opt-in semantic-model flow. Existing tickets record successful checks on Windows Node 24; that is not a substitute for checking the release commit.
+- `npm pack --dry-run --json` was inspected on 2026-11-20 and contained the expected 25 files: package metadata, executable, source, schema, README and MIT license; it excluded tests, plan data and development docs. Still install a real tarball in a clean temporary project and confirm the README install path.
+- Decide the release version and confirm npm's required two-factor authentication or an appropriately scoped granular access token. Current version is `0.1.0`; no version bump or publication was performed as part of this audit. npm requires 2FA or an eligible token for direct publishing and recommends reviewing package contents and installing the tarball before release ([publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/)).
+- Complete HEIST-70 and HEIST-69 after the retry-safety behavior and the full release checks pass.
+
+The owner chose to block the first npm release until ticket creation is retry-safe. The implementation now accepts an optional `requestKey`, stores a canonical SHA-256 payload fingerprint with the ticket, replays identical requests, and rejects key reuse with a changed payload. The browser preserves the attempted draft and key in session storage. Core and HTTP coverage has been added; the full suite and a fresh cross-platform CI run still need to pass before the release ticket can close.
+
+### Product and repository rename staging
+
+The owner chose `Plan` as the product/project name and `plantool` as the repository and CLI name, with the intended npm package `@mmilad/plantool`. Keep the current local project identity intact while completing the release fixes. The owner will first rename the GitHub repository, then update the local `origin`. After that handoff, rename the local CLI/package/project identity and documentation references from Heist/Heistman to Plan/plantool, verify the package contents and commands, then re-run the release checks. Do not publish under the current `@mmilad/heist` identity.
+
+`npm pack --dry-run --json` was inspected on 2026-11-20: it includes the intended 25 files (package metadata, executable, source, schema, README and MIT license), with no tests, plan data or development docs. The corrected worktree-claims test passes locally (1/1). A full `npm run check` was attempted locally, but this restricted environment denied symlink creation and loopback HTTP connections; it therefore does not provide a passing local suite. The `pnpm` wrapper also could not fetch pnpm metadata from the registry. These checks do not require adding product features, but the fresh CI run and clean tarball installation remain release gates. For a public first release, npm's documented command is `npm publish --access public`; no publish command was run during this audit.

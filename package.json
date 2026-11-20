@@ -29,6 +29,9 @@
     "benchmark:scale": "node bench/scale.mjs"
   },
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "optionalDependencies": {
     "@huggingface/transformers": "^4.3.2"
   }

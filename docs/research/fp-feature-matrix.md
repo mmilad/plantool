@@ -6,7 +6,7 @@ Documentation-based review of FP (fp.dev) as of 29 October 2026. “Verified” 
 
 FP describes itself as an agent-native issue tracker for Claude Code, Codex, Pi, and others. Its quickstart shows terminal-based planning and nested issue output. Current docs clarify that default local issue data is outside the checkout in a per-machine SQLite directory; remote/cloud use connects to a shared HTTPS project and needs identity/token configuration. This differs from heist's desired source of truth: durable goals, tickets, decisions, relationships, comments, and config live inside the project and are Git-tracked by default. A clean clone must contain the plan and allow local edits without remote registration or hosted access; only generated caches and ephemeral execution state are excluded. Sources: [FP docs](https://fp.dev/docs/), [installation](https://fp.dev/docs/getting-started/installation/), [CLI overview](https://fp.dev/docs/cli/overview/), [issue tracking and storage](https://fp.dev/docs/cli/issue-tracking/), [configuration](https://fp.dev/docs/cli/configuration/), [cloud agents](https://fp.dev/docs/guides/cloud-agents/), and [extension docs](https://fp.dev/docs/extensions/overview/).
 
-## Capability comparison
+## Capability comparison (proposal at review time)
 
 | FP surface from issue | Evidence in reviewed official docs | heist proposal | Priority / caveat |
 |---|---|---|---|
@@ -36,8 +36,8 @@ FP describes itself as an agent-native issue tracker for Claude Code, Codex, Pi,
 | history/activity | activity.jsonl listed; comments timestamped/attributed; brainstorms versioned. | Git history is initial audit trail; no global mutable event log. | P1/P2. |
 | hot-file/context | Context verified; reviewed docs did not verify hot-file ranking. | Explicit file refs and deterministic local search with provenance. | P1. |
 | extensions/hooks | Pre-hooks can reject transitions; post-hooks trigger side effects; extensions execute in CLI and desktop. | Defer arbitrary code and make future execution explicit opt-in. | P3. |
-| MCP | Pages cover other agents; MCP server not established by inspected sources. | Optional adapter after stable API/CLI. | P2. |
-| desktop / project UI | FP docs list a Mac companion; reviewed installer requirements say macOS/Linux x86_64, not Windows. The reviewed pages do not establish every multi-project UI detail from the user report. | Provide `heist serve`: a browser UI scoped to the one project resolved from the current checkout, loopback-only and no auth. No global project picker or dashboard. | P1 in first usable release, after core CLI/API. Local service gets Host/Origin/CSRF protections despite no login. |
+| MCP | Pages cover other agents; MCP server not established by inspected sources. | Proposal at review time: optional adapter after stable API/CLI. Heist later implemented a curated stdio adapter; see `docs/implementation-decisions.md`. | Historical P2. |
+| desktop / project UI | FP docs list a Mac companion; reviewed installer requirements say macOS/Linux x86_64, not Windows. The reviewed pages do not establish every multi-project UI detail from the user report. | Proposal at review time: a browser UI for one project. Heist later changed this to a local multi-project registry and workspace; loopback-only with Host/Origin/CSRF protections. | Historical P1; current behavior is documented in `docs/implementation-decisions.md`. |
 
 ## Security and product fit
 

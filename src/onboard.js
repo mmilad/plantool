@@ -25,7 +25,7 @@ You are working in a project that plans its work with heist. heist keeps the pla
 
 - CLI: \`heist\` (or \`pnpm exec heist\` when it is a project dependency). \`heist --help\` lists everything. Commands that list data accept \`--format json\`.
 - Programmatic API: the same operations as functions (see the package exports; the types are in \`src/index.d.ts\`). Use it when you want to script or build your own helpers.
-- MCP server: planned, not available yet.
+- MCP server: heist mcp --agent NAME serves this project's plan over stdio with curated read and work tools. The agent identity is fixed at startup; MCP cannot decide a person-owned decision.
 - Local web view: a human-facing view of the same plan. Editing there changes the same data.
 - Planning method: \`heist guide\` (topics: ${list(Object.keys(GUIDE).filter(k => k !== 'overview'))}).
 
