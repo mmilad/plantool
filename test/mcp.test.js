@@ -86,6 +86,8 @@ test('the read tools answer, and an unknown topic or ticket is reported as a too
   const t1 = await p.tickets.create({ title: 'Login page', description: 'Email and password.' });
   assert.equal((await call(handle, 'plantool_ticket_show', { ticket: p.ticketKey(t1) })).json().key, 'MCP-1');
   assert.equal((await call(handle, 'plantool_ticket_list', { status: 'todo' })).json().length, 1);
+  await p.tickets.create({ title: 'Planned feature', kind: 'feature' });
+  assert.equal((await call(handle, 'plantool_ticket_list', { status: 'in_planning' })).json().length, 1);
   assert.match((await call(handle, 'plantool_guide', {})).json().topics.join(','), /decisions/);
   assert.match((await call(handle, 'plantool_guide', { topic: 'workflow' })).json().text, /Working the plan/);
   assert.equal((await call(handle, 'plantool_guide', { topic: 'nope' })).isError, true);

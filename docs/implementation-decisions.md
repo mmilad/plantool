@@ -35,7 +35,8 @@ This file records material choices made while implementing the first usable rele
 
 - Store version and record schema version begin at `1`; canonical structured data is JSON, LF, two-space indented, and newline terminated.
 - UUIDv7 IDs are generated from Node crypto primitives. Record filenames are based only on IDs and sharded by their first two characters.
-- Default statuses are `todo`, `in_progress`, `done`, and `cancelled`. Custom status catalogs are project configuration; reads preserve unknown stored statuses, while writes require a configured status.
+- Default statuses are `todo`, `in_planning`, `in_progress`, `done`, and `cancelled`. Custom status catalogs are project configuration; reads preserve unknown stored statuses, while writes require a configured status.
+- `in_planning` (owner decision 2026-11-22) is the explicit planning state for feature tickets. New features start there and do not appear in `plantool next`; a person moves a feature to `todo` when its behavior, scope and acceptance criteria are ready to implement. Blueprint completeness remains advisory rather than an automatic gate. Projects created before 0.1.1 add the status with `plantool status add in_planning`; existing tickets are not migrated automatically.
 - Ticket rollups are query-time values and never mutate stored child statuses.
 - Reads validate but never migrate or rewrite data. There is no earlier released format to migrate in this initial release; unsupported store/schema versions fail with a typed diagnostic.
 - Writes use same-directory temporary files and rename, with stale-revision checking. This is local filesystem protection, not distributed locking.
@@ -232,20 +233,24 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - Server instructions are short; the full briefing is behind `plantool_guide`, as decided under "Onboarding keeps itself alive".
 - Usage in a client configuration: command `plantool`, arguments `mcp --agent NAME`, working directory the project.
 
-## First npm release readiness (2026-11-20)
+## npm releases and next release readiness
 
-At the initial review, the repository had no `todo` or `in_progress` tickets and no open decisions; `plantool check` reported valid with no warnings. Follow-up work reopened the release audit (PLAN-69), completed retry-safe creation (PLAN-70), and renamed the product/package/CLI. Publication is not cleared until PLAN-69 is closed and the exact-commit CI and final npm checks are complete.
+The owner reports that `@mmilad/plantool@0.1.0` has been published. Version `0.1.1` is being prepared locally with the `in_planning` workflow status; it has not been published.
 
-Before publishing, close these evidence/owner checks:
+### 0.1.0 release audit history (2026-11-20)
+
+At the initial review, the repository had no `todo` or `in_progress` tickets and no open decisions; `plantool check` reported valid with no warnings. Follow-up work reopened the release audit (PLAN-69), completed retry-safe creation (PLAN-70), and renamed the product/package/CLI. The first-release gates were resolved before the owner published 0.1.0.
+
+The 0.1.0 audit recorded these release checks and outcomes:
 
 - Owner confirmed control of the `@mmilad` user scope on 2026-11-20. Recheck the current published versions and choose an unused version immediately before publishing. npm documents that each user's scope is unique and only that user can add packages; a public scoped package's first publication must explicitly use `--access public` ([scoped public packages](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/)).
 - The latest GitHub Actions run visible during this review, [run 20](https://github.com/mmilad/plantool/actions/runs/43633080902) on commit `a5e48ba`, failed. Windows and macOS exposed a brittle worktree path assertion; macOS also exposed a comment paging test that assumed unique millisecond timestamps. The local branch now compares real paths and waits for distinct timestamps in that fixture. Those test changes still need a successful fresh matrix run before release.
-- Run the release-candidate checks against the exact commit: syntax and tests, declaration/package contents, tarball installation, CLI and API smoke checks, and the opt-in semantic-model flow. Existing tickets record successful checks on Windows Node 24; that is not a substitute for checking the release commit.
+- Run the release-candidate checks against the exact commit for each new release: syntax and tests, declaration/package contents, tarball installation, CLI and API smoke checks, and the opt-in semantic-model flow. Existing tickets record successful checks on Windows Node 24; that is not a substitute for checking the release commit.
 - `npm pack --dry-run --json` lists the expected 25 files under `@mmilad/plantool`: package metadata, executable, source, schema, README and MIT license; it excludes tests, plan data and development docs. A real tarball was installed in a clean temporary project with optional dependencies omitted; the installed `plantool --version` returned `@mmilad/plantool 0.1.0` and package metadata pointed to `bin/plantool.js`.
-- Decide the release version and confirm npm's required two-factor authentication or an appropriately scoped granular access token. Current version is `0.1.0`; no version bump or publication was performed as part of this audit. npm requires 2FA or an eligible token for direct publishing and recommends reviewing package contents and installing the tarball before release ([publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/)).
-- PLAN-70 is complete. Close PLAN-69 after a fresh cross-platform CI run passes on the renamed commit and remaining release checks are recorded.
+- The owner confirmed control of the `@mmilad` scope and published 0.1.0. For 0.1.1, verify that the version remains unused, use npm's required two-factor authentication or an appropriately scoped granular access token, and inspect/install the exact tarball before publishing ([publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/)).
+- PLAN-70 is complete. PLAN-69 covers the first release audit; 0.1.1 readiness must be checked against its own exact commit and CI run.
 
-The owner chose to block the first npm release until ticket creation is retry-safe. The implementation now accepts an optional `requestKey`, stores a canonical SHA-256 payload fingerprint with the ticket, replays identical requests, and rejects key reuse with a changed payload. The browser preserves the attempted draft and key in session storage. The full suite now passes locally; a fresh cross-platform CI run is still required before the release ticket can close.
+The owner chose to block the first npm release until ticket creation is retry-safe. The implementation accepts an optional `requestKey`, stores a canonical SHA-256 payload fingerprint with the ticket, replays identical requests, and rejects key reuse with a changed payload. The browser preserves the attempted draft and key in session storage. This gate was resolved for 0.1.0.
 
 ### Product and repository rename (2026-11-20)
 

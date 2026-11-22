@@ -3,7 +3,7 @@
 // decisions a person owns cannot be decided or reopened through it, because the agent name is the decider.
 import fs from 'node:fs';
 import { createInterface } from 'node:readline';
-import { PlanError, openProject } from './index.js';
+import { DEFAULT_STATUSES, PlanError, openProject } from './index.js';
 import { hybridSearch } from './semantic.js';
 import { guide, GUIDE } from './guide.js';
 
@@ -49,7 +49,7 @@ const TOOLS = [
     inputSchema: { type: 'object', properties: { ticket: str('Key such as PLAN-12 or an id') }, required: ['ticket'] },
     run: async (p, a) => withKey(p, await p.tickets.get(a.ticket)) },
   { name: 'plantool_ticket_list', description: 'Tickets, optionally filtered by status or parent. Returns summaries.',
-    inputSchema: { type: 'object', properties: { status: oneOf(['todo', 'in_progress', 'done', 'cancelled'], 'Only this status'), parent: str('Only children of this ticket'), limit: num('How many (default 100)') } },
+    inputSchema: { type: 'object', properties: { status: oneOf(DEFAULT_STATUSES, 'Only this status'), parent: str('Only children of this ticket'), limit: num('How many (default 100)') } },
     run: async (p, a) => (await p.tickets.list({ status: a.status, parentId: a.parent ? await p.resolveTicket(a.parent) : undefined, limit: a.limit ?? 100 })).map(t => summary(p, t)) },
   { name: 'plantool_context', description: 'What an agent needs to work on a ticket: the ticket, its ancestors, relations, comments and documents, within a budget.',
     inputSchema: { type: 'object', properties: { ticket: str('Key or id'), budget: num('Character budget (default 24000)') }, required: ['ticket'] },

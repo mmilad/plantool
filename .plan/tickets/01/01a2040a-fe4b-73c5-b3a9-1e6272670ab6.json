@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "01a2040a-fe4b-73c5-b3a9-1e6272670ab6",
+  "number": 72,
+  "title": "How should Plan distinguish features still being planned from implementation-ready work?",
+  "kind": "decision",
+  "description": "",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": "01a20400-ffce-7c7f-bcb0-586dcc223452",
+  "why": "The owner wants planned features visible but excluded from agent pickup until they are ready.",
+  "decision": {
+    "owner": "human",
+    "criteria": [
+      {
+        "id": "clear-agent-signal",
+        "name": "Clear agent signal",
+        "weight": 3
+      },
+      {
+        "id": "backward-compatibility",
+        "name": "Backward compatibility",
+        "weight": 2
+      }
+    ],
+    "chosen": "01a2040a-fe5a-7e23-b490-6076fcbb6ad8",
+    "rationale": "Use a clear manual status transition for planning readiness; blueprint fields remain advisory rather than blocking.",
+    "decidedBy": "human",
+    "decidedAt": "2026-11-22T16:16:05.073Z",
+    "cancelled": [
+      "01a2040a-fe61-7f16-8d61-a06d11254589"
+    ]
+  },
+  "createdAt": "2026-11-22T16:15:59.051Z",
+  "updatedAt": "2026-11-22T16:16:05.075Z",
+  "completedAt": "2026-11-22T16:16:05.075Z"
+}

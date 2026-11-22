@@ -5,6 +5,8 @@ import vm from 'node:vm';
 
 test('the web UI has a decisions view and its script parses', () => {
   const html = renderAppHtml('token');
+  assert.ok(html.includes("in_planning:'In planning'"));
+  assert.ok(html.includes("count(t=>t.status==='in_planning')"));
   assert.ok(html.includes('id="decisions-page"'));
   assert.ok(html.includes('data-view="decisions"'));
   assert.ok(html.includes('id="decision-needs-person"'));

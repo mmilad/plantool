@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20412-7feb-7f45-a6f6-08d66d54694e",
+  "ticketId": "01a20400-ffce-7c7f-bcb0-586dcc223452",
+  "body": "Added in_planning status, migration command, readiness gating, and agent documentation for 0.1.1.",
+  "author": "codex",
+  "createdAt": "2026-11-22T16:24:10.987Z"
+}

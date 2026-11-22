@@ -41,7 +41,7 @@ Each structured record has schemaVersion and stable id. Canonical JSON is UTF-8,
 
 | Entity | Initial fields |
 |---|---|
-| Project config | schema version, project ID/name, ordered project statuses (default: todo, in_progress, done, cancelled) and custom properties, context/output limits. |
+| Project config | schema version, project ID/name, ordered project statuses (default: todo, in_planning, in_progress, done, cancelled) and custom properties, context/output limits. |
 | Goal | ID, title, Markdown body, status, timestamps, optional parent goal and ticket/plan links. |
 | Plan/spec/decision | ID, kind, title, status, Markdown body, timestamps, explicit links to goals/tickets/decisions. |
 | Ticket | ID, title, description, status, priority, labels, properties, nullable parentId, timestamps, optional owner/estimate. |

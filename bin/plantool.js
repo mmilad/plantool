@@ -57,6 +57,8 @@ Usage:
   plantool projects [list|add PATH|remove ID|KEY|PATH|prune] [--format json]
   plantool keys init [--key KEY]        set the project key and number existing tickets
   plantool keys renumber                fix duplicate KEY-n numbers (e.g. after merging branches)
+  plantool status list                  show the project's configured statuses
+  plantool status add NAME              add a status to an existing project
   plantool ticket create --title TITLE [--parent ID] [--description TEXT] [--status STATUS]
                      [--kind task|feature|bug] [--priority low|normal|high|urgent] [--labels A,B]
                      [--blocked-by KEYS] [--blocks KEYS] [--relates KEYS]
@@ -224,6 +226,8 @@ async function main(argv) {
     throw new Error(`Unknown projects command: ${action}`);}
   if(command==='guide'){const text=guide(sub);if(!text)throw new Error(`Unknown guide topic: ${sub}. Topics: ${Object.keys(GUIDE).join(', ')}`);console.log(text);return;}
   const project=await openProject();globalThis.__planKey=project.key;await autoRegister(project);
+  if(command==='status'&&sub==='list') {const {opts}=parse(rest);out(project.config.statuses,opts.format);return;}
+  if(command==='status'&&sub==='add') {const {opts,positional}=parse(rest),name=positional[0]?.trim();if(!name)throw new Error('Usage: plantool status add NAME');if(project.config.statuses.includes(name)){out(opts.format==='json'?{added:false,statuses:project.config.statuses}:`Status already configured: ${name}`,opts.format);return;}const statuses=[...project.config.statuses];const at=name==='in_planning'?Math.max(0,statuses.indexOf('todo')+1):statuses.length;statuses.splice(at,0,name);await project.saveConfig({...project.config,statuses});out(opts.format==='json'?{added:true,statuses}:`Added status ${name}. Existing tickets were not changed.`,opts.format);return;}
   if(command==='ticket'&&sub==='create') {const {opts}=parse(rest);const links=await resolveLinks(project,opts);const kind=one(opts.kind)??'task';const props=customFlags(project,kind,opts);const t=await project.tickets.create({title:one(opts.title),description:one(opts.description),status:opts.status,kind,priority:opts.priority,labels:labels(opts.labels),parentId:opts.parent??null,createdBy:process.env.PLANTOOL_AGENT||undefined,...fieldFlags(opts),...(props?{properties:props}:{})});
     await applyLinks(project,t.id,links,opts.format);
     const norm = x => String(x ?? '').toLocaleLowerCase().replace(/\s+/g, ' ').trim();

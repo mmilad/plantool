@@ -15,7 +15,7 @@ import { relationGraph } from './relation-graph.js';
 export { relationGraph } from './relation-graph.js';
 export { DEFAULT_COMPONENT_KINDS, normalizeSchema } from './design.js';
 
-export const DEFAULT_STATUSES = Object.freeze(['todo', 'in_progress', 'done', 'cancelled']);
+export const DEFAULT_STATUSES = Object.freeze(['todo', 'in_planning', 'in_progress', 'done', 'cancelled']);
 export const RELATION_TYPES = Object.freeze(['blocks', 'relates_to', 'duplicates', 'implements', 'validates', 'supersedes']);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const kinds = ['goals', 'plans', 'decisions'];
@@ -250,7 +250,7 @@ function ticketApi(p) {
         }
       }
       const number = tickets.reduce((m, x) => Math.max(m, Number.isInteger(x.number) ? x.number : 0), 0) + 1;
-      const date = nowIso(), status=input.status??statuses[0]; const rec = { schemaVersion: 1, id: uuidv7(), number, title: input.title.trim(), kind: input.kind ?? 'task', description: input.description ?? '', status, priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.requestKey ? { requestKey: input.requestKey, requestHash } : {}), ...(input.codePlan ? { codePlan: input.codePlan } : {}), ...(input.checklist ? { checklist: input.checklist } : {}), ...(input.origin ? { origin: input.origin } : {}), ...Object.fromEntries(['why','acceptance','todos','files','size','assumptions','evaluation','decision','option','createdBy','refs','outcome','repro','risks'].filter(k=>input[k]!==undefined&&k!=='requestKey'&&input[k]!==null&&input[k]!==''&&!(Array.isArray(input[k])&&!input[k].length)).map(k=>[k,input[k]])), ...(status === 'done' ? { completedAt: date } : {}), createdAt: date, updatedAt: date };
+      const date = nowIso(), kind = input.kind ?? 'task', status=input.status??(kind==='feature'&&statuses.includes('in_planning')?'in_planning':statuses[0]); const rec = { schemaVersion: 1, id: uuidv7(), number, title: input.title.trim(), kind, description: input.description ?? '', status, priority: input.priority ?? 'normal', labels: input.labels ?? [], properties: input.properties ?? {}, parentId: input.parentId ?? null, ...(input.requestKey ? { requestKey: input.requestKey, requestHash } : {}), ...(input.codePlan ? { codePlan: input.codePlan } : {}), ...(input.checklist ? { checklist: input.checklist } : {}), ...(input.origin ? { origin: input.origin } : {}), ...Object.fromEntries(['why','acceptance','todos','files','size','assumptions','evaluation','decision','option','createdBy','refs','outcome','repro','risks'].filter(k=>input[k]!==undefined&&k!=='requestKey'&&input[k]!==null&&input[k]!==''&&!(Array.isArray(input[k])&&!input[k].length)).map(k=>[k,input[k]])), ...(status === 'done' ? { completedAt: date } : {}), createdAt: date, updatedAt: date };
       return writeJson(p, 'tickets', rec, { create: true });
       });
     },
@@ -283,7 +283,7 @@ function ticketApi(p) {
     },
     async move(id, parentId) { return this.update(id, { parentId: parentId ?? null }); },
     async rollup(id) { const rows = await buildTree(p,id); return rows[0].rollup; },
-    async readiness(id) { id = await ticketRef(p, id);const all=await listJson(p,'tickets'),byId=new Map(all.map(t=>[t.id,t])),rels=await listJson(p,'relationships');const incoming=rels.filter(r=>r.type==='blocks'&&r.targetId===id);return {ready:incoming.every(r=>isFinished(byId.get(r.sourceId))),blockers:incoming.map(r=>({relationshipId:r.id,ticket:byId.get(r.sourceId)??null}))}; }
+    async readiness(id) { id = await ticketRef(p, id);const g=await workGraph(p),ticket=g.byId.get(id),result=readinessOf(g,ticket),incoming=g.explicitEdges.filter(r=>r.targetId===id);return {ready:result.ready,blockers:incoming.map(r=>({relationshipId:r.id,ticket:g.byId.get(r.sourceId)??null})),reasons:result.reasons}; }
   };
 }
 const isFinished = t => t?.status==='done' || t?.status==='cancelled';

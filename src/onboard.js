@@ -46,8 +46,10 @@ Sizes for effort: ${list(TICKET_SIZES)}.
 
 ## States
 
-Ticket status: ${list(DEFAULT_STATUSES)}. A parent is rolled up from its children; a parent cannot be done while children or blockers are open.
-\`plantool next\` lists only work that is ready: todo, not blocked, decisions made, and the providers of the contracts it consumes finished.
+Ticket status: ${list(DEFAULT_STATUSES)}. New feature tickets start as \`in_planning\`; tasks start in the project's first status (\`todo\` by default). A parent is rolled up from its children; a parent cannot be done while children or blockers are open.
+Move a feature to \`todo\` when its behavior, scope and acceptance criteria are planned well enough to implement. \`plantool next\` lists only \`todo\` work that is not blocked, has no open children, has made its decisions, and has finished providers for consumed contracts. Planning tickets stay out of \`next\`; list them with \`plantool ticket list --status in_planning\`.
+Projects created before this status was added can enable it with \`plantool status add in_planning\`. Existing tickets are not changed automatically; move features that are still being planned with \`plantool ticket update KEY --status in_planning\`.
+Blueprint completeness is advisory: missing fields appear in ticket context and \`plantool check\`, but do not automatically block a move to \`todo\`. Treat that move as the explicit readiness decision.
 Claims are leases (default 60 minutes), shared between git worktrees. Decisions have a status of their own (open, decided, cancelled) and an owner (human or agent).
 
 ## Roadmap

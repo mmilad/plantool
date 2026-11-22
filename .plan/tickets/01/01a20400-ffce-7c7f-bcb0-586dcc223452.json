@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20400-ffce-7c7f-bcb0-586dcc223452",
+  "number": 71,
+  "title": "Add an In Planning status for implementation readiness",
+  "kind": "feature",
+  "description": "Add a distinct workflow status for work that is still being planned. Reserve todo for work the owner considers ready to implement, and make sure agent guidance explains the transition.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Agents currently use todo as their ready-to-start status, while incomplete blueprints are only warnings. Work still being planned needs a visible state excluded from plantool next.",
+  "acceptance": [
+    {
+      "text": "New projects start newly created tickets in in_planning",
+      "met": true
+    },
+    {
+      "text": "todo is reserved for planned implementation work",
+      "met": true
+    },
+    {
+      "text": "plantool next and claim exclude in_planning tickets",
+      "met": true
+    },
+    {
+      "text": "existing projects can add the status explicitly",
+      "met": true
+    },
+    {
+      "text": "CLI, MCP, UI and agent documentation explain the workflow.",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "Implement the status and upgrade path",
+      "met": true
+    },
+    {
+      "text": "update agent guidance and docs",
+      "met": true
+    },
+    {
+      "text": "verify with the full check suite",
+      "met": true
+    }
+  ],
+  "createdAt": "2026-11-22T16:05:04.078Z",
+  "updatedAt": "2026-11-22T16:24:10.979Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Added in_planning status, migration command, readiness gating, and agent documentation for 0.1.1.",
+    "verifiedBy": "npm run check (121 passed, 1 skipped); plantool check (0 warnings); node --check src/ui.js; git diff --check.",
+    "changedFiles": [
+      ".plan/config.json",
+      "README.md",
+      "bin/plantool.js",
+      "docs/architecture-proposal.md",
+      "docs/implementation-decisions.md",
+      "docs/open-questions.md",
+      "package.json",
+      "src/guide.js",
+      "src/index.d.ts",
+      "src/index.js",
+      "src/mcp.js",
+      "src/onboard.js",
+      "src/ui.js",
+      "src/workflow.js",
+      "test/cli.test.js",
+      "test/mcp.test.js",
+      "test/ui.test.js",
+      "test/workflow.test.js",
+      ".plan/tickets/01/01a20400-ffce-7c7f-bcb0-586dcc223452.json",
+      ".plan/tickets/01/01a2040a-fe4b-73c5-b3a9-1e6272670ab6.json",
+      ".plan/tickets/01/01a2040a-fe5a-7e23-b490-6076fcbb6ad8.json",
+      ".plan/tickets/01/01a2040a-fe61-7f16-8d61-a06d11254589.json"
+    ]
+  },
+  "completedAt": "2026-11-22T16:24:01.207Z"
+}

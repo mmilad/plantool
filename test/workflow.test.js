@@ -25,6 +25,27 @@ test('ticket kind defaults to task and rejects unknown kinds', async t => {
   await assert.rejects(() => p.tickets.create({ title: 'c', kind: 'service' }), { code: 'VALIDATION' });
 });
 
+test('new features stay in planning until they are moved to todo', async t => {
+  const p = await project(t);
+  const task = await p.tickets.create({ title: 'A task' });
+  const feature = await p.tickets.create({ title: 'A feature', kind: 'feature' });
+  const child = await p.tickets.create({ title: 'Implementation task', parentId: feature.id });
+  assert.equal(task.status, 'todo');
+  assert.equal(feature.status, 'in_planning');
+  assert.equal((await p.tickets.readiness(feature.id)).ready, false);
+  assert.match((await p.tickets.readiness(feature.id)).reasons.join('; '), /still in planning/);
+  assert.equal((await p.tickets.readiness(child.id)).ready, false);
+  assert.match((await p.tickets.readiness(child.id)).reasons.join('; '), /ancestor .* is in planning/);
+  assert.deepEqual((await p.next()).map(x => x.id), [task.id]);
+  await assert.rejects(() => p.claim(feature.id, { agent: 'agent' }), { code: 'CONFLICT' });
+  await assert.rejects(() => p.claim(child.id, { agent: 'agent' }), { code: 'CONFLICT' });
+  await p.tickets.update(feature.id, { status: 'todo' });
+  assert.ok((await p.next()).some(x => x.id === child.id));
+  assert.ok(!(await p.next()).some(x => x.id === feature.id));
+  await p.tickets.update(child.id, { status: 'done' });
+  assert.ok((await p.next()).some(x => x.id === feature.id));
+});
+
 test('a parent cannot be done while descendants or blockers are open unless forced', async t => {
   const p = await project(t);
   const header = await p.tickets.create({ title: 'Header' }), subnav = await p.tickets.create({ title: 'Subnav', parentId: header.id });
@@ -90,7 +111,7 @@ test('agent onboard prints the briefing and writes nothing', async t => {
 
 test('CLI exposes next, claim, done and relation remove', async t => {
   const p = await project(t); const cwd = p.root; const cli = (...a) => run(process.execPath, [bin, ...a], { cwd, env: { ...process.env, PLANTOOL_AGENT: 'cli-agent' } });
-  const a = JSON.parse((await cli('ticket', 'create', '--title', 'A', '--kind', 'feature', '--priority', 'high', '--labels', 'x,y', '--format', 'json')).stdout);
+  const a = JSON.parse((await cli('ticket', 'create', '--title', 'A', '--kind', 'feature', '--status', 'todo', '--priority', 'high', '--labels', 'x,y', '--format', 'json')).stdout);
   assert.equal(a.kind, 'feature'); assert.deepEqual(a.labels, ['x', 'y']);
   const b = JSON.parse((await cli('ticket', 'create', '--title', 'B', '--format', 'json')).stdout);
   await cli('relation', 'add', a.id, b.id, 'blocks');

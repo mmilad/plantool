@@ -22,6 +22,22 @@ test('CLI init, create, tree, JSON and validation work from a path with spaces',
   assert.equal(run(cwd,'validate').status,0);
 });
 
+test('existing projects can add in_planning without changing existing tickets', async t => {
+  const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool status ')); t.after(() => fs.rm(cwd, { recursive: true, force: true }));
+  const env = { ...process.env, PLANTOOL_NO_REGISTER: '1', PLANTOOL_SIMILAR: 'off' };
+  const cli = (...args) => spawnSync(process.execPath, [path.join(root, 'bin', 'plantool.js'), ...args], { cwd, env, encoding: 'utf8' });
+  assert.equal(cli('init', '--name', 'Status test', '--key', 'STA').status, 0);
+  const existing = cli('ticket', 'create', '--title', 'Existing'); assert.equal(existing.status, 0, existing.stderr);
+  const configPath = path.join(cwd, '.plan', 'config.json');
+  const config = JSON.parse(await fs.readFile(configPath, 'utf8')); config.statuses = config.statuses.filter(status => status !== 'in_planning');
+  await fs.writeFile(configPath, JSON.stringify(config, null, 2) + '\n');
+  const added = cli('status', 'add', 'in_planning'); assert.equal(added.status, 0, added.stderr); assert.match(added.stdout, /Added status in_planning/);
+  assert.deepEqual(JSON.parse(cli('status', 'list', '--format', 'json').stdout), ['todo', 'in_planning', 'in_progress', 'done', 'cancelled']);
+  assert.equal(JSON.parse(cli('ticket', 'show', 'STA-1', '--format', 'json').stdout).status, 'todo');
+  const feature = cli('ticket', 'create', '--kind', 'feature', '--title', 'New feature'); assert.equal(feature.status, 0, feature.stderr);
+  assert.equal(JSON.parse(cli('ticket', 'show', 'STA-2', '--format', 'json').stdout).status, 'in_planning');
+});
+
 test('ticket create points at possibly related tickets by title', async t => {
   const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'plantool related ')); t.after(() => fs.rm(cwd, { recursive: true, force: true }));
   const bin = path.resolve('bin/plantool.js'); const env = { ...process.env, PLANTOOL_NO_REGISTER: '1' };

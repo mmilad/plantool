@@ -4,6 +4,7 @@
   "name": "plan",
   "statuses": [
     "todo",
+    "in_planning",
     "in_progress",
     "done",
     "cancelled"

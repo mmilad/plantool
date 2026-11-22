@@ -26,10 +26,12 @@ plantool init --name "My project"
 
 This creates `.plan/` with the project's planning data. Commit that folder to Git to share the plan with your team.
 
-Create and view tickets:
+Create and view tickets. New feature tickets start in `in_planning`; move one to `todo` when its behavior, scope and acceptance criteria are ready for implementation:
 
 ```sh
 plantool ticket create --title "Build the first feature"
+plantool ticket create --kind feature --title "Add sign-in"
+plantool ticket update MY-2 --status todo
 plantool ticket list
 plantool tree
 ```
@@ -43,6 +45,7 @@ plantool done MY-1 --note "Implemented the feature" --verified "Checks passed"
 ```
 
 Replace `MY-1` with the ticket key shown by `plantool ticket list` or `plantool tree`.
+`plantool next` lists ready `todo` tickets and never returns features still in planning. Review those with `plantool ticket list --status in_planning`. For an existing project created before `in_planning` was added, run `plantool status add in_planning` once; existing tickets keep their current statuses.
 
 Start the local web interface with:
 

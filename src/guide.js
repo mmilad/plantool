@@ -31,6 +31,7 @@ Plan the work before building: put every part, open question and dependency on t
 - Link a new ticket when you create it (--blocked-by, --blocks, --relates); no link is a deliberate choice.
 - Write down what you assumed without asking (--assume "a;b"); the person confirms or corrects it.
 - Plan where the code will go (--files) and record what really changed when done (plantool done --files).
+- New features start in in_planning. Move them to todo when their behavior, scope and acceptance criteria are ready to implement; plantool next only offers todo work. In older projects, run plantool status add in_planning once.
 - Prefer asking one clear question with options over guessing; prefer a small first release.
 - Keep titles short and concrete ("Burger menu on mobile", not "Mobile stuff").
 
@@ -59,6 +60,7 @@ by people and by agents who were not there when it was written. A task has a des
 what has to happen), a why, acceptance criteria and, when the way is known, to-dos (--todo "a;b": the steps in
 order, commands included). A bug has steps to reproduce, a feature describes what the user does.
 A title and a why are not enough: write the description so that the ticket can be picked up without asking.
+- Blueprint gaps are warnings, not an automatic readiness gate. Keep a feature in in_planning while its plan is incomplete; moving it to todo is the explicit signal that it is ready for implementation.
 - plantool ticket show ID prints the ticket as a document in blueprint order and names what is missing.
 - plantool ticket create tells you what is still empty; plantool blueprint status TICKET shows it later.
 - Fill the fields on the ticket (plantool ticket update ID --why … --accept "a;b" …). No extra tickets for this.
@@ -114,7 +116,10 @@ consumers that are affected.
 
 plantool next → plantool claim ID --agent NAME → plantool context ID → work → plantool done ID --agent NAME --note "…" --verified "…" --files
 - done takes the name you claimed with (--agent NAME); without it, a claim held by someone else refuses the finish.
-- next only offers work that is ready: todo, no open children, no open blockers, decisions made.
+- New feature tickets start in in_planning. Keep them there while behavior, scope, dependencies and acceptance criteria are still being worked out.
+- Move a feature to todo when its plan is ready to implement: plantool ticket update KEY --status todo. Move it back to in_planning if the plan needs more work.
+- next only offers todo work with no open children, no open blockers and decisions made. It never offers in_planning tickets. Use plantool ticket list --status in_planning to review planned features.
+- For a project created before in_planning was introduced, add it once with plantool status add in_planning. This does not change existing tickets; move unfinished feature plans explicitly.
 - Claims are leases (60 min) and are shared between git worktrees.
 - A parent is done only after its children; plantool check warns about missing checklist items and
   inconsistent contracts; plantool validate checks the files.`,

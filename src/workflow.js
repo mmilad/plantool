@@ -40,6 +40,7 @@ const leaseActive = (t, now) => !!t.assignee?.expiresAt && Date.parse(t.assignee
 export function readinessOf(g, ticket, now = Date.now()) {
   const reasons = [];
   if (isFinished(ticket)) reasons.push(`ticket is ${ticket.status}`);
+  if (ticket.status === 'in_planning') reasons.push('ticket is still in planning');
   const openChildren = (g.children.get(ticket.id) ?? []).filter(c => !isFinished(c) && !(ticket.kind === 'decision' && c.kind === 'option'));
   reasons.push(...decisionReasons(g, ticket));
   if (openChildren.length) reasons.push(`${openChildren.length} open child ticket(s)`);
@@ -54,6 +55,7 @@ export function readinessOf(g, ticket, now = Date.now()) {
     let inherited=cur&&g.ancestorReadinessCache.has(cur)?g.ancestorReadinessCache.get(cur):[];
     const addAncestorReasons=a=>{
       const extra=[];
+      if(a.status==='in_planning')extra.push(`ancestor ${a.id} is in planning`);
       if(a.status==='cancelled')extra.push(`ancestor ${a.id} is cancelled`);
       const ab=g.openBlockers(a.id);if(ab.length)extra.push(`ancestor ${a.id} is blocked by ${ab.map(t=>t.id).join(', ')}`);
       if(extra.length)inherited=[...inherited,...extra];
