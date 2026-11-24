@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e61-06ab-73db-b1b8-a3229f362fef",
+  "number": 80,
+  "title": "Update URL when selecting List in the sidebar",
+  "kind": "bug",
+  "description": "Selecting List in the project sidebar changes the visible page but leaves the URL at /<project-id>. The URL must become /<project-id>/list immediately.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Shareable and direct routes must match the visible view so refresh, back/forward, and copied links work predictably.",
+  "acceptance": [
+    {
+      "text": "Desktop sidebar List navigation pushes /<project-id>/list",
+      "met": true
+    },
+    {
+      "text": "Mobile sidebar List navigation pushes /<project-id>/list",
+      "met": true
+    },
+    {
+      "text": "Selecting a ticket then pushes /<project-id>/list/<ticket-id>",
+      "met": true
+    }
+  ],
+  "repro": {
+    "steps": [
+      "Open a project at /<project-id>",
+      "Click List in the project sidebar"
+    ],
+    "expected": "The URL becomes /<project-id>/list while the ticket list is shown.",
+    "actual": "The list is shown, but the URL stays at /<project-id>."
+  },
+  "createdAt": "2026-11-24T16:26:09.451Z",
+  "updatedAt": "2026-11-24T16:27:56.180Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Sidebar List now delegates to the list-view helper with forceList enabled, updating the URL to /<project-id>/list on desktop and mobile.",
+    "verifiedBy": "npm run check passed (123 passed, 1 optional real-model test skipped); UI test asserts sidebar List wiring and the shared list helper updates route history.",
+    "changedFiles": [
+      "src/ui.js",
+      "test/ui.test.js",
+      ".plan/tickets/01/01a20e61-06ab-73db-b1b8-a3229f362fef.json"
+    ]
+  },
+  "completedAt": "2026-11-24T16:27:56.180Z"
+}

@@ -33,6 +33,12 @@ test('the web UI has a decisions view and its script parses', () => {
   assert.doesNotThrow(() => new Function(script));
 });
 
+test('sidebar List navigation updates the URL to the list route', () => {
+  const html = renderAppHtml('token');
+  assert.ok(html.includes("if(view==='tickets'){showTicketList({forceList:true});}"));
+  assert.ok(html.includes("updateTicketUrl(null,null,'push',{view:roadmap?'roadmap':'tickets'})"));
+});
+
 test('the roadmap has structure, timeline and dependency routes and keeps its controls in the page', () => {
   const html = renderAppHtml('token');
   assert.ok(html.includes('data-view="roadmap"'));

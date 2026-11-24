@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e62-a7a4-721f-b9f2-407dec34df45",
+  "ticketId": "01a20e61-06ab-73db-b1b8-a3229f362fef",
+  "body": "Sidebar List now delegates to the list-view helper with forceList enabled, updating the URL to /<project-id>/list on desktop and mobile.",
+  "author": "codex",
+  "createdAt": "2026-11-24T16:27:56.196Z"
+}
