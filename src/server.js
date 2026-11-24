@@ -5,13 +5,14 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { openProject, findProject, ValidationError, NotFoundError } from './index.js';
 import { listProjects, registerProject, addProjectPath, removeProject, entryId } from './registry.js';
-import { renderAppHtml } from './ui.js';
+import { parseAppRoute, renderAppHtml } from './ui.js';
 
 export async function serve({ cwd = process.cwd(), port = 4000, open = false, register = false } = {}) {
   if (!Number.isInteger(port) || port < 0 || port > 65535) {
     throw new ValidationError('Port must be an integer between 0 and 65535 (0 picks a free port)');
   }
-  // Projects come from the machine-local registry; the project of the start directory (if any) is the default.
+  // Projects come from the machine-local registry. The start-directory project remains the default for root API calls;
+  // the browser root always opens the project overview and project pages use path routes.
   const startRoot = await findProject(cwd);
   const contexts = new Map();
   let defaultId = null;
@@ -39,7 +40,7 @@ export async function serve({ cwd = process.cwd(), port = 4000, open = false, re
         const origin=req.headers.origin;
         if (!origin || origin !== `http://${host}` || !safeToken(req.headers['x-plantool-csrf'], token)) return send(res,403,{error:'Origin or CSRF validation failed'});
       }
-      if (req.method === 'GET' && url.pathname === '/') { res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','content-security-policy':"default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'none'"}); return res.end(renderAppHtml(token, { defaultProjectId: defaultId })); }
+      if (req.method === 'GET' && parseAppRoute(url.pathname)) { res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','content-security-policy':"default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'none'"}); return res.end(renderAppHtml(token, { defaultProjectId: defaultId })); }
       if (req.method === 'OPTIONS') return send(res,405,{error:'CORS disabled'});
       const pathname0=url.pathname;
       if (pathname0==='/api/projects'&&req.method==='GET'){const list=await projectEntries();const rows=await Promise.all(list.map(async e=>{if(!e.available)return e;try{const c=await contextFor(e.id);const tickets=await c.project.tickets.list({limit:Infinity});const open=tickets.filter(x=>x.status!=='done'&&x.status!=='cancelled').length;const updated=tickets.reduce((m,x)=>x.updatedAt>m?x.updatedAt:m,'');return {...e,tickets:tickets.length,open,inProgress:tickets.filter(x=>x.status==='in_progress').length,updatedAt:updated||null,statuses:c.project.config.statuses};}catch(error){return {...e,available:false,problem:error.message};}}));return send(res,200,{projects:rows,defaultProjectId:defaultId});}

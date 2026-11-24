@@ -345,4 +345,4 @@ Checked in Chromium at 1366×820, 1300×850, 1920×1000 and iPhone 13, with a sm
 
 Contrast: body text 14.6:1; input borders `#8590a2` on white ≈ 3.2:1 (meets the 3:1 non-text minimum); primary button white on `#0c66e4` ≈ 5.2:1. Subtle grey buttons keep a visible text label and focus ring, as in Jira.
 
-Open points (not blocking): board scoping is "all parents / one parent" plus "only work items" rather than strictly direct children; the projects page is reached via "Projects" because `/` opens the project `plantool serve` was started in.
+Open points (not blocking): board scoping is "all parents / one parent" plus "only work items" rather than strictly direct children. URL navigation was updated on 2026-11-24: `/` always shows the project overview; project views and ticket/document detail use path routes listed in `docs/ui-wireframe.md`.

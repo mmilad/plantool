@@ -257,3 +257,10 @@ The owner chose to block the first npm release until ticket creation is retry-sa
 The owner renamed the GitHub repository to `mmilad/plantool` and updated the local `origin`. The product/project identity is `Plan`; the npm package and primary executable are `@mmilad/plantool` and `plantool`. The local canonical project directory is `.plan/`, with project key `PLAN`; machine-local registry/cache defaults use `~/.plan`, and environment variables use the `PLANTOOL_` prefix. We chose the descriptive command `plantool` over the proposed short alias `pt` to keep the command aligned with the package and avoid a generic command name. No compatibility alias is included because the package has not been published.
 
 The renamed release candidate passed `npm run check` locally (119 passed, 0 failed, 1 optional real-model test skipped), `plantool check` (0 warnings), and installation of a real tarball in a clean temporary project. A fresh cross-platform GitHub Actions run on the renamed commit and current npm package/version/authentication checks remain release gates. For a public first release, npm's documented command is `npm publish --access public`; no publish command was run during this audit.
+
+## Browser URL navigation (implemented 2026-11-24)
+
+- `/` always shows the project overview, including when `plantool serve` starts inside a project. The project from the start directory remains the default for legacy root-scoped API calls only.
+- `/<project-id>` opens a project's summary. Views use `/<project-id>/list`, `/<project-id>/board`, `/<project-id>/documents`, `/<project-id>/decisions`, `/<project-id>/blueprints`, `/<project-id>/design`, and `/<project-id>/roadmap`.
+- Tickets use `/<project-id>/<ticket-id>`; documents use `/<project-id>/documents/<document-id>`. Roadmap mode and filters stay in the query string, and comment targets stay in the fragment.
+- The server serves the same UI shell for valid project paths. The client parses the path, and `pushState`/`popstate` preserve back, forward, reload, and shareable direct links. REST endpoints remain under `/api/`.

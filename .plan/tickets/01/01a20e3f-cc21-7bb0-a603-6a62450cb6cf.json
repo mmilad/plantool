@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e3f-cc21-7bb0-a603-6a62450cb6cf",
+  "number": 77,
+  "title": "Use path-based browser navigation for projects and views",
+  "kind": "task",
+  "description": "Keep / as the project overview, and add stable path routes for opening a project, its views, tickets and planning documents. Direct links, refresh and browser back/forward must restore the requested route.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Starting plantool serve inside a project currently opens that project directly at /. The root must always show the project overview, and project resources need clear shareable URLs.",
+  "acceptance": [
+    {
+      "text": "GET / always serves the project overview, even when plantool serve starts inside a project",
+      "met": true
+    },
+    {
+      "text": "Project paths support summary, list, board, documents, decisions, design and roadmap views",
+      "met": true
+    },
+    {
+      "text": "A ticket can be opened at /<project_id>/<ticket_id>",
+      "met": true
+    },
+    {
+      "text": "Document detail and browser history follow canonical path routes",
+      "met": true
+    },
+    {
+      "text": "Unknown application paths return a useful not-found result",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "Define and test the canonical route parser and URL builder",
+      "met": true
+    },
+    {
+      "text": "Serve the UI shell for valid project routes while preserving API routing",
+      "met": true
+    },
+    {
+      "text": "Update UI navigation, links and browser history to use paths",
+      "met": true
+    },
+    {
+      "text": "Update route documentation and verify full checks",
+      "met": true
+    }
+  ],
+  "createdAt": "2026-11-24T15:49:51.777Z",
+  "updatedAt": "2026-11-24T16:01:42.812Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Added canonical path-based project, view, ticket and document navigation; root now opens the project overview.",
+    "verifiedBy": "npm run check passed (122 passed, 1 skipped), including UI route parser, generated script parsing, server direct-route and 404 tests.",
+    "changedFiles": [
+      "docs/implementation-decisions.md",
+      "docs/ui-review.md",
+      "docs/ui-wireframe.md",
+      "src/server.js",
+      "src/ui.js",
+      "test/server.test.js",
+      "test/ui.test.js",
+      ".plan/comments/01/01a20e4a-1350-7cd8-86da-b426162d1a2d.json",
+      ".plan/tickets/01/01a20e3f-cc21-7bb0-a603-6a62450cb6cf.json"
+    ]
+  },
+  "completedAt": "2026-11-24T16:01:05.345Z"
+}

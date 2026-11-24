@@ -1,7 +1,23 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { renderAppHtml } from '../src/ui.js';
+import { appPath, parseAppRoute, renderAppHtml } from '../src/ui.js';
 import vm from 'node:vm';
+
+test('application paths resolve projects, views, tickets and documents', () => {
+  const project = 'a1b2c3d4e5f6', ticket = '01a20e3f-cc21-7bb0-a603-6a62450cb6cf', document = '01a20e40-1234-7000-8000-000000000000';
+  assert.deepEqual(parseAppRoute('/'), { type: 'projects' });
+  assert.deepEqual(parseAppRoute('/' + project), { type: 'project', projectId: project, view: 'overview' });
+  assert.deepEqual(parseAppRoute('/' + project + '/list'), { type: 'project', projectId: project, view: 'tickets' });
+  assert.deepEqual(parseAppRoute('/' + project + '/board'), { type: 'project', projectId: project, view: 'board' });
+  assert.deepEqual(parseAppRoute('/' + project + '/' + ticket), { type: 'project', projectId: project, view: 'tickets', ticketId: ticket });
+  assert.deepEqual(parseAppRoute('/' + project + '/documents/' + document), { type: 'project', projectId: project, view: 'documents', documentId: document });
+  assert.equal(parseAppRoute('/not-a-project/list'), null);
+  assert.equal(parseAppRoute('/' + project + '/unknown/deeper'), null);
+  assert.equal(appPath(project), '/' + project);
+  assert.equal(appPath(project, 'tickets'), '/' + project + '/list');
+  assert.equal(appPath(project, 'ticket', ticket), '/' + project + '/' + ticket);
+  assert.equal(appPath(project, 'document', document), '/' + project + '/documents/' + document);
+});
 
 test('the web UI has a decisions view and its script parses', () => {
   const html = renderAppHtml('token');

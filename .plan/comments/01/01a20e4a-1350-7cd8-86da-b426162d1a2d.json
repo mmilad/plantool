@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e4a-1350-7cd8-86da-b426162d1a2d",
+  "ticketId": "01a20e3f-cc21-7bb0-a603-6a62450cb6cf",
+  "body": "Added canonical path-based project, view, ticket and document navigation; root now opens the project overview.",
+  "author": "codex",
+  "createdAt": "2026-11-24T16:01:05.360Z"
+}

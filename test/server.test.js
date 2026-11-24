@@ -141,7 +141,7 @@ test('serve from any directory lists registered projects and scopes the API per 
   const home=await fs.mkdtemp(path.join(os.tmpdir(),'plantool-home-'));const prev=process.env.PLANTOOL_HOME;process.env.PLANTOOL_HOME=home;t.after(async()=>{process.env.PLANTOOL_HOME=prev;await fs.rm(home,{recursive:true,force:true});});
   const {openProject}=await import('../src/index.js');const {registerProject}=await import('../src/registry.js');
   const mk=async name=>{const cwd=await fs.mkdtemp(path.join(os.tmpdir(),`plantool-multi-${name}-`));t.after(()=>fs.rm(cwd,{recursive:true,force:true}));await initProject({cwd,name});return openProject({cwd});};
-  const shop=await mk('Shop'),game=await mk('Game');await shop.tickets.create({title:'Cart'});await shop.tickets.create({title:'Checkout',status:'in_progress'});await game.tickets.create({title:'Level 1'});
+  const shop=await mk('Shop'),game=await mk('Game');await shop.tickets.create({title:'Cart'});await shop.tickets.create({title:'Checkout',status:'in_progress'});const level=await game.tickets.create({title:'Level 1'});
   await registerProject(shop);
   const outside=await fs.mkdtemp(path.join(os.tmpdir(),'plantool-outside-'));t.after(()=>fs.rm(outside,{recursive:true,force:true}));
   const app=await serve({cwd:outside,port:0});t.after(()=>new Promise(r=>app.server.close(r)));const host=new URL(app.url).host;
@@ -150,6 +150,9 @@ test('serve from any directory lists registered projects and scopes the API per 
   const added=await send(`${app.url}/api/projects`,'POST',w,JSON.stringify({path:game.root}));assert.equal(added.status,201);
   list=JSON.parse((await send(`${app.url}/api/projects`,'GET',{host})).body);assert.deepEqual(list.projects.map(p=>p.key),['GAME','SHOP']);
   const gameId=list.projects[0].id;const tree=JSON.parse((await send(`${app.url}/api/projects/${gameId}/tree`,'GET',{host})).body);assert.deepEqual(tree.items.map(x=>[x.title,x.key]),[['Level 1','GAME-1']]);
+  assert.match((await send(app.url,'GET',{host})).body,/route\.type==='projects'/,'root is the projects overview');
+  for(const route of [gameId,`${gameId}/list`,`${gameId}/board`,`${gameId}/${level.id}`,`${gameId}/documents`,`${gameId}/documents/01a20e40-1234-7000-8000-000000000000`])assert.equal((await send(`${app.url}/${route}`,'GET',{host})).status,200,route+' serves the app shell');
+  assert.equal((await send(`${app.url}/not-a-route`,'GET',{host})).status,404);
   const byKey=JSON.parse((await send(`${app.url}/api/projects/${list.projects[1].id}/tickets/SHOP-2`,'GET',{host})).body);assert.equal(byKey.title,'Checkout');
   assert.equal((await send(`${app.url}/api/tree`,'GET',{host})).status,404,'no default project outside a repository');
   assert.equal((await send(`${app.url}/api/projects/000000000000/tree`,'GET',{host})).status,404);
