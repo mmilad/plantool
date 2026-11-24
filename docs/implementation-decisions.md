@@ -271,7 +271,7 @@ The renamed 0.1.0 release candidate passed `npm run check` locally (119 passed, 
 
 - `/` always shows the project overview, including when `plantool serve` starts inside a project. The project from the start directory remains the default for legacy root-scoped API calls only.
 - `/<project-id>` opens a project's summary. Views use `/<project-id>/list`, `/<project-id>/board`, `/<project-id>/documents`, `/<project-id>/decisions`, `/<project-id>/blueprints`, `/<project-id>/design`, and `/<project-id>/roadmap`.
-- Tickets use `/<project-id>/<ticket-id>`; documents use `/<project-id>/documents/<document-id>`. Roadmap mode and filters stay in the query string, and comment targets stay in the fragment.
+- Direct ticket links use `/<project-id>/<ticket-id>`; tickets selected from the list use `/<project-id>/list/<ticket-id>` so the list context is retained. Documents use `/<project-id>/documents/<document-id>`. Roadmap mode and filters stay in the query string, and comment targets stay in the fragment.
 - The server serves the same UI shell for valid project paths. The client parses the path, and `pushState`/`popstate` preserve back, forward, reload, and shareable direct links. REST endpoints remain under `/api/`.
 
 ## Shared worktree claim paths (implemented 2026-11-24)

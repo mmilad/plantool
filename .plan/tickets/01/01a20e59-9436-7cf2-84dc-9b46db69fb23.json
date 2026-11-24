@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e59-9436-7cf2-84dc-9b46db69fb23",
+  "number": 79,
+  "title": "Support nested list ticket URLs",
+  "kind": "feature",
+  "description": "Extend browser routing, ticket links, and documentation so a task opened from the list resolves at /<project-id>/list/<task-id>.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "People need stable links that preserve the list as the ticket's navigation context: /<project-id>/list/<task-id>. Direct ticket links should remain supported.",
+  "acceptance": [
+    {
+      "text": "/<project-id>/list remains the ticket list",
+      "met": true
+    },
+    {
+      "text": "/<project-id>/list/<task-id> opens the list with that ticket selected",
+      "met": true
+    },
+    {
+      "text": "List-origin ticket navigation writes nested list paths while existing direct ticket paths continue to work",
+      "met": true
+    }
+  ],
+  "createdAt": "2026-11-24T16:18:01.398Z",
+  "updatedAt": "2026-11-24T16:21:24.290Z",
+  "assignee": null,
+  "todos": [
+    {
+      "text": "Add the nested list ticket route to the parser and URL builder",
+      "met": true
+    },
+    {
+      "text": "Preserve the list context in ticket links and browser history",
+      "met": true
+    },
+    {
+      "text": "Document the route and run full checks",
+      "met": true
+    }
+  ],
+  "outcome": {
+    "summary": "Added nested list ticket URLs, routed list-origin links through /<project-id>/list/<ticket-id>, preserved list context on browser back, and documented the paths.",
+    "verifiedBy": "npm run check passed: 122 tests passed, 1 optional real-model test skipped; includes route parsing, generated UI script parsing, server shell for nested list ticket path, and 404 handling.",
+    "changedFiles": [
+      "docs/implementation-decisions.md",
+      "docs/ui-wireframe.md",
+      "src/ui.js",
+      "test/server.test.js",
+      "test/ui.test.js",
+      ".plan/tickets/01/01a20e59-9436-7cf2-84dc-9b46db69fb23.json"
+    ]
+  },
+  "completedAt": "2026-11-24T16:21:11.386Z"
+}

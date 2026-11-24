@@ -16,6 +16,7 @@ export function parseAppRoute(pathname) {
     if (views[rest[0]]) return { type: 'project', projectId, view: views[rest[0]] };
     return { type: 'project', projectId, view: 'tickets', ticketId: rest[0] };
   }
+  if (rest.length === 2 && rest[0] === 'list' && rest[1]) return { type: 'project', projectId, view: 'tickets', ticketId: rest[1], list: true };
   if (rest.length === 2 && rest[0] === 'documents' && rest[1]) return { type: 'project', projectId, view: 'documents', documentId: rest[1] };
   return null;
 }
@@ -24,6 +25,7 @@ export function appPath(projectId, view = 'overview', resourceId = null) {
   if (!projectId) return '/';
   const base = '/' + encodeURIComponent(projectId);
   if (view === 'ticket') return base + '/' + encodeURIComponent(resourceId || '');
+  if (view === 'list-ticket') return base + '/list/' + encodeURIComponent(resourceId || '');
   if (view === 'document') return base + '/documents/' + encodeURIComponent(resourceId || '');
   const segment = { overview: '', summary: '', tickets: 'list', list: 'list', board: 'board', documents: 'documents', decisions: 'decisions', blueprints: 'blueprints', design: 'design', roadmap: 'roadmap' }[view];
   return base + (segment ? '/' + segment : '');
@@ -263,7 +265,7 @@ export function renderAppHtml(token, { defaultProjectId = null } = {}) {
     function priorityOptions(){const select=byId('priority-filter');const values=[...new Set(state.items.map(ticket=>ticket.priority).filter(Boolean))];select.innerHTML='<option value="">All priorities</option>'+values.map(value=>'<option value="'+esc(value)+'">'+esc(priorityLabel(value))+'</option>').join('');}
     function renderFilterChips(f){const chips=[];const name={status:'Status',priority:'Priority',kind:'Kind',label:'Label'};if(f.query)chips.push(['tree-filter','Text: “'+f.query+'”']);if(f.status)chips.push(['status-filter',name.status+': '+statusLabel(f.status)]);if(f.priority)chips.push(['priority-filter',name.priority+': '+priorityLabel(f.priority)]);if(f.kind)chips.push(['kind-filter',name.kind+': '+f.kind]);if(f.label)chips.push(['label-filter',name.label+': '+f.label]);if(f.scope)chips.push(['scope','Branch: '+(treeIndex().byId.get(f.scope)?.title||'')]);const host=byId('filter-chips');if(!chips.length){host.innerHTML='';return;}host.innerHTML='<span class="filter-count" id="filter-count"></span>'+chips.map(([id,text])=>'<button type="button" class="filter-chip" data-clear="'+id+'" aria-label="Remove filter '+esc(text)+'">'+esc(text)+' '+uiIcon('close')+'</button>').join('')+(chips.length>1?'<button type="button" class="filter-reset" data-clear="all">Reset all</button>':'');host.querySelectorAll('[data-clear]').forEach(button=>button.addEventListener('click',()=>{const id=button.dataset.clear;const clear=x=>{if(x==='scope')state.scopeId=null;else byId(x).value='';};if(id==='all')['tree-filter','status-filter','priority-filter','kind-filter','label-filter','scope'].forEach(clear);else clear(id);state.filterLimit=200;renderTree();byId('tree-filter').focus();}));}
     function projectHref(view='overview'){return appPath(state.projectId,view);}
-    function ticketHref(ticket){return appPath(state.projectId,'ticket',ticket.id);}
+    function ticketHref(ticket){return appPath(state.projectId,'list-ticket',ticket.id);}
     function findProject(ref){if(!ref)return null;const r=String(ref);return state.projects.find(x=>x.id===r)||state.projects.find(x=>x.key&&x.key.toLowerCase()===r.toLowerCase())||null;}
     async function loadProjects(){try{const response=await fetch('/api/projects',{headers:{'x-plantool-csrf':csrf}});const r=await response.json().catch(()=>({}));if(!response.ok)throw new Error(r.error||'The server answered '+response.status);state.projects=r.projects||[];state.defaultProjectId=r.defaultProjectId;state.projectsError=null;return state.projects;}catch(error){state.projectsError=error.message||'The server is not reachable';throw error;}}
     function resetProjectState(){Object.assign(state,{items:[],total:0,offset:0,activeId:null,recentId:null,index:null,indexSize:-1,expanded:new Set(),branchLimit:new Map(),filterLimit:200,loadingMore:false,treeLoaded:false,documents:[],documentsLoaded:false,documentCache:new Map(),currentDocumentId:null,docDraft:null,search:null,scopeId:null,version:null,versionParts:null});state.treeGeneration++;state.detailRequest++;state.roadmapRequest++;state.roadmapStructure={items:[],offset:0,total:0,snapshot:null};state.roadmapTimeline={items:[],offset:0,total:0,snapshot:null};state.roadmapDeps={data:null,root:'',includeFinished:false,snapshot:null};state.roadmapGraph={root:''};state.roadmapMode='structure';state.roadmapCollapsed.clear();state.roadmapFocusId=null;byId('roadmap-blocked').checked=false;byId('roadmap-range').value='90';byId('roadmap-deps-root').value='';byId('roadmap-graph-root').value='';byId('roadmap-deps-finished').checked=false;['roadmap-search','roadmap-status','roadmap-kind','roadmap-timeline-kind','tree-filter','status-filter','priority-filter','kind-filter','label-filter','board-search','board-kind','board-parent'].forEach(id=>{if(byId(id))byId(id).value='';});byId('tree').innerHTML='';byId('doc-list').innerHTML='';byId('doc-reader').innerHTML='<p class="lead">Select a document from the list.</p>';byId('ticket-content').innerHTML='<div class="welcome-card"><h2>Select a ticket</h2><p>Select a ticket in the list to see its details.</p></div>';byId('search-results').hidden=true;byId('global-search').value='';}
@@ -286,7 +288,7 @@ export function renderAppHtml(token, { defaultProjectId = null } = {}) {
       const commentId=url.hash.startsWith('#comment=')?decodeURIComponent(url.hash.slice(9)):null;
       if(route.documentId){await openDocumentView(route.documentId);return;}
       if(route.ticketId){await openTicket(route.ticketId,{commentId,restore,roadmap:url.searchParams.get('view')==='roadmap'});return;}
-      state.activeId=null;state.detailRequest++;byId('app-shell').dataset.mobileDetail='false';setView(route.view);renderTree();
+      state.activeId=null;state.detailRequest++;byId('app-shell').dataset.mobileDetail='false';setView(route.view);if(route.view==='tickets'&&restore)restoreListState(restore);else renderTree();
     }
     function renderRoadmapMode(){const status=byId('roadmap-status');if(status&&status.dataset.projectId!==state.projectId){status.innerHTML='<option value="">All statuses</option>'+((boot.statuses||[]).map(value=>'<option value="'+esc(value)+'">'+esc(statusLabel(value))+'</option>').join(''));status.dataset.projectId=state.projectId||'';}const timeline=state.roadmapMode==='timeline',deps=state.roadmapMode==='deps',graph=state.roadmapMode==='graph';byId('roadmap-structure').hidden=timeline||deps||graph;byId('roadmap-timeline').hidden=!timeline;byId('roadmap-deps').hidden=!deps;byId('roadmap-graph').hidden=!graph;document.querySelectorAll('[data-roadmap-mode]').forEach(button=>button.setAttribute('aria-selected',String(button.dataset.roadmapMode===state.roadmapMode)));}
     function roadmapParams(base,filter){const p=new URLSearchParams({limit:'100',offset:String(filter.offset||0)});if(filter.snapshot)p.set('snapshot',filter.snapshot);if(filter.kind)p.set('kind',filter.kind);return p;}
@@ -347,13 +349,14 @@ export function renderAppHtml(token, { defaultProjectId = null } = {}) {
       const view=extra.view||state.view,params=new URLSearchParams();
       if(id&&(extra.roadmap||state.view==='roadmap')){params.set('view','roadmap');params.set('mode',state.roadmapMode);if(state.roadmapMode==='deps'){if(state.roadmapDeps.root)params.set('root',state.roadmapDeps.root);if(state.roadmapDeps.includeFinished)params.set('includeFinished','true');}if(state.roadmapMode==='graph'&&state.roadmapGraph.root)params.set('root',state.roadmapGraph.root);}
       if(!id&&view==='roadmap'){params.set('mode',state.roadmapMode);if(state.roadmapMode==='deps'){if(state.roadmapDeps.root)params.set('root',state.roadmapDeps.root);if(state.roadmapDeps.includeFinished)params.set('includeFinished','true');}if(state.roadmapMode==='graph'&&state.roadmapGraph.root)params.set('root',state.roadmapGraph.root);}
-      const path=(id?appPath(state.projectId,'ticket',id):appPath(state.projectId,view))+(params.toString()?'?'+params.toString():'')+(commentId?'#comment='+encodeURIComponent(commentId):'');
+      const path=(id?appPath(state.projectId,extra.listRoute?'list-ticket':'ticket',id):appPath(state.projectId,view))+(params.toString()?'?'+params.toString():'')+(commentId?'#comment='+encodeURIComponent(commentId):'');
       const entry={view:id?'tickets':view,ticketId:id||null,listState:extra.listState||listState()};
       if(mode==='push')history.pushState(entry,'',path);else history.replaceState(entry,'',path);
     }
     async function openTicket(id,{push=false,commentId=null,restore=null,keepFocus=false,roadmap=false}={}){if(id&&!/^[0-9a-f]{8}-/i.test(id)){const hit=state.items.find(x=>keyOf(x).toLowerCase()===String(id).toLowerCase());if(hit)id=hit.id;else{try{id=(await api('/api/tickets/'+encodeURIComponent(id))).id;}catch{}}}
       const previousState=listState();
-      if(push)updateTicketUrl(id,commentId,'push',{listState:previousState,roadmap:roadmap||state.view==='roadmap'});
+      if(push&&state.view==='tickets')history.replaceState({...history.state,view:'tickets',listState:previousState},'');
+      if(push)updateTicketUrl(id,commentId,'push',{listState:previousState,roadmap:roadmap||state.view==='roadmap',listRoute:state.view==='tickets'});
       state.activeId=id;setView('tickets');byId('app-shell').dataset.mobileDetail='true';
       if(restore)restoreListState(restore);expandTo(id);renderTree();byId('tree').querySelector('[aria-current="true"]')?.scrollIntoView({block:'nearest'});
       const sequence=++state.detailRequest;

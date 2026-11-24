@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e5c-7a6a-7073-9e75-a4d510aeb834",
+  "ticketId": "01a20e59-9436-7cf2-84dc-9b46db69fb23",
+  "body": "Added nested list ticket URLs, routed list-origin links through /<project-id>/list/<ticket-id>, preserved list context on browser back, and documented the paths.",
+  "author": "codex",
+  "createdAt": "2026-11-24T16:21:11.402Z"
+}

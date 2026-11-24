@@ -151,7 +151,7 @@ test('serve from any directory lists registered projects and scopes the API per 
   list=JSON.parse((await send(`${app.url}/api/projects`,'GET',{host})).body);assert.deepEqual(list.projects.map(p=>p.key),['GAME','SHOP']);
   const gameId=list.projects[0].id;const tree=JSON.parse((await send(`${app.url}/api/projects/${gameId}/tree`,'GET',{host})).body);assert.deepEqual(tree.items.map(x=>[x.title,x.key]),[['Level 1','GAME-1']]);
   assert.match((await send(app.url,'GET',{host})).body,/route\.type==='projects'/,'root is the projects overview');
-  for(const route of [gameId,`${gameId}/list`,`${gameId}/board`,`${gameId}/${level.id}`,`${gameId}/documents`,`${gameId}/documents/01a20e40-1234-7000-8000-000000000000`])assert.equal((await send(`${app.url}/${route}`,'GET',{host})).status,200,route+' serves the app shell');
+  for(const route of [gameId,`${gameId}/list`,`${gameId}/list/${level.id}`,`${gameId}/board`,`${gameId}/${level.id}`,`${gameId}/documents`,`${gameId}/documents/01a20e40-1234-7000-8000-000000000000`])assert.equal((await send(`${app.url}/${route}`,'GET',{host})).status,200,route+' serves the app shell');
   assert.equal((await send(`${app.url}/not-a-route`,'GET',{host})).status,404);
   const byKey=JSON.parse((await send(`${app.url}/api/projects/${list.projects[1].id}/tickets/SHOP-2`,'GET',{host})).body);assert.equal(byKey.title,'Checkout');
   assert.equal((await send(`${app.url}/api/tree`,'GET',{host})).status,404,'no default project outside a repository');

@@ -8,6 +8,7 @@ test('application paths resolve projects, views, tickets and documents', () => {
   assert.deepEqual(parseAppRoute('/'), { type: 'projects' });
   assert.deepEqual(parseAppRoute('/' + project), { type: 'project', projectId: project, view: 'overview' });
   assert.deepEqual(parseAppRoute('/' + project + '/list'), { type: 'project', projectId: project, view: 'tickets' });
+  assert.deepEqual(parseAppRoute('/' + project + '/list/' + ticket), { type: 'project', projectId: project, view: 'tickets', ticketId: ticket, list: true });
   assert.deepEqual(parseAppRoute('/' + project + '/board'), { type: 'project', projectId: project, view: 'board' });
   assert.deepEqual(parseAppRoute('/' + project + '/' + ticket), { type: 'project', projectId: project, view: 'tickets', ticketId: ticket });
   assert.deepEqual(parseAppRoute('/' + project + '/documents/' + document), { type: 'project', projectId: project, view: 'documents', documentId: document });
@@ -15,6 +16,7 @@ test('application paths resolve projects, views, tickets and documents', () => {
   assert.equal(parseAppRoute('/' + project + '/unknown/deeper'), null);
   assert.equal(appPath(project), '/' + project);
   assert.equal(appPath(project, 'tickets'), '/' + project + '/list');
+  assert.equal(appPath(project, 'list-ticket', ticket), '/' + project + '/list/' + ticket);
   assert.equal(appPath(project, 'ticket', ticket), '/' + project + '/' + ticket);
   assert.equal(appPath(project, 'document', document), '/' + project + '/documents/' + document);
 });
