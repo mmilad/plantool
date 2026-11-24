@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e3a-950a-7c90-a186-d172a384727e",
+  "ticketId": "01a20e38-85b2-760d-9707-b8986b53cb23",
+  "body": "Moved shared worktree claim files from .git into the machine-local PLANTOOL_HOME store and documented the path.",
+  "author": "codex",
+  "createdAt": "2026-11-24T15:44:09.994Z"
+}

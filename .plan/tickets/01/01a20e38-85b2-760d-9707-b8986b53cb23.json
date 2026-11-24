@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e38-85b2-760d-9707-b8986b53cb23",
+  "number": 76,
+  "title": "Store shared worktree claims outside .git",
+  "kind": "task",
+  "description": "Move ephemeral cross-worktree claim registry out of the common Git directory and into the machine-local Plantool data directory, preserving coordination between worktrees.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "Agent environments may be permitted to read .git but not write there. Claiming tickets currently fails because Plantool creates .git/plantool/claims.lock and claims.json.",
+  "acceptance": [
+    {
+      "text": "No Plantool command creates or writes claim files under .git",
+      "met": true
+    },
+    {
+      "text": "Claims remain shared between worktrees in the same local environment",
+      "met": true
+    },
+    {
+      "text": "The claim storage location and override are documented",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "Move claim registry under PLANTOOL_HOME",
+      "met": true
+    },
+    {
+      "text": "Update worktree claim test to verify storage and coordination",
+      "met": true
+    },
+    {
+      "text": "Document the local claim store",
+      "met": true
+    },
+    {
+      "text": "Run full checks and validate no repository .git writes",
+      "met": true
+    }
+  ],
+  "createdAt": "2026-11-24T15:41:54.994Z",
+  "updatedAt": "2026-11-24T15:44:09.978Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Moved shared worktree claim files from .git into the machine-local PLANTOOL_HOME store and documented the path.",
+    "verifiedBy": "npm run check (121 passed, 1 skipped); claim test confirms cross-worktree coordination and absence of .git/plantool; plantool check (0 warnings); git diff --check.",
+    "changedFiles": [
+      "docs/implementation-decisions.md",
+      "src/claims.js",
+      "test/claims.test.js",
+      ".plan/tickets/01/01a20e38-85b2-760d-9707-b8986b53cb23.json"
+    ]
+  },
+  "completedAt": "2026-11-24T15:44:09.978Z"
+}

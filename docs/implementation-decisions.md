@@ -69,7 +69,7 @@ This file records material choices made while implementing the first usable rele
 
 - Readiness: a ticket is ready when it is `todo`, has no open children, and neither it nor an ancestor has an open (not done/cancelled) `blocks` dependency or a cancelled ancestor. Done or cancelled blockers never block rollups or readiness.
 - `plantool next` ranking: effective priority (explicit priority wins; `normal` inherits from the nearest ancestor with an explicit priority), transitive unblock count (including edges of ancestors), focus on parents with work in progress, then creation time and ID for determinism. Every row carries human-readable reasons.
-- Claims are stored on the ticket as `assignee { agent, claimedAt, expiresAt }` so they are visible in Git and across worktrees; default lease 60 minutes. Expired leases are offered again by `next` and can be claimed by another agent. A short lock directory in the OS temp folder (keyed by project root) serialises concurrent claims in one checkout; nothing is written to the repository for locking.
+- Claims are stored on the ticket as `assignee { agent, claimedAt, expiresAt }` so they are visible in Git; default lease 60 minutes. Expired leases are offered again by `next` and can be claimed by another agent. A short lock directory in the OS temp folder (keyed by project root) serialises concurrent claims in one checkout. Active claims are also mirrored to a machine-local store shared by worktrees.
 - `plantool done` refuses to finish a ticket with open descendants or blockers unless forced, clears the claim, records an optional note as a comment authored by the agent, and returns tickets that became ready.
 - `plantool agent onboard` only prints a briefing for agents (tools, node types, states, relationships, workflows). It writes nothing; agents decide for themselves what they keep.
 - Line endings: `.gitattributes` enforces LF for text files; planning-document parsing also tolerates CRLF.
@@ -132,11 +132,11 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 - An item is covered in one of three ways, chosen by the planner per item and not by the checklist (owner guidance 2026-11-12, PLAN-14): a child ticket when it is work of its own (`apply --only`), an answer on the ticket itself when it is information (`answer --note`, stored in `checklist.answered`), or a skip with a reason. `checklist attach` puts the checklist on a ticket without creating tickets. `apply` without `--only` still creates every required item.
 - Suggestions are keyword based (title and labels, or a `checklist:<name>` label) and only shown, never applied automatically. A ticket of kind `feature` is also offered the `feature` checklist (2026-11-11).
 
-## Claims across worktrees (PM-82, 2026-11-08)
+## Claims across worktrees (PM-82, 2026-11-08; storage updated 2026-11-24)
 
-- Each worktree has its own `.plan/`, so a claim used to be visible elsewhere only after a merge. Claims are now mirrored in the common Git directory (`<repo>/.git/plantool/claims.json`), found without spawning git (`.git` directory, or `.git` file → `gitdir` → `commondir`).
+- Each worktree has its own `.plan/`, so a claim used to be visible elsewhere only after a merge. The shared claim registry is stored at `$PLANTOOL_HOME/claims/<repo-id>/claims.json` (default `~/.plan/claims/`), keyed by the common Git directory (`.git` directory, or `.git` file → `gitdir` → `commondir`). This keeps worktree coordination without requiring writes under `.git` or adding runtime state to the repository.
 - `claim` fails with CONFLICT when another worktree holds an active lease (unless `--force`), `next` skips tickets claimed elsewhere, `release`/`done` remove the entry. Expired leases are cleaned up on the next claim.
-- The ticket files remain the source of truth inside a worktree; the shared file is only coordination and is never committed. No Git repository or `PLANTOOL_SHARED_CLAIMS=0` → no-op.
+- The ticket files remain the source of truth inside a worktree; the local shared file is only coordination. `PLANTOOL_HOME` may point to an alternate writable local directory. No Git repository or `PLANTOOL_SHARED_CLAIMS=0` → no-op.
 
 ## Verification and remaining release work
 

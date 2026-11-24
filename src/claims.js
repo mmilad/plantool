@@ -1,9 +1,12 @@
 // Claims shared between Git worktrees of the same repository.
 // Each worktree has its own .plan/ files, so a claim in one worktree is invisible to the others until a merge.
-// The shared registry lives in the common Git directory (<repo>/.git/plantool/claims.json), which all worktrees share
-// and which is never committed. Without Git (or with PLANTOOL_SHARED_CLAIMS=0) everything here is a no-op.
+// The shared registry lives in the machine-local Plantool home, keyed by the common Git directory. This keeps
+// worktree coordination without requiring write access to .git or adding runtime state to the repository.
+// Without Git (or with PLANTOOL_SHARED_CLAIMS=0) everything here is a no-op.
+import os from 'node:os';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { ConflictError } from './index.js';
 
 /** The common Git directory for a checkout, or null when the project is not inside a Git repository. */
@@ -27,7 +30,11 @@ async function registry(p) {
   if (process.env.PLANTOOL_SHARED_CLAIMS === '0') return null;
   if (p._claimsDir !== undefined) return p._claimsDir;
   const common = await gitCommonDir(p.root);
-  p._claimsDir = common ? path.join(common, 'plantool') : null;
+  if (!common) return p._claimsDir = null;
+  const home = process.env.PLANTOOL_HOME || path.join(os.homedir(), '.plan');
+  const commonPath = path.resolve(common);
+  const repoId = createHash('sha256').update(process.platform === 'win32' ? commonPath.toLowerCase() : commonPath).digest('hex').slice(0, 24);
+  p._claimsDir = path.join(home, 'claims', repoId);
   return p._claimsDir;
 }
 
