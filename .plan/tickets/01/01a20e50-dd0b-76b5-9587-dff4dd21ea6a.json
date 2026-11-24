@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e50-dd0b-76b5-9587-dff4dd21ea6a",
+  "number": 78,
+  "title": "Canonicalize shared Git directory for worktree claims",
+  "kind": "bug",
+  "description": "Canonicalize the common Git directory before deriving the shared claims registry path, and cover aliases that resolve to the same physical repository path.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "macOS can expose the same common Git directory through /var and /private/var paths, causing worktrees to calculate different machine-local claim registries. CI on macOS and one Windows runner then offered tickets claimed elsewhere.",
+  "acceptance": [
+    {
+      "text": "Equivalent paths to the same common Git directory use one shared claim registry",
+      "met": true
+    },
+    {
+      "text": "Cross-worktree claims remain hidden and conflicting claims are rejected across supported platforms",
+      "met": true
+    }
+  ],
+  "createdAt": "2026-11-24T16:08:30.218Z",
+  "updatedAt": "2026-11-24T16:15:10.788Z",
+  "assignee": null,
+  "repro": {
+    "steps": [
+      "Create a Git repository and a linked worktree",
+      "Claim a ticket in one worktree",
+      "Ask for ready work in the other worktree"
+    ],
+    "expected": "The other worktree does not offer the claimed ticket and a conflicting claim is rejected.",
+    "actual": "GitHub Actions reported the claimed ticket as ready in macOS and Windows matrix jobs."
+  },
+  "outcome": {
+    "summary": "Canonicalized the common Git directory with realpath before deriving the shared claim registry key; updated release documentation with the cross-platform CI blocker and current 0.1.2 gates.",
+    "verifiedBy": "npm run check passed (122 passed, 1 optional model test skipped); plantool check reports 0 warnings; npm pack --dry-run lists 25 files for @mmilad/plantool@0.1.2 and excludes plan data.",
+    "changedFiles": [
+      "docs/implementation-decisions.md",
+      "docs/open-questions.md",
+      "docs/product-vision.md",
+      "src/claims.js",
+      ".plan/tickets/01/01a20e50-dd0b-76b5-9587-dff4dd21ea6a.json"
+    ]
+  },
+  "completedAt": "2026-11-24T16:15:10.788Z"
+}

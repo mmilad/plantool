@@ -29,7 +29,7 @@ This is intended product fit, not a claim that no other tool combines these trai
 
 Before work begins, people should see the parts, dependencies, and open questions that shape the outcome. A ticket called "Header" may need a logo, a menu, mobile and desktop navigation, states, accessibility, and contracts for the data it shows. Plan helps people and agents uncover these parts up front through decomposition, dependencies, code plans and contracts, and reusable checklists.
 
-The current package is `@mmilad/plantool` and the executable is `plantool`. The package remains unpublished pending release checks.
+The public package is `@mmilad/plantool` and the executable is `plantool`. The current local release candidate is version `0.1.2`; see `implementation-decisions.md` for its release gates.
 
 ## Principles
 

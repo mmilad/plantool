@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20e56-f9d3-7b1d-b1a2-322def694e6a",
+  "ticketId": "01a20e50-dd0b-76b5-9587-dff4dd21ea6a",
+  "body": "Canonicalized the common Git directory with realpath before deriving the shared claim registry key; updated release documentation with the cross-platform CI blocker and current 0.1.2 gates.",
+  "author": "codex",
+  "createdAt": "2026-11-24T16:15:10.803Z"
+}

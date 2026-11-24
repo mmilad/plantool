@@ -235,7 +235,16 @@ This supersedes the earlier single-project server boundary and the "no machine-g
 
 ## npm releases and next release readiness
 
-The owner reports that `@mmilad/plantool@0.1.0` has been published. Version `0.1.1` is being prepared locally with the `in_planning` workflow status; it has not been published.
+The owner reported publishing `@mmilad/plantool@0.1.0`. This record does not confirm the current registry state. The local package version is now `0.1.2`; verify the exact version is still available immediately before publishing.
+
+### 0.1.2 release candidate (2026-11-24)
+
+- `package.json` is bumped to `0.1.2`. Local `npm run check` passes on Windows/Node 24 (122 passed, 1 optional real-model test skipped).
+- The latest pushed commit, `54fbfda` (path-based UI navigation), has a failed Actions matrix: the shared-worktree-claims test fails on macOS and at least one Windows job. The local fix canonicalizes the common Git directory with `realpath`; push it and require a fresh successful Windows/macOS/Linux matrix before release.
+- Local package audit: `npm pack --dry-run --json` lists 25 files and excludes `.plan/`, tests, and development docs. The tarball installed offline in a clean consumer project; its Windows command shim printed `@mmilad/plantool 0.1.2`, initialized a project, and `plantool check` reported 0 warnings. The repository's own `plantool check` also reported 0 warnings. Repeat the package check on the final release commit.
+- Still required: a fresh successful cross-platform Actions run on the final pushed commit and a live npm check that `0.1.2` is unused. Registry lookup could not run from this environment because `registry.npmjs.org` DNS access is unavailable.
+- Immediately before publishing, confirm `0.1.2` has not already been used on npm, confirm the signed-in account can publish to `@mmilad`, and use public access plus the account's configured two-factor flow.
+- The owner publishes. No publish command is run as part of this audit.
 
 ### 0.1.0 release audit history (2026-11-20)
 
@@ -247,16 +256,16 @@ The 0.1.0 audit recorded these release checks and outcomes:
 - The latest GitHub Actions run visible during this review, [run 20](https://github.com/mmilad/plantool/actions/runs/43633080902) on commit `a5e48ba`, failed. Windows and macOS exposed a brittle worktree path assertion; macOS also exposed a comment paging test that assumed unique millisecond timestamps. The local branch now compares real paths and waits for distinct timestamps in that fixture. Those test changes still need a successful fresh matrix run before release.
 - Run the release-candidate checks against the exact commit for each new release: syntax and tests, declaration/package contents, tarball installation, CLI and API smoke checks, and the opt-in semantic-model flow. Existing tickets record successful checks on Windows Node 24; that is not a substitute for checking the release commit.
 - `npm pack --dry-run --json` lists the expected 25 files under `@mmilad/plantool`: package metadata, executable, source, schema, README and MIT license; it excludes tests, plan data and development docs. A real tarball was installed in a clean temporary project with optional dependencies omitted; the installed `plantool --version` returned `@mmilad/plantool 0.1.0` and package metadata pointed to `bin/plantool.js`.
-- The owner confirmed control of the `@mmilad` scope and published 0.1.0. For 0.1.1, verify that the version remains unused, use npm's required two-factor authentication or an appropriately scoped granular access token, and inspect/install the exact tarball before publishing ([publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/)).
-- PLAN-70 is complete. PLAN-69 covers the first release audit; 0.1.1 readiness must be checked against its own exact commit and CI run.
+- The owner confirmed control of the `@mmilad` scope and published 0.1.0. For each later release, verify the version is unused, use npm's configured two-factor authentication or an appropriately scoped granular access token, and inspect/install the exact tarball before publishing ([publishing guidance](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/)).
+- PLAN-70 is complete. PLAN-69 records the first-release audit; all later versions require checks against their own exact commit and CI run.
 
 The owner chose to block the first npm release until ticket creation is retry-safe. The implementation accepts an optional `requestKey`, stores a canonical SHA-256 payload fingerprint with the ticket, replays identical requests, and rejects key reuse with a changed payload. The browser preserves the attempted draft and key in session storage. This gate was resolved for 0.1.0.
 
 ### Product and repository rename (2026-11-20)
 
-The owner renamed the GitHub repository to `mmilad/plantool` and updated the local `origin`. The product/project identity is `Plan`; the npm package and primary executable are `@mmilad/plantool` and `plantool`. The local canonical project directory is `.plan/`, with project key `PLAN`; machine-local registry/cache defaults use `~/.plan`, and environment variables use the `PLANTOOL_` prefix. We chose the descriptive command `plantool` over the proposed short alias `pt` to keep the command aligned with the package and avoid a generic command name. No compatibility alias is included because the package has not been published.
+The owner renamed the GitHub repository to `mmilad/plantool` and updated the local `origin`. The product/project identity is `Plan`; the npm package and primary executable are `@mmilad/plantool` and `plantool`. The local canonical project directory is `.plan/`, with project key `PLAN`; machine-local registry/cache defaults use `~/.plan`, and environment variables use the `PLANTOOL_` prefix. We chose the descriptive command `plantool` over the proposed short alias `pt` to keep the command aligned with the package and avoid a generic command name. The published CLI remains `plantool` without a `pt` compatibility alias.
 
-The renamed release candidate passed `npm run check` locally (119 passed, 0 failed, 1 optional real-model test skipped), `plantool check` (0 warnings), and installation of a real tarball in a clean temporary project. A fresh cross-platform GitHub Actions run on the renamed commit and current npm package/version/authentication checks remain release gates. For a public first release, npm's documented command is `npm publish --access public`; no publish command was run during this audit.
+The renamed 0.1.0 release candidate passed `npm run check` locally (119 passed, 0 failed, 1 optional real-model test skipped), `plantool check` (0 warnings), and installation of a real tarball in a clean temporary project. These results are historical and do not replace the 0.1.2 gates above.
 
 ## Browser URL navigation (implemented 2026-11-24)
 
@@ -264,3 +273,7 @@ The renamed release candidate passed `npm run check` locally (119 passed, 0 fail
 - `/<project-id>` opens a project's summary. Views use `/<project-id>/list`, `/<project-id>/board`, `/<project-id>/documents`, `/<project-id>/decisions`, `/<project-id>/blueprints`, `/<project-id>/design`, and `/<project-id>/roadmap`.
 - Tickets use `/<project-id>/<ticket-id>`; documents use `/<project-id>/documents/<document-id>`. Roadmap mode and filters stay in the query string, and comment targets stay in the fragment.
 - The server serves the same UI shell for valid project paths. The client parses the path, and `pushState`/`popstate` preserve back, forward, reload, and shareable direct links. REST endpoints remain under `/api/`.
+
+## Shared worktree claim paths (implemented 2026-11-24)
+
+Git can expose one common directory through multiple filesystem paths, notably `/var/...` and `/private/var/...` on macOS. Hashing the unresolved paths created separate machine-local claim registries for linked worktrees, so one checkout could offer a ticket claimed from another. Resolve the common Git directory with `realpath` before deriving its registry key; fall back to the normalized path if resolution fails. The existing worktree integration test covers shared claims and conflicting claims. CI for the preceding UI-navigation commit failed this test on macOS and Windows, so the fix still needs a fresh cross-platform Actions run after it is pushed.

@@ -32,7 +32,10 @@ async function registry(p) {
   const common = await gitCommonDir(p.root);
   if (!common) return p._claimsDir = null;
   const home = process.env.PLANTOOL_HOME || path.join(os.homedir(), '.plan');
-  const commonPath = path.resolve(common);
+  // Worktree gitfiles may resolve the same common directory through an OS alias
+  // (for example /var/... versus /private/var/... on macOS). Hash its physical
+  // path so every worktree reaches the same machine-local registry.
+  const commonPath = await fs.realpath(common).catch(() => path.resolve(common));
   const repoId = createHash('sha256').update(process.platform === 'win32' ? commonPath.toLowerCase() : commonPath).digest('hex').slice(0, 24);
   p._claimsDir = path.join(home, 'claims', repoId);
   return p._claimsDir;
