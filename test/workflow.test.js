@@ -104,7 +104,7 @@ test('concurrent claims by different agents leave exactly one owner', async t =>
 test('agent onboard prints the briefing and writes nothing', async t => {
   const p = await project(t); const before = await fs.readdir(p.root);
   const text = onboardText();
-  assert.match(text, /## Keep what you learned/); assert.match(text, /AGENTS\.md/); assert.match(text, /outside `\.plan\/`/);
+  assert.match(text, /## Keep what you learned/); assert.match(text, /configured Plantool MCP server/); assert.match(text, /Do not tell every new session to rerun this briefing/); assert.match(text, /MCP must be configured in the agent host/); assert.match(text, /outside `\.plan\/`/);
   for (const word of ['plantool guide', 'implements', 'blocks', 'todo', 'in_progress', 'MCP', 'Language', 'in English']) assert.ok(text.includes(word), `briefing mentions ${word}`);
   assert.deepEqual(await fs.readdir(p.root), before);
 });

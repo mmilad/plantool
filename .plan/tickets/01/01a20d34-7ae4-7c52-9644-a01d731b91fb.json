@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20d34-7ae4-7c52-9644-a01d731b91fb",
+  "number": 75,
+  "title": "Make agent setup MCP-first and avoid repeated onboard calls",
+  "kind": "task",
+  "description": "Update AGENTS.md and generated onboarding so agents use the configured Plantool MCP server when available, and use the CLI briefing only as a fallback. Do not ask each future session to rerun onboarding.",
+  "status": "done",
+  "priority": "normal",
+  "labels": [],
+  "properties": {},
+  "parentId": null,
+  "why": "The current generated onboarding asks agents to add a note that tells future sessions to run plantool agent onboard, which can cause repeated startup work. MCP already provides concise server instructions and an on-demand guide.",
+  "acceptance": [
+    {
+      "text": "AGENTS.md gives MCP-first guidance with a CLI fallback",
+      "met": true
+    },
+    {
+      "text": "Generated onboarding no longer asks agents to rerun onboard in every new agent context",
+      "met": true
+    },
+    {
+      "text": "MCP setup requirement and fallback are clear",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "Update repository agent instructions",
+      "met": true
+    },
+    {
+      "text": "Update generated onboarding guidance",
+      "met": true
+    },
+    {
+      "text": "Verify docs and checks",
+      "met": true
+    }
+  ],
+  "createdAt": "2026-11-24T10:57:52.868Z",
+  "updatedAt": "2026-11-24T11:00:32.767Z",
+  "assignee": null,
+  "outcome": {
+    "summary": "Made the repository guidance MCP-first with a CLI fallback and stopped generated onboarding from asking each future session to rerun the briefing.",
+    "verifiedBy": "npm run check (121 passed, 1 skipped); onboard output checked; node --check src/onboard.js; git diff --check.",
+    "changedFiles": [
+      "AGENTS.md",
+      "src/onboard.js",
+      "test/workflow.test.js",
+      ".plan/tickets/01/01a20d34-7ae4-7c52-9644-a01d731b91fb.json"
+    ]
+  },
+  "completedAt": "2026-11-24T11:00:32.767Z"
+}

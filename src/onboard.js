@@ -89,12 +89,12 @@ Search covers ${list(SEARCH_TYPES)} by text, and semantically when the index is 
 
 ## Keep what you learned
 
-A later session starts without this briefing. Make sure it finds plantool again:
+A later session may not have this briefing. Leave concise, durable project guidance in the instruction file your tool reads:
 
-- If your tool reads an instruction file in the project (for example \`AGENTS.md\` or \`CLAUDE.md\`) and that file does not mention plantool yet, add a short note: this project plans its work with plantool, run \`plantool agent onboard\` first. Keep what is already in the file.
+- Say that this project plans its work with plantool. Tell agents to use the configured Plantool MCP server when available, and the CLI otherwise. Do not tell every new session to rerun this briefing; MCP agents can request \`plantool_guide\` when they need more detail.
 - Write down how you use plantool here, in whatever form your tool keeps notes: the commands you rely on, the project's own conventions, mistakes you do not want to repeat.
 - When something repeats often enough to be a procedure, capture it as a skill, script or helper on the CLI or the API, if you think it is worth it. That is your call.
 
-plantool does not write any of this for you and does not prescribe a format. Keep whatever you create outside \`.plan/\`, and tell the person what you created and where.
+MCP must be configured in the agent host to be available. If it is not configured, the CLI remains the fallback. plantool does not write instruction files for you or prescribe a format. Keep any notes you create outside \`.plan/\`, and tell the person what you created and where.
 `;
 }

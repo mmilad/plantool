@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "01a20d36-eb8d-749d-978b-7a4936ddbba8",
+  "ticketId": "01a20d34-7ae4-7c52-9644-a01d731b91fb",
+  "body": "Made the repository guidance MCP-first with a CLI fallback and stopped generated onboarding from asking each future session to rerun the briefing.",
+  "author": "codex",
+  "createdAt": "2026-11-24T11:00:32.781Z"
+}

@@ -1,6 +1,6 @@
 # Agent notes
 
-Run `plantool agent onboard` once, the first time you work here, to learn how this project plans its work, and keep the key rules in your own notes. Do not repeat it in every session; repeat it only when `plantool --version` changes or your notes are gone. The plan lives in `.plan/`; `plantool next` lists what is ready, `plantool ticket show KEY` shows a ticket as a document.
+Use the configured Plantool MCP server when it is available; otherwise use the `plantool` CLI. Do not run `plantool agent onboard` automatically in every session. If you need the full briefing, request `plantool_guide` from MCP or run `plantool agent onboard` once. The plan lives in `.plan/`; `plantool next` lists what is ready, `plantool ticket show KEY` shows a ticket as a document.
 
 ## Working in this repository
 
