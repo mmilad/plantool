@@ -24,6 +24,7 @@
     "LICENSE"
   ],
   "scripts": {
+    "serve": "node ./bin/plantool.js serve",
     "test": "node --test",
     "check": "node --check src/index.js && node --check src/server.js && node --check bin/plantool.js && node --check bench/scale.mjs && node --test",
     "benchmark:scale": "node bench/scale.mjs"
