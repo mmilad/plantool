@@ -32,6 +32,13 @@ test('search ranks title matches first, pages deterministically and detects stal
   await assert.rejects(()=>p.searchPage('cart',{limit:4,offset:4,snapshot:first.snapshot}),{code:'STALE_SEARCH'});
   await assert.rejects(()=>p.searchPage('cart',{limit:500}),{code:'VALIDATION'});await assert.rejects(()=>p.search('cart',{types:['secret']}),{code:'VALIDATION'});
 });
+test('ticket search matches visible keys and stable UUID prefixes, including children',async t=>{
+  const p=await project(t),parent=await p.tickets.create({title:'Parent'}),child=await p.tickets.create({title:'Searchable child',parentId:parent.id});
+  const keyHits=await p.search('test-2',{types:['ticket']});
+  assert.ok(keyHits.some(hit=>hit.id===child.id));
+  const idHits=await p.search(child.id.slice(0,12),{types:['ticket']});
+  assert.ok(idHits.some(hit=>hit.id===child.id));
+});
 test('documents update revision-safely, validate links and never add duplicates',async t=>{const p=await project(t);
   const a=await p.tickets.create({title:'A'}),b=await p.tickets.create({title:'B'});
   const g=await p.documents.create('goals',{title:'Goal',body:'Body',links:[a.id]});

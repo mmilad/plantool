@@ -53,4 +53,6 @@ Start the local web interface with:
 plantool serve
 ```
 
+In the ticket view, search by title, ticket key or UUID to find parents and child tickets. Ticket fields save when you change a selection or leave an edited field. Add a reusable checklist as a `checklist:<name>` label; its checks appear on the ticket, where each can be ticked directly. Add ticket-specific checks under **Individual checks**.
+
 For all available commands, run `plantool --help`. For an introduction to the planning workflow, run `plantool agent onboard`.

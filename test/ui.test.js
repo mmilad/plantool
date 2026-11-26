@@ -33,6 +33,21 @@ test('the web UI has a decisions view and its script parses', () => {
   assert.doesNotThrow(() => new Function(script));
 });
 
+test('ticket details save inline and checklist choices come from tags', () => {
+  const html = renderAppHtml('token');
+  assert.ok(html.includes('Search tickets by title, key or ID'));
+  assert.ok(html.includes('[ticket.title,keyOf(ticket),ticket.id]'));
+  assert.ok(html.includes('id="edit-ticket-form">'));
+  assert.ok(html.includes("form.addEventListener('focusout'"));
+  assert.ok(html.includes("const tag='checklist:'+button.dataset.checklistTag"));
+  assert.ok(html.includes("note:box.checked?'Checked':null"));
+  assert.ok(!html.includes('Preview checklist'));
+  assert.ok(!html.includes('id="bp-preview"'));
+  const script = /<script>([\s\S]*?)<\/script>/.exec(html)?.[1];
+  assert.ok(script);
+  assert.doesNotThrow(() => new Function(script));
+});
+
 test('sidebar List navigation updates the URL to the list route', () => {
   const html = renderAppHtml('token');
   assert.ok(html.includes("if(view==='tickets'){showTicketList({forceList:true});}"));

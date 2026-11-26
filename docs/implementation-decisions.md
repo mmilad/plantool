@@ -2,6 +2,13 @@
 
 This file records material choices made while implementing the first usable release against the merged planning contract.
 
+## Ticket editing, search and checks (2026-11-26)
+
+- The ticket list filter matches title, visible ticket key and UUID, including loaded descendants. Exact key and UUID-prefix searches also work in global keyword search.
+- Ticket details stay editable in place. Each changed field saves on blur or selection change; requests patch only changed fields against a fresh revision, and report a conflict if the same field changed elsewhere.
+- A `checklist:<name>` ticket label attaches the named reusable checklist without creating child tickets. A reusable checklist can provide multiple independent checks, each directly tickable in the ticket view. Ticket-specific checks remain in the separate `acceptance` list shown as **Individual checks**.
+- A ticket uses one reusable checklist at a time because the stored checklist model is singular. Replacing or removing its checklist tag detaches the template; any child tickets already created from it remain ordinary child tickets.
+
 ## Roadmap completion and structure (2026-11-13)
 
 - Roadmap phases 1–3 share the canonical tickets and existing workflow readiness. Dependencies follows as phase 4 (PLAN-42); no milestones or event-history entity is introduced.

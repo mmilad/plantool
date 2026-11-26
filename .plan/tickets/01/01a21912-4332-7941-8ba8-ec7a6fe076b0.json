@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "01a21912-4332-7941-8ba8-ec7a6fe076b0",
+  "number": 81,
+  "title": "Improve ticket search, inline editing and checklists",
+  "kind": "feature",
+  "description": "A person opens the ticket list, searches by visible key or stable ID, and gets matching parent or child tickets. From a ticket detail page they change fields directly; each field saves automatically when focus leaves it or its selection changes, with clear saving and error feedback. Checks required by labels appear immediately on the ticket, and the person can add ticket-specific checks alongside them.",
+  "status": "in_progress",
+  "priority": "high",
+  "labels": [
+    "ui",
+    "search",
+    "checklist"
+  ],
+  "properties": {},
+  "parentId": null,
+  "why": "Make the ticket workflow quick and discoverable: find tickets by visible ID and nested work, edit fields directly with autosave, and show persistent checks that come from labels plus ticket-specific additions.",
+  "acceptance": [
+    {
+      "text": "Search by ticket key and stable ID, including subtasks",
+      "met": true
+    },
+    {
+      "text": "Ticket fields save on blur or selection change, with visible save and conflict feedback",
+      "met": true
+    },
+    {
+      "text": "Checklist tags provide reusable checks without preview",
+      "met": true
+    },
+    {
+      "text": "ticket-specific checks remain available",
+      "met": true
+    }
+  ],
+  "todos": [
+    {
+      "text": "Inspect the ticket UI, API and checklist data model",
+      "met": true
+    },
+    {
+      "text": "implement ticket search by key and stable ID, including descendants",
+      "met": true
+    },
+    {
+      "text": "replace the ticket edit mode with inline autosaving fields",
+      "met": true
+    },
+    {
+      "text": "make reusable label-driven checks visible and combine them with individual checks",
+      "met": true
+    },
+    {
+      "text": "add focused regression coverage and update product docs",
+      "met": true
+    },
+    {
+      "text": "Re-run npm run check on a Windows runner with symlink and loopback permissions before closing",
+      "met": false
+    }
+  ],
+  "createdAt": "2026-11-26T18:15:56.978Z",
+  "updatedAt": "2026-11-26T18:34:26.197Z"
+}
